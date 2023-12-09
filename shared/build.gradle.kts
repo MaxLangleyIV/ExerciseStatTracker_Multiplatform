@@ -26,10 +26,17 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            //put your multiplatform dependencies here
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+            implementation("app.cash.sqldelight:sqlite-driver:2.0.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        androidMain.dependencies {
+            implementation("app.cash.sqldelight:android-driver:2.0.1")
+        }
+        iosMain.dependencies {
+            implementation("app.cash.sqldelight:ios-driver:2.0.1")
         }
     }
 }
@@ -39,5 +46,13 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 24
+    }
+}
+
+sqldelight {
+    databases {
+        create("ExerciseStatTrackerDatabase") {
+            packageName.set("com.langley.exercisestattracker.database")
+        }
     }
 }
