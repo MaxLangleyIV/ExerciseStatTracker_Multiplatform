@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    id("org.jetbrains.compose") version "1.5.11"
     id("app.cash.sqldelight") version "2.0.1"
 }
 
@@ -28,6 +29,12 @@ kotlin {
         commonMain.dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             implementation("app.cash.sqldelight:sqlite-driver:2.0.1")
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.components.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -47,6 +54,9 @@ android {
     defaultConfig {
         minSdk = 24
     }
+}
+dependencies {
+
 }
 
 sqldelight {
