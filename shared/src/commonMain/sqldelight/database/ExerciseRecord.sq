@@ -1,0 +1,16 @@
+CREATE TABLE ExerciseRecord (
+    exerciseRecordId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    dateCompleted INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    weightUsed REAL NOT NULL,
+    repsCompleted INTEGER NOT NULL,
+    rpe INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    userId INTEGER NOT NULL,
+    notes TEXT NOT NULL
+);
+
+getExerciseRecords:
+SELECT *
+FROM ExerciseRecord
+ORDER BY dateCompleted DESC;

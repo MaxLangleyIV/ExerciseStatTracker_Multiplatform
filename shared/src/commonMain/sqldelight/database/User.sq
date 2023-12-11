@@ -1,0 +1,11 @@
+CREATE TABLE User (
+    userId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    birthDate INTEGER NOT NULL,
+    bodyWeight INTEGER NOT NULL
+);
+
+getUserById:
+SELECT *
+FROM User
+WHERE userId = :givenUserId;
