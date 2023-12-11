@@ -1,0 +1,17 @@
+CREATE TABLE ExerciseSchedule (
+    exerciseScheduleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    exerciseScheduleName TEXT NOT NULL,
+    exerciseRoutineCSV TEXT NOT NULL,
+    dateCreated INTEGER NOT NULL,
+    isFavorited INTEGER NOT NULL
+);
+
+getExerciseSchedules:
+SELECT *
+FROM ExerciseSchedule
+ORDER BY exerciseScheduleName;
+
+getExerciseScheduleById:
+SELECT *
+FROM ExerciseSchedule
+WHERE exerciseScheduleId = :givenExerciseScheduleId;

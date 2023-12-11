@@ -1,0 +1,20 @@
+CREATE TABLE ExerciseRoutine (
+    exerciseRoutineId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    routineName TEXT NOT NULL,
+    --Exercise Id's as  CSV, in order performed.
+    exercisesCSV TEXT NOT NULL,
+    --Reps to perform, in corresponding order to exercisesCSV.
+    repsCSV TEXT NOT NULL,
+    dateCreated INTEGER NOT NULL,
+    isFavorited INTEGER NOT NULL
+);
+
+getExerciseRoutines:
+SELECT *
+FROM ExerciseRoutine
+ORDER BY routineName;
+
+getExerciseRoutineById:
+SELECT *
+FROM ExerciseRoutine
+WHERE exerciseRoutineId = :givenExerciseRoutineId;

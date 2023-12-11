@@ -4,7 +4,7 @@ CREATE TABLE ExerciseDefinition (
     bodyRegion TEXT NOT NULL,
     targetMuscles TEXT NOT NULL,
     description TEXT NOT NULL,
-    dateAdded INTEGER NOT NULL,
+    dateCreated INTEGER NOT NULL,
     isFavorited INTEGER NOT NULL
 );
 
