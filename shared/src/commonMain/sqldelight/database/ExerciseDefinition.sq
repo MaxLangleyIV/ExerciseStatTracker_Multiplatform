@@ -1,0 +1,19 @@
+CREATE TABLE ExerciseDefinition (
+    exerciseDefinitionId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    bodyRegion TEXT NOT NULL,
+    targetMuscles TEXT NOT NULL,
+    description TEXT NOT NULL,
+    dateAdded INTEGER NOT NULL,
+    isFavorited INTEGER NOT NULL
+);
+
+getExerciseDefinitions:
+SELECT *
+FROM ExerciseDefinition
+ORDER BY name ASC;
+
+getFavoritedDefinitions:
+SELECT *
+FROM ExerciseDefinition
+WHERE isFavorited = 1;
