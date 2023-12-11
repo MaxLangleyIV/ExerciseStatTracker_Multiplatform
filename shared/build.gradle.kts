@@ -56,7 +56,10 @@ android {
     }
 }
 dependencies {
-
+    commonMainApi("dev.icerock.moko:mvvm-core:0.16.1")
+    commonMainApi("dev.icerock.moko:mvvm-compose:0.16.1")
+    commonMainApi("dev.icerock.moko:mvvm-flow:0.16.1")
+    commonMainApi("dev.icerock.moko:mvvm-flow-compose:0.16.1")
 }
 
 sqldelight {

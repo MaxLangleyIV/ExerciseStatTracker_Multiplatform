@@ -6,7 +6,7 @@ CREATE TABLE ExerciseRoutine (
     --Reps to perform, in corresponding order to exercisesCSV.
     repsCSV TEXT NOT NULL,
     dateCreated INTEGER NOT NULL,
-    isFavorited INTEGER NOT NULL
+    isFavorite INTEGER NOT NULL
 );
 
 getExerciseRoutines:

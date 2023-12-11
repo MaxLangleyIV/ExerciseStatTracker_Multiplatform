@@ -1,19 +1,44 @@
 CREATE TABLE ExerciseDefinition (
     exerciseDefinitionId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
+    exerciseName TEXT NOT NULL,
     bodyRegion TEXT NOT NULL,
     targetMuscles TEXT NOT NULL,
     description TEXT NOT NULL,
-    dateCreated INTEGER NOT NULL,
-    isFavorited INTEGER NOT NULL
+    isFavorite INTEGER NOT NULL,
+    dateCreated INTEGER NOT NULL
 );
 
 getExerciseDefinitions:
 SELECT *
 FROM ExerciseDefinition
-ORDER BY name ASC;
+ORDER BY exerciseName ASC;
 
 getFavoritedDefinitions:
 SELECT *
 FROM ExerciseDefinition
-WHERE isFavorited = 1;
+WHERE isFavorite = 1;
+
+insertOrReplaceExerciseDefinition:
+INSERT OR REPLACE
+INTO ExerciseDefinition(
+    exerciseDefinitionId,
+    exerciseName,
+    bodyRegion,
+    targetMuscles,
+    description,
+    isFavorite,
+    dateCreated
+)
+VALUES (
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?
+);
+
+deleteExerciseDefinition:
+DELETE FROM ExerciseDefinition
+WHERE exerciseDefinitionId = :givenExerciseDefinitionId;

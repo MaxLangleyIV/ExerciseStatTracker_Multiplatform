@@ -3,7 +3,7 @@ CREATE TABLE ExerciseSchedule (
     exerciseScheduleName TEXT NOT NULL,
     exerciseRoutineCSV TEXT NOT NULL,
     dateCreated INTEGER NOT NULL,
-    isFavorited INTEGER NOT NULL
+    isFavorite INTEGER NOT NULL
 );
 
 getExerciseSchedules:
