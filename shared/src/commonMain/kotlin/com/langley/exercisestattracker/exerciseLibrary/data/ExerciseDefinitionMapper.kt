@@ -5,7 +5,7 @@ import database.ExerciseDefinition
 
 fun ExerciseDefinition.toExerciseDefinitionModel(): ExerciseDefinitionModel
 {
-    return com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionModel(
+    return ExerciseDefinitionModel(
         exerciseDefinitionId,
         exerciseName,
         bodyRegion,
