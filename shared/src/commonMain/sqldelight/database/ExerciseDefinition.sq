@@ -13,7 +13,7 @@ SELECT *
 FROM ExerciseDefinition
 ORDER BY exerciseName ASC;
 
-getFavoritedDefinitions:
+getFavoriteDefinitions:
 SELECT *
 FROM ExerciseDefinition
 WHERE isFavorite = 1;
