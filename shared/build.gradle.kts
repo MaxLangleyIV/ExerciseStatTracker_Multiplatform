@@ -29,6 +29,7 @@ kotlin {
         commonMain.dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             implementation("app.cash.sqldelight:sqlite-driver:2.0.1")
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
