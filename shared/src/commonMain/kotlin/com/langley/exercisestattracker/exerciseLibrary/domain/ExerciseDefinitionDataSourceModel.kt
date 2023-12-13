@@ -6,6 +6,6 @@ interface ExerciseDefinitionDataSourceModel {
     fun getDefinitions(): Flow<List<ExerciseDefinitionModel>>
     fun getFavoriteDefinitions(): Flow<List<ExerciseDefinitionModel>>
     suspend fun insertOrReplaceExerciseDefinition(definition: ExerciseDefinitionModel)
-    suspend fun deleteDefinition(exerciseDefinitionId: Int)
+    suspend fun deleteDefinition(exerciseDefinitionId: Long)
 
 }

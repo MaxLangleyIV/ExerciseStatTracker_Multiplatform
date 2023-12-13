@@ -52,7 +52,7 @@ class SqlDelightExerciseDefDataSource(
         )
     }
 
-    override suspend fun deleteDefinition(exerciseDefinitionId: Int) {
-        TODO("Not yet implemented")
+    override suspend fun deleteDefinition(exerciseDefinitionId: Long) {
+        exerciseDefinitionQueries.deleteExerciseDefinition(exerciseDefinitionId)
     }
 }
