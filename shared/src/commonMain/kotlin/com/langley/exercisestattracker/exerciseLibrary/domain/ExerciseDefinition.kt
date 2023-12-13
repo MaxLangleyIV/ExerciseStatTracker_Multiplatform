@@ -1,6 +1,6 @@
 package com.langley.exercisestattracker.exerciseLibrary.domain
 
-data class ExerciseDefinitionModel(
+data class ExerciseDefinition(
     val exerciseDefinitionId: Long?,
     val exerciseName: String,
     val bodyRegion: String,

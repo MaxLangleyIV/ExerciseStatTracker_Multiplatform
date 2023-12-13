@@ -1,11 +1,9 @@
 package com.langley.exercisestattracker.exerciseLibrary.data
 
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionModel
-import database.ExerciseDefinition
 
-fun ExerciseDefinition.toExerciseDefinitionModel(): ExerciseDefinitionModel
+fun database.ExerciseDefinition.toExerciseDefinition(): com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 {
-    return ExerciseDefinitionModel(
+    return com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition(
         exerciseDefinitionId,
         exerciseName,
         bodyRegion,

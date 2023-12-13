@@ -3,8 +3,8 @@ package com.langley.exercisestattracker.exerciseLibrary.data
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.langley.exercisestattracker.database.ExerciseStatTrackerDatabase
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionModel
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSourceModel
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -13,34 +13,34 @@ import kotlinx.datetime.Clock
 
 class SqlDelightExerciseDefDataSource(
     database: ExerciseStatTrackerDatabase
-): ExerciseDefinitionDataSourceModel {
+): ExerciseDefinitionDataSource {
 
     private val exerciseDefinitionQueries = database.exerciseDefinitionQueries
-    override fun getDefinitions(): Flow<List<ExerciseDefinitionModel>> {
+    override fun getDefinitions(): Flow<List<ExerciseDefinition>> {
         return exerciseDefinitionQueries
             .getExerciseDefinitions()
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { dbExerciseDefinitions ->
                 dbExerciseDefinitions.map { dbExerciseDefinition ->
-                    dbExerciseDefinition.toExerciseDefinitionModel()
+                    dbExerciseDefinition.toExerciseDefinition()
                 }
             }
     }
 
-    override fun getFavoriteDefinitions(): Flow<List<ExerciseDefinitionModel>> {
+    override fun getFavoriteDefinitions(): Flow<List<ExerciseDefinition>> {
         return exerciseDefinitionQueries
             .getFavoriteDefinitions()
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { dbExerciseDefinitions ->
                 dbExerciseDefinitions.map { dbExerciseDefinition ->
-                    dbExerciseDefinition.toExerciseDefinitionModel()
+                    dbExerciseDefinition.toExerciseDefinition()
                 }
             }
     }
 
-    override suspend fun insertOrReplaceExerciseDefinition(definition: ExerciseDefinitionModel) {
+    override suspend fun insertOrReplaceExerciseDefinition(definition: ExerciseDefinition) {
         exerciseDefinitionQueries.insertOrReplaceExerciseDefinition(
             definition.exerciseDefinitionId,
             definition.exerciseName,
