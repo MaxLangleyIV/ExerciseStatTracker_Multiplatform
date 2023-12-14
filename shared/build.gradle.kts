@@ -42,6 +42,8 @@ kotlin {
         }
         androidMain.dependencies {
             implementation("app.cash.sqldelight:android-driver:2.0.1")
+            implementation("androidx.appcompat:appcompat:1.6.1")
+            implementation("androidx.activity:activity-compose:1.7.2")
         }
         iosMain.dependencies {
             implementation("app.cash.sqldelight:ios-driver:2.0.1")
