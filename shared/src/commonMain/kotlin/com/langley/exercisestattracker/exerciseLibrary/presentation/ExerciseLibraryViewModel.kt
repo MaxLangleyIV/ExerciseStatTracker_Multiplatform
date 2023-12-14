@@ -8,12 +8,21 @@ import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 
 class ExerciseLibraryViewModel(
-    private val exerciseLibraryDataSourceModel: ExerciseDefinitionDataSource
+    private val exerciseLibraryDataSource: ExerciseDefinitionDataSource
 ): ViewModel() {
     private val _state = MutableStateFlow(ExerciseLibraryState())
-    val state = _state.asStateFlow()
+    val state = combine(
+        _state,
+        exerciseLibraryDataSource.getDefinitions()
+    ){
+        state, exerciseDefinitions ->
+        state.copy(
+            exerciseDefinitions = exerciseDefinitions
+        )
+    }
 
     var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(null)
         private set

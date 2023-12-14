@@ -9,11 +9,11 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -45,9 +45,15 @@ kotlin {
             implementation("androidx.appcompat:appcompat:1.6.1")
             implementation("androidx.activity:activity-compose:1.7.2")
         }
-        iosMain.dependencies {
+        nativeMain.dependencies {
             implementation("app.cash.sqldelight:native-driver:2.0.1")
         }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
@@ -72,3 +78,4 @@ sqldelight {
         }
     }
 }
+
