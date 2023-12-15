@@ -9,6 +9,7 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 
 class ExerciseLibraryViewModel(
     private val exerciseLibraryDataSource: ExerciseDefinitionDataSource
@@ -27,7 +28,15 @@ class ExerciseLibraryViewModel(
     var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(null)
         private set
 
-    fun onEvent(event: ExerciseLibraryEvent){
-        TODO()
+    fun onEvent(event: ExerciseLibraryEvent) {
+        when (event) {
+            ExerciseLibraryEvent.DefaultEvent -> return
+            is ExerciseLibraryEvent.ExerciseDefinitionSelected -> return
+            is ExerciseLibraryEvent.SaveExerciseDefinition -> {
+                viewModelScope.launch {
+                    exerciseLibraryDataSource.insertOrReplaceExerciseDefinition(event.exerciseDefinition)
+                }
+            }
+        }
     }
 }
