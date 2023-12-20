@@ -16,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
@@ -44,8 +43,10 @@ fun ExerciseLibraryScreen(
         }
     ){
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .padding(16.dp),
             contentPadding = PaddingValues(vertical = 16.dp),
+            //horizontalAlignment = Alignment.CenterHorizontally
 
         ){
             item {
@@ -64,7 +65,7 @@ fun ExerciseLibraryScreen(
                         .fillMaxWidth()
                         .clickable {
                             onEvent(ExerciseLibraryEvent.ExerciseDefinitionSelected(exerciseDefinition))
-                        }
+                        },
                     )
             }
         }
