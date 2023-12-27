@@ -3,6 +3,7 @@ package com.langley.exercisestattracker.exerciseLibrary.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -51,26 +52,26 @@ fun ExerciseLibraryScreen(
         }
     ){
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 128.dp),
-            modifier = Modifier.fillMaxSize()
-                .padding(16.dp)
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
                 .background(MaterialTheme.colorScheme.background),
-            contentPadding = PaddingValues(vertical = 16.dp),
+            contentPadding = PaddingValues(vertical = 8.dp),
+
             content = {
                 items(state.exerciseDefinitions){ exerciseDefinition: ExerciseDefinition ->
                     ExerciseDefinitionListItem(
                         exerciseDefinition,
                         modifier = Modifier
-                            .padding(16.dp)
-                            .background(MaterialTheme.colorScheme.secondary)
+                            .fillMaxHeight()
+                            .padding(8.dp)
                             .clickable {
                                 onEvent(ExerciseLibraryEvent.ExerciseDefinitionSelected(exerciseDefinition))
                             },
                     )
                 }
             }
-            //horizontalAlignment = Alignment.CenterHorizontally
-
         )
     }
 }
