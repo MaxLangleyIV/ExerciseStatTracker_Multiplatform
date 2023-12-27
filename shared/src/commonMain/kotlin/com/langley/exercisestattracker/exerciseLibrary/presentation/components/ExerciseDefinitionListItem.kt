@@ -1,5 +1,6 @@
 package com.langley.exercisestattracker.exerciseLibrary.presentation.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,8 @@ fun ExerciseDefinitionListItem(
         ){
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ){
                 Text(
                     text = exerciseDefinition.exerciseName,
