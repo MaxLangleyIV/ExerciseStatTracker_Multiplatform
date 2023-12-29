@@ -27,9 +27,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-            implementation("app.cash.sqldelight:sqlite-driver:2.0.1")
-            implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.sqlite.driver)
+            implementation(libs.sqldelight.coroutines.extensions)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -41,12 +41,12 @@ kotlin {
             implementation(libs.kotlin.test)
         }
         androidMain.dependencies {
-            implementation("app.cash.sqldelight:android-driver:2.0.1")
-            implementation("androidx.appcompat:appcompat:1.6.1")
-            implementation("androidx.activity:activity-compose:1.7.2")
+            implementation(libs.sqldelight.android.driver)
+            implementation(libs.androidx.appcompat)
+            implementation(libs.androidx.activity.compose.v172)
         }
         nativeMain.dependencies {
-            implementation("app.cash.sqldelight:native-driver:2.0.1")
+            implementation(libs.sqldelight.native.driver)
         }
     }
 }
@@ -65,10 +65,10 @@ android {
     }
 }
 dependencies {
-    commonMainApi("dev.icerock.moko:mvvm-core:0.16.1")
-    commonMainApi("dev.icerock.moko:mvvm-compose:0.16.1")
-    commonMainApi("dev.icerock.moko:mvvm-flow:0.16.1")
-    commonMainApi("dev.icerock.moko:mvvm-flow-compose:0.16.1")
+    commonMainApi(libs.mvvm.core)
+    commonMainApi(libs.mvvm.compose)
+    commonMainApi(libs.mvvm.flow)
+    commonMainApi(libs.mvvm.flow.compose)
 }
 
 sqldelight {
