@@ -2,8 +2,13 @@ package com.langley.exercisestattracker.exerciseLibrary.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,12 +24,12 @@ import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibr
 fun ExerciseDefinitionDetailsView(
     isVisible: Boolean,
     selectedExerciseDefinition: ExerciseDefinition?,
-    onEvent: ExerciseLibraryEvent
+    onEvent: (ExerciseLibraryEvent) -> Unit
 )
 {
     BasicBottomSheet(
         visible = isVisible,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize()
     )
     {
         Box(
@@ -43,6 +48,17 @@ fun ExerciseDefinitionDetailsView(
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 30.sp
+                )
+            }
+
+            IconButton(
+                onClick = {
+                    onEvent(ExerciseLibraryEvent.CloseExerciseDetailsView)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close"
                 )
             }
         }

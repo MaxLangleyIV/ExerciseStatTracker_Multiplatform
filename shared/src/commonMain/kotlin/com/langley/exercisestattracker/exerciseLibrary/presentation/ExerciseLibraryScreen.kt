@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
+import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefinitionDetailsView
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.ui.theme.DarkColors
 
@@ -72,6 +73,12 @@ fun ExerciseLibraryScreen(
                     )
                 }
             }
+        )
+
+        ExerciseDefinitionDetailsView(
+            isVisible = state.isSelectedExerciseDefSheetOpen,
+            onEvent = onEvent,
+            selectedExerciseDefinition = state.selectedExerciseDefinition
         )
     }
 }
