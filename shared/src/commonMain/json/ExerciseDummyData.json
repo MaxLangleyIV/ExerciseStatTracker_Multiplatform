@@ -1,0 +1,260 @@
+[
+  {
+    "name": "Squats",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Quadriceps", "Hamstrings", "Glutes"],
+    "description": "Stand with feet shoulder-width apart, toes forward. Bend knees and lower body as if sitting in a chair, keeping back straight. Return to starting position."
+  },
+  {
+    "name": "Push-ups",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Pectorals", "Triceps", "Shoulders"],
+    "description": "Start in a plank position with arms straight and hands slightly wider than shoulder width. Lower chest to the ground, then push back up to the starting position."
+  },
+  {
+    "name": "Lunges",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Quadriceps", "Hamstrings", "Glutes"],
+    "description": "Step forward with one foot, bending the knee and lowering the body until it's just above the ground. Push back up to starting position and repeat on opposite side."
+  },
+  {
+    "name": "Bicep Curls",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Biceps"],
+    "description": "Stand with feet shoulder-width apart, holding a dumbbell in each hand at your sides. Curl the weights towards shoulders, keeping elbows close to body. Lower back down to starting position."
+  },
+  {
+    "name": "Pull-ups",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Latissimus Dorsi", "Biceps", "Rhomboids"],
+    "description": "Grip a pullup bar with palms facing away from you and arms extended. Pull your body up towards the bar until chin is above the bar, then lower back down."
+  },
+  {
+    "name": "Barbell Squats",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Quadriceps", "Hamstrings", "Glutes"],
+    "description": "Stand with feet shoulder-width apart, toes forward. Grip the barbell with an overhand grip just below your shoulders. Bend knees and lower body as if sitting in a chair, keeping back straight. Return to starting position."
+  },
+  {
+    "name": "Barbell Bench Press",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Pectorals", "Triceps"],
+    "description": "Lie face-up on a flat bench holding the barbell with an overhand grip just above your upper chest. Lower the bar to your lower chest, then push it back up to the starting position."
+  },
+  {
+    "name": "Deadlifts",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Glutes", "Hamstrings", "Quads"],
+    "description": "Stand with feet hip-width apart, gripping the barbell with an overhand grip just below your shoulders. Hinge at the hips and lower your body until you're holding the bar just above the ground, then straighten up to complete the lift."
+  },
+  {
+    "name": "Bridges",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Glutes"],
+    "description": "Lie on your back with knees bent and feet flat on the ground. Lift hips off the ground, squeezing glutes to hold position for a few seconds. Lower back down."
+  },
+  {
+    "name": "Incline Dumbbell Bench Press",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Pectorals", "Triceps"],
+    "description": "Lie on a bench set at an incline, holding a dumbbell in each hand over chest with palms facing forward. Lower weights towards chest, then press back up to starting position."
+  },
+  {
+    "name": "Planks",
+    "body_region": "Core",
+    "targeted_muscles": ["Abdominals"],
+    "description": "Assume a pushup position on the ground with elbows directly beneath shoulders. Push up onto toes and lift body into a straight line from head to heels, holding for as long as possible."
+  },
+  {
+    "name": "Russian Twists",
+    "body_region": "Core",
+    "targeted_muscles": ["Abdominals", "Obliques"],
+    "description": "Sit on the ground with knees bent and feet flat, holding a medicine ball or other lightweight object. Lean back slightly and rotate torso to one side while extending opposite arm and leg. Return to starting position, then repeat on the other side."
+  },
+  {
+    "name": "Cable Woodchoppers",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Shoulders", "Triceps"],
+    "description": "Stand with feet shoulder-width apart and grab a handle attached to cable machine. Keep elbows close to body and rotate hands until palms face forward, then extend arms out to sides. Return to starting position."
+  },
+  {
+    "name": "Jumping Jacks",
+    "body_region": "Full Body",
+    "targeted_muscles": ["Cardiovascular"],
+    "description": "Stand with feet together and arms at sides. Jump up, spreading legs and arms out to side while turning head over shoulders to look overhead. Land with feet together and repeat."
+  },
+  {
+    "name": "Calf Raises",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Calves"],
+    "description": "Stand with feet hip-width apart, toes pointing forward. Raise heels off the ground as high as possible, then lower back down. Repeat."
+  },
+  {
+    "name": "Kettlebell Swings",
+    "body_region": "Full Body",
+    "targeted_muscles": ["Core", "Lower Body"],
+    "description": "Stand with feet shoulder-width apart and kettlebell between legs. Hinge hips back and swing kettlebell forward, bringing it up to chest height. Extend hips and return to starting position."
+  },
+  {
+    "name": "Lateral Raises",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Deltoids"],
+    "description": "Stand with feet hip-width apart, holding dumbbells at sides. Raise arms out to sides until they're parallel to the ground, then lower back down."
+  },
+  {
+    "name": "Burpees",
+    "body_region": "Full Body",
+    "targeted_muscles": ["Cardiovascular"],
+    "description": "Stand with feet shoulder-width apart. Drop into a squat position, placing hands on the ground. Jump backwards into a pushup position, then jump forward and return to standing. Repeat."
+  },
+  {
+    "name": "Incline Dumbbell Flyes",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Pectorals"],
+    "description": "Lie on an incline bench with a dumbbell in each hand, palms facing forward. Keeping elbows slightly bent, lift weights out to sides until they're even with shoulders. Lower back down."
+  },
+  {
+    "name": "Squat Jumps",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Quadriceps"],
+    "description": "Stand with feet shoulder-width apart. Squat down as low as possible, then jump up and spread legs out to the sides while reaching arms overhead."
+  },
+  {
+    "name": "Dumbbell Lunges",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Quadriceps", "Glutes"],
+    "description": "Stand with feet hip-width apart, holding a dumbbell in each hand at shoulders. Step forward with right leg and lower body until left knee is bent at 90 degrees. Return to starting position, then repeat with the opposite leg."
+  },
+  {
+    "name": "Bent Over Rows",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Latissimus Dorsi"],
+    "description": "Stand with feet shoulder-width apart and grab a barbell at lower back. Bend over at the hips, keeping back straight, until chest is almost touching the ground. Pull the barbell up towards the chin, squeezing shoulder blades together."
+  },
+  {
+    "name": "Bar Dips",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Triceps", "Pectorals"],
+    "description": "Sit on a bench with hands shoulder-width apart on the edge. Straighten legs and lower body until arms are bent at 90 degrees. Press up to return to starting position."
+  },
+  {
+    "name": "Leg Curls",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Hamstrings"],
+    "description": "Sit on a leg curl machine with feet under the pad. Keep back straight and lift heels towards butt, squeezing hamstrings at the top of the movement."
+  },
+  {
+    "name": "Cable Pull-Throughs",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Lats"],
+    "description": "Stand facing a cable machine with handle in hand. Pull the handle towards chest, squeezing shoulder blades together at the top of the movement."
+  },
+  {
+    "name": "Barbell Shrugs",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Trapezius"],
+    "description": "Stand with feet hip-width apart and grab a barbell at shoulders. Lift the barbell up towards ears, squeezing shoulder blades together."
+  },
+  {
+    "name": "Dumbbell Shoulder Press",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Deltoids"],
+    "description": "Lie back on a bench with dumbbells at shoulders. Straighten arms and press the weights up towards the ceiling, squeezing shoulder blades together."
+  },
+  {
+  "name": "Straight-Leg Deadlifts",
+  "body_region": "Lower Body",
+  "targeted_muscles": ["Hamstrings"],
+  "description": "Stand with feet hip-width apart and lift one leg straight behind you. Bend over at the hips, keeping back straight, until you can grasp the foot with both hands. Return to starting position."
+  },
+  {
+    "name": "Dumbbell Rows",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Latissimus Dorsi"],
+    "description": "Stand with feet shoulder-width apart and grab a dumbbell in each hand at sides. Bend over at the hips, keeping back straight, until chest is almost touching the ground. Pull the weights up towards armpits."
+  },
+  {
+    "name": "Seated Cable Row",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Latissimus Dorsi"],
+    "description": "Sit on a bench facing away from a cable machine with handle in hand. Pull the handle towards chest, squeezing shoulder blades together at the top of the movement."
+  },
+  {
+    "name": "Dumbbell Lateral Raises",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Deltoids"],
+    "description": "Stand with feet shoulder-width apart and grab a dumbbell in each hand at sides. Raise arms out to the sides until they're parallel to the ground, then lower back down."
+  },
+  {
+    "name": "Cable Face Pulls",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Posterior Deltoids", "Rhomboids"],
+    "description": "Stand facing away from a cable machine with handle in hand. Pull the handle towards chest, squeezing shoulder blades together at the top of the movement."
+  },
+  {
+    "name": "Mountain Climbers",
+    "body_region": "Full Body",
+    "targeted_muscles": ["Abdominals", "Quads"],
+    "description": "Start in a pushup position with legs together. Alternate bringing one knee towards opposite elbow, then switch to the other side."
+  },
+  {
+    "name": "Split Squats",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Quads", "Glutes"],
+    "description": "Stand with feet hip-width apart, holding a dumbbell in each hand at shoulders. Step forward with right leg and lower body until left knee is bent at 90 degrees. Return to starting position, then repeat with the opposite leg."
+  },
+  {
+    "name": "Bicycle Crunches",
+    "body_region": "Core",
+    "targeted_muscles": ["Abdominals"],
+    "description": "Lie on your back with knees bent and feet flat on the ground. Lift shoulders off the ground, then alternate touching opposite elbows to each knee while keeping lower back pressed into the ground."
+  },
+  {
+    "name": "Donkey Kicks",
+    "body_region": "Core",
+    "targeted_muscles": ["Abdominals"],
+    "description": "Start on all fours with hands directly under shoulders and knees under hips. Lift one leg straight back behind you, then lower it to the ground."
+  },
+  {
+    "name": "Dumbbell Row",
+    "body_region": "Back",
+    "targeted_muscles": ["Latissimus Dorsi"],
+    "description": "Lie face up on a bench with dumbbells in hand, palms facing grip. Pull the weights towards your chest by squeezing shoulder blades together."
+  },
+  {
+    "name": "Hanging Leg Raises",
+    "body_region": "Core",
+    "targeted_muscles": ["Abdominals"],
+    "description": "Hang from a pull-up bar with legs straight. Slowly lift knees towards chest, then lower back down."
+  },
+  {
+    "name": "Single Arm Dumbbell Snatch",
+    "body_region": "Full Body",
+    "targeted_muscles": ["Shoulders", "Arms"],
+    "description": "Stand with feet shoulder-width apart and dumbbell in right hand at shoulders. Extend arm overhead, then quickly bring it back down to the ground by your side."
+  },
+  {
+    "name": "Walking Lunges",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Quads", "Glutes"],
+    "description": "Step forward with right foot, lower body until left knee is bent at 90 degrees. Push through heel to stand back up."
+  },
+  {
+    "name": "Cable Chest Flyes",
+    "body_region": "Chest",
+    "targeted_muscles": ["Pectorals"],
+    "description": "Stand in front of a cable machine with handles at chest height. Pull the handles apart, squeezing shoulder blades together."
+  },
+  {
+    "name": "Reverse Hyperextensions",
+    "body_region": "Lower Body",
+    "targeted_muscles": ["Hamstrings"],
+    "description": "Lie face down on a hyperextension bench with feet secured and arms straight. Lift hips towards the ceiling, squeezing hamstrings at the top of the movement."
+  },
+  {
+    "name": "Cable Triceps Pushdown",
+    "body_region": "Upper Body",
+    "targeted_muscles": ["Triceps"],
+    "description": "Stand in front of a cable machine with handle at chest height. Extend arms straight down, then push the weight back up towards chin."
+  }
+]

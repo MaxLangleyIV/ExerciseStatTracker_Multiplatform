@@ -37,32 +37,31 @@ fun App(
 
         val state by exerciseLibraryViewModel.state.collectAsState(ExerciseLibraryState())
 
-        val tempExerciseList = listOf(
-            "Barbell Squat", "Deadlift", "Bench Press", "Overhead Press",
-            "Bent-over Rows", "Pull-ups", "Chin-ups", "Push-ups", "Dips",
-            "Lunges", "Leg Press", "Leg Curl", "Leg Extension", "Calf Raises",
-            "Plank", "Russian Twists", "Sit-ups", "Crunches", "Hanging Leg Raise",
-            "Flutter Kicks", "Mountain Climbers", "Burpees", "Box Jumps",
-            "Kettlebell Swings", "Thrusters", "Clean and Jerk", "Snatch",
-            "Turkish Get-up", "Romanian Deadlift", "Front Squat", "Box Squat",
-            "Incline Bench Press", "Decline Bench Press", "Lat Pulldown",
-            "Face Pulls", "Tricep Dips", "Skull Crushers", "Barbell Curl",
-            "Hammer Curl", "Dumbbell Flyes", "Side Lateral Raises", "Reverse Flyes",
-            "Seated Shoulder Press", "Leg Raises", "Hyperextensions", "Good Mornings",
-            "Side Plank", "Woodchoppers", "Battle Ropes", "Jump Rope", "Rowing Machine",
-            "Cycling", "Swimming", "Running", "Hiking", "Elliptical Trainer",
-            "Sled Push", "Sled Pull", "Tire Flips", "Bodyweight Squats",
-            "Wall Sit", "Farmers Walk", "Sprints", "High Knees", "Jumping Jacks",
-            "Plank Jacks", "Cycling", "Stair Climbing", "Bicycles", "Reverse Crunches",
-            "Sissy Squat", "Leg Raises on Roman Chair", "Plyometric Push-ups",
-            "One-Arm Dumbbell Row", "Machine Shoulder Press", "Machine Leg Press",
-            "Smith Machine Squat", "Smith Machine Bench Press", "Barbell Hip Thrust",
-            "Barbell Step-ups", "Assisted Pull-ups", "Cable Crunch",
-            "Face Pulls with Rope Attachment", "Landmine Press", "Reverse Lunges",
-            "Zercher Squat", "Dumbbell Pullover", "Battle Ropes", "Rowing Machine"
-        )
-
-
+//        val tempExerciseList = listOf(
+//            "Barbell Squat", "Deadlift", "Bench Press", "Overhead Press",
+//            "Bent-over Rows", "Pull-ups", "Chin-ups", "Push-ups", "Dips",
+//            "Lunges", "Leg Press", "Leg Curl", "Leg Extension", "Calf Raises",
+//            "Plank", "Russian Twists", "Sit-ups", "Crunches", "Hanging Leg Raise",
+//            "Flutter Kicks", "Mountain Climbers", "Burpees", "Box Jumps",
+//            "Kettlebell Swings", "Thrusters", "Clean and Jerk", "Snatch",
+//            "Turkish Get-up", "Romanian Deadlift", "Front Squat", "Box Squat",
+//            "Incline Bench Press", "Decline Bench Press", "Lat Pulldown",
+//            "Face Pulls", "Tricep Dips", "Skull Crushers", "Barbell Curl",
+//            "Hammer Curl", "Dumbbell Flyes", "Side Lateral Raises", "Reverse Flyes",
+//            "Seated Shoulder Press", "Leg Raises", "Hyperextensions", "Good Mornings",
+//            "Side Plank", "Woodchoppers", "Battle Ropes", "Jump Rope", "Rowing Machine",
+//            "Cycling", "Swimming", "Running", "Hiking", "Elliptical Trainer",
+//            "Sled Push", "Sled Pull", "Tire Flips", "Bodyweight Squats",
+//            "Wall Sit", "Farmers Walk", "Sprints", "High Knees", "Jumping Jacks",
+//            "Plank Jacks", "Cycling", "Stair Climbing", "Bicycles", "Reverse Crunches",
+//            "Sissy Squat", "Leg Raises on Roman Chair", "Plyometric Push-ups",
+//            "One-Arm Dumbbell Row", "Machine Shoulder Press", "Machine Leg Press",
+//            "Smith Machine Squat", "Smith Machine Bench Press", "Barbell Hip Thrust",
+//            "Barbell Step-ups", "Assisted Pull-ups", "Cable Crunch",
+//            "Face Pulls with Rope Attachment", "Landmine Press", "Reverse Lunges",
+//            "Zercher Squat", "Dumbbell Pullover", "Battle Ropes", "Rowing Machine"
+//        )
+//
 //        for (exercise in tempExerciseList){
 //            val exerciseDefinition = ExerciseDefinition(
 //                exerciseDefinitionId = null,
