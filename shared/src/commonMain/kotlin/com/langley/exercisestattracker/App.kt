@@ -14,6 +14,7 @@ import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibr
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryViewModel
+import com.langley.exercisestattracker.exerciseLibrary.data.exerciseDefinitionDummyData
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.datetime.Clock
@@ -37,43 +38,20 @@ fun App(
 
         val state by exerciseLibraryViewModel.state.collectAsState(ExerciseLibraryState())
 
-//        val tempExerciseList = listOf(
-//            "Barbell Squat", "Deadlift", "Bench Press", "Overhead Press",
-//            "Bent-over Rows", "Pull-ups", "Chin-ups", "Push-ups", "Dips",
-//            "Lunges", "Leg Press", "Leg Curl", "Leg Extension", "Calf Raises",
-//            "Plank", "Russian Twists", "Sit-ups", "Crunches", "Hanging Leg Raise",
-//            "Flutter Kicks", "Mountain Climbers", "Burpees", "Box Jumps",
-//            "Kettlebell Swings", "Thrusters", "Clean and Jerk", "Snatch",
-//            "Turkish Get-up", "Romanian Deadlift", "Front Squat", "Box Squat",
-//            "Incline Bench Press", "Decline Bench Press", "Lat Pulldown",
-//            "Face Pulls", "Tricep Dips", "Skull Crushers", "Barbell Curl",
-//            "Hammer Curl", "Dumbbell Flyes", "Side Lateral Raises", "Reverse Flyes",
-//            "Seated Shoulder Press", "Leg Raises", "Hyperextensions", "Good Mornings",
-//            "Side Plank", "Woodchoppers", "Battle Ropes", "Jump Rope", "Rowing Machine",
-//            "Cycling", "Swimming", "Running", "Hiking", "Elliptical Trainer",
-//            "Sled Push", "Sled Pull", "Tire Flips", "Bodyweight Squats",
-//            "Wall Sit", "Farmers Walk", "Sprints", "High Knees", "Jumping Jacks",
-//            "Plank Jacks", "Cycling", "Stair Climbing", "Bicycles", "Reverse Crunches",
-//            "Sissy Squat", "Leg Raises on Roman Chair", "Plyometric Push-ups",
-//            "One-Arm Dumbbell Row", "Machine Shoulder Press", "Machine Leg Press",
-//            "Smith Machine Squat", "Smith Machine Bench Press", "Barbell Hip Thrust",
-//            "Barbell Step-ups", "Assisted Pull-ups", "Cable Crunch",
-//            "Face Pulls with Rope Attachment", "Landmine Press", "Reverse Lunges",
-//            "Zercher Squat", "Dumbbell Pullover", "Battle Ropes", "Rowing Machine"
-//        )
-//
-//        for (exercise in tempExerciseList){
-//            val exerciseDefinition = ExerciseDefinition(
-//                exerciseDefinitionId = null,
-//                exerciseName = exercise,
-//                bodyRegion = "Dummy Text",
-//                targetMuscles = "Dummy Text",
-//                description = "Dummy Text",
-//                isFavorite = 0,
-//                dateCreated = null,
-//                )
-//            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
-//        }
+        val tempExerciseList = exerciseDefinitionDummyData
+
+        for (exercise in tempExerciseList){
+            val exerciseDefinition = ExerciseDefinition(
+                exerciseDefinitionId = null,
+                exerciseName = exercise["name"] as String,
+                bodyRegion = exercise["body_region"] as String,
+                targetMuscles = ,
+                description = "Dummy Text",
+                isFavorite = 0,
+                dateCreated = null,
+                )
+            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
+        }
 
         Surface(
             modifier = Modifier.fillMaxSize(),

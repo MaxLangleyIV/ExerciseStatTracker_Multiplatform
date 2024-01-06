@@ -3,267 +3,309 @@ package com.langley.exercisestattracker.exerciseLibrary.data
 val exerciseDefinitionDummyData = listOf(
     mapOf(
         "name" to "Push-up",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Chest", "Triceps", "Shoulders"),
-        "description" to "Start in a plank position with hands shoulder-width apart. Lower your body by bending elbows until chest nearly touches the ground. Push back up to the starting position."
+        "body_region" to "Upper body",
+        "target_muscles" to "Chest, Shoulders, Triceps",
+        "description" to "Start in a plank position with hands shoulder-width apart. Lower your body until your chest almost touches the ground, then push back up."
     ),
     mapOf(
-        "name" to "Squats",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Stand with feet shoulder-width apart. Bend your knees and lower your body as if you are sitting back into a chair. Keep your back straight and chest up. Return to the starting position."
+        "name" to "Squat",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Stand with feet shoulder-width apart. Lower your body by bending your knees and pushing your hips back as if you're sitting in a chair. Keep your back straight."
     ),
     mapOf(
         "name" to "Plank",
         "body_region" to "Core",
-        "target_muscles" to listOf("Abdominals", "Lower Back", "Shoulders"),
-        "description" to "Start in a forearm plank position, with elbows directly below shoulders. Keep your body in a straight line from head to heels, engaging your core muscles. Hold for the desired duration."
+        "target_muscles" to "Abdominals, Lower back",
+        "description" to "Start in a forearm plank position, with elbows directly beneath your shoulders. Keep your body in a straight line from head to heels, engaging your core muscles."
     ),
     mapOf(
         "name" to "Lunges",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Take a step forward with one foot and lower your body until both knees are bent at a 90-degree angle. Push back up to the starting position and repeat with the other leg."
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Stand with feet hip-width apart. Take a step forward with one leg, lowering your hips until both knees are bent at a 90-degree angle. Repeat on the other leg."
     ),
     mapOf(
         "name" to "Pull-up",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Back", "Biceps", "Forearms"),
-        "description" to "Hang from a horizontal bar with palms facing away. Pull your body up until your chin is above the bar. Lower your body back down with control."
+        "body_region" to "Upper body",
+        "target_muscles" to "Back, Biceps",
+        "description" to "Hang from a pull-up bar with hands slightly wider than shoulder-width apart. Pull your body upward until your chin clears the bar, then lower back down with control."
+    ),
+    mapOf(
+        "name" to "Russian Twist",
+        "body_region" to "Core",
+        "target_muscles" to "Obliques, Abdominals",
+        "description" to "Sit on the floor with knees bent and lean back slightly. Hold your hands together and twist your torso to one side, then to the other, engaging your core muscles."
     ),
     mapOf(
         "name" to "Deadlift",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Hamstrings", "Glutes", "Lower Back"),
-        "description" to "Stand with feet hip-width apart, bend at the hips, and lower your torso while keeping your back straight. Lift the barbell by extending your hips and knees. Stand straight and then lower the barbell back to the ground with control."
-    ),
-    mapOf(
-        "name" to "Bicycle Crunches",
-        "body_region" to "Core",
-        "target_muscles" to listOf("Abdominals", "Obliques"),
-        "description" to "Lie on your back, lift your legs, and bend your knees. Bring one knee toward your chest while simultaneously twisting your torso to touch the opposite elbow to the raised knee. Repeat with the other leg."
+        "body_region" to "Lower body",
+        "target_muscles" to "Hamstrings, Glutes, Lower back",
+        "description" to "Stand with feet hip-width apart, a barbell in front of you. Bend at the hips and knees, keeping your back straight, to lower the barbell to the ground. Stand back up."
     ),
     mapOf(
         "name" to "Dumbbell Rows",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Back", "Biceps"),
-        "description" to "Hold a dumbbell in each hand, hinge at the hips, and keep your back straight. Pull the dumbbells to your chest by bending your elbows. Lower the dumbbells back down with control."
+        "body_region" to "Upper body",
+        "target_muscles" to "Back, Biceps",
+        "description" to "Hold a dumbbell in each hand, hinge at the hips, and let the weights hang in front of you. Pull the weights up to your chest, squeezing your shoulder blades together."
     ),
     mapOf(
         "name" to "Leg Press",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Sit on a leg press machine with your feet on the platform. Push the platform away by extending your knees, then lower it back down with control."
-    ),
-    mapOf(
-        "name" to "Tricep Dips",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Triceps", "Shoulders"),
-        "description" to "Sit on the edge of a bench with your hands placed beside your hips. Slide your hips off the bench and lower your body by bending your elbows. Push yourself back up to the starting position."
-    ),
-    mapOf(
-        "name" to "Russian Twists",
-        "body_region" to "Core",
-        "target_muscles" to listOf("Abdominals", "Obliques"),
-        "description" to "Sit on the floor, lean back slightly, and lift your legs. Hold your hands together in front of you and twist your torso to one side, then the other, tapping the floor beside you with your hands."
-    ),
-    mapOf(
-        "name" to "Calf Raises",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Calves"),
-        "description" to "Stand on a flat surface with feet hip-width apart. Lift your heels off the ground, rising onto your toes. Lower your heels back down, then repeat."
-    ),
-    mapOf(
-        "name" to "Hammer Curls",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Biceps", "Forearms"),
-        "description" to "Hold a dumbbell in each hand with palms facing your torso. Keeping your elbows close to your body, curl the weights up toward your shoulders. Lower the weights back down with control."
-    ),
-    mapOf(
-        "name" to "Reverse Lunges",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Step backward with one foot, lowering your body until both knees are bent at a 90-degree angle. Push back up to the starting position and repeat with the other leg."
-    ),
-    mapOf(
-        "name" to "Shoulder Press",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Shoulders", "Triceps"),
-        "description" to "Hold a dumbbell in each hand at shoulder height. Press the weights overhead, extending your arms fully. Lower the weights back down with control."
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Sit on a leg press machine with feet shoulder-width apart. Push the platform away by extending your knees, then slowly lower it back down with control."
     ),
     mapOf(
         "name" to "Burpees",
-        "body_region" to "Total Body",
-        "target_muscles" to listOf("Chest", "Legs", "Shoulders"),
-        "description" to "Start in a standing position, drop into a squat position, kick your feet back into a plank position, immediately return your feet into squat position, and explosively jump up from the squat position."
+        "body_region" to "Full body",
+        "target_muscles" to "Legs, Chest, Shoulders, Arms, Core",
+        "description" to "Start in a standing position, perform a squat, kick your feet back to a plank position, immediately return to squat position, and jump up from the squat position."
     ),
     mapOf(
-        "name" to "Reverse Crunches",
-        "body_region" to "Core",
-        "target_muscles" to listOf("Lower Abdominals"),
-        "description" to "Lie on your back with legs lifted. Curl your hips off the floor, bringing your knees towards your chest. Lower your legs back down without letting your feet touch the ground."
+        "name" to "Bicep Curl",
+        "body_region" to "Arms",
+        "target_muscles" to "Biceps",
+        "description" to "Hold a dumbbell in each hand with palms facing forward. Keep your upper arms stationary and curl the weights toward your shoulders, then lower them back down."
     ),
     mapOf(
         "name" to "Side Plank",
         "body_region" to "Core",
-        "target_muscles" to listOf("Obliques", "Abdominals"),
-        "description" to "Lie on your side, lift your body off the ground using your forearm and the side of your foot. Keep your body in a straight line from head to heels, engaging your core muscles. Hold for the desired duration and repeat on the other side."
-    ),
-    mapOf(
-        "name" to "Mountain Climbers",
-        "body_region" to "Total Body",
-        "target_muscles" to listOf("Core", "Legs", "Shoulders"),
-        "description" to "Start in a plank position. Bring one knee towards your chest and then switch quickly, as if you're 'climbing' in place. Keep your core engaged throughout."
+        "target_muscles" to "Obliques, Abdominals",
+        "description" to "Lie on your side with your elbow directly beneath your shoulder and legs stacked. Lift your hips to create a straight line from head to heels, engaging your core."
     ),
     mapOf(
         "name" to "Box Jumps",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Stand in front of a sturdy box or platform. Jump onto the box, landing with both feet, then step back down and repeat."
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Calves",
+        "description" to "Stand in front of a sturdy box. Jump onto the box, landing softly with your knees slightly bent. Step back down and repeat."
     ),
     mapOf(
-        "name" to "Kettlebell Swings",
-        "body_region" to "Total Body",
-        "target_muscles" to listOf("Hips", "Glutes", "Back"),
-        "description" to "Stand with feet shoulder-width apart, holding a kettlebell with both hands. Hinge at the hips and swing the kettlebell between your legs, then explosively swing it up to shoulder height."
+        "name" to "Tricep Dips",
+        "body_region" to "Arms",
+        "target_muscles" to "Triceps",
+        "description" to "Sit on the edge of a bench with hands beside you, fingers pointing forward. Slide your hips off the bench and lower your body, then push back up using your triceps."
     ),
     mapOf(
-        "name" to "Hanging Leg Raises",
+        "name" to "Reverse Lunges",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Stand with feet together. Step one foot backward and lower your body until both knees are bent at a 90-degree angle. Return to the starting position and repeat on the other leg."
+    ),
+    mapOf(
+        "name" to "Hanging Leg Raise",
         "body_region" to "Core",
-        "target_muscles" to listOf("Abdominals", "Hip Flexors"),
-        "description" to "Hang from a bar with your arms extended. Lift your legs up towards your chest, keeping them straight. Lower your legs back down without swinging."
+        "target_muscles" to "Lower abdominals",
+        "description" to "Hang from a pull-up bar with legs straight. Lift your legs upward, keeping them straight, until they form a 90-degree angle with your torso."
     ),
     mapOf(
-        "name" to "Walking Lunges",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Take a step forward with one foot and lower your body until both knees are bent at a 90-degree angle. Instead of returning to the starting position, step forward with the other foot and repeat."
+        "name" to "Calf Raises",
+        "body_region" to "Lower body",
+        "target_muscles" to "Calves",
+        "description" to "Stand on a flat surface with feet hip-width apart. Lift your heels off the ground, rising onto your toes, then lower them back down."
     ),
     mapOf(
-        "name" to "Push Press",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Shoulders", "Triceps"),
-        "description" to "Hold a barbell at shoulder height. Bend your knees slightly and explosively press the barbell overhead. Lower it back down with control."
-    ),
-    mapOf(
-        "name" to "Seated Leg Press",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Sit on a leg press machine and press the platform away by extending your knees. Lower the platform back down with control."
-    ),
-    mapOf(
-        "name" to "Boxing Jabs",
-        "body_region" to "Cardio",
-        "target_muscles" to listOf("Shoulders", "Triceps", "Core"),
-        "description" to "Stand in a boxing stance and throw quick, straight punches with your front hand. Rotate your hips and engage your core for power."
-    ),
-    mapOf(
-        "name" to "Renegade Rows",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Back", "Biceps", "Core"),
-        "description" to "Start in a plank position holding a dumbbell in each hand. Row one dumbbell up to your hip while balancing on the other arm. Alternate sides."
-    ),
-    mapOf(
-        "name" to "Bent Over Reverse Flyes",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Back", "Rear Delts"),
-        "description" to "Bend at the hips, holding a dumbbell in each hand with palms facing each other. Lift the dumbbells out to the sides, squeezing your shoulder blades together."
-    ),
-    mapOf(
-        "name" to "Jumping Jacks",
-        "body_region" to "Total Body",
-        "target_muscles" to listOf("Cardio"),
-        "description" to "Start with feet together and hands by your sides. Jump while spreading your legs and raising your arms overhead. Jump back to the starting position and repeat."
-    ),
-    mapOf(
-        "name" to "Lateral Leg Raises",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Abductors", "Glutes"),
-        "description" to "Stand with hands on hips. Lift one leg directly to the side, keeping it straight. Lower it back down and repeat on the other side."
-    ),
-    mapOf(
-        "name" to "Medicine Ball Slams",
-        "body_region" to "Total Body",
-        "target_muscles" to listOf("Core", "Shoulders", "Legs"),
-        "description" to "Stand with feet shoulder-width apart, holding a medicine ball overhead. Slam the ball to the ground with force, then pick it up and repeat."
-    ),
-    mapOf(
-        "name" to "Plank Shoulder Taps",
-        "body_region" to "Core",
-        "target_muscles" to listOf("Abdominals", "Shoulders"),
-        "description" to "Start in a plank position. Lift one hand and tap the opposite shoulder, then repeat on the other side. Keep your hips stable throughout."
-    ),
-    mapOf(
-        "name" to "Bosu Ball Squats",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Stand on a Bosu ball with feet hip-width apart. Squat down, keeping your back straight. Press through your heels to return to the starting position."
-    ),
-    mapOf(
-        "name" to "Side Lunges",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Adductors"),
-        "description" to "Stand with feet together. Take a step to the side, bending one knee while keeping the other leg straight. Push off the bent leg to return to the starting position."
-    ),
-    mapOf(
-        "name" to "Battle Rope Waves",
-        "body_region" to "Cardio",
-        "target_muscles" to listOf("Shoulders", "Arms", "Core"),
-        "description" to "Hold one end of a battle rope in each hand. Make continuous waves with the rope by moving your arms up and down rapidly."
+        "name" to "Mountain Climbers",
+        "body_region" to "Full body",
+        "target_muscles" to "Core, Legs, Shoulders",
+        "description" to "Start in a plank position. Alternately bring your knees toward your chest in a running motion, keeping your core engaged."
     ),
     mapOf(
         "name" to "Barbell Bench Press",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Chest", "Triceps", "Shoulders"),
-        "description" to "Lie on a flat bench and grip the barbell with hands slightly wider than shoulder-width apart. Lower the barbell to your chest and press it back up to the starting position."
+        "body_region" to "Upper body",
+        "target_muscles" to "Chest, Shoulders, Triceps",
+        "description" to "Lie on a flat bench and grasp the barbell with a grip slightly wider than shoulder-width. Lower the barbell to your chest, then press it back up to the starting position."
+    ),
+    mapOf(
+        "name" to "Barbell Squat",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Place a barbell on your upper back, stand with feet shoulder-width apart. Lower your body by bending your knees and hips, keeping your back straight, then return to the starting position."
     ),
     mapOf(
         "name" to "Barbell Deadlift",
-        "body_region" to "Total Body",
-        "target_muscles" to listOf("Lower Back", "Glutes", "Hamstrings"),
-        "description" to "Stand with feet hip-width apart, grip the barbell with hands shoulder-width apart. Keep your back straight, bend at the hips and knees, and lift the barbell by extending your hips and knees."
+        "body_region" to "Full body",
+        "target_muscles" to "Hamstrings, Glutes, Lower back",
+        "description" to "Stand with feet hip-width apart, barbell in front. Hinge at the hips and knees to lower the barbell to the ground, then stand back up, keeping a straight back."
     ),
     mapOf(
         "name" to "Barbell Overhead Press",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Shoulders", "Triceps"),
-        "description" to "Stand with feet shoulder-width apart. Hold the barbell at shoulder height and press it overhead, extending your arms fully. Lower the barbell back down with control."
+        "body_region" to "Upper body",
+        "target_muscles" to "Shoulders, Triceps",
+        "description" to "Stand with feet shoulder-width apart, hold the barbell at shoulder height. Press the barbell overhead, fully extending your arms, and then lower it back to shoulder height."
     ),
     mapOf(
-        "name" to "Barbell Bent Over Rows",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Back", "Biceps"),
-        "description" to "Bend at the hips, holding the barbell with an overhand grip. Row the barbell to your hip, squeezing your shoulder blades together. Lower the barbell back down with control."
+        "name" to "Barbell Bent Over Row",
+        "body_region" to "Upper body",
+        "target_muscles" to "Back, Biceps",
+        "description" to "Hold a barbell with a pronated grip, hinge at the hips, and lower your torso. Pull the barbell to your lower chest, squeezing your shoulder blades together, then lower it back down."
     ),
     mapOf(
-        "name" to "Barbell Front Squats",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Hold the barbell in front of your shoulders with palms facing up. Stand with feet shoulder-width apart and squat down, keeping your back straight. Return to the starting position."
+        "name" to "Barbell Front Squat",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Rest a barbell on your front shoulders, feet shoulder-width apart. Lower your body by bending your knees and hips, keeping your back straight, then return to the starting position."
     ),
     mapOf(
-        "name" to "Barbell Lunges",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Quadriceps", "Hamstrings", "Glutes"),
-        "description" to "Stand with a barbell on your upper back. Step forward with one foot and lower your body until both knees are bent at a 90-degree angle. Push back up to the starting position and repeat on the other leg."
+        "name" to "Barbell Romanian Deadlift",
+        "body_region" to "Lower body",
+        "target_muscles" to "Hamstrings, Glutes, Lower back",
+        "description" to "Hold a barbell with an overhand grip, feet hip-width apart. Hinge at the hips, keeping your back straight, and lower the barbell toward the ground. Stand back up using your hamstrings and glutes."
     ),
     mapOf(
-        "name" to "Barbell Romanian Deadlifts",
-        "body_region" to "Lower Body",
-        "target_muscles" to listOf("Hamstrings", "Glutes", "Lower Back"),
-        "description" to "Hold a barbell in front of your thighs with a shoulder-width grip. Hinge at the hips, keeping your back straight, and lower the barbell toward the ground. Stand back up, engaging your glutes."
+        "name" to "Barbell Upright Row",
+        "body_region" to "Upper body",
+        "target_muscles" to "Shoulders, Traps",
+        "description" to "Hold a barbell with an overhand grip, hands slightly narrower than shoulder-width. Lift the barbell to shoulder height, keeping it close to your body, then lower it back down."
     ),
     mapOf(
-        "name" to "Barbell Upright Rows",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Shoulders", "Traps"),
-        "description" to "Hold a barbell with a narrow overhand grip. Lift the barbell straight up towards your chin, keeping it close to your body. Lower it back down with control."
+        "name" to "Barbell Lunge",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Hold a barbell on your upper back, stand with feet hip-width apart. Step forward with one leg, lowering your body until both knees are bent at a 90-degree angle. Return to the starting position and repeat on the other leg."
     ),
     mapOf(
-        "name" to "Barbell Curls",
-        "body_region" to "Upper Body",
-        "target_muscles" to listOf("Biceps", "Forearms"),
-        "description" to "Hold a barbell with an underhand grip, arms fully extended. Curl the barbell up towards your shoulders, squeezing your biceps. Lower it back down with control."
-    )
-    )
-
+        "name" to "Barbell Calf Raise",
+        "body_region" to "Lower body",
+        "target_muscles" to "Calves",
+        "description" to "Place a barbell on your upper back, stand with feet hip-width apart. Rise onto your toes, lifting your heels off the ground, then lower them back down."
+    ),
+    mapOf(
+        "name" to "Barbell Russian Twist",
+        "body_region" to "Core",
+        "target_muscles" to "Obliques, Abdominals",
+        "description" to "Sit on the floor with knees bent and hold a barbell with both hands. Lean back slightly and twist your torso to one side, then to the other, engaging your core muscles."
+    ),
+    mapOf(
+        "name" to "Barbell Hip Thrust",
+        "body_region" to "Lower body",
+        "target_muscles" to "Glutes, Hamstrings",
+        "description" to "Sit on the ground with your upper back against a bench, place a barbell across your hips. Drive through your heels to lift your hips toward the ceiling, squeezing your glutes at the top."
+    ),
+    mapOf(
+        "name" to "Dumbbell Shoulder Press",
+        "body_region" to "Upper body",
+        "target_muscles" to "Shoulders, Triceps",
+        "description" to "Sit or stand, holding a dumbbell in each hand at shoulder height. Press the dumbbells overhead, fully extending your arms, and then lower them back to shoulder height."
+    ),
+    mapOf(
+        "name" to "Dumbbell Goblet Squat",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Hold a dumbbell close to your chest with both hands, stand with feet shoulder-width apart. Lower your body by bending your knees and hips, then return to the starting position."
+    ),
+    mapOf(
+        "name" to "Dumbbell Renegade Row",
+        "body_region" to "Upper body",
+        "target_muscles" to "Back, Biceps, Core",
+        "description" to "Start in a plank position with a dumbbell in each hand. Row one dumbbell to your hip while balancing on the other, then switch sides and repeat."
+    ),
+    mapOf(
+        "name" to "Dumbbell Bicep Curl",
+        "body_region" to "Arms",
+        "target_muscles" to "Biceps",
+        "description" to "Hold a dumbbell in each hand with palms facing forward. Keep your upper arms stationary and curl the weights toward your shoulders, then lower them back down."
+    ),
+    mapOf(
+        "name" to "Dumbbell Romanian Deadlift",
+        "body_region" to "Lower body",
+        "target_muscles" to "Hamstrings, Glutes, Lower back",
+        "description" to "Hold a dumbbell in each hand, stand with feet hip-width apart. Hinge at the hips, keeping your back straight, and lower the dumbbells toward the ground. Stand back up."
+    ),
+    mapOf(
+        "name" to "Dumbbell Lateral Raise",
+        "body_region" to "Upper body",
+        "target_muscles" to "Shoulders",
+        "description" to "Hold a dumbbell in each hand at your sides. Lift the dumbbells out to the sides until your arms are parallel to the ground, then lower them back down."
+    ),
+    mapOf(
+        "name" to "Dumbbell Tricep Kickback",
+        "body_region" to "Arms",
+        "target_muscles" to "Triceps",
+        "description" to "Hold a dumbbell in each hand, hinge at the hips, and bend your elbows to bring the weights close to your chest. Straighten your arms behind you, engaging your triceps, then return to the starting position."
+    ),
+    mapOf(
+        "name" to "Dumbbell Step-Up",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Hold a dumbbell in each hand at your sides, stand in front of a step or bench. Step up onto the platform with one foot, then bring the other foot up. Step back down and repeat on the other side."
+    ),
+    mapOf(
+        "name" to "Dumbbell Front Raise",
+        "body_region" to "Upper body",
+        "target_muscles" to "Shoulders",
+        "description" to "Hold a dumbbell in each hand at your sides. Lift the dumbbells directly in front of you until your arms are parallel to the ground, then lower them back down."
+    ),
+    mapOf(
+        "name" to "Dumbbell Reverse Lunge",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Hold a dumbbell in each hand at your sides. Step backward with one foot, lowering your body until both knees are bent at a 90-degree angle. Return to the starting position and repeat on the other leg."
+    ),
+    mapOf(
+        "name" to "Dumbbell Bent Over Reverse Fly",
+        "body_region" to "Upper body",
+        "target_muscles" to "Shoulders, Upper back",
+        "description" to "Hold a dumbbell in each hand, hinge at the hips, and let the weights hang in front of you. Lift the dumbbells out to the sides until your arms are parallel to the ground, then lower them back down."
+    ),
+    mapOf(
+        "name" to "Dumbbell Hammer Curl",
+        "body_region" to "Arms",
+        "target_muscles" to "Biceps, Forearms",
+        "description" to "Hold a dumbbell in each hand with palms facing your body. Keep your upper arms stationary and curl the weights toward your shoulders, then lower them back down."
+    ),
+    mapOf(
+        "name" to "Dumbbell Incline Bench Press",
+        "body_region" to "Upper body",
+        "target_muscles" to "Chest, Shoulders, Triceps",
+        "description" to "Lie on an incline bench, holding a dumbbell in each hand. Press the dumbbells upward, fully extending your arms, and then lower them back down to chest level."
+    ),
+    mapOf(
+        "name" to "Dumbbell Bulgarian Split Squat",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Hold a dumbbell in each hand, stand a few feet in front of a bench. Place one foot on the bench behind you and lower your body into a lunge position. Return to the starting position and repeat on the other leg."
+    ),
+    mapOf(
+        "name" to "Dumbbell Side Plank Row",
+        "body_region" to "Upper body, Core",
+        "target_muscles" to "Back, Obliques",
+        "description" to "Start in a side plank position with a dumbbell in the top hand. Lower the dumbbell towards the ground and then row it up towards your hip. Switch sides and repeat."
+    ),
+    mapOf(
+        "name" to "Dumbbell Pullover",
+        "body_region" to "Upper body",
+        "target_muscles" to "Lats, Chest, Triceps",
+        "description" to "Lie on your back on a bench, holding a dumbbell with both hands above your chest. Lower the dumbbell behind your head, keeping a slight bend in your elbows, then return to the starting position."
+    ),
+    mapOf(
+        "name" to "Dumbbell Crossover Lunge",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Hold a dumbbell in each hand, stand with feet hip-width apart. Step one foot forward and one foot to the side, lowering into a lunge. Return to the starting position and repeat on the other side."
+    ),
+    mapOf(
+        "name" to "Dumbbell Skull Crushers",
+        "body_region" to "Arms",
+        "target_muscles" to "Triceps",
+        "description" to "Lie on a bench with a dumbbell in each hand above your chest. Lower the dumbbells toward your forehead by bending your elbows, then extend your arms to the starting position."
+    ),
+    mapOf(
+        "name" to "Dumbbell Front Squat",
+        "body_region" to "Lower body",
+        "target_muscles" to "Quadriceps, Hamstrings, Glutes",
+        "description" to "Hold a dumbbell in each hand at your sides, stand with feet shoulder-width apart. Lower your body by bending your knees and hips, keeping your back straight, then return to the starting position."
+    ),
+    mapOf(
+        "name" to "Dumbbell Concentration Curl",
+        "body_region" to "Arms",
+        "target_muscles" to "Biceps",
+        "description" to "Sit on a bench with legs spread, hold a dumbbell in one hand between your legs. Curl the dumbbell up towards your shoulder, then lower it back down."
+    ),
+    mapOf(
+        "name" to "Dumbbell Split Jerk",
+        "body_region" to "Full body",
+        "target_muscles" to "Shoulders, Legs, Triceps",
+        "description" to "Hold a dumbbell in each hand at shoulder height. Step one foot forward and dip your knees, then explosively push the dumbbells overhead while splitting your legs. Return to the starting position and repeat on the other leg."
+    ),
+    
+)
