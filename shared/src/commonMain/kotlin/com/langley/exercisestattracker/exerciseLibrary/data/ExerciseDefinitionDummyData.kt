@@ -307,5 +307,5 @@ val exerciseDefinitionDummyData = listOf(
         "target_muscles" to "Shoulders, Legs, Triceps",
         "description" to "Hold a dumbbell in each hand at shoulder height. Step one foot forward and dip your knees, then explosively push the dumbbells overhead while splitting your legs. Return to the starting position and repeat on the other leg."
     ),
-    
+
 )

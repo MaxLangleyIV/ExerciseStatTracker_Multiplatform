@@ -40,18 +40,18 @@ fun App(
 
         val tempExerciseList = exerciseDefinitionDummyData
 
-        for (exercise in tempExerciseList){
-            val exerciseDefinition = ExerciseDefinition(
-                exerciseDefinitionId = null,
-                exerciseName = exercise["name"] as String,
-                bodyRegion = exercise["body_region"] as String,
-                targetMuscles = ,
-                description = "Dummy Text",
-                isFavorite = 0,
-                dateCreated = null,
-                )
-            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
-        }
+//        for (exercise in tempExerciseList){
+//            val exerciseDefinition = ExerciseDefinition(
+//                exerciseDefinitionId = null,
+//                exerciseName = exercise["name"] as String,
+//                bodyRegion = exercise["body_region"] as String,
+//                targetMuscles = exercise["target_muscles"] as String,
+//                description = exercise["description"] as String,
+//                isFavorite = 0,
+//                dateCreated = null,
+//                )
+//            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
+//        }
 
         Surface(
             modifier = Modifier.fillMaxSize(),

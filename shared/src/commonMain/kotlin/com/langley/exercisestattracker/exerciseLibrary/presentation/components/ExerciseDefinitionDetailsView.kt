@@ -43,10 +43,13 @@ fun ExerciseDefinitionDetailsView(
         )
         {
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             )
             {
+                Spacer(Modifier.height(16.dp))
+
                 Text(
                     text = "${selectedExerciseDefinition?.exerciseName}",
                     textAlign = TextAlign.Center,
@@ -54,6 +57,8 @@ fun ExerciseDefinitionDetailsView(
                     fontWeight = FontWeight.Bold,
                     fontSize = 30.sp
                 )
+
+                Spacer(Modifier.height(16.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -63,17 +68,17 @@ fun ExerciseDefinitionDetailsView(
                     Text(
                         text = "${selectedExerciseDefinition?.bodyRegion}",
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier,
                         fontWeight = FontWeight.Normal,
-                        fontSize = 15.sp
+                        fontSize = 20.sp
                     )
 
                     Text(
                         text = "${selectedExerciseDefinition?.targetMuscles}",
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier,
                         fontWeight = FontWeight.Normal,
-                        fontSize = 15.sp
+                        fontSize = 20.sp
                     )
                 }
 
