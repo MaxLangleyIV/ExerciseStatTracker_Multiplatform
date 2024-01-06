@@ -69,6 +69,7 @@ dependencies {
     commonMainApi(libs.mvvm.compose)
     commonMainApi(libs.mvvm.flow)
     commonMainApi(libs.mvvm.flow.compose)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
 }
 
 sqldelight {
