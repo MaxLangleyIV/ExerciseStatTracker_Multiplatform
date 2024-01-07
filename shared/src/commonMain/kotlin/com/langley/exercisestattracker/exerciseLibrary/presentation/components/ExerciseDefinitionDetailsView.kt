@@ -106,8 +106,6 @@ fun ExerciseDefinitionDetailsView(
                 ){}
             }
 
-
-
             Spacer(
                 Modifier.height(16.dp)
             )
@@ -118,10 +116,34 @@ fun ExerciseDefinitionDetailsView(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(
+                    text = "Body Region:",
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 20.sp
+                )
+
+                Text(
                     text = "${selectedExerciseDefinition?.bodyRegion}",
                     textAlign = TextAlign.Center,
                     modifier = Modifier,
                     fontWeight = FontWeight.Normal,
+                    fontSize = 24.sp
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    text = "Target Muscles:",
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier,
+                    fontWeight = FontWeight.Light,
                     fontSize = 20.sp
                 )
 
@@ -130,7 +152,7 @@ fun ExerciseDefinitionDetailsView(
                     textAlign = TextAlign.Center,
                     modifier = Modifier,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 20.sp
+                    fontSize = 24.sp
                 )
             }
 
