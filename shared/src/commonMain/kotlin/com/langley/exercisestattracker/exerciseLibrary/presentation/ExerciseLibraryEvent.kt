@@ -6,6 +6,7 @@ sealed interface ExerciseLibraryEvent {
 
     data object DefaultEvent: ExerciseLibraryEvent
     data object CloseExerciseDetailsView : ExerciseLibraryEvent
+    data class EditExerciseDefinition(val exerciseDefinition: ExerciseDefinition) : ExerciseLibraryEvent
     data class ExerciseDefinitionSelected(val exerciseDefinition: ExerciseDefinition): ExerciseLibraryEvent
     data class SaveExerciseDefinition(val exerciseDefinition: ExerciseDefinition): ExerciseLibraryEvent
 }

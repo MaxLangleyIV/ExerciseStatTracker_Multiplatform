@@ -59,6 +59,10 @@ class ExerciseLibraryViewModel(
                     ) }
                 }
             }
+
+            is ExerciseLibraryEvent.EditExerciseDefinition -> {
+                return
+            }
         }
     }
 }
