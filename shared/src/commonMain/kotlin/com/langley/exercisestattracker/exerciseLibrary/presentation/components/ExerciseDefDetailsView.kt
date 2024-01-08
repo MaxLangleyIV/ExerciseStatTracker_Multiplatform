@@ -3,11 +3,9 @@ package com.langley.exercisestattracker.exerciseLibrary.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,10 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.presentation.BasicBottomSheet
@@ -35,7 +30,7 @@ import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 
 @Composable
-fun ExerciseDefinitionDetailsView(
+fun ExerciseDefDetailsView(
     isVisible: Boolean,
     selectedExerciseDefinition: ExerciseDefinition?,
     onEvent: (ExerciseLibraryEvent) -> Unit
@@ -77,7 +72,8 @@ fun ExerciseDefinitionDetailsView(
         }
 
         Column (
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         )
@@ -92,6 +88,7 @@ fun ExerciseDefinitionDetailsView(
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 35.sp,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(Modifier.height(8.dp))
                 Row(
@@ -101,7 +98,7 @@ fun ExerciseDefinitionDetailsView(
                         .clip(
                             RoundedCornerShape(16.dp)
                         )
-                        .background(MaterialTheme.colorScheme.tertiary)
+                        .background(MaterialTheme.colorScheme.tertiaryContainer)
 
                 ){}
             }
@@ -111,49 +108,76 @@ fun ExerciseDefinitionDetailsView(
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(16.dp)
+                    )
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(
-                    text = "Body Region:",
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 20.sp
-                )
 
-                Text(
-                    text = "${selectedExerciseDefinition?.bodyRegion}",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 24.sp
-                )
+                Column()
+                {
+                    Text(
+                        text = "Body Region:",
+                        textAlign = TextAlign.Left,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+
+                Column()
+                {
+                    Text(
+                        text = "${selectedExerciseDefinition?.bodyRegion}",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
             }
 
             Spacer(Modifier.height(16.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(16.dp)
+                    )
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(
-                    text = "Target Muscles:",
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 20.sp
-                )
+                Column()
+                {
+                    Text(
+                        text = "Target Muscles:",
+                        textAlign = TextAlign.Left,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
 
-                Text(
-                    text = "${selectedExerciseDefinition?.targetMuscles}",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 24.sp
-                )
+                Column()
+                {
+                    Text(
+                        text = "${selectedExerciseDefinition?.targetMuscles}",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
             }
 
             Spacer(Modifier.height(16.dp))
@@ -165,6 +189,8 @@ fun ExerciseDefinitionDetailsView(
                 fontWeight = FontWeight.Normal,
                 fontSize = 20.sp
             )
+
+            Spacer(Modifier.height(16.dp))
 
         }
     }
