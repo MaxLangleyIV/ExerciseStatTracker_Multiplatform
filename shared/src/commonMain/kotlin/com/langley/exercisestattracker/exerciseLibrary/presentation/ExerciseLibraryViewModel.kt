@@ -61,8 +61,23 @@ class ExerciseLibraryViewModel(
             }
 
             is ExerciseLibraryEvent.EditExerciseDefinition -> {
-                return
+                _state.update { it.copy(
+                    isEditExerciseDefSheetOpen = true,
+                ) }
             }
+
+            ExerciseLibraryEvent.CloseEditExerciseDefView -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        isEditExerciseDefSheetOpen = false
+                    ) }
+                }
+            }
+
+            is ExerciseLibraryEvent.OnBodyRegionChanged -> TODO()
+            is ExerciseLibraryEvent.OnExerciseDescriptionChanged -> TODO()
+            is ExerciseLibraryEvent.OnExerciseNameChanged -> TODO()
+            is ExerciseLibraryEvent.OnTargetMusclesChanged -> TODO()
         }
     }
 }

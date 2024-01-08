@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
+import com.langley.exercisestattracker.exerciseLibrary.presentation.components.EditExerciseDefDetailsView
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefDetailsView
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefinitionListItem
 
@@ -69,6 +70,12 @@ fun ExerciseLibraryScreen(
 
         ExerciseDefDetailsView(
             isVisible = state.isSelectedExerciseDefSheetOpen,
+            onEvent = onEvent,
+            selectedExerciseDefinition = state.selectedExerciseDefinition
+        )
+
+        EditExerciseDefDetailsView(
+            isVisible = state.isEditExerciseDefSheetOpen,
             onEvent = onEvent,
             selectedExerciseDefinition = state.selectedExerciseDefinition
         )

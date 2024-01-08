@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
@@ -37,166 +39,172 @@ fun EditExerciseDefDetailsView(
     onEvent: (ExerciseLibraryEvent) -> Unit
 )
 {
-    BasicBottomSheet(
-        visible = isVisible,
-        modifier = Modifier.fillMaxSize()
-    )
-    {
+   if (isVisible){
+       Column(
+           modifier = Modifier
+               .fillMaxSize()
+               .clip(
+                   RoundedCornerShape(
+                       topStart = 30.dp,
+                       topEnd = 30.dp
+                   )
+               )
+               .background(MaterialTheme.colorScheme.surface)
+               .padding(8.dp)
+               .verticalScroll(rememberScrollState()),
+           verticalArrangement = Arrangement.Top
+       )
+       {
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        )
-        {
-            IconButton(
-                onClick = {
-                    onEvent(ExerciseLibraryEvent.CloseExerciseDetailsView)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "Close"
-                )
-            }
+           Row(
+               modifier = Modifier.fillMaxWidth(),
+               horizontalArrangement = Arrangement.SpaceBetween
+           )
+           {
+               IconButton(
+                   onClick = {
+                       onEvent(ExerciseLibraryEvent.CloseEditExerciseDefView)
+                   }
+               ) {
+                   Icon(
+                       imageVector = Icons.Rounded.Close,
+                       contentDescription = "Close"
+                   )
+               }
 
-            Text(
-                text = "Edit",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(16.dp)
-                    .clickable {
-                        onEvent(
-                            ExerciseLibraryEvent.EditExerciseDefinition(selectedExerciseDefinition!!)
-                        ) },
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
+           }
 
-        Column (
-            modifier = Modifier.fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        )
-        {
-            Spacer(Modifier.height(16.dp))
+           Column (
+               modifier = Modifier.fillMaxSize()
+                   .background(MaterialTheme.colorScheme.surface),
+               horizontalAlignment = Alignment.CenterHorizontally,
+               verticalArrangement = Arrangement.Center
+           )
+           {
+               Spacer(Modifier.height(16.dp))
 
-            Column()
-            {
-                Text(
-                    text = "${selectedExerciseDefinition?.exerciseName}",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 35.sp,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(
-                            RoundedCornerShape(16.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.tertiaryContainer)
+               Column()
+               {
+                   Text(
+                       text = "${selectedExerciseDefinition?.exerciseName}",
+                       textAlign = TextAlign.Center,
+                       modifier = Modifier.fillMaxWidth(),
+                       fontWeight = FontWeight.Bold,
+                       fontSize = 35.sp,
+                       color = MaterialTheme.colorScheme.onSurface
+                   )
+                   Spacer(Modifier.height(8.dp))
+                   Row(
+                       modifier = Modifier
+                           .fillMaxWidth()
+                           .height(8.dp)
+                           .clip(
+                               RoundedCornerShape(16.dp)
+                           )
+                           .background(MaterialTheme.colorScheme.tertiaryContainer)
 
-                ){}
-            }
+                   ){}
+               }
 
-            Spacer(
-                Modifier.height(16.dp)
-            )
+               Spacer(
+                   Modifier.height(16.dp)
+               )
 
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ){
+               Row(
+                   modifier = Modifier.fillMaxWidth()
+                       .clip(
+                           RoundedCornerShape(16.dp)
+                       )
+                       .background(MaterialTheme.colorScheme.secondaryContainer)
+                       .padding(4.dp),
+                   horizontalArrangement = Arrangement.SpaceEvenly,
+                   verticalAlignment = Alignment.CenterVertically
+               ){
 
-                Column()
-                {
-                    Text(
-                        text = "Body Region:",
-                        textAlign = TextAlign.Left,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
-                }
+                   Column()
+                   {
+                       Text(
+                           text = "Body Region:",
+                           textAlign = TextAlign.Left,
+                           modifier = Modifier,
+                           fontWeight = FontWeight.Normal,
+                           fontSize = 20.sp,
+                           color = MaterialTheme.colorScheme.onSecondaryContainer
+                       )
+                   }
 
-                Column()
-                {
-                    OutlinedTextField(
-                        value = "${selectedExerciseDefinition?.bodyRegion}",
-                        onValueChange = {}
-                    )
-                    Text(
-                        text = "${selectedExerciseDefinition?.bodyRegion}",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 24.sp,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
-                }
-            }
+                   Column()
+                   {
+                       OutlinedTextField(
+                           value = "${selectedExerciseDefinition?.bodyRegion}",
+                           onValueChange = { onEvent(ExerciseLibraryEvent.OnBodyRegionChanged(it)) },
+                           placeholder = {
+                               Text(text = "Body Region")
+                           },
+                           shape = RoundedCornerShape(20.dp)
 
-            Spacer(Modifier.height(16.dp))
+                       )
+//                    Text(
+//                        text = "${selectedExerciseDefinition?.bodyRegion}",
+//                        textAlign = TextAlign.Center,
+//                        modifier = Modifier,
+//                        fontWeight = FontWeight.Normal,
+//                        fontSize = 24.sp,
+//                        color = MaterialTheme.colorScheme.onSecondaryContainer
+//                    )
+                   }
+               }
 
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Column()
-                {
-                    Text(
-                        text = "Target Muscles:",
-                        textAlign = TextAlign.Left,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
-                }
+               Spacer(Modifier.height(16.dp))
 
-                Column()
-                {
-                    Text(
-                        text = "${selectedExerciseDefinition?.targetMuscles}",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 24.sp,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
-                }
-            }
+               Row(
+                   modifier = Modifier.fillMaxWidth()
+                       .clip(
+                           RoundedCornerShape(16.dp)
+                       )
+                       .background(MaterialTheme.colorScheme.secondaryContainer)
+                       .padding(4.dp),
+                   horizontalArrangement = Arrangement.SpaceEvenly,
+                   verticalAlignment = Alignment.CenterVertically
+               ){
+                   Column()
+                   {
+                       Text(
+                           text = "Target Muscles:",
+                           textAlign = TextAlign.Left,
+                           modifier = Modifier,
+                           fontWeight = FontWeight.Normal,
+                           fontSize = 20.sp,
+                           color = MaterialTheme.colorScheme.onSecondaryContainer
+                       )
+                   }
 
-            Spacer(Modifier.height(16.dp))
+                   Column()
+                   {
+                       Text(
+                           text = "${selectedExerciseDefinition?.targetMuscles}",
+                           textAlign = TextAlign.Center,
+                           modifier = Modifier,
+                           fontWeight = FontWeight.Normal,
+                           fontSize = 24.sp,
+                           color = MaterialTheme.colorScheme.onSecondaryContainer
+                       )
+                   }
+               }
 
-            Text(
-                text = "${selectedExerciseDefinition?.description}",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Normal,
-                fontSize = 20.sp
-            )
+               Spacer(Modifier.height(16.dp))
 
-            Spacer(Modifier.height(16.dp))
+               Text(
+                   text = "${selectedExerciseDefinition?.description}",
+                   textAlign = TextAlign.Center,
+                   modifier = Modifier.fillMaxWidth(),
+                   fontWeight = FontWeight.Normal,
+                   fontSize = 20.sp
+               )
 
-        }
-    }
+               Spacer(Modifier.height(16.dp))
+
+           }
+       }
+   }
 }
