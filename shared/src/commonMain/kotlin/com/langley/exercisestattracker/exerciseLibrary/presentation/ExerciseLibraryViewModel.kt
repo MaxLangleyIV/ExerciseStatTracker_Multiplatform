@@ -64,6 +64,7 @@ class ExerciseLibraryViewModel(
                 _state.update { it.copy(
                     isEditExerciseDefSheetOpen = true,
                 ) }
+                newExerciseDefinition = _state.value.selectedExerciseDefinition?.copy()
             }
 
             ExerciseLibraryEvent.CloseEditExerciseDefView -> {
@@ -72,12 +73,36 @@ class ExerciseLibraryViewModel(
                         isEditExerciseDefSheetOpen = false
                     ) }
                 }
+                newExerciseDefinition = null
             }
 
-            is ExerciseLibraryEvent.OnBodyRegionChanged -> TODO()
-            is ExerciseLibraryEvent.OnExerciseDescriptionChanged -> TODO()
-            is ExerciseLibraryEvent.OnExerciseNameChanged -> TODO()
-            is ExerciseLibraryEvent.OnTargetMusclesChanged -> TODO()
+            is ExerciseLibraryEvent.OnBodyRegionChanged -> {
+                newExerciseDefinition = newExerciseDefinition?.copy(
+                    bodyRegion = event.value
+                )
+            }
+            is ExerciseLibraryEvent.OnExerciseDescriptionChanged -> {
+                newExerciseDefinition = newExerciseDefinition?.copy(
+                    description = event.value
+                )
+            }
+            is ExerciseLibraryEvent.OnExerciseNameChanged -> {
+                newExerciseDefinition = newExerciseDefinition?.copy(
+                    exerciseName = event.value
+                )
+            }
+            is ExerciseLibraryEvent.OnTargetMusclesChanged -> {
+                newExerciseDefinition = newExerciseDefinition?.copy(
+                    targetMuscles = event.value
+                )
+            }
+            ExerciseLibraryEvent.OnUpdateExerciseDefClicked -> {
+                _state.update {it.copy(
+                    selectedExerciseDefinition = newExerciseDefinition,
+                    isEditExerciseDefSheetOpen = false
+                )
+                }
+            }
         }
     }
 }

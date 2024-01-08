@@ -1,7 +1,6 @@
 package com.langley.exercisestattracker.exerciseLibrary.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,14 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.langley.exercisestattracker.core.presentation.BasicBottomSheet
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 
 @Composable
 fun EditExerciseDefDetailsView(
     isVisible: Boolean,
-    selectedExerciseDefinition: ExerciseDefinition?,
+    newExerciseDefinition: ExerciseDefinition?,
     onEvent: (ExerciseLibraryEvent) -> Unit
 )
 {
@@ -83,16 +82,28 @@ fun EditExerciseDefDetailsView(
            {
                Spacer(Modifier.height(16.dp))
 
-               Column()
+               Column(
+                   horizontalAlignment = Alignment.CenterHorizontally
+               )
                {
-                   Text(
-                       text = "${selectedExerciseDefinition?.exerciseName}",
-                       textAlign = TextAlign.Center,
-                       modifier = Modifier.fillMaxWidth(),
-                       fontWeight = FontWeight.Bold,
-                       fontSize = 35.sp,
-                       color = MaterialTheme.colorScheme.onSurface
+                   OutlinedTextField(
+                       value = "${newExerciseDefinition?.exerciseName}",
+                       onValueChange = {
+                           onEvent(ExerciseLibraryEvent.OnExerciseNameChanged(it))
+                       },
+                       placeholder = {
+                           Text(text = "Exercise Name")
+                       },
+                       shape = RoundedCornerShape(20.dp),
                    )
+//                   Text(
+//                       text = "${selectedExerciseDefinition?.exerciseName}",
+//                       textAlign = TextAlign.Center,
+//                       modifier = Modifier.fillMaxWidth(),
+//                       fontWeight = FontWeight.Bold,
+//                       fontSize = 35.sp,
+//                       color = MaterialTheme.colorScheme.onSurface
+//                   )
                    Spacer(Modifier.height(8.dp))
                    Row(
                        modifier = Modifier
@@ -136,7 +147,7 @@ fun EditExerciseDefDetailsView(
                    Column()
                    {
                        OutlinedTextField(
-                           value = "${selectedExerciseDefinition?.bodyRegion}",
+                           value = "${newExerciseDefinition?.bodyRegion}",
                            onValueChange = { onEvent(ExerciseLibraryEvent.OnBodyRegionChanged(it)) },
                            placeholder = {
                                Text(text = "Body Region")
@@ -181,28 +192,56 @@ fun EditExerciseDefDetailsView(
 
                    Column()
                    {
-                       Text(
-                           text = "${selectedExerciseDefinition?.targetMuscles}",
-                           textAlign = TextAlign.Center,
-                           modifier = Modifier,
-                           fontWeight = FontWeight.Normal,
-                           fontSize = 24.sp,
-                           color = MaterialTheme.colorScheme.onSecondaryContainer
+                       OutlinedTextField(
+                           value = "${newExerciseDefinition?.targetMuscles}",
+                           onValueChange = {
+                               onEvent(ExerciseLibraryEvent.OnTargetMusclesChanged(it))
+                                           },
+                           placeholder = {
+                               Text(text = "Target Muscles")
+                           },
+                           shape = RoundedCornerShape(20.dp)
                        )
+//                       Text(
+//                           text = "${selectedExerciseDefinition?.targetMuscles}",
+//                           textAlign = TextAlign.Center,
+//                           modifier = Modifier,
+//                           fontWeight = FontWeight.Normal,
+//                           fontSize = 24.sp,
+//                           color = MaterialTheme.colorScheme.onSecondaryContainer
+//                       )
                    }
                }
 
                Spacer(Modifier.height(16.dp))
 
-               Text(
-                   text = "${selectedExerciseDefinition?.description}",
-                   textAlign = TextAlign.Center,
-                   modifier = Modifier.fillMaxWidth(),
-                   fontWeight = FontWeight.Normal,
-                   fontSize = 20.sp
+               OutlinedTextField(
+                   value = "${newExerciseDefinition?.description}",
+                   onValueChange = {
+                       onEvent(ExerciseLibraryEvent.OnExerciseDescriptionChanged(it))
+                   },
+                   placeholder = {
+                       Text(text = "Exercise Description")
+                   },
+                   shape = RoundedCornerShape(20.dp)
                )
+//               Text(
+//                   text = "${selectedExerciseDefinition?.description}",
+//                   textAlign = TextAlign.Center,
+//                   modifier = Modifier.fillMaxWidth(),
+//                   fontWeight = FontWeight.Normal,
+//                   fontSize = 20.sp
+//               )
 
                Spacer(Modifier.height(16.dp))
+
+               Button(
+                   onClick = {
+                       onEvent(ExerciseLibraryEvent.OnUpdateExerciseDefClicked)
+                   }
+               ){
+                   Text(text = "Update")
+               }
 
            }
        }
