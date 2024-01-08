@@ -243,6 +243,16 @@ fun EditExerciseDefDetailsView(
                    Text(text = "Update")
                }
 
+               Spacer(Modifier.height(8.dp))
+
+               Button(
+                   onClick = {
+                       onEvent(ExerciseLibraryEvent.CloseEditExerciseDefView)
+                   }
+               ){
+                   Text(text = "Cancel")
+               }
+
            }
        }
    }
