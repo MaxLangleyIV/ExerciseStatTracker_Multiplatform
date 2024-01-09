@@ -211,7 +211,7 @@ fun EditExerciseDefDetailsView(
 
                Button(
                    onClick = {
-                       onEvent(ExerciseLibraryEvent.OnUpdateExerciseDefClicked)
+                       onEvent(ExerciseLibraryEvent.SaveOrUpdateExerciseDef)
                    }
                ){
                    Text(text = "Update")

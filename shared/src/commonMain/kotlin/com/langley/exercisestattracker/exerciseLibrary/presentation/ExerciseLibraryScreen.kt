@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
+import com.langley.exercisestattracker.exerciseLibrary.presentation.components.AddNewExerciseDefView
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.EditExerciseDefDetailsView
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefDetailsView
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefinitionListItem
@@ -34,7 +35,7 @@ fun ExerciseLibraryScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    onEvent(ExerciseLibraryEvent.DefaultEvent)
+                    onEvent(ExerciseLibraryEvent.AddNewExerciseDefClicked)
                 },
                 shape = RoundedCornerShape(20.dp)
             ){
@@ -76,6 +77,13 @@ fun ExerciseLibraryScreen(
 
         EditExerciseDefDetailsView(
             isVisible = state.isEditExerciseDefSheetOpen,
+            state = state,
+            onEvent = onEvent,
+            newExerciseDefinition = newExerciseDefinition
+        )
+
+        AddNewExerciseDefView(
+            isVisible = state.isAddExerciseDefSheetOpen,
             state = state,
             onEvent = onEvent,
             newExerciseDefinition = newExerciseDefinition

@@ -7,11 +7,9 @@ import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionValidator
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -102,7 +100,7 @@ class ExerciseLibraryViewModel(
                     targetMuscles = event.value
                 )
             }
-            is ExerciseLibraryEvent.OnUpdateExerciseDefClicked -> {
+            is ExerciseLibraryEvent.SaveOrUpdateExerciseDef -> {
                 newExerciseDefinition?.let {exerciseDefinition ->
 
                     val validationResult =
@@ -132,6 +130,25 @@ class ExerciseLibraryViewModel(
                             exerciseTargetMusclesError = validationResult.targetMusclesErrorString
                         ) }
                     }
+                }
+            }
+
+            ExerciseLibraryEvent.AddNewExerciseDefClicked -> {
+                _state.update { it.copy(
+                    isAddExerciseDefSheetOpen = true,
+                ) }
+            }
+
+            ExerciseLibraryEvent.CloseAddExerciseDefClicked -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        isAddExerciseDefSheetOpen = false,
+                        exerciseNameError = null,
+                        exerciseBodyRegionError = null,
+                        exerciseTargetMusclesError = null
+                    ) }
+                    delay(300L) //Animation delay for slide out.
+                    newExerciseDefinition = null
                 }
             }
         }
