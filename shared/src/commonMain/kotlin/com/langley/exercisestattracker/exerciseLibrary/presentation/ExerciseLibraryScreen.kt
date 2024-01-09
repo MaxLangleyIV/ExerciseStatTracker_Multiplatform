@@ -76,6 +76,7 @@ fun ExerciseLibraryScreen(
 
         EditExerciseDefDetailsView(
             isVisible = state.isEditExerciseDefSheetOpen,
+            state = state,
             onEvent = onEvent,
             newExerciseDefinition = newExerciseDefinition
         )

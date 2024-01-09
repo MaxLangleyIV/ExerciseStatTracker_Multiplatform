@@ -11,6 +11,18 @@ object ExerciseDefinitionValidator {
             )
         }
 
+        if (exerciseDefinition.bodyRegion.isBlank()){
+            validationResult = validationResult.copy(
+                bodyRegionErrorString = "Exercise body region can't be empty."
+            )
+        }
+
+        if (exerciseDefinition.targetMuscles.isBlank()){
+            validationResult = validationResult.copy(
+                targetMusclesErrorString = "Exercise target muscles can't be empty."
+            )
+        }
+
         return validationResult
     }
 

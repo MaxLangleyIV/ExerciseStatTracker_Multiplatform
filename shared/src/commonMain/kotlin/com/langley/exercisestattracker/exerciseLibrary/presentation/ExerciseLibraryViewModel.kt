@@ -73,7 +73,10 @@ class ExerciseLibraryViewModel(
             ExerciseLibraryEvent.CloseEditExerciseDefView -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
-                        isEditExerciseDefSheetOpen = false
+                        isEditExerciseDefSheetOpen = false,
+                        exerciseNameError = null,
+                        exerciseBodyRegionError = null,
+                        exerciseTargetMusclesError = null
                     ) }
                 }
                 newExerciseDefinition = null

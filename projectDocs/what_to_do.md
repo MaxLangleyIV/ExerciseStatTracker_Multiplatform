@@ -1,8 +1,7 @@
 ## Current Targets:
 
 **Create / Edit Exercise Definition**:
-	TODO:
-		Input validator
+	TODO
 		Page for adding a new user defined exercise.
 
 **Exercise Library**:
@@ -70,11 +69,11 @@
 **Create / Edit Exercise Definition**:
 
 	TODO:
-		Input validator
 		Page for adding a new user defined exercise.
 
 	DONE:
 		Basic edit page for existing exercise definitions.
+		Input validator
 
 **Create / Edit Exercise Routine**:
 

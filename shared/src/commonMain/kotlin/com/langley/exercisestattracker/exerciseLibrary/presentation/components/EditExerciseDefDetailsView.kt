@@ -30,9 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
+import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 
 @Composable
 fun EditExerciseDefDetailsView(
+    state: ExerciseLibraryState,
     isVisible: Boolean,
     newExerciseDefinition: ExerciseDefinition?,
     onEvent: (ExerciseLibraryEvent) -> Unit
@@ -86,15 +88,13 @@ fun EditExerciseDefDetailsView(
                    horizontalAlignment = Alignment.CenterHorizontally
                )
                {
-                   OutlinedTextField(
+                   ErrorDisplayingTextField(
                        value = "${newExerciseDefinition?.exerciseName}",
-                       onValueChange = {
+                       placeholder = "Exercise Name",
+                       error = state.exerciseNameError,
+                       onValueChanged = {
                            onEvent(ExerciseLibraryEvent.OnExerciseNameChanged(it))
                        },
-                       placeholder = {
-                           Text(text = "Exercise Name")
-                       },
-                       shape = RoundedCornerShape(20.dp),
                    )
 
                    Spacer(Modifier.height(8.dp))
@@ -139,14 +139,13 @@ fun EditExerciseDefDetailsView(
 
                    Column()
                    {
-                       OutlinedTextField(
+                       ErrorDisplayingTextField(
                            value = "${newExerciseDefinition?.bodyRegion}",
-                           onValueChange = { onEvent(ExerciseLibraryEvent.OnBodyRegionChanged(it)) },
-                           placeholder = {
-                               Text(text = "Body Region")
+                           placeholder = "Body Region",
+                           error = state.exerciseBodyRegionError,
+                           onValueChanged = {
+                               onEvent(ExerciseLibraryEvent.OnBodyRegionChanged(it))
                            },
-                           shape = RoundedCornerShape(20.dp)
-
                        )
                    }
                }
@@ -177,15 +176,13 @@ fun EditExerciseDefDetailsView(
 
                    Column()
                    {
-                       OutlinedTextField(
+                       ErrorDisplayingTextField(
                            value = "${newExerciseDefinition?.targetMuscles}",
-                           onValueChange = {
+                           placeholder = "Target Muscles",
+                           error = state.exerciseTargetMusclesError,
+                           onValueChanged = {
                                onEvent(ExerciseLibraryEvent.OnTargetMusclesChanged(it))
                                            },
-                           placeholder = {
-                               Text(text = "Target Muscles")
-                           },
-                           shape = RoundedCornerShape(20.dp)
                        )
                    }
                }
@@ -236,7 +233,7 @@ fun EditExerciseDefDetailsView(
 }
 
 @Composable
-fun ErrorCheckingTextField(
+fun ErrorDisplayingTextField(
     value: String,
     placeholder: String,
     error: String?,
