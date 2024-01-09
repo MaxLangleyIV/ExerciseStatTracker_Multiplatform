@@ -65,3 +65,4 @@ Analytics are easily accessible from the homepage of the app.
 Analytics displayed can be filtered by time period.
 
 __________________________________________________________________________________________________________________
+
