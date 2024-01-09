@@ -5,12 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSource
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionValidator
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -26,7 +29,7 @@ class ExerciseLibraryViewModel(
         state.copy(
             exerciseDefinitions = exerciseDefinitions
         )
-    }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), ExerciseLibraryState())
 
     var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(null)
         private set
@@ -96,11 +99,36 @@ class ExerciseLibraryViewModel(
                     targetMuscles = event.value
                 )
             }
-            ExerciseLibraryEvent.OnUpdateExerciseDefClicked -> {
-                _state.update {it.copy(
-                    selectedExerciseDefinition = newExerciseDefinition,
-                    isEditExerciseDefSheetOpen = false
-                )
+            is ExerciseLibraryEvent.OnUpdateExerciseDefClicked -> {
+                newExerciseDefinition?.let {exerciseDefinition ->
+
+                    val validationResult =
+                        ExerciseDefinitionValidator.validateExerciseDefinition(exerciseDefinition)
+
+                    val errorsList = listOfNotNull(
+                        validationResult.nameErrorString,
+                        validationResult.bodyRegionErrorString,
+                        validationResult.targetMusclesErrorString
+                    )
+
+                    if (errorsList.isEmpty()){
+                        _state.update {it.copy(
+                            selectedExerciseDefinition = newExerciseDefinition,
+                            isEditExerciseDefSheetOpen = false
+                        )
+                        }
+
+                        viewModelScope.launch {
+                            exerciseLibraryDataSource.insertOrReplaceExerciseDefinition(exerciseDefinition)
+                        }
+                    }
+                    else {
+                        _state.update { it.copy(
+                            exerciseNameError = validationResult.nameErrorString,
+                            exerciseBodyRegionError = validationResult.bodyRegionErrorString,
+                            exerciseTargetMusclesError = validationResult.targetMusclesErrorString
+                        ) }
+                    }
                 }
             }
         }
