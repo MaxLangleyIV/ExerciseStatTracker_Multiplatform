@@ -96,14 +96,7 @@ fun EditExerciseDefDetailsView(
                        },
                        shape = RoundedCornerShape(20.dp),
                    )
-//                   Text(
-//                       text = "${selectedExerciseDefinition?.exerciseName}",
-//                       textAlign = TextAlign.Center,
-//                       modifier = Modifier.fillMaxWidth(),
-//                       fontWeight = FontWeight.Bold,
-//                       fontSize = 35.sp,
-//                       color = MaterialTheme.colorScheme.onSurface
-//                   )
+
                    Spacer(Modifier.height(8.dp))
                    Row(
                        modifier = Modifier
@@ -155,14 +148,6 @@ fun EditExerciseDefDetailsView(
                            shape = RoundedCornerShape(20.dp)
 
                        )
-//                    Text(
-//                        text = "${selectedExerciseDefinition?.bodyRegion}",
-//                        textAlign = TextAlign.Center,
-//                        modifier = Modifier,
-//                        fontWeight = FontWeight.Normal,
-//                        fontSize = 24.sp,
-//                        color = MaterialTheme.colorScheme.onSecondaryContainer
-//                    )
                    }
                }
 
@@ -202,14 +187,6 @@ fun EditExerciseDefDetailsView(
                            },
                            shape = RoundedCornerShape(20.dp)
                        )
-//                       Text(
-//                           text = "${selectedExerciseDefinition?.targetMuscles}",
-//                           textAlign = TextAlign.Center,
-//                           modifier = Modifier,
-//                           fontWeight = FontWeight.Normal,
-//                           fontSize = 24.sp,
-//                           color = MaterialTheme.colorScheme.onSecondaryContainer
-//                       )
                    }
                }
 
@@ -256,4 +233,29 @@ fun EditExerciseDefDetailsView(
            }
        }
    }
+}
+
+@Composable
+fun ErrorCheckingTextField(
+    value: String,
+    placeholder: String,
+    error: String?,
+    onValueChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
+){
+    OutlinedTextField(
+        value = value,
+        placeholder = {
+            Text(text = placeholder)
+        },
+        onValueChange = onValueChanged,
+        shape = RoundedCornerShape(20.dp),
+        modifier = modifier
+    )
+    if (error != null){
+        Text(
+            text = error,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
 }
