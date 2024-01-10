@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.presentation.BasicBottomSheet
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
@@ -39,187 +40,188 @@ fun AddNewExerciseDefView(
     newExerciseDefinition: ExerciseDefinition?,
     onEvent: (ExerciseLibraryEvent) -> Unit
 ){
-    if (isVisible){
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 30.dp,
-                        topEnd = 30.dp
-                    )
-                )
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top
+    //        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .clip(
+//                    RoundedCornerShape(
+//                        topStart = 30.dp,
+//                        topEnd = 30.dp
+//                    )
+//                )
+//                .background(MaterialTheme.colorScheme.surface)
+//                .padding(8.dp)
+//                .verticalScroll(rememberScrollState()),
+//            verticalArrangement = Arrangement.Top
+//        )
+    BasicBottomSheet(
+        visible = isVisible,
+        modifier = Modifier.fillMaxSize()
+    )
+    {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         )
         {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            )
-            {
-                IconButton(
-                    onClick = {
-                        onEvent(ExerciseLibraryEvent.CloseAddExerciseDefClicked)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = "Close"
-                    )
+            IconButton(
+                onClick = {
+                    onEvent(ExerciseLibraryEvent.CloseAddExerciseDefClicked)
                 }
-
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close"
+                )
             }
+        }
 
-            Column (
-                modifier = Modifier.fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surface),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+        Column (
+            modifier = Modifier.fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        )
+        {
+            Spacer(Modifier.height(16.dp))
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
             )
             {
-                Spacer(Modifier.height(16.dp))
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
-                {
-                    ErrorDisplayingTextField(
-                        value = "${newExerciseDefinition?.exerciseName}",
-                        placeholder = "Exercise Name",
-                        error = state.exerciseNameError,
-                        onValueChanged = {
-                            onEvent(ExerciseLibraryEvent.OnExerciseNameChanged(it))
-                        },
-                    )
-
-                    Spacer(Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .clip(
-                                RoundedCornerShape(16.dp)
-                            )
-                            .background(MaterialTheme.colorScheme.tertiaryContainer)
-
-                    ){}
-                }
-
-                Spacer(
-                    Modifier.height(16.dp)
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .clip(
-                            RoundedCornerShape(16.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-
-                    Column()
-                    {
-                        Text(
-                            text = "Body Region:",
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                    }
-
-                    Column()
-                    {
-                        ErrorDisplayingTextField(
-                            value = "${newExerciseDefinition?.bodyRegion}",
-                            placeholder = "Body Region",
-                            error = state.exerciseBodyRegionError,
-                            onValueChanged = {
-                                onEvent(ExerciseLibraryEvent.OnBodyRegionChanged(it))
-                            },
-                        )
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .clip(
-                            RoundedCornerShape(16.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Column()
-                    {
-                        Text(
-                            text = "Target Muscles:",
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                    }
-
-                    Column()
-                    {
-                        ErrorDisplayingTextField(
-                            value = "${newExerciseDefinition?.targetMuscles}",
-                            placeholder = "Target Muscles",
-                            error = state.exerciseTargetMusclesError,
-                            onValueChanged = {
-                                onEvent(ExerciseLibraryEvent.OnTargetMusclesChanged(it))
-                            },
-                        )
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                OutlinedTextField(
-                    value = "${newExerciseDefinition?.description}",
-                    onValueChange = {
-                        onEvent(ExerciseLibraryEvent.OnExerciseDescriptionChanged(it))
+                ErrorDisplayingTextField(
+                    value = "${newExerciseDefinition?.exerciseName}",
+                    placeholder = "Exercise Name",
+                    error = state.exerciseNameError,
+                    onValueChanged = {
+                        onEvent(ExerciseLibraryEvent.OnExerciseNameChanged(it))
                     },
-                    placeholder = {
-                        Text(text = "Exercise Description")
-                    },
-                    shape = RoundedCornerShape(20.dp)
                 )
-
-                Spacer(Modifier.height(16.dp))
-
-                Button(
-                    onClick = {
-                        onEvent(ExerciseLibraryEvent.SaveOrUpdateExerciseDef)
-                    }
-                ){
-                    Text(text = "Update")
-                }
 
                 Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(
+                            RoundedCornerShape(16.dp)
+                        )
+                        .background(MaterialTheme.colorScheme.tertiaryContainer)
 
-                Button(
-                    onClick = {
-                        onEvent(ExerciseLibraryEvent.CloseAddExerciseDefClicked)
-                    }
-                ){
-                    Text(text = "Cancel")
+                ){}
+            }
+
+            Spacer(
+                Modifier.height(16.dp)
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(16.dp)
+                    )
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+
+                Column()
+                {
+                    Text(
+                        text = "Body Region:",
+                        textAlign = TextAlign.Left,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
                 }
 
+                Column()
+                {
+                    ErrorDisplayingTextField(
+                        value = "${newExerciseDefinition?.bodyRegion}",
+                        placeholder = "Body Region",
+                        error = state.exerciseBodyRegionError,
+                        onValueChanged = {
+                            onEvent(ExerciseLibraryEvent.OnBodyRegionChanged(it))
+                        },
+                    )
+                }
             }
+
+            Spacer(Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(16.dp)
+                    )
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Column()
+                {
+                    Text(
+                        text = "Target Muscles:",
+                        textAlign = TextAlign.Left,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+
+                Column()
+                {
+                    ErrorDisplayingTextField(
+                        value = "${newExerciseDefinition?.targetMuscles}",
+                        placeholder = "Target Muscles",
+                        error = state.exerciseTargetMusclesError,
+                        onValueChanged = {
+                            onEvent(ExerciseLibraryEvent.OnTargetMusclesChanged(it))
+                        },
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = "${newExerciseDefinition?.description}",
+                onValueChange = {
+                    onEvent(ExerciseLibraryEvent.OnExerciseDescriptionChanged(it))
+                },
+                placeholder = {
+                    Text(text = "Exercise Description")
+                },
+                shape = RoundedCornerShape(20.dp)
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    onEvent(ExerciseLibraryEvent.SaveOrUpdateExerciseDef)
+                }
+            ){
+                Text(text = "Update")
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    onEvent(ExerciseLibraryEvent.CloseAddExerciseDefClicked)
+                }
+            ){
+                Text(text = "Cancel")
+            }
+
         }
     }
 }

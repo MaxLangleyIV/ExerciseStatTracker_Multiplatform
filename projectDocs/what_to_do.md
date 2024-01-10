@@ -1,9 +1,5 @@
 ## Current Targets:
 
-**Create / Edit Exercise Definition**:
-	TODO
-		Page for adding a new user defined exercise.
-
 **Exercise Library**:
 	TODO:
 		Search bar.
@@ -69,9 +65,10 @@
 **Create / Edit Exercise Definition**:
 
 	TODO:
-		Page for adding a new user defined exercise.
+		Beautify UI.
 
 	DONE:
+		Page for adding a new user defined exercise.
 		Basic edit page for existing exercise definitions.
 		Input validator
 

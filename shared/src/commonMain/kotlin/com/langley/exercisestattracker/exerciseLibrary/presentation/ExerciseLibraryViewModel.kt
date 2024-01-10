@@ -115,7 +115,8 @@ class ExerciseLibraryViewModel(
                     if (errorsList.isEmpty()){
                         _state.update {it.copy(
                             selectedExerciseDefinition = newExerciseDefinition,
-                            isEditExerciseDefSheetOpen = false
+                            isEditExerciseDefSheetOpen = false,
+                            isAddExerciseDefSheetOpen = false
                         )
                         }
 
@@ -137,6 +138,15 @@ class ExerciseLibraryViewModel(
                 _state.update { it.copy(
                     isAddExerciseDefSheetOpen = true,
                 ) }
+                newExerciseDefinition = ExerciseDefinition(
+                    exerciseDefinitionId = null,
+                    exerciseName = "",
+                    bodyRegion = "",
+                    targetMuscles = "",
+                    description = "",
+                    isFavorite = 0,
+                    dateCreated = null
+                )
             }
 
             ExerciseLibraryEvent.CloseAddExerciseDefClicked -> {
