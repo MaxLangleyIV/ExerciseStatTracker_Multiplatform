@@ -77,6 +77,19 @@ fun AddNewExerciseDefView(
             }
         }
 
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ){
+            Text(
+                text = "New Exercise:",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Bold,
+                fontSize = 35.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+
         Column (
             modifier = Modifier.fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface),
@@ -209,7 +222,7 @@ fun AddNewExerciseDefView(
                     onEvent(ExerciseLibraryEvent.SaveOrUpdateExerciseDef)
                 }
             ){
-                Text(text = "Update")
+                Text(text = "Save")
             }
 
             Spacer(Modifier.height(8.dp))

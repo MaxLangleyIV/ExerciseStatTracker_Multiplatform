@@ -65,6 +65,7 @@
 **Create / Edit Exercise Definition**:
 
 	TODO:
+		Add a delete button
 		Beautify UI.
 
 	DONE:
@@ -75,11 +76,19 @@
 **Create / Edit Exercise Routine**:
 
 	TODO:
+		Page for adding a new user defined routines.
+		Basic edit page for existing exercise routines.
+		Input validator
+
 	DONE:
 
 **Create / Edit Exercise Schedule**:
 
 	TODO:
+		Page for adding a new user defined routines.
+		Basic edit page for existing exercise routines.
+		Input validator
+
 	DONE:
 
 **Current Exercise**:
@@ -90,4 +99,5 @@
 **Completed Exercises**:
 
 	TODO:
+		List of all completed exercise records.
 	DONE:
