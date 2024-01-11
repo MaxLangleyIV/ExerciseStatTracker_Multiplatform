@@ -161,6 +161,8 @@ class ExerciseLibraryViewModel(
                     newExerciseDefinition = null
                 }
             }
+
+            is ExerciseLibraryEvent.OnSearchStringChanged -> TODO()
         }
     }
 }

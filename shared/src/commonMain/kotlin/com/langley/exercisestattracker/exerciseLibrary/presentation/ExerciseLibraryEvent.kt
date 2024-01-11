@@ -18,4 +18,5 @@ sealed interface ExerciseLibraryEvent {
     data class OnTargetMusclesChanged(val value: String) : ExerciseLibraryEvent
     data class OnExerciseNameChanged(val value: String) : ExerciseLibraryEvent
     data class OnExerciseDescriptionChanged(val value: String) : ExerciseLibraryEvent
+    data class OnSearchStringChanged(val value: String) : ExerciseLibraryEvent
 }
