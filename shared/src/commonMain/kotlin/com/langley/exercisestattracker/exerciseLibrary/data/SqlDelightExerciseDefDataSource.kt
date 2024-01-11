@@ -28,6 +28,17 @@ class SqlDelightExerciseDefDataSource(
             }
     }
 
+    override fun getDefinitionsLikeName(searchString: String): Flow<List<ExerciseDefinition>> {
+        return exerciseDefinitionQueries.getDefinitionsLikeName(searchString)
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+            .map { dbExerciseDefinitions ->
+                dbExerciseDefinitions.map { dbExerciseDefinition ->
+                    dbExerciseDefinition.toExerciseDefinition()
+                }
+            }
+    }
+
     override fun getFavoriteDefinitions(): Flow<List<ExerciseDefinition>> {
         return exerciseDefinitionQueries
             .getFavoriteDefinitions()

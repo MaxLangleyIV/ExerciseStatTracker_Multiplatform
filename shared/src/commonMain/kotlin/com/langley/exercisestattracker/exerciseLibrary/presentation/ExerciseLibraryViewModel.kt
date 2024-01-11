@@ -162,7 +162,8 @@ class ExerciseLibraryViewModel(
                 }
             }
 
-            is ExerciseLibraryEvent.OnSearchStringChanged -> TODO()
+            is ExerciseLibraryEvent.OnSearchStringChanged -> return
+            ExerciseLibraryEvent.ToggleIsSearching -> return
         }
     }
 }

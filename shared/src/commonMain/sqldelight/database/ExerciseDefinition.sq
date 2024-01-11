@@ -8,6 +8,11 @@ CREATE TABLE ExerciseDefinition (
     dateCreated INTEGER NOT NULL
 );
 
+getDefinitionsLikeName:
+SELECT *
+FROM ExerciseDefinition
+WHERE exerciseName LIKE :searchString;
+
 getExerciseDefinitions:
 SELECT *
 FROM ExerciseDefinition
