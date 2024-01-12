@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.core.presentation
+package com.langley.exercisestattracker.core.presentation.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -37,12 +37,6 @@ fun BasicBottomSheet(
     ) {
         Column(
             modifier = modifier
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 30.dp,
-                        topEnd = 30.dp
-                    )
-                )
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState()),

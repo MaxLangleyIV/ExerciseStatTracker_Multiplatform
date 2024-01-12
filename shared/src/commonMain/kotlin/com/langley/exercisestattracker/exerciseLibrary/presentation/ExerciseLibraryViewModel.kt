@@ -1,5 +1,6 @@
 package com.langley.exercisestattracker.exerciseLibrary.presentation
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,7 +11,9 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,14 +22,27 @@ class ExerciseLibraryViewModel(
     private val exerciseLibraryDataSource: ExerciseDefinitionDataSource
 ): ViewModel() {
     private val _state = MutableStateFlow(ExerciseLibraryState())
+
     val state = combine(
         _state,
-        exerciseLibraryDataSource.getDefinitions()
+        exerciseLibraryDataSource.getDefinitions(),
     ){
         state, exerciseDefinitions ->
-        state.copy(
-            exerciseDefinitions = exerciseDefinitions
-        )
+
+        if (state.searchString.isBlank()) {
+            state.copy(
+                exerciseDefinitions = exerciseDefinitions
+            )
+        }
+
+        else {
+            state.copy(
+                exerciseDefinitions = exerciseDefinitions.filter {
+                    it.exerciseName.contains(state.searchString, ignoreCase = true)
+                }
+            )
+        }
+
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), ExerciseLibraryState())
 
     var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(null)
@@ -38,6 +54,7 @@ class ExerciseLibraryViewModel(
 
             is ExerciseLibraryEvent.ExerciseDefinitionSelected -> {
                 _state.update { it.copy(
+                    isSearchDropdownOpen = false,
                     selectedExerciseDefinition = event.exerciseDefinition,
                     isSelectedExerciseDefSheetOpen = true
                 ) }
@@ -162,8 +179,16 @@ class ExerciseLibraryViewModel(
                 }
             }
 
-            is ExerciseLibraryEvent.OnSearchStringChanged -> return
-            ExerciseLibraryEvent.ToggleIsSearching -> return
+            is ExerciseLibraryEvent.OnSearchStringChanged -> {
+                _state.update { it.copy(
+                    searchString = event.value
+                ) }
+            }
+            ExerciseLibraryEvent.ToggleIsDropdownOpen -> {
+                _state.update { it.copy(
+                    isSearchDropdownOpen = !_state.value.isSearchDropdownOpen
+                ) }
+            }
         }
     }
 }

@@ -65,6 +65,7 @@ android {
     }
 }
 dependencies {
+    implementation(libs.androidx.ui.tooling.preview.android)
     commonMainApi(libs.mvvm.core)
     commonMainApi(libs.mvvm.compose)
     commonMainApi(libs.mvvm.flow)

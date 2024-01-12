@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
@@ -28,7 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.langley.exercisestattracker.core.presentation.BasicBottomSheet
+import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
+import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
@@ -40,20 +39,6 @@ fun AddNewExerciseDefView(
     newExerciseDefinition: ExerciseDefinition?,
     onEvent: (ExerciseLibraryEvent) -> Unit
 ){
-    //        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .clip(
-//                    RoundedCornerShape(
-//                        topStart = 30.dp,
-//                        topEnd = 30.dp
-//                    )
-//                )
-//                .background(MaterialTheme.colorScheme.surface)
-//                .padding(8.dp)
-//                .verticalScroll(rememberScrollState()),
-//            verticalArrangement = Arrangement.Top
-//        )
     BasicBottomSheet(
         visible = isVisible,
         modifier = Modifier.fillMaxSize()

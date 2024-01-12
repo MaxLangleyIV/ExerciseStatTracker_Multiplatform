@@ -10,7 +10,7 @@ sealed interface ExerciseLibraryEvent {
     data object SaveOrUpdateExerciseDef : ExerciseLibraryEvent
     data object AddNewExerciseDefClicked : ExerciseLibraryEvent
     data object CloseAddExerciseDefClicked : ExerciseLibraryEvent
-    data object ToggleIsSearching: ExerciseLibraryEvent
+    data object ToggleIsDropdownOpen: ExerciseLibraryEvent
 
     data class EditExerciseDefinition(val exerciseDefinition: ExerciseDefinition) : ExerciseLibraryEvent
     data class ExerciseDefinitionSelected(val exerciseDefinition: ExerciseDefinition): ExerciseLibraryEvent

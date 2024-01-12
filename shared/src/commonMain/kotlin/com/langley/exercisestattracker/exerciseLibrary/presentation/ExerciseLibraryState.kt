@@ -8,8 +8,9 @@ data class ExerciseLibraryState(
     val selectedExerciseDefinition: ExerciseDefinition? = null,
 
     //Search state
-    val isSearching: Boolean = false,
+    val isSearchDropdownOpen: Boolean = false,
     val searchString: String = "",
+    val previousSearches: List<String>? = null,
 
     //UI visibility flags.
     val isSelectedExerciseDefSheetOpen: Boolean = false,

@@ -2,13 +2,10 @@ package com.langley.exercisestattracker.exerciseLibrary.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,7 +18,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,6 +26,7 @@ import com.langley.exercisestattracker.exerciseLibrary.presentation.components.A
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.EditExerciseDefDetailsView
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefDetailsView
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefinitionListItem
+import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseLibraryTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,26 +50,14 @@ fun ExerciseLibraryScreen(
             }
         }
     ){
-
         Column(
             modifier = Modifier.fillMaxSize()
         ){
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ){
-                SearchBar(
-                    query = state.searchString,
-                    onQueryChange = {
-                        onEvent(ExerciseLibraryEvent.OnSearchStringChanged(it))
-                    },
-                    onSearch = {
-                        onEvent(ExerciseLibraryEvent.OnSearchStringChanged(it))
-                    },
-                    active = state.isSearching,
-                    onActiveChange = { onEvent(ExerciseLibraryEvent.ToggleIsSearching) }
-                ){}
-            }
+            ExerciseLibraryTopBar(
+                state = state,
+                onEvent = onEvent
+            )
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier
@@ -95,26 +80,26 @@ fun ExerciseLibraryScreen(
                     }
                 }
             )
-
-            ExerciseDefDetailsView(
-                isVisible = state.isSelectedExerciseDefSheetOpen,
-                onEvent = onEvent,
-                selectedExerciseDefinition = state.selectedExerciseDefinition
-            )
-
-            EditExerciseDefDetailsView(
-                isVisible = state.isEditExerciseDefSheetOpen,
-                state = state,
-                onEvent = onEvent,
-                newExerciseDefinition = newExerciseDefinition
-            )
-
-            AddNewExerciseDefView(
-                isVisible = state.isAddExerciseDefSheetOpen,
-                state = state,
-                onEvent = onEvent,
-                newExerciseDefinition = newExerciseDefinition
-            )
         }
+
+        ExerciseDefDetailsView(
+            isVisible = state.isSelectedExerciseDefSheetOpen,
+            onEvent = onEvent,
+            selectedExerciseDefinition = state.selectedExerciseDefinition
+        )
+
+        EditExerciseDefDetailsView(
+            isVisible = state.isEditExerciseDefSheetOpen,
+            state = state,
+            onEvent = onEvent,
+            newExerciseDefinition = newExerciseDefinition
+        )
+
+        AddNewExerciseDefView(
+            isVisible = state.isAddExerciseDefSheetOpen,
+            state = state,
+            onEvent = onEvent,
+            newExerciseDefinition = newExerciseDefinition
+        )
     }
 }

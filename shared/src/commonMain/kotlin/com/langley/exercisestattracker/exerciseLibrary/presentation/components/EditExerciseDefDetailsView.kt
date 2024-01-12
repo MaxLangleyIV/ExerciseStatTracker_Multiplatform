@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
@@ -44,12 +45,6 @@ fun EditExerciseDefDetailsView(
        Column(
            modifier = Modifier
                .fillMaxSize()
-               .clip(
-                   RoundedCornerShape(
-                       topStart = 30.dp,
-                       topEnd = 30.dp
-                   )
-               )
                .background(MaterialTheme.colorScheme.surface)
                .padding(8.dp)
                .verticalScroll(rememberScrollState()),
@@ -232,27 +227,3 @@ fun EditExerciseDefDetailsView(
    }
 }
 
-@Composable
-fun ErrorDisplayingTextField(
-    value: String,
-    placeholder: String,
-    error: String?,
-    onValueChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
-){
-    OutlinedTextField(
-        value = value,
-        placeholder = {
-            Text(text = placeholder)
-        },
-        onValueChange = onValueChanged,
-        shape = RoundedCornerShape(20.dp),
-        modifier = modifier
-    )
-    if (error != null){
-        Text(
-            text = error,
-            color = MaterialTheme.colorScheme.error
-        )
-    }
-}

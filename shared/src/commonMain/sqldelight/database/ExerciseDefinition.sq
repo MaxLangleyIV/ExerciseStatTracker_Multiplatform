@@ -11,7 +11,8 @@ CREATE TABLE ExerciseDefinition (
 getDefinitionsLikeName:
 SELECT *
 FROM ExerciseDefinition
-WHERE exerciseName LIKE :searchString;
+WHERE exerciseName LIKE (:searchString || '%')
+ORDER BY exerciseName ASC;
 
 getExerciseDefinitions:
 SELECT *
