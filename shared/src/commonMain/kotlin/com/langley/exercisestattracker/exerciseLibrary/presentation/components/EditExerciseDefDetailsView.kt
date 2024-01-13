@@ -1,6 +1,7 @@
 package com.langley.exercisestattracker.exerciseLibrary.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -67,6 +68,18 @@ fun EditExerciseDefDetailsView(
                        contentDescription = "Close"
                    )
                }
+
+               Text(
+                   text = "Delete",
+                   textAlign = TextAlign.Center,
+                   modifier = Modifier.padding(16.dp)
+                       .clickable {
+                           onEvent(
+                               ExerciseLibraryEvent.DeleteExerciseDefinition
+                           ) },
+                   fontWeight = FontWeight.Bold,
+                   fontSize = 20.sp,
+               )
 
            }
 

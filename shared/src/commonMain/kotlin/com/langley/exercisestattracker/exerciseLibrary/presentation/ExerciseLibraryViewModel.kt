@@ -189,6 +189,28 @@ class ExerciseLibraryViewModel(
                     isSearchDropdownOpen = !_state.value.isSearchDropdownOpen
                 ) }
             }
+
+            ExerciseLibraryEvent.DeleteExerciseDefinition -> {
+                val exerciseDefId = _state.value.selectedExerciseDefinition?.exerciseDefinitionId
+
+                if (exerciseDefId != null){
+                    viewModelScope.launch {
+
+                        exerciseLibraryDataSource.deleteDefinition(exerciseDefId)
+
+                        _state.update { it.copy(
+                            isEditExerciseDefSheetOpen = false,
+                            isSelectedExerciseDefSheetOpen = false,
+                        ) }
+
+                        delay(300L) //Animation delay for slide out.
+
+                        _state.update { it.copy(
+                            selectedExerciseDefinition = null
+                        ) }
+                    }
+                }
+            }
         }
     }
 }
