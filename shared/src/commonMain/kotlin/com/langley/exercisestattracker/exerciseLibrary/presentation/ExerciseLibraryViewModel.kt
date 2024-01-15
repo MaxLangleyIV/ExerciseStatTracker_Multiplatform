@@ -1,19 +1,16 @@
 package com.langley.exercisestattracker.exerciseLibrary.presentation
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSource
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSource
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionValidator
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -48,16 +45,20 @@ class ExerciseLibraryViewModel(
     var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(null)
         private set
 
+    private fun setSelectedExerciseDef(exerciseDefinition: ExerciseDefinition){
+        _state.update { it.copy(
+            isSearchDropdownOpen = false,
+            selectedExerciseDefinition = exerciseDefinition,
+            isSelectedExerciseDefSheetOpen = true
+        ) }
+    }
+
     fun onEvent(event: ExerciseLibraryEvent) {
         when (event) {
             ExerciseLibraryEvent.DefaultEvent -> return
 
             is ExerciseLibraryEvent.ExerciseDefinitionSelected -> {
-                _state.update { it.copy(
-                    isSearchDropdownOpen = false,
-                    selectedExerciseDefinition = event.exerciseDefinition,
-                    isSelectedExerciseDefSheetOpen = true
-                ) }
+                setSelectedExerciseDef(event.exerciseDefinition)
             }
 
             is ExerciseLibraryEvent.SaveExerciseDefinition -> {
@@ -102,21 +103,25 @@ class ExerciseLibraryViewModel(
                     bodyRegion = event.value
                 )
             }
+
             is ExerciseLibraryEvent.OnExerciseDescriptionChanged -> {
                 newExerciseDefinition = newExerciseDefinition?.copy(
                     description = event.value
                 )
             }
+
             is ExerciseLibraryEvent.OnExerciseNameChanged -> {
                 newExerciseDefinition = newExerciseDefinition?.copy(
                     exerciseName = event.value
                 )
             }
+
             is ExerciseLibraryEvent.OnTargetMusclesChanged -> {
                 newExerciseDefinition = newExerciseDefinition?.copy(
                     targetMuscles = event.value
                 )
             }
+
             is ExerciseLibraryEvent.SaveOrUpdateExerciseDef -> {
                 newExerciseDefinition?.let {exerciseDefinition ->
 
@@ -154,6 +159,7 @@ class ExerciseLibraryViewModel(
             ExerciseLibraryEvent.AddNewExerciseDefClicked -> {
                 _state.update { it.copy(
                     isAddExerciseDefSheetOpen = true,
+                    isEditExerciseDefSheetOpen = false
                 ) }
                 newExerciseDefinition = ExerciseDefinition(
                     exerciseDefinitionId = null,
@@ -184,6 +190,7 @@ class ExerciseLibraryViewModel(
                     searchString = event.value
                 ) }
             }
+            
             ExerciseLibraryEvent.ToggleIsDropdownOpen -> {
                 _state.update { it.copy(
                     isSearchDropdownOpen = !_state.value.isSearchDropdownOpen

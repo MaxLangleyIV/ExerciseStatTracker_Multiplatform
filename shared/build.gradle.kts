@@ -39,6 +39,8 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.junit)
+
         }
         androidMain.dependencies {
             implementation(libs.sqldelight.android.driver)
@@ -66,11 +68,15 @@ android {
 }
 dependencies {
     implementation(libs.androidx.ui.tooling.preview.android)
+
+    testImplementation(libs.junit)
+    androidTestImplementation( "junit:junit:4.13")
+
     commonMainApi(libs.mvvm.core)
     commonMainApi(libs.mvvm.compose)
     commonMainApi(libs.mvvm.flow)
     commonMainApi(libs.mvvm.flow.compose)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
+
 }
 
 sqldelight {
