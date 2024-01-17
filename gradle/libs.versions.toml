@@ -14,6 +14,7 @@ kotlinxDatetime = "0.4.0"
 mvvmCore = "0.16.1"
 nativeDriver = "2.0.1"
 sqliteDriver = "2.0.1"
+uiToolingPreview = "1.4.1"
 uiToolingPreviewAndroid = "1.5.4"
 
 [libraries]
@@ -37,6 +38,7 @@ sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-ex
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "nativeDriver" }
 sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqliteDriver" }
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
+ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

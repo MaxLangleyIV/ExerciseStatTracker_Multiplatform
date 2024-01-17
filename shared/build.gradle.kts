@@ -46,6 +46,7 @@ kotlin {
             implementation(libs.sqldelight.android.driver)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.activity.compose.v172)
+
         }
         nativeMain.dependencies {
             implementation(libs.sqldelight.native.driver)
@@ -65,12 +66,18 @@ android {
     defaultConfig {
         minSdk = 24
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
 }
 dependencies {
     implementation(libs.androidx.ui.tooling.preview.android)
 
     testImplementation(libs.junit)
-    androidTestImplementation( "junit:junit:4.13")
+    androidTestImplementation(libs.junit)
 
     commonMainApi(libs.mvvm.core)
     commonMainApi(libs.mvvm.compose)

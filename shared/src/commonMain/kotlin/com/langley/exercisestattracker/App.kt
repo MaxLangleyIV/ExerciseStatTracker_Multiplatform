@@ -9,15 +9,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
-import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
+import com.langley.exercisestattracker.exerciseLibrary.data.exerciseDefinitionDummyData
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryViewModel
-import com.langley.exercisestattracker.exerciseLibrary.data.exerciseDefinitionDummyData
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import kotlinx.datetime.Clock
 
 @Composable
 fun App(
