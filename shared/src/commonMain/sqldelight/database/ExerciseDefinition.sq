@@ -8,21 +8,10 @@ CREATE TABLE ExerciseDefinition (
     dateCreated INTEGER NOT NULL
 );
 
-getDefinitionsLikeName:
-SELECT *
-FROM ExerciseDefinition
-WHERE exerciseName LIKE (:searchString || '%')
-ORDER BY exerciseName ASC;
-
 getExerciseDefinitions:
 SELECT *
 FROM ExerciseDefinition
 ORDER BY exerciseName ASC;
-
-getFavoriteDefinitions:
-SELECT *
-FROM ExerciseDefinition
-WHERE isFavorite = 1;
 
 insertOrReplaceExerciseDefinition:
 INSERT OR REPLACE
