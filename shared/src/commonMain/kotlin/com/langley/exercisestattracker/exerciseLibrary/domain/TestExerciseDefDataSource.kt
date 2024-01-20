@@ -1,7 +1,5 @@
-package com.langley.exercisestattracker.exerciseLibrary.data
+package com.langley.exercisestattracker.exerciseLibrary.domain
 
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -42,7 +40,7 @@ class TestExerciseDefDataSource: ExerciseDefinitionDataSource {
     }
 
     override suspend fun deleteDefinition(exerciseDefinitionId: Long) {
-
+        
         for (def in dummyDataList){
 
             if (def.exerciseDefinitionId == exerciseDefinitionId){

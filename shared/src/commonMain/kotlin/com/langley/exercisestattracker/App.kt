@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.exerciseLibrary.data.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.exerciseLibrary.domain.TestExerciseDefDataSource
+import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryViewModel
@@ -29,31 +31,32 @@ fun App(
         val exerciseLibraryViewModel = getViewModel(
             key = "exerciseLibraryScreen",
             factory = viewModelFactory {
-                ExerciseLibraryViewModel(appModule.exerciseDefinitionDataSource)
+//                ExerciseLibraryViewModel(appModule.exerciseDefinitionDataSource)
+                ExerciseLibraryViewModel(TestExerciseDefDataSource())
             }
         )
 
         val state by exerciseLibraryViewModel.state.collectAsState(ExerciseLibraryState())
 
-        val tempExerciseList = ExerciseDefinitionDummyData().dummyDefinitionData
+        // Initialize dummy data for exercise library.
 
-//        for (exercise in tempExerciseList){
-//            val exerciseDefinition = ExerciseDefinition(
-//                exerciseDefinitionId = null,
-//                exerciseName = exercise["name"] as String,
-//                bodyRegion = exercise["body_region"] as String,
-//                targetMuscles = exercise["target_muscles"] as String,
-//                description = exercise["description"] as String,
-//                isFavorite = 0,
-//                dateCreated = null,
-//                )
-//            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
-//        }
+        val exerciseDummyData = ExerciseDefinitionDummyData()
+        val exerciseDefinitionList = exerciseDummyData
+            .convertDummyDataToExerciseDef(exerciseDummyData.dummyDefinitionData)
+
+        for (exerciseDefinition in exerciseDefinitionList){
+            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
+        }
 
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+//            LazyColumn {
+//                items(testList){
+//                    Text(text = it.exerciseName)
+//                }
+//            }
 
             ExerciseLibraryScreen(
                 state = state,

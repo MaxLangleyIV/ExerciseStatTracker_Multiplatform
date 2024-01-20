@@ -45,20 +45,16 @@ class ExerciseLibraryViewModel(
     var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(null)
         private set
 
-    private fun setSelectedExerciseDef(exerciseDefinition: ExerciseDefinition){
-        _state.update { it.copy(
-            isSearchDropdownOpen = false,
-            selectedExerciseDefinition = exerciseDefinition,
-            isSelectedExerciseDefSheetOpen = true
-        ) }
-    }
-
     fun onEvent(event: ExerciseLibraryEvent) {
         when (event) {
             ExerciseLibraryEvent.DefaultEvent -> return
 
             is ExerciseLibraryEvent.ExerciseDefinitionSelected -> {
-                setSelectedExerciseDef(event.exerciseDefinition)
+                _state.update { it.copy(
+                    isSearchDropdownOpen = false,
+                    selectedExerciseDefinition = event.exerciseDefinition,
+                    isSelectedExerciseDefSheetOpen = true
+                ) }
             }
 
             is ExerciseLibraryEvent.SaveExerciseDefinition -> {

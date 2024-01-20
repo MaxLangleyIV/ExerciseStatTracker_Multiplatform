@@ -40,17 +40,24 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.junit)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.mvvm.core)
+            implementation(libs.mvvm.compose)
+            implementation(libs.mvvm.flow)
+            implementation(libs.mvvm.flow.compose)
 
         }
         androidMain.dependencies {
             implementation(libs.sqldelight.android.driver)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.activity.compose.v172)
-
         }
+
+
         nativeMain.dependencies {
             implementation(libs.sqldelight.native.driver)
         }
+
     }
 }
 
@@ -65,6 +72,7 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 24
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
         compose = true
@@ -73,11 +81,22 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
+
 dependencies {
     implementation(libs.androidx.ui.tooling.preview.android)
 
+
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test.v16)
+
     androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.kotlin.test)
+    androidTestImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.kotlin.test)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.junit)
 
     commonMainApi(libs.mvvm.core)
     commonMainApi(libs.mvvm.compose)

@@ -3,23 +3,31 @@ activityCompose = "1.7.2"
 agp = "8.2.1"
 androidDriver = "2.0.1"
 appcompat = "1.6.1"
+core = "1.5.0"
 coroutinesExtensions = "2.0.1"
+jetbrains-kotlinxCoroutinesTest = "1.6"
 junit = "4.13.2"
 kotlin = "1.9.20"
 compose = "1.5.4"
 compose-compiler = "1.5.4"
 compose-material3 = "1.1.2"
 androidx-activityCompose = "1.8.1"
+kotlinxCoroutinesTest = "1.7.3"
 kotlinxDatetime = "0.4.0"
 mvvmCore = "0.16.1"
 nativeDriver = "2.0.1"
+runner = "1.5.2"
 sqliteDriver = "2.0.1"
 uiToolingPreview = "1.4.1"
 uiToolingPreviewAndroid = "1.5.4"
+junitKtx = "1.1.5"
 
 [libraries]
 androidx-activity-compose-v172 = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-core = { module = "androidx.test:core", version.ref = "core" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitKtx" }
+androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -28,6 +36,8 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+kotlinx-coroutines-test-v16 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "jetbrains-kotlinxCoroutinesTest" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "mvvmCore" }
 mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "mvvmCore" }
@@ -39,6 +49,7 @@ sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", versi
 sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqliteDriver" }
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
 ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
