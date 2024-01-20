@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 
 class ExerciseLibraryViewModel(
     private val exerciseLibraryDataSource: ExerciseDefinitionDataSource
@@ -31,7 +32,6 @@ class ExerciseLibraryViewModel(
                 exerciseDefinitions = exerciseDefinitions
             )
         }
-
         else {
             state.copy(
                 exerciseDefinitions = exerciseDefinitions.filter {

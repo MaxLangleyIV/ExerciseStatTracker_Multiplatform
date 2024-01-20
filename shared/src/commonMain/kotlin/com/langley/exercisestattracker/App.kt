@@ -31,8 +31,7 @@ fun App(
         val exerciseLibraryViewModel = getViewModel(
             key = "exerciseLibraryScreen",
             factory = viewModelFactory {
-//                ExerciseLibraryViewModel(appModule.exerciseDefinitionDataSource)
-                ExerciseLibraryViewModel(TestExerciseDefDataSource())
+                ExerciseLibraryViewModel(appModule.exerciseDefinitionDataSource)
             }
         )
 
@@ -40,13 +39,13 @@ fun App(
 
         // Initialize dummy data for exercise library.
 
-        val exerciseDummyData = ExerciseDefinitionDummyData()
-        val exerciseDefinitionList = exerciseDummyData
-            .convertDummyDataToExerciseDef(exerciseDummyData.dummyDefinitionData)
-
-        for (exerciseDefinition in exerciseDefinitionList){
-            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
-        }
+//        val exerciseDummyData = ExerciseDefinitionDummyData()
+//        val exerciseDefinitionList = exerciseDummyData
+//            .convertDummyDataToExerciseDef(exerciseDummyData.dummyDefinitionData)
+//
+//        for (exerciseDefinition in exerciseDefinitionList){
+//            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
+//        }
 
         Surface(
             modifier = Modifier.fillMaxSize(),

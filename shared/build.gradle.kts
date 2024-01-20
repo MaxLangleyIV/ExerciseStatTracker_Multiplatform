@@ -53,7 +53,6 @@ kotlin {
             implementation(libs.androidx.activity.compose.v172)
         }
 
-
         nativeMain.dependencies {
             implementation(libs.sqldelight.native.driver)
         }
