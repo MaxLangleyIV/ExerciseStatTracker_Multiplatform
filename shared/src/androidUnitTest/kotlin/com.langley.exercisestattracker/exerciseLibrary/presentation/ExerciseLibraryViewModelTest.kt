@@ -25,6 +25,7 @@ import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
+import kotlin.random.Random
 import kotlin.test.assertNotNull
 
 class MainDispatcherRule @OptIn(ExperimentalCoroutinesApi::class) constructor(
@@ -51,7 +52,6 @@ class ExerciseLibraryViewModelTest {
     @BeforeTest
     fun setup() = runTest{
         viewModel = viewModelFactory { ExerciseLibraryViewModel(TestExerciseDefDataSource()) }.createViewModel()
-        advanceUntilIdle()
 
         val exerciseDummyData = ExerciseDefinitionDummyData()
         val exerciseDefinitionList = exerciseDummyData
@@ -59,23 +59,25 @@ class ExerciseLibraryViewModelTest {
 
         for (exerciseDefinition in exerciseDefinitionList){
             viewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
-            advanceUntilIdle()
         }
 
     }
 
     @Test
-    fun test() = runTest{
-
-        assertNotNull(viewModel.state.first().exerciseDefinitions[0])
+    fun viewModelState_initializedWithDummyData_definitionsListNotEmpty() = runTest{
+        assertTrue(viewModel.state.first().exerciseDefinitions.isNotEmpty())
     }
 
     @Test
     fun viewModelOnEvent_exerciseDefClicked_correctDefSelectedInState() = runTest{
         var state = viewModel.state.first()
-        val selectedDef = state.exerciseDefinitions[0]
+
+        val randomNum = Random.nextInt(0,(state.exerciseDefinitions.size - 1))
+        val selectedDef = state.exerciseDefinitions[randomNum]
+
         viewModel.onEvent(ExerciseLibraryEvent.ExerciseDefinitionSelected(selectedDef))
-        state = viewModel.state.value
+
+        state = viewModel.state.first()
 
         assertEquals(selectedDef, state.selectedExerciseDefinition)
 

@@ -51,11 +51,6 @@ fun App(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-//            LazyColumn {
-//                items(testList){
-//                    Text(text = it.exerciseName)
-//                }
-//            }
 
             ExerciseLibraryScreen(
                 state = state,
