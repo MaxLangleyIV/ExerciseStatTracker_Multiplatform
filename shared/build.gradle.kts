@@ -42,7 +42,7 @@ kotlin {
             implementation(libs.junit)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.mvvm.core)
-            implementation(libs.mvvm.compose)
+
             implementation(libs.mvvm.flow)
             implementation(libs.mvvm.flow.compose)
 
@@ -83,7 +83,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.ui.tooling.preview.android)
-
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test.v16)

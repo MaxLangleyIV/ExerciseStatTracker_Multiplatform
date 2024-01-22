@@ -14,12 +14,15 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 
 class ExerciseLibraryViewModel(
-    private val exerciseLibraryDataSource: ExerciseDefinitionDataSource
+
+    private val exerciseLibraryDataSource: ExerciseDefinitionDataSource,
+    initialState: ExerciseLibraryState = ExerciseLibraryState(),
+
 ): ViewModel() {
-    private val _state = MutableStateFlow(ExerciseLibraryState())
+
+    private val _state = MutableStateFlow(initialState)
 
     val state = combine(
         _state,
@@ -53,7 +56,7 @@ class ExerciseLibraryViewModel(
                 _state.update { it.copy(
                     isSearchDropdownOpen = false,
                     selectedExerciseDefinition = event.exerciseDefinition,
-                    isSelectedExerciseDefSheetOpen = true
+                    isExerciseDetailsSheetOpen = true
                 ) }
             }
 
@@ -66,7 +69,7 @@ class ExerciseLibraryViewModel(
             ExerciseLibraryEvent.CloseExerciseDetailsView -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
-                        isSelectedExerciseDefSheetOpen = false
+                        isExerciseDetailsSheetOpen = false
                     ) }
                     delay(300L) //BottomSheet animation delay
                     _state.update { it.copy(
@@ -203,7 +206,7 @@ class ExerciseLibraryViewModel(
 
                         _state.update { it.copy(
                             isEditExerciseDefSheetOpen = false,
-                            isSelectedExerciseDefSheetOpen = false,
+                            isExerciseDetailsSheetOpen = false,
                         ) }
 
                         delay(300L) //Animation delay for slide out.

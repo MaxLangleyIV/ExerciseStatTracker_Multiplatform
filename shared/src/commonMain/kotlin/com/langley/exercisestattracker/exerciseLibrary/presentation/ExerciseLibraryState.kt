@@ -13,7 +13,7 @@ data class ExerciseLibraryState(
     val previousSearches: List<String>? = null,
 
     //UI visibility flags.
-    val isSelectedExerciseDefSheetOpen: Boolean = false,
+    val isExerciseDetailsSheetOpen: Boolean = false,
     val isEditExerciseDefSheetOpen: Boolean = false,
     val isAddExerciseDefSheetOpen: Boolean = false,
 

@@ -5,10 +5,9 @@ import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TestExerciseDefDataSource: ExerciseDefinitionDataSource {
+class TestExerciseDefDataSource(dummyExerciseDefData: List<ExerciseDefinition>): ExerciseDefinitionDataSource {
 
-    private val dummyDataList = mutableListOf<ExerciseDefinition>()
-
+    private val dummyDataList = dummyExerciseDefData.toMutableList()
 
     override fun getDefinitions(): Flow<List<ExerciseDefinition>> {
         return flow {
@@ -18,7 +17,7 @@ class TestExerciseDefDataSource: ExerciseDefinitionDataSource {
 
     override suspend fun insertOrReplaceExerciseDefinition(definition: ExerciseDefinition) {
 
-        var newDefinition: ExerciseDefinition? = null
+        val newDefinition: ExerciseDefinition?
 
         if (definition.exerciseDefinitionId != null){
 

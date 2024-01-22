@@ -335,3 +335,23 @@ class ExerciseDefinitionDummyData {
 
         )
 }
+
+fun ExerciseDefinitionDummyData.toListOfExerciseDefinitionsWithIndex(): List<ExerciseDefinition>{
+
+    val convertedList = mutableListOf<ExerciseDefinition>()
+
+    for ( (i, exercise) in this.dummyDefinitionData.withIndex() ){
+
+        val exerciseDefinition = ExerciseDefinition(
+            exerciseDefinitionId = i.toLong(),
+            exerciseName = exercise["name"] as String,
+            bodyRegion = exercise["body_region"] as String,
+            targetMuscles = exercise["target_muscles"] as String,
+            description = exercise["description"] as String,
+            isFavorite = 0,
+            dateCreated = null,)
+
+        convertedList.add(exerciseDefinition)
+    }
+    return convertedList
+}

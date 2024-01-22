@@ -83,7 +83,7 @@ fun ExerciseLibraryScreen(
         }
 
         ExerciseDefDetailsView(
-            isVisible = state.isSelectedExerciseDefSheetOpen,
+            isVisible = state.isExerciseDetailsSheetOpen,
             onEvent = onEvent,
             selectedExerciseDefinition = state.selectedExerciseDefinition
         )
