@@ -22,6 +22,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import kotlin.random.Random
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 
 class ExerciseLibraryViewModelTest {
 
@@ -31,7 +32,11 @@ class ExerciseLibraryViewModelTest {
     private lateinit var viewModel: ExerciseLibraryViewModel
     private lateinit var testExerciseDefinition: ExerciseDefinition
 
-    private fun setupViewModel(initialState: ExerciseLibraryState): ExerciseLibraryViewModel {
+    private fun setupViewModel(
+        initialState: ExerciseLibraryState,
+        newExerciseDefinition: ExerciseDefinition? = null
+    ): ExerciseLibraryViewModel {
+
         viewModel = viewModelFactory {
 
             ExerciseLibraryViewModel(
@@ -39,7 +44,8 @@ class ExerciseLibraryViewModelTest {
                 TestExerciseDefDataSource(
                     ExerciseDefinitionDummyData().toListOfExerciseDefinitionsWithIndex()
                 ),
-                initialState
+                initialState,
+                newExerciseDefinition
             )
         }.createViewModel()
 
@@ -171,30 +177,101 @@ class ExerciseLibraryViewModelTest {
         val state = viewModel.state.first()
 
         assertTrue(state.isEditExerciseDefSheetOpen,
-            "EditExerciseDefSheetOpen is false after EditExerciseDefinition event.")
+            "EditExerciseDefSheetOpen is false after EditExerciseDefinition event."
+        )
 
         assertEquals(state.selectedExerciseDefinition, selectedDef,
             "Selected Def in state: ${state.selectedExerciseDefinition} " +
-                    "does not equal selected def: $selectedDef")
+                    "does not equal selected def: $selectedDef"
+        )
     }
 
     @Test
     fun onEvent_closeEditExerciseDefinition_stateProperlyUpdated() = runTest {
+        val selectedDef = viewModel.state.first().exerciseDefinitions[0]
 
+        viewModel = setupViewModel(
+            initialState = ExerciseLibraryState(
+                isExerciseDetailsSheetOpen = true,
+                isEditExerciseDefSheetOpen = true,
+                selectedExerciseDefinition = selectedDef
+            ),
+            newExerciseDefinition = selectedDef
+        )
+
+        var state = viewModel.state.first()
+
+        assertTrue(state.isEditExerciseDefSheetOpen,
+            "isEditExerciseDefSheetOpen failed to be initialized as true."
+        )
+
+        assertEquals(viewModel.newExerciseDefinition, selectedDef,
+            "newExerciseDef in viewModel: ${viewModel.newExerciseDefinition} " +
+                    "does not equal $selectedDef"
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.CloseEditExerciseDefView)
+
+        state = viewModel.state.first()
+
+        assertFalse(state.isEditExerciseDefSheetOpen,
+            "isEditExerciseDefSheetOpen still true after CloseEdit' event"
+        )
+
+        assertNull(state.exerciseNameError, "name error not null.")
+        assertNull(state.exerciseBodyRegionError, "body region error not null.")
+        assertNull(state.exerciseTargetMusclesError, "target muscle error not null.")
+        assertNull(viewModel.newExerciseDefinition, "newExerciseDef not null.")
     }
 
     @Test
     fun onEvent_OnBodyRegionChanged_newExerciseProperlyUpdated() = runTest {
+        val testString = "Test Body Region."
+
+        setupViewModel(
+            ExerciseLibraryState(),
+            newExerciseDefinition = testExerciseDefinition
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.OnBodyRegionChanged(testString))
+        val newExerciseDef = viewModel.newExerciseDefinition
+
+        assertEquals(testString, newExerciseDef?.bodyRegion)
 
     }
 
     @Test
     fun onEvent_ExerciseDescriptionChanged_newExerciseProperlyUpdated() = runTest {
+        val testString = "Test Exercise Description."
 
+        setupViewModel(
+            ExerciseLibraryState(),
+            newExerciseDefinition = testExerciseDefinition
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.OnExerciseDescriptionChanged(testString))
+
+        val newExerciseDef = viewModel.newExerciseDefinition
+
+        assertEquals(testString, newExerciseDef?.description)
     }
 
     @Test
-    fun onEvent_OnExerciseNameChanged_newExerciseProperlyUpdated() = runTest {}
+    fun onEvent_OnExerciseNameChanged_newExerciseProperlyUpdated() = runTest {
+        val testString = "Test Exercise Name."
+
+        setupViewModel(
+            ExerciseLibraryState(),
+            newExerciseDefinition = testExerciseDefinition
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.OnExerciseNameChanged(testString))
+
+        val newExerciseDef = viewModel.newExerciseDefinition
+
+        assertEquals(testString, newExerciseDef?.exerciseName)
+    }
+
     @Test
     fun onEvent_OnTargetMusclesChanged_newExerciseProperlyUpdated() = runTest {}
     @Test

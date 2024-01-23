@@ -19,8 +19,9 @@ class ExerciseLibraryViewModel(
 
     private val exerciseLibraryDataSource: ExerciseDefinitionDataSource,
     initialState: ExerciseLibraryState = ExerciseLibraryState(),
+    newExerciseDef: ExerciseDefinition? = null,
 
-): ViewModel() {
+    ): ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
 
@@ -45,7 +46,7 @@ class ExerciseLibraryViewModel(
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), ExerciseLibraryState())
 
-    var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(null)
+    var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(newExerciseDef)
         private set
 
     fun onEvent(event: ExerciseLibraryEvent) {
