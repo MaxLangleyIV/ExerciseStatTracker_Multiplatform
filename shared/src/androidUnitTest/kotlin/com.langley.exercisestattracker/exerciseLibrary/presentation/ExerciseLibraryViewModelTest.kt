@@ -10,6 +10,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -22,6 +24,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import kotlin.random.Random
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class ExerciseLibraryViewModelTest {
@@ -63,7 +66,7 @@ class ExerciseLibraryViewModelTest {
             bodyRegion = "test",
             targetMuscles = "test",
             description = "Test",
-            isFavorite = null,
+            isFavorite = 0,
             dateCreated = null
         )
     }
@@ -138,7 +141,7 @@ class ExerciseLibraryViewModelTest {
     @Test
     fun onEvent_closeExerciseDetailsViewCalled_ExerciseDetailsSheetOpenIsFalse() = runTest {
         //Select a definition to open details view.
-        viewModel = setupViewModel(
+        setupViewModel(
             ExerciseLibraryState(
                 isExerciseDetailsSheetOpen = true
             )
@@ -165,7 +168,7 @@ class ExerciseLibraryViewModelTest {
     fun onEvent_EditExerciseDefinition_stateProperlyUpdated() = runTest {
         val selectedDef = viewModel.state.first().exerciseDefinitions[0]
 
-        viewModel = setupViewModel(
+        setupViewModel(
             ExerciseLibraryState(
                 isExerciseDetailsSheetOpen = true,
                 selectedExerciseDefinition = selectedDef
@@ -190,7 +193,7 @@ class ExerciseLibraryViewModelTest {
     fun onEvent_closeEditExerciseDefinition_stateProperlyUpdated() = runTest {
         val selectedDef = viewModel.state.first().exerciseDefinitions[0]
 
-        viewModel = setupViewModel(
+        setupViewModel(
             initialState = ExerciseLibraryState(
                 isExerciseDetailsSheetOpen = true,
                 isEditExerciseDefSheetOpen = true,
@@ -273,15 +276,166 @@ class ExerciseLibraryViewModelTest {
     }
 
     @Test
-    fun onEvent_OnTargetMusclesChanged_newExerciseProperlyUpdated() = runTest {}
+    fun onEvent_OnTargetMusclesChanged_newExerciseProperlyUpdated() = runTest {
+        val testString = "Test Exercise Target Muscles."
+
+        setupViewModel(
+            ExerciseLibraryState(),
+            newExerciseDefinition = testExerciseDefinition
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.OnTargetMusclesChanged(testString))
+
+        val newExerciseDef = viewModel.newExerciseDefinition
+
+        assertEquals(testString, newExerciseDef?.targetMuscles)
+    }
     @Test
-    fun onEvent_SaveOrUpdateExerciseDef_stateProperlyUpdated() = runTest {}
+    fun onEvent_SaveOrUpdateExerciseDefWithCorrectInput_stateProperlyUpdated() = runTest {
+        setupViewModel(
+            ExerciseLibraryState(),
+            newExerciseDefinition = testExerciseDefinition
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.SaveOrUpdateExerciseDef)
+
+        val state = viewModel.state.first()
+
+        var savedExerciseDefFoundInState = false
+
+        for (def in state.exerciseDefinitions){
+
+            if (def.exerciseName == testExerciseDefinition.exerciseName){
+                savedExerciseDefFoundInState = true
+            }
+
+        }
+
+        assertTrue(savedExerciseDefFoundInState,
+            "testExercise not found in state after SaveOrUpdate event."
+        )
+    }
+
     @Test
-    fun onEvent_AddNewExerciseDefClicked_stateProperlyUpdated() = runTest {}
+    fun onEvent_SaveOrUpdateExerciseDefWithIncorrectInput_stateProperlyUpdated() = runTest {
+        testExerciseDefinition = testExerciseDefinition.copy(
+            exerciseName = "",
+            bodyRegion = "",
+            targetMuscles = "",
+        )
+
+        setupViewModel(
+            ExerciseLibraryState(),
+            newExerciseDefinition = testExerciseDefinition
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.SaveOrUpdateExerciseDef)
+
+        val state = viewModel.state.first()
+
+        assertNotNull(state.exerciseNameError,
+            "Name error is null in state."
+        )
+        assertNotNull(state.exerciseBodyRegionError,
+            "Body Region error is null in state."
+        )
+        assertNotNull(state.exerciseTargetMusclesError,
+            "Target Muscles error is null in state."
+        )
+    }
+
     @Test
-    fun onEvent_CloseAddExerciseDefClicked_stateProperlyUpdated() = runTest {}
+    fun onEvent_SaveOrUpdateExerciseDefWithDuplicateDef_stateProperlyUpdated() = runTest {
+
+
+        testExerciseDefinition = testExerciseDefinition.copy(
+            exerciseDefinitionId = 0
+        )
+
+        setupViewModel(
+            ExerciseLibraryState(),
+            newExerciseDefinition = testExerciseDefinition
+        )
+
+        var state = viewModel.state.first()
+        val initialDefinitionListSize = state.exerciseDefinitions.size
+
+        viewModel.onEvent(ExerciseLibraryEvent.SaveOrUpdateExerciseDef)
+
+        state = viewModel.state.first()
+
+        val finalDefinitionListSize = state.exerciseDefinitions.size
+        val updatedDefinition = state.exerciseDefinitions[finalDefinitionListSize - 1]
+
+        assertEquals(
+            initialDefinitionListSize,
+            finalDefinitionListSize,
+            "List size changed after updating event."
+            )
+
+        assertEquals(
+            testExerciseDefinition.exerciseName,
+            updatedDefinition.exerciseName,
+            "Last element in definitions list doesn't match updated definition."
+        )
+
+    }
+
     @Test
-    fun onEvent_OnSearchStringChanged_stateProperlyUpdated() = runTest {}
+    fun onEvent_AddNewExerciseDefClicked_stateProperlyUpdated() = runTest {
+        viewModel.onEvent(ExerciseLibraryEvent.AddNewExerciseDefClicked)
+
+        val state = viewModel.state.first()
+
+        assertTrue(
+            state.isAddExerciseDefSheetOpen,
+            "isAddExerciseDefSheetOpen is false, should be true."
+        )
+
+        assertNotNull(
+            viewModel.newExerciseDefinition,
+            "newExerciseDefinition is null, should be ExerciseDefinition."
+            )
+    }
+    @Test
+    fun onEvent_CloseAddExerciseDefClicked_stateProperlyUpdated() = runTest {
+
+        setupViewModel(
+            initialState = ExerciseLibraryState(
+                isAddExerciseDefSheetOpen = true,
+                exerciseNameError = "Test",
+                exerciseBodyRegionError = "Test",
+                exerciseTargetMusclesError = "Test"
+            ),
+            newExerciseDefinition = testExerciseDefinition
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.CloseAddExerciseDefClicked)
+
+        val state = viewModel.state.first()
+
+        assertFalse(
+            state.isAddExerciseDefSheetOpen,
+            "isAddExerciseDefSheetOpen is true, should be false."
+        )
+        assertNull(
+            state.exerciseNameError,
+            "Name error is not null in state."
+        )
+        assertNull(
+            state.exerciseBodyRegionError,
+            "Body Region error is not null in state."
+        )
+        assertNull(
+            state.exerciseTargetMusclesError,
+            "Target Muscles error is not null in state."
+        )
+
+    }
+    @Test
+    fun onEvent_OnSearchStringChanged_stateProperlyUpdated() = runTest {
+
+    }
     @Test
     fun onEvent_ToggleIsDropdownOpen_stateProperlyUpdated() = runTest {}
     @Test
