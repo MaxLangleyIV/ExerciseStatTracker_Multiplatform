@@ -18,16 +18,13 @@ class TestExerciseDefDataSource(dummyExerciseDefData: List<ExerciseDefinition>):
     override suspend fun insertOrReplaceExerciseDefinition(definition: ExerciseDefinition) {
 
         val newDefinition: ExerciseDefinition?
+        val definitionId = definition.exerciseDefinitionId
 
-        if (definition.exerciseDefinitionId != null){
+        if (definitionId != null){
 
-            for (def in dummyDataList){
+            val index = definitionId.toInt()
 
-                if (def.exerciseDefinitionId == definition.exerciseDefinitionId){
-                    dummyDataList.remove(def)
-                }
-            }
-
+            dummyDataList.removeAt(index)
             dummyDataList.add(definition)
         }
         else{
