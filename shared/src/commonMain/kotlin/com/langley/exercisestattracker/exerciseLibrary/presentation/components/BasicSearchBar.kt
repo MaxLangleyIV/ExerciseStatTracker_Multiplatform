@@ -1,5 +1,6 @@
 package com.langley.exercisestattracker.exerciseLibrary.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,11 +11,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
@@ -38,12 +42,15 @@ fun BasicSearchBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ){
-            TextField(
+            OutlinedTextField(
+                modifier = Modifier.focusRequester(FocusRequester())
+                    .clickable { onEvent(ExerciseLibraryEvent.ToggleIsDropdownOpen) },
                 value = query,
                 onValueChange = {
                     onEvent(ExerciseLibraryEvent.OnSearchStringChanged(it))
                 },
                 shape = RoundedCornerShape(20.dp),
+                maxLines = 1
             )
         }
 

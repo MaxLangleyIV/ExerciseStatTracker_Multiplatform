@@ -434,12 +434,49 @@ class ExerciseLibraryViewModelTest {
     }
     @Test
     fun onEvent_OnSearchStringChanged_stateProperlyUpdated() = runTest {
+        viewModel.onEvent(ExerciseLibraryEvent.OnSearchStringChanged("Test"))
+
+        val state = viewModel.state.first()
+
+        assertEquals(
+            state.searchString,
+            "Test",
+            "SearchString does not equal 'Test'"
+        )
 
     }
     @Test
-    fun onEvent_ToggleIsDropdownOpen_stateProperlyUpdated() = runTest {}
+    fun onEvent_ToggleIsDropdownOpen_stateProperlyUpdated() = runTest {
+        viewModel.onEvent(ExerciseLibraryEvent.ToggleIsDropdownOpen)
+        val state = viewModel.state.first()
+
+        assertTrue(
+            state.isSearchDropdownOpen,
+            "isSearchDropdownOpen should be true after first toggle."
+        )
+
+    }
     @Test
-    fun onEvent_DeleteExerciseDefinition_stateProperlyUpdated() = runTest {}
+    fun onEvent_DeleteExerciseDefinition_stateProperlyUpdated() = runTest {
+
+        var state = viewModel.state.first()
+        val exerciseDefToDelete = state.exerciseDefinitions[0]
+
+        viewModel.onEvent(
+            ExerciseLibraryEvent.ExerciseDefinitionSelected(exerciseDefToDelete)
+        )
+
+        viewModel.onEvent(ExerciseLibraryEvent.DeleteExerciseDefinition)
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            state.exerciseDefinitions.contains(exerciseDefToDelete),
+            "${exerciseDefToDelete.exerciseName} " +
+                    "found in definitions after deletion event."
+        )
+
+    }
 
 }
 

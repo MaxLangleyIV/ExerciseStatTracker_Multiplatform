@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 
@@ -13,6 +14,7 @@ fun ExerciseLibraryTopBar(
     state: ExerciseLibraryState,
     onEvent: (ExerciseLibraryEvent) -> Unit,
     modifier: Modifier = Modifier,
+    focusManager: FocusManager
 
 ){
     Row(

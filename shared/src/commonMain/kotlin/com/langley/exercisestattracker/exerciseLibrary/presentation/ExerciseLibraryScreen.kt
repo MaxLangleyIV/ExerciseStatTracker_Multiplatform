@@ -2,6 +2,9 @@ package com.langley.exercisestattracker.exerciseLibrary.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,7 +22,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.AddNewExerciseDefView
@@ -28,17 +37,21 @@ import com.langley.exercisestattracker.exerciseLibrary.presentation.components.E
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.ExerciseLibraryTopBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExerciseLibraryScreen(
     state: ExerciseLibraryState,
     newExerciseDefinition: ExerciseDefinition?,
-    onEvent: (ExerciseLibraryEvent) -> Unit
+    onEvent: (ExerciseLibraryEvent) -> Unit,
+    focusRequester: FocusRequester,
+    focusManager: FocusManager,
+    interactionSource: MutableInteractionSource
 ) {
     Scaffold(
+        modifier = Modifier,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    focusManager.clearFocus()
                     onEvent(ExerciseLibraryEvent.AddNewExerciseDefClicked)
                 },
                 shape = RoundedCornerShape(20.dp)
@@ -51,11 +64,18 @@ fun ExerciseLibraryScreen(
         }
     ){
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .focusable(true)
+                .clickable(
+                    indication = null,
+                    interactionSource = interactionSource
+                ) { focusManager.clearFocus() },
         ){
             ExerciseLibraryTopBar(
                 state = state,
-                onEvent = onEvent
+                onEvent = onEvent,
+                focusManager = focusManager
             )
 
             LazyVerticalGrid(
@@ -73,7 +93,9 @@ fun ExerciseLibraryScreen(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .padding(8.dp)
+                                .focusable(true)
                                 .clickable {
+                                    focusManager.clearFocus()
                                     onEvent(ExerciseLibraryEvent.ExerciseDefinitionSelected(exerciseDefinition))
                                 },
                         )

@@ -38,12 +38,8 @@ class TestExerciseDefDataSource(dummyExerciseDefData: List<ExerciseDefinition>):
     }
 
     override suspend fun deleteDefinition(exerciseDefinitionId: Long) {
+        val index = exerciseDefinitionId.toInt()
 
-        for (def in dummyDataList){
-
-            if (def.exerciseDefinitionId == exerciseDefinitionId){
-                dummyDataList.remove(def)
-            }
-        }
+        dummyDataList.removeAt(index)
     }
 }

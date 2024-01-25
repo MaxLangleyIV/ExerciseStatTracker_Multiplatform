@@ -1,12 +1,16 @@
 package com.langley.exercisestattracker
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
@@ -34,6 +38,10 @@ fun App(
 
         val state by exerciseLibraryViewModel.state.collectAsState(ExerciseLibraryState())
 
+        val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
+        val interactionSource = remember { MutableInteractionSource() }
+
         // Initialize dummy data for exercise library.
 
 //        val exerciseDummyData = ExerciseDefinitionDummyData()
@@ -52,7 +60,10 @@ fun App(
             ExerciseLibraryScreen(
                 state = state,
                 newExerciseDefinition = exerciseLibraryViewModel.newExerciseDefinition,
-                onEvent = exerciseLibraryViewModel::onEvent
+                onEvent = exerciseLibraryViewModel::onEvent,
+                focusRequester = focusRequester,
+                focusManager = focusManager,
+                interactionSource = interactionSource
             )
 
         }
