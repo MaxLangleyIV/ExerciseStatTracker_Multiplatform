@@ -31,23 +31,55 @@ class ExerciseLibraryViewModel(
     ){
         state, exerciseDefinitions ->
 
-        if (state.searchString.isBlank()) {
-            state.copy(
-                exerciseDefinitions = exerciseDefinitions
-            )
-        }
-        else {
-            state.copy(
-                exerciseDefinitions = exerciseDefinitions.filter {
-                    it.exerciseName.contains(state.searchString, ignoreCase = true)
-                }
-            )
-        }
+        updateLibraryState(state, exerciseDefinitions)
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), ExerciseLibraryState())
 
     var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(newExerciseDef)
         private set
+
+    private fun updateLibraryState(
+        currentState: ExerciseLibraryState,
+        definitionsList: List<ExerciseDefinition>
+    ): ExerciseLibraryState {
+
+        var newState: ExerciseLibraryState
+
+        if (currentState.searchFilterType != null){
+
+            when (currentState.searchFilterType){
+                ExerciseLibraryFilterType.Barbell -> {
+                    newState = currentState.copy(
+                        exerciseDefinitions = definitionsList.filter {
+                            it.exerciseName.contains("barbell", true)
+                        }
+                    )
+                }
+                ExerciseLibraryFilterType.Calisthenic -> TODO()
+                ExerciseLibraryFilterType.Dumbbell -> TODO()
+                ExerciseLibraryFilterType.Favorite -> TODO()
+                ExerciseLibraryFilterType.LowerBody -> TODO()
+                ExerciseLibraryFilterType.UpperBody -> TODO()
+            }
+
+        }
+
+        if (currentState.searchString.isBlank()) {
+            newState = currentState.copy(
+                exerciseDefinitions = definitionsList
+            )
+        }
+
+        else {
+            newState = currentState.copy(
+                exerciseDefinitions = definitionsList.filter {
+                    it.exerciseName.contains(currentState.searchString, ignoreCase = true)
+                }
+            )
+        }
+
+        return newState
+    }
 
     fun onEvent(event: ExerciseLibraryEvent) {
         when (event) {
