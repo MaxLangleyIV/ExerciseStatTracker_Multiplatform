@@ -11,6 +11,7 @@ data class ExerciseLibraryState(
     val isSearchDropdownOpen: Boolean = false,
     val searchString: String = "",
     val previousSearches: List<String>? = null,
+    val searchFilterType: ExerciseLibraryFilterType? = null,
 
     //UI visibility flags.
     val isExerciseDetailsSheetOpen: Boolean = false,
