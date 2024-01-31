@@ -25,11 +25,11 @@ data class ExerciseLibraryState(
 )
 
 sealed interface ExerciseLibraryFilterType {
-    data object Favorite: ExerciseLibraryFilterType
-    data object UpperBody: ExerciseLibraryFilterType
-    data object LowerBody: ExerciseLibraryFilterType
-    data object Barbell: ExerciseLibraryFilterType
-    data object Dumbbell: ExerciseLibraryFilterType
-    data object Calisthenic: ExerciseLibraryFilterType
+    data class Favorite(val name: String = "barbell") : ExerciseLibraryFilterType
+    data class UpperBody(val name: String = "barbell") : ExerciseLibraryFilterType
+    data class LowerBody(val name: String = "barbell") : ExerciseLibraryFilterType
+    data class Barbell(val name: String = "barbell"): ExerciseLibraryFilterType
+    data class Dumbbell(val name: String = "barbell") : ExerciseLibraryFilterType
+    data class Calisthenic(val name: String = "barbell") : ExerciseLibraryFilterType
 
 }
