@@ -10,8 +10,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -475,6 +473,51 @@ class ExerciseLibraryViewModelTest {
             "${exerciseDefToDelete.exerciseName} " +
                     "found in definitions after deletion event."
         )
+
+    }
+
+    @Test
+    fun onEvent_setCurrentFilterType_typeReflectedInState() = runTest {
+        var state = viewModel.state.first()
+        var currentFilterType = state.searchFilterType
+        val testFilterType = ExerciseLibraryFilterType.Barbell()
+
+        assertNull(currentFilterType, "Filter should be null initially.")
+
+        viewModel.onEvent(ExerciseLibraryEvent.SetCurrentFilterType(testFilterType))
+
+        state = viewModel.state.first()
+        currentFilterType = state.searchFilterType
+
+        assertEquals(
+            testFilterType,
+            currentFilterType,
+            "Filter type not updated properly."
+        )
+
+    }
+
+    @Test
+    fun onEvent_clearFilterType_filterNullInState() = runTest {
+        val testFilterType = ExerciseLibraryFilterType.Barbell()
+
+        setupViewModel(
+            ExerciseLibraryState(
+                searchFilterType = testFilterType
+            )
+        )
+        var state = viewModel.state.first()
+        var currentFilterType = state.searchFilterType
+
+
+        assertNotNull(currentFilterType, "Filter should be $testFilterType.")
+
+        viewModel.onEvent(ExerciseLibraryEvent.ClearFilterType)
+
+        state = viewModel.state.first()
+        currentFilterType = state.searchFilterType
+
+        assertNull(currentFilterType, null)
 
     }
 
