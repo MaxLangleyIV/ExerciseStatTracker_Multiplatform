@@ -43,42 +43,82 @@ class ExerciseLibraryViewModel(
         definitionsList: List<ExerciseDefinition>
     ): ExerciseLibraryState {
 
-        var newState: ExerciseLibraryState
+        return currentState.copy(
+            exerciseDefinitions = filterDefinitionLibrary(
+                definitionLibrary = definitionsList,
+                filterType = currentState.searchFilterType,
+                searchString = currentState.searchString
+            )
+        )
 
-        if (currentState.searchFilterType != null){
+    }
 
-            when (currentState.searchFilterType){
-                ExerciseLibraryFilterType.Barbell -> {
-                    newState = currentState.copy(
-                        exerciseDefinitions = definitionsList.filter {
-                            it.exerciseName.contains("barbell", true)
-                        }
+    private fun filterDefinitionLibrary(
+
+        definitionLibrary: List<ExerciseDefinition>,
+        filterType: ExerciseLibraryFilterType?,
+        searchString: String = ""
+
+    ):List<ExerciseDefinition> {
+
+        var filteredLibrary: List<ExerciseDefinition> =
+            when (filterType) {
+
+            is ExerciseLibraryFilterType.Barbell -> {
+                definitionLibrary.filter {
+                    it.exerciseName.contains(
+                        "barbell",
+                        true
                     )
                 }
-                ExerciseLibraryFilterType.Calisthenic -> TODO()
-                ExerciseLibraryFilterType.Dumbbell -> TODO()
-                ExerciseLibraryFilterType.Favorite -> TODO()
-                ExerciseLibraryFilterType.LowerBody -> TODO()
-                ExerciseLibraryFilterType.UpperBody -> TODO()
             }
-
-        }
-
-        if (currentState.searchString.isBlank()) {
-            newState = currentState.copy(
-                exerciseDefinitions = definitionsList
-            )
-        }
-
-        else {
-            newState = currentState.copy(
-                exerciseDefinitions = definitionsList.filter {
-                    it.exerciseName.contains(currentState.searchString, ignoreCase = true)
+            is ExerciseLibraryFilterType.Calisthenic -> {
+                definitionLibrary.filter {
+                    it.exerciseName.contains(
+                        "body",
+                        true)
                 }
-            )
+            }
+            is ExerciseLibraryFilterType.Dumbbell -> {
+                definitionLibrary.filter {
+                    it.exerciseName.contains(
+                        "dumbbell",
+                        true)
+                }
+            }
+            is ExerciseLibraryFilterType.Favorite -> {
+                definitionLibrary.filter {
+                    it.isFavorite?.toInt() == 1
+                }
+            }
+            is ExerciseLibraryFilterType.LowerBody -> {
+                definitionLibrary.filter {
+                    it.exerciseName.contains(
+                        "leg",
+                        true)
+                }
+            }
+            is ExerciseLibraryFilterType.UpperBody -> {
+                definitionLibrary.filter {
+                    it.exerciseName.contains(
+                        "barbell",
+                        true)
+                }
+            }
+            null -> {
+                definitionLibrary
+            }
         }
 
-        return newState
+
+
+        if (searchString.isNotBlank()){
+            filteredLibrary = filteredLibrary.filter {
+                it.exerciseName.contains(searchString, true)
+            }
+        }
+
+        return filteredLibrary
     }
 
     fun onEvent(event: ExerciseLibraryEvent) {
@@ -248,6 +288,22 @@ class ExerciseLibraryViewModel(
                             selectedExerciseDefinition = null
                         ) }
                     }
+                }
+            }
+
+            is ExerciseLibraryEvent.SetCurrentFilterType -> {
+                _state.update {
+                    it.copy(
+                        searchFilterType = event.filterType
+                    )
+                }
+            }
+
+            ExerciseLibraryEvent.ClearFilterType -> {
+                _state.update {
+                    it.copy(
+                        searchFilterType = null,
+                    )
                 }
             }
         }
