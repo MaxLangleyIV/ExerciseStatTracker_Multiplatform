@@ -1,9 +1,11 @@
-package com.langley.exercisestattracker.exerciseLibrary.domain
+package com.langley.exercisestattracker.exerciseLibrary.data
 
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TestExerciseDefDataSource: ExerciseDefinitionDataSource {
+class TestExerciseDefDataSource: ExerciseAppDataSource {
 
     private val dummyDataList = mutableListOf<ExerciseDefinition>()
 

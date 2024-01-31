@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSource
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionValidator
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class ExerciseLibraryViewModel(
 
-    private val exerciseLibraryDataSource: ExerciseDefinitionDataSource,
+    private val exerciseLibraryDataSource: ExerciseAppDataSource,
     initialState: ExerciseLibraryState = ExerciseLibraryState(),
     newExerciseDef: ExerciseDefinition? = null,
 

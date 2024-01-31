@@ -13,8 +13,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
-import com.langley.exercisestattracker.exerciseLibrary.data.ExerciseDefinitionDummyData
-import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryViewModel
@@ -34,7 +32,7 @@ fun App(
         val exerciseLibraryViewModel = getViewModel(
             key = "exerciseLibraryScreen",
             factory = viewModelFactory {
-                ExerciseLibraryViewModel(appModule.exerciseDefinitionDataSource)
+                ExerciseLibraryViewModel(appModule.exerciseAppDataSource)
             }
         )
 

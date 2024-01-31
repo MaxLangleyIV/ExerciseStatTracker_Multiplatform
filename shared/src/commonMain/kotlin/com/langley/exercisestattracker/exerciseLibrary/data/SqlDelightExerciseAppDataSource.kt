@@ -4,18 +4,20 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.langley.exercisestattracker.database.ExerciseStatTrackerDatabase
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSource
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseAppDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
 
-class SqlDelightExerciseDefDataSource(
+class SqlDelightExerciseAppDataSource(
     database: ExerciseStatTrackerDatabase
-): ExerciseDefinitionDataSource {
+): ExerciseAppDataSource {
 
     private val exerciseDefinitionQueries = database.exerciseDefinitionQueries
+
+
     override fun getDefinitions(): Flow<List<ExerciseDefinition>> {
         return exerciseDefinitionQueries
             .getExerciseDefinitions()

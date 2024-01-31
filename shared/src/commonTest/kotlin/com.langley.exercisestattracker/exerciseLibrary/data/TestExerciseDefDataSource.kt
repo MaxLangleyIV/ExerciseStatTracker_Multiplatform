@@ -1,11 +1,11 @@
 package com.langley.exercisestattracker.exerciseLibrary.data
 
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinitionDataSource
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseAppDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TestExerciseDefDataSource(dummyExerciseDefData: List<ExerciseDefinition>): ExerciseDefinitionDataSource {
+class TestExerciseDefDataSource(dummyExerciseDefData: List<ExerciseDefinition>): ExerciseAppDataSource {
 
     private val dummyDataList = dummyExerciseDefData.toMutableList()
 
