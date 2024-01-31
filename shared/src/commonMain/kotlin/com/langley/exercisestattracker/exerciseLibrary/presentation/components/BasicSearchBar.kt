@@ -32,7 +32,7 @@ fun BasicSearchBar(
     isDropdownOpen: Boolean = false,
 ){
     Column(
-        modifier = Modifier,
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
