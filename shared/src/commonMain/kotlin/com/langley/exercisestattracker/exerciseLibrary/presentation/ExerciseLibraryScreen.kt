@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -29,6 +31,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.presentation.components.AddNewExerciseDefView
@@ -73,6 +76,9 @@ fun ExerciseLibraryScreen(
                 ) { focusManager.clearFocus() },
         ){
             ExerciseLibraryTopBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp,16.dp),
                 state = state,
                 onEvent = onEvent,
                 focusManager = focusManager
