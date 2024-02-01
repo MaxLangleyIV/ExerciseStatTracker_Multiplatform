@@ -16,6 +16,8 @@ class SqlDelightExerciseAppDataSource(
 ): ExerciseAppDataSource {
 
     private val exerciseDefinitionQueries = database.exerciseDefinitionQueries
+    private val exerciseRoutineQueries = database.exerciseRoutineQueries
+    private val exerciseScheduleQueries = database.exerciseScheduleQueries
 
 
     override fun getDefinitions(): Flow<List<ExerciseDefinition>> {
@@ -30,7 +32,7 @@ class SqlDelightExerciseAppDataSource(
             }
     }
 
-    override suspend fun insertOrReplaceExerciseDefinition(definition: ExerciseDefinition) {
+    override suspend fun insertOrReplaceDefinition(definition: ExerciseDefinition) {
         exerciseDefinitionQueries.insertOrReplaceExerciseDefinition(
             definition.exerciseDefinitionId,
             definition.exerciseName,
@@ -44,5 +46,41 @@ class SqlDelightExerciseAppDataSource(
 
     override suspend fun deleteDefinition(exerciseDefinitionId: Long) {
         exerciseDefinitionQueries.deleteExerciseDefinition(exerciseDefinitionId)
+    }
+
+    override fun getRoutines(): Flow<List<ExerciseDefinition>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertOrReplaceRoutine(definition: ExerciseDefinition) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteRoutine(exerciseDefinitionId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getSchedules(): Flow<List<ExerciseDefinition>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertOrReplaceSchedule(definition: ExerciseDefinition) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteSchedule(exerciseDefinitionId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getRecords(): Flow<List<ExerciseDefinition>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertOrReplaceRecord(definition: ExerciseDefinition) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteRecord(exerciseDefinitionId: Long) {
+        TODO("Not yet implemented")
     }
 }

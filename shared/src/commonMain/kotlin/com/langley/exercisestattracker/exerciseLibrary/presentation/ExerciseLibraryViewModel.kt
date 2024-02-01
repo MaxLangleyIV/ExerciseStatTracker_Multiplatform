@@ -135,7 +135,7 @@ class ExerciseLibraryViewModel(
 
             is ExerciseLibraryEvent.SaveExerciseDefinition -> {
                 viewModelScope.launch {
-                    exerciseLibraryDataSource.insertOrReplaceExerciseDefinition(event.exerciseDefinition)
+                    exerciseLibraryDataSource.insertOrReplaceDefinition(event.exerciseDefinition)
                 }
             }
 
@@ -215,7 +215,7 @@ class ExerciseLibraryViewModel(
                         }
 
                         viewModelScope.launch {
-                            exerciseLibraryDataSource.insertOrReplaceExerciseDefinition(exerciseDefinition)
+                            exerciseLibraryDataSource.insertOrReplaceDefinition(exerciseDefinition)
                         }
                     }
                     else {
