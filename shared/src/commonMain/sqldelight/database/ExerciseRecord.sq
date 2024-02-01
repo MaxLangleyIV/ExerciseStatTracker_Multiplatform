@@ -1,7 +1,7 @@
 CREATE TABLE ExerciseRecord (
     exerciseRecordId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     dateCompleted INTEGER NOT NULL,
-    name TEXT NOT NULL,
+    exerciseName TEXT NOT NULL,
     weightUsed REAL NOT NULL,
     repsCompleted INTEGER NOT NULL,
     rpe INTEGER NOT NULL,

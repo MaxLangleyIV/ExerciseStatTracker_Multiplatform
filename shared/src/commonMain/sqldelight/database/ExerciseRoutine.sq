@@ -5,6 +5,7 @@ CREATE TABLE ExerciseRoutine (
     exercisesCSV TEXT NOT NULL,
     --Reps to perform, in corresponding order to exercisesCSV.
     repsCSV TEXT NOT NULL,
+    description TEXT NOT NULL,
     dateCreated INTEGER NOT NULL,
     isFavorite INTEGER NOT NULL
 );
