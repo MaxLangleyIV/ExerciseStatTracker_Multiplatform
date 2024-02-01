@@ -1,8 +1,8 @@
 package com.langley.exercisestattracker.exerciseLibrary.presentation
 
-import com.langley.exercisestattracker.exerciseLibrary.data.ExerciseDefinitionDummyData
-import com.langley.exercisestattracker.exerciseLibrary.data.TestExerciseDefDataSource
-import com.langley.exercisestattracker.exerciseLibrary.data.toListOfExerciseDefinitionsWithIndex
+import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.exerciseLibrary.data.TestExerciseAppDataSource
+import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.toListOfExerciseDefinitionsWithIndex
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +42,7 @@ class ExerciseLibraryViewModelTest {
 
             ExerciseLibraryViewModel(
 
-                TestExerciseDefDataSource(
+                TestExerciseAppDataSource(
                     ExerciseDefinitionDummyData().toListOfExerciseDefinitionsWithIndex()
                 ),
                 initialState,
