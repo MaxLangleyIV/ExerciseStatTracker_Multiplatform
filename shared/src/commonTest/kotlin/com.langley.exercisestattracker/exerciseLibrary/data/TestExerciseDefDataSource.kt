@@ -15,7 +15,7 @@ class TestExerciseDefDataSource(dummyExerciseDefData: List<ExerciseDefinition>):
         }
     }
 
-    override suspend fun insertOrReplaceExerciseDefinition(definition: ExerciseDefinition) {
+    override suspend fun insertOrReplaceDefinition(definition: ExerciseDefinition) {
 
         val newDefinition: ExerciseDefinition?
         val definitionId = definition.exerciseDefinitionId
