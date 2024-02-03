@@ -1,6 +1,5 @@
 package com.langley.exercisestattracker.exerciseLibrary.data.dummyData
 
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseRoutine
 
 class ExerciseRoutineDummyData {
@@ -127,7 +126,6 @@ class ExerciseRoutineDummyData {
             "description" to "Intense leg workout to add mass and strength to lower body muscles."
         )
     )
-
 }
 
 fun ExerciseRoutineDummyData.toListOfExerciseRoutines(): List<ExerciseRoutine> {
