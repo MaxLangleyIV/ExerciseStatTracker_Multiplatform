@@ -6,7 +6,7 @@ data class ExerciseRecord(
     val exerciseName: String,
     val weightUsed: Double,
     val repsCompleted: Int,
-    val rpe: Int?,
+    val rpe: Int,
     val description: String,
     val notes: String,
     val userId: Long
