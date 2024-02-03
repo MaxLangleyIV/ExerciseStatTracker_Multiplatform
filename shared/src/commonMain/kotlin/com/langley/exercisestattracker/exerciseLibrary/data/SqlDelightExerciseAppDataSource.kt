@@ -5,6 +5,9 @@ import app.cash.sqldelight.coroutines.mapToList
 import com.langley.exercisestattracker.database.ExerciseStatTrackerDatabase
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseRecord
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseRoutine
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseSchedule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +21,7 @@ class SqlDelightExerciseAppDataSource(
     private val exerciseDefinitionQueries = database.exerciseDefinitionQueries
     private val exerciseRoutineQueries = database.exerciseRoutineQueries
     private val exerciseScheduleQueries = database.exerciseScheduleQueries
+    private val exerciseRecordQueries = database.exerciseRecordQueries
 
 
     override fun getDefinitions(): Flow<List<ExerciseDefinition>> {
@@ -39,7 +43,7 @@ class SqlDelightExerciseAppDataSource(
             definition.bodyRegion,
             definition.targetMuscles,
             definition.description,
-            0,
+            definition.isFavorite,
             Clock.System.now().toEpochMilliseconds()
         )
     }
@@ -48,39 +52,71 @@ class SqlDelightExerciseAppDataSource(
         exerciseDefinitionQueries.deleteExerciseDefinition(exerciseDefinitionId)
     }
 
-    override fun getRoutines(): Flow<List<ExerciseDefinition>> {
+    override fun getRoutines(): Flow<List<ExerciseRoutine>> {
+        return exerciseRoutineQueries
+            .getExerciseRoutines()
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+            .map { dbExerciseRoutines ->
+                dbExerciseRoutines.map { dbExerciseRoutine ->
+                    dbExerciseRoutine.toExerciseRoutine()
+                }
+            }
+    }
+
+    override suspend fun insertOrReplaceRoutine(routine: ExerciseRoutine) {
+        exerciseRoutineQueries.insertOrReplaceExerciseRoutine(
+            exerciseRoutineId = routine.exerciseRoutineId,
+            routineName = routine.routineName,
+            exercisesCSV = routine.exerciseCSV,
+            repsCSV = routine.repsCSV,
+            description = routine.description,
+            isFavorite = routine.isFavorite,
+            dateCreated = Clock.System.now().toEpochMilliseconds()
+        )
+
+    }
+
+    override suspend fun deleteRoutine(exerciseRoutineId: Long) {
+        exerciseRoutineQueries.deleteExerciseRoutine(exerciseRoutineId)
+    }
+
+    override fun getSchedules(): Flow<List<ExerciseSchedule>> {
+        return exerciseScheduleQueries
+            .getExerciseSchedules()
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+            .map { dbExerciseSchedules ->
+                dbExerciseSchedules.map { dbExerciseSchedule ->
+                    dbExerciseSchedule.toExerciseSchedule()
+                }
+            }
+    }
+
+    override suspend fun insertOrReplaceSchedule(schedule: ExerciseSchedule) {
+        exerciseScheduleQueries.insertOrReplaceExerciseSchedule(
+            exerciseScheduleId = schedule.exerciseScheduleId,
+            exerciseScheduleName = schedule.exerciseScheduleName,
+            exerciseRoutineCSV = schedule.exerciseRoutineCSV,
+            isFavorite = schedule.isFavorite,
+            dateCreated = Clock.System.now().toEpochMilliseconds()
+        )
+    }
+
+    override suspend fun deleteSchedule(exerciseScheduleId: Long) {
+        
+    }
+
+    override fun getRecords(): Flow<List<ExerciseRecord>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertOrReplaceRoutine(definition: ExerciseDefinition) {
+    override suspend fun insertOrReplaceRecord(record: ExerciseRecord) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteRoutine(exerciseDefinitionId: Long) {
+    override suspend fun deleteRecord(exerciseRecordId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getSchedules(): Flow<List<ExerciseDefinition>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertOrReplaceSchedule(definition: ExerciseDefinition) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deleteSchedule(exerciseDefinitionId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getRecords(): Flow<List<ExerciseDefinition>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertOrReplaceRecord(definition: ExerciseDefinition) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deleteRecord(exerciseDefinitionId: Long) {
-        TODO("Not yet implemented")
-    }
 }
