@@ -14,3 +14,32 @@ getExerciseRecords:
 SELECT *
 FROM ExerciseRecord
 ORDER BY dateCompleted DESC;
+
+insertOrReplaceExerciseRecord:
+INSERT OR REPLACE
+INTO ExerciseRecord(
+    exerciseRecordId,
+    dateCompleted,
+    exerciseName,
+    weightUsed,
+    repsCompleted,
+    rpe,
+    description,
+    userId,
+    notes
+)
+VALUES (
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?
+);
+
+deleteExerciseDefinition:
+DELETE FROM ExerciseRecord
+WHERE exerciseRecordId = :givenExerciseDefinitionId;
