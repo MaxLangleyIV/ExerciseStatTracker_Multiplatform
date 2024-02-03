@@ -10,19 +10,19 @@ interface ExerciseAppDataSource {
     suspend fun deleteDefinition(exerciseDefinitionId: Long)
 
     //Routines
-    fun getRoutines(): Flow<List<ExerciseDefinition>>
-    suspend fun insertOrReplaceRoutine(definition: ExerciseDefinition)
-    suspend fun deleteRoutine(exerciseDefinitionId: Long)
+    fun getRoutines(): Flow<List<ExerciseRoutine>>
+    suspend fun insertOrReplaceRoutine(routine: ExerciseRoutine)
+    suspend fun deleteRoutine(exerciseRoutineId: Long)
 
     //Schedules
-    fun getSchedules(): Flow<List<ExerciseDefinition>>
-    suspend fun insertOrReplaceSchedule(definition: ExerciseDefinition)
-    suspend fun deleteSchedule(exerciseDefinitionId: Long)
+    fun getSchedules(): Flow<List<ExerciseSchedule>>
+    suspend fun insertOrReplaceSchedule(schedule: ExerciseSchedule)
+    suspend fun deleteSchedule(exerciseScheduleId: Long)
 
     //Records
-    fun getRecords(): Flow<List<ExerciseDefinition>>
-    suspend fun insertOrReplaceRecord(definition: ExerciseDefinition)
-    suspend fun deleteRecord(exerciseDefinitionId: Long)
+    fun getRecords(): Flow<List<ExerciseRecord>>
+    suspend fun insertOrReplaceRecord(record: ExerciseRecord)
+    suspend fun deleteRecord(exerciseRecordId: Long)
 
 
 }
