@@ -40,6 +40,6 @@ VALUES (
     ?
 );
 
-deleteExerciseDefinition:
+deleteExerciseRecord:
 DELETE FROM ExerciseRecord
 WHERE exerciseRecordId = :givenExerciseDefinitionId;
