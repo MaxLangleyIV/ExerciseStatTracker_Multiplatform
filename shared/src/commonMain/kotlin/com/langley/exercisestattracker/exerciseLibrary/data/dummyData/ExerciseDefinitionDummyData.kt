@@ -1,6 +1,9 @@
 package com.langley.exercisestattracker.exerciseLibrary.data.dummyData
 
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseRecord
+import kotlinx.datetime.Clock
+import kotlin.random.Random
 
 class ExerciseDefinitionDummyData {
 
@@ -354,4 +357,31 @@ fun ExerciseDefinitionDummyData.toListOfExerciseDefinitionsWithIndex(): List<Exe
         convertedList.add(exerciseDefinition)
     }
     return convertedList
+}
+
+fun ExerciseDefinitionDummyData.getListOfDummyExerciseRecords(): List<ExerciseRecord>{
+
+    val dummyExerciseRecords = mutableListOf<ExerciseRecord>()
+    val sizeOfDefinitionLibrary = dummyDefinitionData.size
+
+    for (i in 0..100){
+        val randomDef = dummyDefinitionData[Random.nextInt(sizeOfDefinitionLibrary)]
+
+        dummyExerciseRecords.add(
+            ExerciseRecord(
+                exerciseRecordId = i.toLong(),
+                dateCompleted = Clock.System.now().toEpochMilliseconds(),
+                exerciseName = randomDef["name"] as  String,
+                weightUsed = Random.nextDouble(300.0),
+                repsCompleted = Random.nextInt(20),
+                rpe = Random.nextInt(11),
+                description = randomDef["description"] as String,
+                notes = "",
+                userId = 0.toLong()
+
+            )
+        )
+    }
+
+    return dummyExerciseRecords
 }
