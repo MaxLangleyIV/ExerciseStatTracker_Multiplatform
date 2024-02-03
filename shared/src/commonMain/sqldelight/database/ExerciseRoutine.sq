@@ -6,8 +6,9 @@ CREATE TABLE ExerciseRoutine (
     --Reps to perform, in corresponding order to exercisesCSV.
     repsCSV TEXT NOT NULL,
     description TEXT NOT NULL,
-    dateCreated INTEGER NOT NULL,
-    isFavorite INTEGER NOT NULL
+    isFavorite INTEGER NOT NULL,
+    dateCreated INTEGER NOT NULL
+
 );
 
 getExerciseRoutines:
@@ -15,7 +16,27 @@ SELECT *
 FROM ExerciseRoutine
 ORDER BY routineName;
 
-getExerciseRoutineById:
-SELECT *
-FROM ExerciseRoutine
-WHERE exerciseRoutineId = :givenExerciseRoutineId;
+insertOrReplaceExerciseRoutine:
+INSERT OR REPLACE
+INTO ExerciseRoutine(
+    exerciseRoutineId,
+    routineName,
+    exercisesCSV,
+    repsCSV,
+    description,
+    isFavorite,
+    dateCreated
+)
+VALUES (
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?
+);
+
+deleteExerciseRoutine:
+DELETE FROM ExerciseRoutine
+WHERE exerciseRoutineId = :givenExerciseDefinitionId;
