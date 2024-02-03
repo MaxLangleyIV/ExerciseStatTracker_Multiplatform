@@ -35,6 +35,6 @@ VALUES (
     ?
 );
 
-deleteExerciseDefinition:
-DELETE FROM ExerciseRoutine
-WHERE exerciseRoutineId = :givenExerciseDefinitionId;
+deleteExerciseSchedule:
+DELETE FROM ExerciseSchedule
+WHERE exerciseScheduleId = :givenExerciseDefinitionId;
