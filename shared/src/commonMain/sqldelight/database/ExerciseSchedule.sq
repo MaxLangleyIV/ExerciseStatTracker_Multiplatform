@@ -2,8 +2,9 @@ CREATE TABLE ExerciseSchedule (
     exerciseScheduleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     exerciseScheduleName TEXT NOT NULL,
     exerciseRoutineCSV TEXT NOT NULL,
-    dateCreated INTEGER NOT NULL,
-    isFavorite INTEGER NOT NULL
+    isFavorite INTEGER NOT NULL,
+    dateCreated INTEGER NOT NULL
+
 );
 
 getExerciseSchedules:
@@ -15,3 +16,25 @@ getExerciseScheduleById:
 SELECT *
 FROM ExerciseSchedule
 WHERE exerciseScheduleId = :givenExerciseScheduleId;
+
+insertOrReplaceExerciseSchedule:
+INSERT OR REPLACE
+INTO ExerciseSchedule(
+    exerciseScheduleId,
+    exerciseScheduleName,
+    exerciseRoutineCSV,
+    isFavorite,
+    dateCreated
+
+)
+VALUES (
+    ?,
+    ?,
+    ?,
+    ?,
+    ?
+);
+
+deleteExerciseDefinition:
+DELETE FROM ExerciseRoutine
+WHERE exerciseRoutineId = :givenExerciseDefinitionId;
