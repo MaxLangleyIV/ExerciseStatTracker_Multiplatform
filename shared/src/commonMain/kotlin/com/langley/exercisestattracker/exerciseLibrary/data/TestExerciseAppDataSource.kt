@@ -2,6 +2,9 @@ package com.langley.exercisestattracker.exerciseLibrary.data
 
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseDefinition
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseRecord
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseRoutine
+import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseSchedule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -51,39 +54,39 @@ class TestExerciseAppDataSource: ExerciseAppDataSource {
         }
     }
 
-    override fun getRoutines(): Flow<List<ExerciseDefinition>> {
+    override fun getRoutines(): Flow<List<ExerciseRoutine>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertOrReplaceRoutine(definition: ExerciseDefinition) {
+    override suspend fun insertOrReplaceRoutine(routine: ExerciseRoutine) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteRoutine(exerciseDefinitionId: Long) {
+    override suspend fun deleteRoutine(exerciseRoutineId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getSchedules(): Flow<List<ExerciseDefinition>> {
+    override fun getSchedules(): Flow<List<ExerciseSchedule>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertOrReplaceSchedule(definition: ExerciseDefinition) {
+    override suspend fun insertOrReplaceSchedule(schedule: ExerciseSchedule) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteSchedule(exerciseDefinitionId: Long) {
+    override suspend fun deleteSchedule(exerciseScheduleId: Long) {
         TODO("Not yet implemented")
     }
 
-    override fun getRecords(): Flow<List<ExerciseDefinition>> {
+    override fun getRecords(): Flow<List<ExerciseRecord>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertOrReplaceRecord(definition: ExerciseDefinition) {
+    override suspend fun insertOrReplaceRecord(record: ExerciseRecord) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteRecord(exerciseDefinitionId: Long) {
+    override suspend fun deleteRecord(exerciseRecordId: Long) {
         TODO("Not yet implemented")
     }
 }
