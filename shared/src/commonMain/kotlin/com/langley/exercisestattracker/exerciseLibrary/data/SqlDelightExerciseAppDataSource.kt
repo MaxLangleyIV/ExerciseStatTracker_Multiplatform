@@ -104,19 +104,39 @@ class SqlDelightExerciseAppDataSource(
     }
 
     override suspend fun deleteSchedule(exerciseScheduleId: Long) {
-        
+        exerciseScheduleQueries.deleteExerciseSchedule(exerciseScheduleId)
     }
 
     override fun getRecords(): Flow<List<ExerciseRecord>> {
-        TODO("Not yet implemented")
+        return exerciseRecordQueries
+            .getExerciseRecords()
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+            .map { dbExerciseRecords ->
+                dbExerciseRecords.map { dbExerciseRecord ->
+                    dbExerciseRecord.toExerciseRecord()
+                }
+            }
     }
 
     override suspend fun insertOrReplaceRecord(record: ExerciseRecord) {
-        TODO("Not yet implemented")
+        exerciseRecordQueries.insertOrReplaceExerciseRecord(
+            exerciseRecordId = record.exerciseRecordId,
+            dateCompleted = record.dateCompleted,
+            exerciseName = record.exerciseName,
+            weightUsed = record.weightUsed,
+            repsCompleted = record.repsCompleted.toLong(),
+            rpe = record.rpe.toLong(),
+            description = record.description,
+            userId = record.userId,
+            notes = record.notes
+
+
+        )
     }
 
     override suspend fun deleteRecord(exerciseRecordId: Long) {
-        TODO("Not yet implemented")
+        exerciseRecordQueries.deleteExerciseRecord(exerciseRecordId)
     }
 
 }
