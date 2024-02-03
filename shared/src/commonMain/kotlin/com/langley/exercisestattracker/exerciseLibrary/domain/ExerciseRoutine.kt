@@ -6,6 +6,6 @@ data class ExerciseRoutine(
     val exerciseCSV: String,
     val repsCSV: String,
     val description: String,
-    val isFavorite: Long?,
+    val isFavorite: Long,
     val dateCreated: Long?
 )
