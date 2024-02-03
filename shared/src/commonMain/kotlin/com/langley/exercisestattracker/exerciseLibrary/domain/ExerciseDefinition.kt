@@ -6,6 +6,6 @@ data class ExerciseDefinition(
     val bodyRegion: String,
     val targetMuscles: String,
     val description: String,
-    val isFavorite: Long?,
+    val isFavorite: Long,
     val dateCreated: Long?
 )
