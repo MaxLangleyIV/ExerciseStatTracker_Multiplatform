@@ -13,11 +13,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
+import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.ExerciseRoutineDummyData
+import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.getListOfDummyExerciseRecords
+import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryViewModel
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kotlinx.datetime.Clock
 
 @Composable
 fun App(
@@ -43,12 +48,21 @@ fun App(
         val interactionSource = remember { MutableInteractionSource() }
 
         // Initialize dummy data for exercise library.
+        val exerciseDefDummyData = ExerciseDefinitionDummyData()
+        val exerciseDefList = exerciseDefDummyData
+            .convertDummyDataToExerciseDef(exerciseDefDummyData.dummyDefinitionData)
 
-//        val exerciseDummyData = ExerciseDefinitionDummyData()
-//        val exerciseDefinitionList = exerciseDummyData
-//            .convertDummyDataToExerciseDef(exerciseDummyData.dummyDefinitionData)
-//
-//        for (exerciseDefinition in exerciseDefinitionList){
+        val exerciseRecordList = exerciseDefDummyData.getListOfDummyExerciseRecords()
+
+        val exerciseRoutineDummyData = ExerciseRoutineDummyData(exerciseDefList)
+        val exerciseRoutineList = exerciseRoutineDummyData.getRoutines()
+
+        println("OUTPUTING RECORDS:" + exerciseRecordList)
+
+        println("OUTPUTING ROUTINES:" + exerciseRoutineList)
+
+        //Add definitions to SQLDelight db.
+//        for (exerciseDefinition in exerciseDefList){
 //            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
 //        }
 
