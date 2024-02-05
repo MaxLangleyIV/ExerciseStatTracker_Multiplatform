@@ -74,7 +74,6 @@ class SqlDelightExerciseAppDataSource(
             isFavorite = routine.isFavorite,
             dateCreated = Clock.System.now().toEpochMilliseconds()
         )
-
     }
 
     override suspend fun deleteRoutine(exerciseRoutineId: Long) {
@@ -138,5 +137,4 @@ class SqlDelightExerciseAppDataSource(
     override suspend fun deleteRecord(exerciseRecordId: Long) {
         exerciseRecordQueries.deleteExerciseRecord(exerciseRecordId)
     }
-
 }
