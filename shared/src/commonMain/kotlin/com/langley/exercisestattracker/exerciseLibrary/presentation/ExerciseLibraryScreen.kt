@@ -52,17 +52,24 @@ fun ExerciseLibraryScreen(
     Scaffold(
         modifier = Modifier,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    focusManager.clearFocus()
-                    onEvent(ExerciseLibraryEvent.AddNewExerciseDefClicked)
-                },
-                shape = RoundedCornerShape(20.dp)
-            ){
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = "Add exercise definition."
-                )
+            if (
+                !state.isEditExerciseDefSheetOpen
+                and !state.isAddExerciseDefSheetOpen
+                and !state.isExerciseDetailsSheetOpen
+                ){
+
+                FloatingActionButton(
+                    onClick = {
+                        focusManager.clearFocus()
+                        onEvent(ExerciseLibraryEvent.AddNewExerciseDefClicked)
+                    },
+                    shape = RoundedCornerShape(20.dp)
+                ){
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = "Add exercise definition."
+                    )
+                }
             }
         }
     ){
