@@ -16,13 +16,11 @@ import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.ExerciseRoutineDummyData
 import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.getListOfDummyExerciseRecords
-import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryEvent
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryViewModel
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import kotlinx.datetime.Clock
 
 @Composable
 fun App(
@@ -34,6 +32,10 @@ fun App(
         isDarkTheme,
         isDynamicColor = false
     ){
+        val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
+        val interactionSource = remember { MutableInteractionSource() }
+
         val exerciseLibraryViewModel = getViewModel(
             key = "exerciseLibraryScreen",
             factory = viewModelFactory {
@@ -41,11 +43,7 @@ fun App(
             }
         )
 
-        val state by exerciseLibraryViewModel.state.collectAsState(ExerciseLibraryState())
-
-        val focusRequester = remember { FocusRequester() }
-        val focusManager = LocalFocusManager.current
-        val interactionSource = remember { MutableInteractionSource() }
+        val libraryState by exerciseLibraryViewModel.state.collectAsState(ExerciseLibraryState())
 
         // Initialize dummy data for exercise library.
         val exerciseDefDummyData = ExerciseDefinitionDummyData()
@@ -57,9 +55,9 @@ fun App(
         val exerciseRoutineDummyData = ExerciseRoutineDummyData(exerciseDefList)
         val exerciseRoutineList = exerciseRoutineDummyData.getRoutines()
 
-        println("OUTPUTING RECORDS:" + exerciseRecordList)
+        println("OUTPUTTING RECORDS: $exerciseRecordList")
 
-        println("OUTPUTING ROUTINES:" + exerciseRoutineList)
+        println("OUTPUTTING ROUTINES: $exerciseRoutineList")
 
         //Add definitions to SQLDelight db.
 //        for (exerciseDefinition in exerciseDefList){
@@ -72,7 +70,7 @@ fun App(
         ) {
 
             ExerciseLibraryScreen(
-                state = state,
+                state = libraryState,
                 newExerciseDefinition = exerciseLibraryViewModel.newExerciseDefinition,
                 onEvent = exerciseLibraryViewModel::onEvent,
                 focusRequester = focusRequester,
