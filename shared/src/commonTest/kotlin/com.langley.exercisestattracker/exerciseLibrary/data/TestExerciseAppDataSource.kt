@@ -8,9 +8,13 @@ import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseSchedule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TestExerciseAppDataSource: ExerciseAppDataSource {
+class TestExerciseAppDataSource(
 
-    private val dummyDataList = mutableListOf<ExerciseDefinition>()
+    dummyDefinitions: List<ExerciseDefinition> = listOf()
+
+): ExerciseAppDataSource {
+
+    private val dummyDataList = dummyDefinitions.toMutableList()
 
 
     override fun getDefinitions(): Flow<List<ExerciseDefinition>> {
@@ -21,17 +25,14 @@ class TestExerciseAppDataSource: ExerciseAppDataSource {
 
     override suspend fun insertOrReplaceDefinition(definition: ExerciseDefinition) {
 
-        var newDefinition: ExerciseDefinition? = null
+        val newDefinition: ExerciseDefinition?
+        val definitionId = definition.exerciseDefinitionId
 
-        if (definition.exerciseDefinitionId != null){
+        if (definitionId != null){
 
-            for (def in dummyDataList){
+            val index = definitionId.toInt()
 
-                if (def.exerciseDefinitionId == definition.exerciseDefinitionId){
-                    dummyDataList.remove(def)
-                }
-            }
-
+            dummyDataList.removeAt(index)
             dummyDataList.add(definition)
         }
         else{
@@ -45,13 +46,10 @@ class TestExerciseAppDataSource: ExerciseAppDataSource {
     }
 
     override suspend fun deleteDefinition(exerciseDefinitionId: Long) {
-        
-        for (def in dummyDataList){
 
-            if (def.exerciseDefinitionId == exerciseDefinitionId){
-                dummyDataList.remove(def)
-            }
-        }
+        val index = exerciseDefinitionId.toInt()
+
+        dummyDataList.removeAt(index)
     }
 
     override fun getRoutines(): Flow<List<ExerciseRoutine>> {
