@@ -13,7 +13,7 @@ class ExerciseDefinitionValidatorTest {
             "a",
             "b",
             "c",
-            null,
+            0,
             null
         )
         assertNotNull(
@@ -30,7 +30,7 @@ class ExerciseDefinitionValidatorTest {
             "",
             "b",
             "c",
-            null,
+            0,
             null
         )
         assertNotNull(
@@ -47,7 +47,7 @@ class ExerciseDefinitionValidatorTest {
             "b",
             "",
             "c",
-            null,
+            0,
             null
         )
         assertNotNull(
