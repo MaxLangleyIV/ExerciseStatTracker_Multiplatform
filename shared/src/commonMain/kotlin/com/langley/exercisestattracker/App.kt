@@ -13,29 +13,32 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
-import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.ExerciseDefinitionDummyData
-import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.ExerciseRoutineDummyData
-import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.getListOfDummyExerciseRecords
-import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
-import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
-import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryViewModel
-import com.langley.exercisestattracker.homePage.presentation.HomeScreen
-import com.langley.exercisestattracker.homePage.presentation.HomeScreenState
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
+import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
+import com.langley.exercisestattracker.library.LibraryScreen
+import com.langley.exercisestattracker.library.LibraryState
+import com.langley.exercisestattracker.library.LibraryViewModel
+import com.langley.exercisestattracker.home.HomeScreen
+import com.langley.exercisestattracker.home.HomeState
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
+import com.langley.exercisestattracker.records.RecordsScreen
+import com.langley.exercisestattracker.records.RecordsState
+import com.langley.exercisestattracker.records.RecordsViewModel
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun App(
     isDarkTheme: Boolean,
-    isDynamicColor: Boolean,
     appModule: AppModule
 ){
     ExerciseStatTrackerTheme(
         isDarkTheme,
         isDynamicColor = false
     ){
+
         val focusRequester = remember { FocusRequester() }
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
@@ -43,14 +46,25 @@ fun App(
         val navController = remember { ExerciseAppNavController() }
         val currentScreen by navController.currentScreen.collectAsState()
 
-        val exerciseLibraryViewModel = getViewModel(
-            key = "exerciseLibraryScreen",
+
+
+        // View models and related states.
+        val libraryViewModel = getViewModel(
+            key = "libraryViewModel",
             factory = viewModelFactory {
-                ExerciseLibraryViewModel(appModule.exerciseAppDataSource)
+                LibraryViewModel(appModule.exerciseAppDataSource)
             }
         )
+        val libraryState by libraryViewModel.state.collectAsState(LibraryState())
 
-        val libraryState by exerciseLibraryViewModel.state.collectAsState(ExerciseLibraryState())
+        val recordsViewModel = getViewModel(
+            key = "recordsViewModel",
+            factory = viewModelFactory {
+                RecordsViewModel(appModule.exerciseAppDataSource)
+            }
+        )
+        val recordsState by recordsViewModel.state.collectAsState(RecordsState())
+
 
         // Initialize dummy data for exercise library.
         val exerciseDefDummyData = ExerciseDefinitionDummyData()
@@ -68,9 +82,11 @@ fun App(
 
         //Add definitions to SQLDelight db.
 //        for (exerciseDefinition in exerciseDefList){
-//            exerciseLibraryViewModel.onEvent(ExerciseLibraryEvent.SaveExerciseDefinition(exerciseDefinition))
+//            exerciseLibraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
 //        }
 
+
+        //
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
@@ -80,7 +96,7 @@ fun App(
 
                 Screen.Home -> HomeScreen(
                     // This state is a placeholder and the
-                    state = HomeScreenState(),
+                    state = HomeState(),
                     focusRequester = focusRequester,
                     focusManager = focusManager,
                     interactionSource = interactionSource,
@@ -89,10 +105,10 @@ fun App(
 
                 Screen.Library -> {
 
-                    ExerciseLibraryScreen(
+                    LibraryScreen(
                         state = libraryState,
-                        newExerciseDefinition = exerciseLibraryViewModel.newExerciseDefinition,
-                        onEvent = exerciseLibraryViewModel::onEvent,
+                        newExerciseDefinition = libraryViewModel.newExerciseDefinition,
+                        onEvent = libraryViewModel::onEvent,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,
@@ -101,7 +117,18 @@ fun App(
 
                 }
 
-                Screen.Records -> TODO()
+                Screen.Records -> {
+
+                    RecordsScreen(
+                        state = recordsState,
+//                        onEvent = libraryViewModel::onEvent,
+                        focusRequester = focusRequester,
+                        focusManager = focusManager,
+                        interactionSource = interactionSource,
+                        navController = navController
+                    )
+
+                }
 
             }
 
