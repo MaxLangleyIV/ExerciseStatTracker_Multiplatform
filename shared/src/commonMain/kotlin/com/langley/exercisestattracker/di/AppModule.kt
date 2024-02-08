@@ -1,6 +1,6 @@
 package com.langley.exercisestattracker.di
 
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 
 expect class AppModule {
     val exerciseAppDataSource: ExerciseAppDataSource

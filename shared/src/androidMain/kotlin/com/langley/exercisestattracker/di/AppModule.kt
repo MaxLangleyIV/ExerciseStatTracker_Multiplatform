@@ -3,8 +3,8 @@ package com.langley.exercisestattracker.di
 import android.content.Context
 import com.langley.exercisestattracker.core.data.DatabaseDriverFactory
 import com.langley.exercisestattracker.database.ExerciseStatTrackerDatabase
-import com.langley.exercisestattracker.exerciseLibrary.data.SqlDelightExerciseAppDataSource
-import com.langley.exercisestattracker.exerciseLibrary.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.core.data.SqlDelightExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 
 actual class AppModule(
     private val context: Context
