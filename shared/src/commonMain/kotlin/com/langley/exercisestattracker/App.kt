@@ -19,6 +19,10 @@ import com.langley.exercisestattracker.exerciseLibrary.data.dummyData.getListOfD
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryScreen
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryState
 import com.langley.exercisestattracker.exerciseLibrary.presentation.ExerciseLibraryViewModel
+import com.langley.exercisestattracker.homePage.presentation.HomeScreen
+import com.langley.exercisestattracker.homePage.presentation.HomeScreenState
+import com.langley.exercisestattracker.navigation.ExerciseAppNavController
+import com.langley.exercisestattracker.navigation.Screen
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
@@ -35,6 +39,9 @@ fun App(
         val focusRequester = remember { FocusRequester() }
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
+
+        val navController = remember { ExerciseAppNavController() }
+        val currentScreen by navController.currentScreen.collectAsState()
 
         val exerciseLibraryViewModel = getViewModel(
             key = "exerciseLibraryScreen",
@@ -69,14 +76,34 @@ fun App(
             color = MaterialTheme.colorScheme.background
         ) {
 
-            ExerciseLibraryScreen(
-                state = libraryState,
-                newExerciseDefinition = exerciseLibraryViewModel.newExerciseDefinition,
-                onEvent = exerciseLibraryViewModel::onEvent,
-                focusRequester = focusRequester,
-                focusManager = focusManager,
-                interactionSource = interactionSource
-            )
+            when (currentScreen) {
+
+                Screen.Home -> HomeScreen(
+                    // This state is a placeholder and the
+                    state = HomeScreenState(),
+                    focusRequester = focusRequester,
+                    focusManager = focusManager,
+                    interactionSource = interactionSource,
+                    navController = navController
+                )
+
+                Screen.Library -> {
+
+                    ExerciseLibraryScreen(
+                        state = libraryState,
+                        newExerciseDefinition = exerciseLibraryViewModel.newExerciseDefinition,
+                        onEvent = exerciseLibraryViewModel::onEvent,
+                        focusRequester = focusRequester,
+                        focusManager = focusManager,
+                        interactionSource = interactionSource,
+                        navController = navController
+                    )
+
+                }
+
+                Screen.Records -> TODO()
+
+            }
 
         }
     }
