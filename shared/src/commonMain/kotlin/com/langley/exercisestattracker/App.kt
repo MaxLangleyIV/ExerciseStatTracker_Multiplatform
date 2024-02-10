@@ -121,7 +121,7 @@ fun App(
 
                     RecordsScreen(
                         state = recordsState,
-//                        onEvent = libraryViewModel::onEvent,
+                        onEvent = recordsViewModel::onEvent,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,
