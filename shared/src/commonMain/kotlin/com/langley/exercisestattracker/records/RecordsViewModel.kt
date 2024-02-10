@@ -28,6 +28,8 @@ class RecordsViewModel(
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), RecordsState())
 
+    private var selectedRecord: ExerciseRecord? = null
+
     private fun updateRecordsState(
         state: RecordsState,
         records: List<ExerciseRecord>
@@ -99,4 +101,37 @@ class RecordsViewModel(
 
         return filteredRecords
     }
+
+    fun onEvent(event: RecordsEvent){
+
+        when (event){
+
+            // Main Records View Events
+            is RecordsEvent.RecordSelected -> {
+                selectedRecord = event.exerciseRecord
+            }
+            is RecordsEvent.OnSearchStringChanged -> return
+            is RecordsEvent.SetCurrentFilterType -> return
+            RecordsEvent.ToggleIsSearchDropdownOpen -> return
+            RecordsEvent.ClearFilterType -> return
+
+            // Details View Events
+            is RecordsEvent.EditRecord -> return
+            RecordsEvent.CloseDetailsView -> return
+
+            // Edit View Events
+
+
+            is RecordsEvent.OnNameChanged -> TODO()
+            is RecordsEvent.OnBodyRegionChanged -> TODO()
+            is RecordsEvent.OnDescriptionChanged -> TODO()
+            is RecordsEvent.OnTargetMusclesChanged -> TODO()
+            RecordsEvent.SaveOrUpdateRecord -> TODO()
+            RecordsEvent.DeleteRecord -> TODO()
+            RecordsEvent.CloseEditRecordView -> TODO()
+
+        }
+
+    }
+
 }
