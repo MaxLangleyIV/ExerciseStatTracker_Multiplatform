@@ -14,8 +14,8 @@ data class RecordsState(
     val searchFilterType: RecordsFilterType? = null,
 //
 //    //UI visibility flags.
-//    val isExerciseDetailsSheetOpen: Boolean = false,
-//    val isEditExerciseDefSheetOpen: Boolean = false,
+    val isRecordDetailsSheetOpen: Boolean = false,
+    val isEditRecordDetailsSheetOpen: Boolean = false,
 
 )
 
