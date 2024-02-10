@@ -6,7 +6,7 @@ import com.langley.exercisestattracker.library.ExerciseLibraryFilterType
 
 sealed interface RecordsEvent {
 
-    // Main Library View Events
+    // Main Records View Events
     data class RecordSelected(val exerciseRecord: ExerciseRecord): RecordsEvent
     data class OnSearchStringChanged(val value: String) : RecordsEvent
     data class SetCurrentFilterType(val filterType: RecordsFilterType): RecordsEvent
