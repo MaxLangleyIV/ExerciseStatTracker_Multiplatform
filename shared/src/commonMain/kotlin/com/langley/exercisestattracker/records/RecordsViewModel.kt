@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 
 class RecordsViewModel(
 
@@ -28,7 +29,6 @@ class RecordsViewModel(
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), RecordsState())
 
-    private var selectedRecord: ExerciseRecord? = null
 
     private fun updateRecordsState(
         state: RecordsState,
@@ -108,27 +108,43 @@ class RecordsViewModel(
 
             // Main Records View Events
             is RecordsEvent.RecordSelected -> {
-                selectedRecord = event.exerciseRecord
+                _state.update { it.copy(
+                    selectedRecord = event.exerciseRecord,
+                    isRecordDetailsSheetOpen = true
+                ) }
             }
-            is RecordsEvent.OnSearchStringChanged -> return
-            is RecordsEvent.SetCurrentFilterType -> return
-            RecordsEvent.ToggleIsSearchDropdownOpen -> return
-            RecordsEvent.ClearFilterType -> return
+
+            is RecordsEvent.OnSearchStringChanged -> {
+
+            }
+
+            is RecordsEvent.SetCurrentFilterType -> {
+
+            }
+
+            RecordsEvent.ClearFilterType -> {
+
+            }
+
+            RecordsEvent.ToggleIsSearchDropdownOpen -> {
+                TODO()
+            }
+
 
             // Details View Events
-            is RecordsEvent.EditRecord -> return
-            RecordsEvent.CloseDetailsView -> return
+            is RecordsEvent.EditRecord -> {
+                TODO() // Might choose to keep records immutable.
+            }
+            RecordsEvent.CloseDetailsView -> {}
 
             // Edit View Events
-
-
-            is RecordsEvent.OnNameChanged -> TODO()
-            is RecordsEvent.OnBodyRegionChanged -> TODO()
-            is RecordsEvent.OnDescriptionChanged -> TODO()
-            is RecordsEvent.OnTargetMusclesChanged -> TODO()
-            RecordsEvent.SaveOrUpdateRecord -> TODO()
-            RecordsEvent.DeleteRecord -> TODO()
-            RecordsEvent.CloseEditRecordView -> TODO()
+            is RecordsEvent.OnNameChanged -> {}
+            is RecordsEvent.OnBodyRegionChanged -> {}
+            is RecordsEvent.OnDescriptionChanged -> {}
+            is RecordsEvent.OnTargetMusclesChanged -> {}
+            RecordsEvent.SaveOrUpdateRecord -> {}
+            RecordsEvent.DeleteRecord -> {}
+            RecordsEvent.CloseEditRecordView -> {}
 
         }
 
