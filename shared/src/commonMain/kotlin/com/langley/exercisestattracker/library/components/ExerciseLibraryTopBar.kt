@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.library.LibraryEvent
 import com.langley.exercisestattracker.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.library.LibraryState
+import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
 @Composable
 fun ExerciseLibraryTopBar(
@@ -36,7 +38,8 @@ fun ExerciseLibraryTopBar(
     state: LibraryState,
     onEvent: (LibraryEvent) -> Unit,
     modifier: Modifier = Modifier,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    navController: ExerciseAppNavController
 
 ){
     var dropdownExpanded by remember { mutableStateOf(false) }
@@ -50,6 +53,14 @@ fun ExerciseLibraryTopBar(
                 .align(Alignment.CenterStart)
                 .padding(12.dp)
         ) {
+            IconButton(onClick = { navController.navigateBack() }){
+                Icon(
+                    modifier = Modifier.size(200.dp),
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back Button"
+                )
+            }
+
             Box(
             ) {
                 IconButton(onClick = { dropdownExpanded = true }) {
