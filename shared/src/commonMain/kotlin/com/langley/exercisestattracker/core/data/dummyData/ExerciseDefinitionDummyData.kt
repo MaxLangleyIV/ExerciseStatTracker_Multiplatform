@@ -372,7 +372,7 @@ fun ExerciseDefinitionDummyData.getListOfDummyExerciseRecords(): List<ExerciseRe
                 exerciseRecordId = i.toLong(),
                 dateCompleted = Clock.System.now().toEpochMilliseconds(),
                 exerciseName = randomDef["name"] as  String,
-                weightUsed = Random.nextDouble(300.0),
+                weightUsed = Random.nextInt(300).toDouble(),
                 repsCompleted = Random.nextInt(20),
                 rpe = Random.nextInt(11),
                 description = randomDef["description"] as String,
