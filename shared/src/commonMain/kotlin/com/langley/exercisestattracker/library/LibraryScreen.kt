@@ -83,7 +83,8 @@ fun LibraryScreen(
                     .padding(0.dp,16.dp),
                 state = state,
                 onEvent = onEvent,
-                focusManager = focusManager
+                focusManager = focusManager,
+                navController = navController
             )
 
             LazyVerticalGrid(
