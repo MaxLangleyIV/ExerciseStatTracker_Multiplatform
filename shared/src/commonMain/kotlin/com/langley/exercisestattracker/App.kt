@@ -21,8 +21,10 @@ import com.langley.exercisestattracker.library.LibraryState
 import com.langley.exercisestattracker.library.LibraryViewModel
 import com.langley.exercisestattracker.home.HomeScreen
 import com.langley.exercisestattracker.home.HomeState
+import com.langley.exercisestattracker.library.LibraryEvent
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
+import com.langley.exercisestattracker.records.RecordsEvent
 import com.langley.exercisestattracker.records.RecordsScreen
 import com.langley.exercisestattracker.records.RecordsState
 import com.langley.exercisestattracker.records.RecordsViewModel
@@ -80,9 +82,13 @@ fun App(
 
         println("OUTPUTTING ROUTINES: $exerciseRoutineList")
 
-        //Add definitions to SQLDelight db.
+        // Add definitions to SQLDelight db.
 //        for (exerciseDefinition in exerciseDefList){
-//            exerciseLibraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
+//            libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
+//        }
+        // Add records to SQLDelight db.
+//        for (exerciseRecord in exerciseRecordList){
+//            recordsViewModel.onEvent(RecordsEvent.SaveRecord(exerciseRecord))
 //        }
 
 
@@ -129,9 +135,7 @@ fun App(
                     )
 
                 }
-
             }
-
         }
     }
 }
