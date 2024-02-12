@@ -10,6 +10,7 @@ import com.langley.exercisestattracker.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -177,9 +178,36 @@ class RecordsViewModelTest{
             message = "Selected record should be null after closing event."
         )
 
-        assertNull(
+        assertFalse(
             actual = state.isRecordDetailsSheetOpen,
             message = "DetailsSheetOpen still true after closing event."
         )
     }
+
+    @Test
+    fun onEvent_SaveRecord_recordSavedToDatasource() = runTest {
+        val newRecord = state.exerciseRecords[0].copy(
+            exerciseRecordId = null,
+            dateCompleted = Clock.System.now().toEpochMilliseconds(),
+            exerciseName = "Test"
+        )
+
+        viewModel.onEvent(RecordsEvent.SaveRecord(newRecord))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = newRecord.exerciseName,
+            actual = state.exerciseRecords.last().exerciseName
+        )
+    }
 }
+
+
+
+
+
+
+
+
+
