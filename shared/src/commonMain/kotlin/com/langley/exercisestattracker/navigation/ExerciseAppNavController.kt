@@ -16,7 +16,11 @@ class ExerciseAppNavController(initialScreen: Screen = Screen.Home) {
     }
 
     fun navigateBack() {
-        if (backStack.size > 1) {
+        if (backStack.size == 1){
+            backStack.removeAt(backStack.size - 1)
+            _currentScreen.value = Screen.Home
+        }
+        else if (backStack.size > 1) {
             backStack.removeAt(backStack.size - 1)
             _currentScreen.value = backStack.last()
         }
