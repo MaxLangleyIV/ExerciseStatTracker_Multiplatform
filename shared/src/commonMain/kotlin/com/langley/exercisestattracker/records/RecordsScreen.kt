@@ -32,6 +32,8 @@ import com.langley.exercisestattracker.library.components.ExerciseDefinitionList
 import com.langley.exercisestattracker.library.components.ExerciseLibraryTopBar
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
+import com.langley.exercisestattracker.records.components.RecordListItem
+import com.langley.exercisestattracker.records.components.RecordsTopBar
 
 @Composable
 fun RecordsScreen(
@@ -52,17 +54,18 @@ fun RecordsScreen(
                 interactionSource = interactionSource
             ) { focusManager.clearFocus() },
     ){
-//        RecordsTopBar(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(0.dp,16.dp),
-//            state = state,
-//            onEvent = onEvent,
-//            focusManager = focusManager
-//        )
+        RecordsTopBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp,16.dp),
+            state = state,
+            onEvent = onEvent,
+            focusManager = focusManager,
+            navController = navController
+        )
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(1),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
@@ -71,10 +74,10 @@ fun RecordsScreen(
 
             content = {
                 items(state.exerciseRecords){ exerciseRecord: ExerciseRecord ->
-                    ExerciseRecordListItem(
+                    RecordListItem(
                         exerciseRecord,
                         modifier = Modifier
-                            .fillMaxHeight()
+                            .fillMaxWidth()
                             .padding(8.dp)
                             .focusable(true)
                             .clickable {
@@ -101,15 +104,6 @@ fun RecordsScreen(
 
 }
 
-@Composable
-fun RecordsTopBar(
-    modifier: Modifier,
-    state: RecordsState,
-    onEvent: (RecordsEvent) -> Unit,
-    focusManager: FocusManager
-) {
-    TODO("Not yet implemented")
-}
 
 @Composable
 fun EditRecordDetailsView(
@@ -129,7 +123,4 @@ fun RecordDetailsView(
     TODO("Not yet implemented")
 }
 
-@Composable
-fun ExerciseRecordListItem(exerciseRecord: ExerciseRecord, modifier: Modifier) {
-    TODO("Not yet implemented")
-}
+
