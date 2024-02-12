@@ -2,13 +2,13 @@ package com.langley.exercisestattracker.records
 
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
-import com.langley.exercisestattracker.library.ExerciseLibraryFilterType
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class RecordsViewModel(
 
@@ -115,15 +115,22 @@ class RecordsViewModel(
             }
 
             is RecordsEvent.OnSearchStringChanged -> {
+                _state.update { it.copy(
+                    searchString = event.searchString
+                ) }
 
             }
 
             is RecordsEvent.SetCurrentFilterType -> {
-
+                _state.update { it.copy(
+                    searchFilterType = event.filterType
+                ) }
             }
 
             RecordsEvent.ClearFilterType -> {
-
+                _state.update { it.copy(
+                    searchFilterType = null
+                ) }
             }
 
             RecordsEvent.ToggleIsSearchDropdownOpen -> {
@@ -135,7 +142,12 @@ class RecordsViewModel(
             is RecordsEvent.EditRecord -> {
                 TODO() // Might choose to keep records immutable.
             }
-            RecordsEvent.CloseDetailsView -> {}
+            RecordsEvent.CloseDetailsView -> {
+                _state.update { it.copy(
+                    isRecordDetailsSheetOpen = false,
+                    selectedRecord = null
+                ) }
+            }
 
             // Edit View Events
             is RecordsEvent.OnNameChanged -> {}
@@ -146,6 +158,12 @@ class RecordsViewModel(
             RecordsEvent.DeleteRecord -> {}
             RecordsEvent.CloseEditRecordView -> {}
 
+            //For initializing the database.
+            is RecordsEvent.SaveRecord -> {
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceRecord(event.exerciseRecord)
+                }
+            }
         }
 
     }
