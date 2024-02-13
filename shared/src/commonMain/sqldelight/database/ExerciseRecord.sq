@@ -2,11 +2,15 @@ CREATE TABLE ExerciseRecord (
     exerciseRecordId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     dateCompleted INTEGER NOT NULL,
     exerciseName TEXT NOT NULL,
+    isCalisthenic INTEGER NOT NULL,
+    isTimed INTEGER NOT NULL,
+    duration INTEGER NOT NULL,
     weightUsed REAL NOT NULL,
     repsCompleted INTEGER NOT NULL,
     rpe INTEGER NOT NULL,
     description TEXT NOT NULL,
     userId INTEGER NOT NULL,
+    currentBodyWeight INTEGER NOT NULL,
     notes TEXT NOT NULL
 );
 
@@ -21,14 +25,23 @@ INTO ExerciseRecord(
     exerciseRecordId,
     dateCompleted,
     exerciseName,
+    isCalisthenic,
+    isTimed,
+    duration,
     weightUsed,
     repsCompleted,
     rpe,
     description,
+    notes,
     userId,
-    notes
+    currentBodyWeight
+
 )
 VALUES (
+    ?,
+    ?,
+    ?,
+    ?,
     ?,
     ?,
     ?,
