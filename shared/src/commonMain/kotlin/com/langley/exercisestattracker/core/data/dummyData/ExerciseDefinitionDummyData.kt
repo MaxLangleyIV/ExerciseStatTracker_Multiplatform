@@ -18,6 +18,9 @@ class ExerciseDefinitionDummyData {
                 bodyRegion = exercise["body_region"] as String,
                 targetMuscles = exercise["target_muscles"] as String,
                 description = exercise["description"] as String,
+                isCalisthenic = 0,
+                isTimed = 0,
+                duration = 0,
                 isFavorite = 0,
                 dateCreated = null,
             )
@@ -351,6 +354,9 @@ fun ExerciseDefinitionDummyData.toListOfExerciseDefinitionsWithIndex(): List<Exe
             bodyRegion = exercise["body_region"] as String,
             targetMuscles = exercise["target_muscles"] as String,
             description = exercise["description"] as String,
+            isCalisthenic = 0,
+            isTimed = 0,
+            duration = 0,
             isFavorite = 0,
             dateCreated = null,)
 
@@ -372,12 +378,18 @@ fun ExerciseDefinitionDummyData.getListOfDummyExerciseRecords(): List<ExerciseRe
                 exerciseRecordId = i.toLong(),
                 dateCompleted = Clock.System.now().toEpochMilliseconds(),
                 exerciseName = randomDef["name"] as  String,
+                isCalisthenic = 0,
+                isTimed = 0,
+                duration = 0,
                 weightUsed = Random.nextInt(300).toDouble(),
                 repsCompleted = Random.nextInt(20),
                 rpe = Random.nextInt(11),
                 description = randomDef["description"] as String,
                 notes = "",
-                userId = 0.toLong()
+                userId = 0.toLong(),
+                currentBodyWeight = 0
+
+
 
             )
         )
