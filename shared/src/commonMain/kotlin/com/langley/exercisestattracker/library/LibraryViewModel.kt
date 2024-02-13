@@ -236,6 +236,9 @@ class LibraryViewModel(
                     bodyRegion = "",
                     targetMuscles = "",
                     description = "",
+                    isCalisthenic = 0,
+                    isTimed = 0,
+                    duration = 0,
                     isFavorite = 0,
                     dateCreated = null
                 )
