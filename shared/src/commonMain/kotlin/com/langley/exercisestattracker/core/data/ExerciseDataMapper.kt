@@ -10,13 +10,16 @@ fun database.ExerciseDefinition.toExerciseDefinition():
         ExerciseDefinition {
 
     return ExerciseDefinition(
-        exerciseDefinitionId,
-        exerciseName,
-        bodyRegion,
-        targetMuscles,
-        description,
-        isFavorite,
-        dateCreated
+        exerciseDefinitionId = exerciseDefinitionId,
+        exerciseName = exerciseName,
+        bodyRegion = bodyRegion,
+        targetMuscles = targetMuscles,
+        description = description,
+        isCalisthenic = isCalisthenic,
+        isTimed = isTimed,
+        duration = duration,
+        isFavorite = isFavorite,
+        dateCreated = dateCreated
     )
 }
 
@@ -53,12 +56,16 @@ fun database.ExerciseRecord.toExerciseRecord():
         exerciseRecordId,
         dateCompleted,
         exerciseName,
+        isCalisthenic,
+        isTimed,
+        duration,
         weightUsed,
         repsCompleted.toInt(),
         rpe.toInt(),
         description,
         notes,
-        userId
+        userId,
+        currentBodyWeight
     )
 
 }
