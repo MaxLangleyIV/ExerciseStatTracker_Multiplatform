@@ -100,14 +100,18 @@ fun App(
 
             when (currentScreen) {
 
-                Screen.Home -> HomeScreen(
-                    // This state is a placeholder and the
-                    state = HomeState(),
-                    focusRequester = focusRequester,
-                    focusManager = focusManager,
-                    interactionSource = interactionSource,
-                    navController = navController
-                )
+                Screen.Home -> {
+
+                    HomeScreen(
+                        // This state is a placeholder and the
+                        state = HomeState(),
+                        focusRequester = focusRequester,
+                        focusManager = focusManager,
+                        interactionSource = interactionSource,
+                        navController = navController
+                    )
+
+                }
 
                 Screen.Library -> {
 
