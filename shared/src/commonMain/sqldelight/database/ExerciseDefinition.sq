@@ -4,6 +4,9 @@ CREATE TABLE ExerciseDefinition (
     bodyRegion TEXT NOT NULL,
     targetMuscles TEXT NOT NULL,
     description TEXT NOT NULL,
+    isCalisthenic INTEGER NOT NULL,
+    isTimed INTEGER NOT NULL ,
+    duration INTEGER NOT NULL,
     isFavorite INTEGER NOT NULL,
     dateCreated INTEGER NOT NULL
 );
@@ -21,10 +24,16 @@ INTO ExerciseDefinition(
     bodyRegion,
     targetMuscles,
     description,
+    isCalisthenic,
+    isTimed,
+    duration,
     isFavorite,
     dateCreated
 )
 VALUES (
+    ?,
+    ?,
+    ?,
     ?,
     ?,
     ?,
