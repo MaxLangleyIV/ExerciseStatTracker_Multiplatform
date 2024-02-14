@@ -43,9 +43,11 @@ class SqlDelightExerciseAppDataSource(
             definition.bodyRegion,
             definition.targetMuscles,
             definition.description,
+            definition.isWeighted,
+            definition.isCardio,
             definition.isCalisthenic,
             definition.isTimed,
-            definition.duration,
+            definition.hasDistance,
             definition.isFavorite,
             Clock.System.now().toEpochMilliseconds()
         )
@@ -126,16 +128,16 @@ class SqlDelightExerciseAppDataSource(
             exerciseRecordId = record.exerciseRecordId,
             dateCompleted = record.dateCompleted,
             exerciseName = record.exerciseName,
-            isCalisthenic = record.isCalisthenic,
-            isTimed = record.isTimed,
-            duration = record.duration,
-            weightUsed = record.weightUsed,
+            weightUsed = record.weightUsed.toDouble(),
+            isCardio = if (record.isCardio){ 1 } else{ 0 },
+            isCalisthenic = if (record.isCalisthenic){ 1 } else{ 0 },
+            duration = record.duration.toDouble(),
+            distance = record.distance.toDouble(),
             repsCompleted = record.repsCompleted.toLong(),
             rpe = record.rpe.toLong(),
-            description = record.description,
             notes = record.notes,
             userId = record.userId,
-            currentBodyWeight = record.currentBodyWeight
+            currentBodyWeight = record.currentBodyWeight.toLong()
         )
     }
 
