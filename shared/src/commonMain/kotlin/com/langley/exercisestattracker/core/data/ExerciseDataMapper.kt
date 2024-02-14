@@ -15,9 +15,11 @@ fun database.ExerciseDefinition.toExerciseDefinition():
         bodyRegion = bodyRegion,
         targetMuscles = targetMuscles,
         description = description,
+        isWeighted = isWeighted,
+        isCardio = isCardio,
         isCalisthenic = isCalisthenic,
         isTimed = isTimed,
-        duration = duration,
+        hasDistance = 0,
         isFavorite = isFavorite,
         dateCreated = dateCreated
     )
@@ -56,16 +58,16 @@ fun database.ExerciseRecord.toExerciseRecord():
         exerciseRecordId,
         dateCompleted,
         exerciseName,
-        isCalisthenic,
-        isTimed,
-        duration,
-        weightUsed,
+        weightUsed.toFloat(),
+        isCardio == 1L,
+        isCalisthenic == 1L,
+        duration.toFloat(),
+        distance.toFloat(),
         repsCompleted.toInt(),
         rpe.toInt(),
-        description,
         notes,
         userId,
-        currentBodyWeight
+        currentBodyWeight.toInt()
     )
 
 }
