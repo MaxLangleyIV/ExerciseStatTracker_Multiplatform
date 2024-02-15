@@ -8,7 +8,9 @@ CREATE TABLE ExerciseDefinition (
     isCardio INTEGER NOT NULL,
     isCalisthenic INTEGER NOT NULL,
     isTimed INTEGER NOT NULL ,
+    defaultDuration INTEGER NOT NULL,
     hasDistance INTEGER NOT NULL,
+    defaultDistance INTEGER NOT NULL,
     isFavorite INTEGER NOT NULL,
     dateCreated INTEGER NOT NULL
 );
@@ -30,11 +32,15 @@ INTO ExerciseDefinition(
     isCardio,
     isCalisthenic,
     isTimed,
+    defaultDuration,
     hasDistance,
+    defaultDistance,
     isFavorite,
     dateCreated
 )
 VALUES (
+    ?,
+    ?,
     ?,
     ?,
     ?,
