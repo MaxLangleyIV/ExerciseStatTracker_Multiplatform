@@ -47,7 +47,9 @@ class SqlDelightExerciseAppDataSource(
             definition.isCardio,
             definition.isCalisthenic,
             definition.isTimed,
+            definition.defaultDuration,
             definition.hasDistance,
+            definition.defaultDistance,
             definition.isFavorite,
             Clock.System.now().toEpochMilliseconds()
         )
