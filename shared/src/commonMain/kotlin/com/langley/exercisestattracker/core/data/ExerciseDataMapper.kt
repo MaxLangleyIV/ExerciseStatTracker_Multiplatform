@@ -19,7 +19,9 @@ fun database.ExerciseDefinition.toExerciseDefinition():
         isCardio = isCardio,
         isCalisthenic = isCalisthenic,
         isTimed = isTimed,
+        defaultDuration = defaultDuration,
         hasDistance = 0,
+        defaultDistance = defaultDistance,
         isFavorite = isFavorite,
         dateCreated = dateCreated
     )
