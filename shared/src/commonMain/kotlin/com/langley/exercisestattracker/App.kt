@@ -70,8 +70,7 @@ fun App(
 
         // Initialize dummy data for exercise library.
         val exerciseDefDummyData = ExerciseDefinitionDummyData()
-        val exerciseDefList = exerciseDefDummyData
-            .convertDummyDataToExerciseDef(exerciseDefDummyData.dummyDefinitionData)
+        val exerciseDefList = exerciseDefDummyData.definitionList
 
         val exerciseRecordList = exerciseDefDummyData.getListOfDummyExerciseRecords()
 
