@@ -23,6 +23,7 @@ class ExerciseDefinitionValidatorTest {
             0,
             0,
             0,
+            0,
             null
         )
         assertNotNull(
@@ -47,6 +48,7 @@ class ExerciseDefinitionValidatorTest {
             0,
             0,
             0,
+            0,
             null
         )
         assertNotNull(
@@ -63,6 +65,7 @@ class ExerciseDefinitionValidatorTest {
             "b",
             "",
             "c",
+            0,
             0,
             0,
             0,
