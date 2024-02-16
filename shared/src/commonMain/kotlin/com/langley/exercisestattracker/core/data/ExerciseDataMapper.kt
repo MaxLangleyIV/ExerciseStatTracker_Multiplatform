@@ -16,6 +16,7 @@ fun database.ExerciseDefinition.toExerciseDefinition():
         targetMuscles = targetMuscles,
         description = description,
         isWeighted = isWeighted,
+        hasReps = hasReps,
         isCardio = isCardio,
         isCalisthenic = isCalisthenic,
         isTimed = isTimed,
