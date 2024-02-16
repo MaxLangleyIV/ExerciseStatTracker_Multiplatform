@@ -237,6 +237,7 @@ class LibraryViewModel(
                     targetMuscles = "",
                     description = "",
                     isWeighted = 0,
+                    hasReps = 0,
                     isCardio = 0,
                     isCalisthenic = 0,
                     isTimed = 0,
