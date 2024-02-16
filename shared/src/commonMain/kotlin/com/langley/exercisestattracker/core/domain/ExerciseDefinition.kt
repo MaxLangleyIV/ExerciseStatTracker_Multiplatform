@@ -7,6 +7,7 @@ data class ExerciseDefinition(
     val targetMuscles: String,
     val description: String,
     val isWeighted: Long,
+    val hasReps: Long,
     val isCardio: Long,
     val isCalisthenic: Long,
     val isTimed: Long,
