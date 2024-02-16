@@ -44,6 +44,7 @@ class SqlDelightExerciseAppDataSource(
             definition.targetMuscles,
             definition.description,
             definition.isWeighted,
+            definition.hasReps,
             definition.isCardio,
             definition.isCalisthenic,
             definition.isTimed,
