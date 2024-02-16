@@ -28,7 +28,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.datetime)
-            implementation(libs.sqlite.driver)
+            implementation("app.cash.sqldelight:runtime")
             implementation(libs.sqldelight.coroutines.extensions)
             implementation(compose.runtime)
             implementation(compose.foundation)

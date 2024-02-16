@@ -6,9 +6,13 @@ data class ExerciseDefinition(
     val bodyRegion: String,
     val targetMuscles: String,
     val description: String,
+    val isWeighted: Long,
+    val isCardio: Long,
     val isCalisthenic: Long,
     val isTimed: Long,
-    val duration: Long,
+    val defaultDuration: Long,
+    val hasDistance: Long,
+    val defaultDistance: Long,
     val isFavorite: Long,
     val dateCreated: Long?
 )
