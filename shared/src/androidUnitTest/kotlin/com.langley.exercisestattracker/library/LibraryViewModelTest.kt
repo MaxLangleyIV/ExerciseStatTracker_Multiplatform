@@ -64,6 +64,13 @@ class LibraryViewModelTest {
             bodyRegion = "test",
             targetMuscles = "test",
             description = "Test",
+            isWeighted = 1,
+            isCardio = 0,
+            isCalisthenic = 0,
+            isTimed = 0,
+            defaultDuration = 0,
+            hasDistance = 0,
+            defaultDistance = 0,
             isFavorite = 0,
             dateCreated = null
         )
