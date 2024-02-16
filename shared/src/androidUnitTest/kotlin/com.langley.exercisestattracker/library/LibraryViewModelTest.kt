@@ -43,7 +43,7 @@ class LibraryViewModelTest {
             LibraryViewModel(
 
                 TestExerciseAppDataSource(
-                    ExerciseDefinitionDummyData().toListOfExerciseDefinitionsWithIndex()
+                    ExerciseDefinitionDummyData().definitionList
                 ),
                 initialState,
                 newExerciseDefinition
@@ -65,6 +65,7 @@ class LibraryViewModelTest {
             targetMuscles = "test",
             description = "Test",
             isWeighted = 1,
+            hasReps = 1,
             isCardio = 0,
             isCalisthenic = 0,
             isTimed = 0,
@@ -79,7 +80,7 @@ class LibraryViewModelTest {
     @Test
     fun exerciseLibraryViewModel_retrieveDefinitionsList_exercisesFoundInState() = runTest {
         val exerciseDefinitionList =
-            ExerciseDefinitionDummyData().toListOfExerciseDefinitionsWithIndex()
+            ExerciseDefinitionDummyData().definitionList
 
         val state = viewModel.state.first()
 
