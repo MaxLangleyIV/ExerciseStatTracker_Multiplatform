@@ -30,7 +30,7 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.library.LibraryEvent
 
 @Composable
-fun ExerciseDefDetailsView(
+fun DefinitionDetailsView(
     isVisible: Boolean,
     selectedExerciseDefinition: ExerciseDefinition?,
     onEvent: (LibraryEvent) -> Unit

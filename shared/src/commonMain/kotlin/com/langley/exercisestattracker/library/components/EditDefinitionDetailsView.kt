@@ -35,7 +35,7 @@ import com.langley.exercisestattracker.library.LibraryEvent
 import com.langley.exercisestattracker.library.LibraryState
 
 @Composable
-fun EditExerciseDefDetailsView(
+fun EditDefinitionDetailsView(
     state: LibraryState,
     isVisible: Boolean,
     newExerciseDefinition: ExerciseDefinition?,
