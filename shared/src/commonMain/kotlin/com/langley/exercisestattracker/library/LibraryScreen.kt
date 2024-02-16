@@ -27,8 +27,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.library.components.AddNewExerciseDefView
-import com.langley.exercisestattracker.library.components.EditExerciseDefDetailsView
-import com.langley.exercisestattracker.library.components.ExerciseDefDetailsView
+import com.langley.exercisestattracker.library.components.EditDefinitionDetailsView
+import com.langley.exercisestattracker.library.components.DefinitionDetailsView
 import com.langley.exercisestattracker.library.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.library.components.ExerciseLibraryTopBar
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
@@ -113,13 +113,13 @@ fun LibraryScreen(
             )
         }
 
-        ExerciseDefDetailsView(
+        DefinitionDetailsView(
             isVisible = state.isExerciseDetailsSheetOpen,
             onEvent = onEvent,
             selectedExerciseDefinition = state.selectedExerciseDefinition
         )
 
-        EditExerciseDefDetailsView(
+        EditDefinitionDetailsView(
             isVisible = state.isEditExerciseDefSheetOpen,
             state = state,
             onEvent = onEvent,
