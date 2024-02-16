@@ -53,7 +53,7 @@ class ExerciseAppNavControllerTest {
         navController.navigateBack() // Attempt to navigate back again
 
         val currentScreen = navController.currentScreen.value
-        assertEquals(screen, currentScreen) // Should remain on the same screen
+        assertEquals(Screen.Home, currentScreen) // Should remain on the same screen
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
