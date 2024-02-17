@@ -15,15 +15,15 @@ fun database.ExerciseDefinition.toExerciseDefinition():
         bodyRegion = bodyRegion,
         targetMuscles = targetMuscles,
         description = description,
-        isWeighted = isWeighted,
-        hasReps = hasReps,
-        isCardio = isCardio,
-        isCalisthenic = isCalisthenic,
-        isTimed = isTimed,
+        isWeighted = isWeighted.toInt() == 1,
+        hasReps = hasReps.toInt() == 1,
+        isCardio = isCardio.toInt() == 1,
+        isCalisthenic = isCalisthenic.toInt() == 1,
+        isTimed = isTimed.toInt() == 1,
         defaultDuration = defaultDuration,
-        hasDistance = 0,
+        hasDistance = hasDistance.toInt() == 1,
         defaultDistance = defaultDistance,
-        isFavorite = isFavorite,
+        isFavorite = isFavorite.toInt() == 1,
         dateCreated = dateCreated
     )
 }
