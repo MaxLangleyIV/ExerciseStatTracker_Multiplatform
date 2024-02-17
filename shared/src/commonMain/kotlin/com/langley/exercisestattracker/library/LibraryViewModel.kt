@@ -19,7 +19,7 @@ class LibraryViewModel(
 
     private val exerciseAppDataSource: ExerciseAppDataSource,
     initialState: LibraryState = LibraryState(),
-    newExerciseDef: ExerciseDefinition? = null,
+    newExerciseDef: ExerciseDefinition = ExerciseDefinition(),
 
     ): ViewModel() {
 
@@ -35,7 +35,7 @@ class LibraryViewModel(
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), LibraryState())
 
-    var newExerciseDefinition: ExerciseDefinition? by mutableStateOf(newExerciseDef)
+    var newExerciseDefinition: ExerciseDefinition by mutableStateOf(newExerciseDef)
         private set
 
     private fun updateLibraryState(
@@ -152,7 +152,7 @@ class LibraryViewModel(
                 _state.update { it.copy(
                     isEditExerciseDefSheetOpen = true,
                 ) }
-                newExerciseDefinition = _state.value.selectedExerciseDefinition?.copy()
+                newExerciseDefinition = _state.value.selectedExerciseDefinition!!.copy()
             }
 
             LibraryEvent.CloseEditDefView -> {
@@ -164,35 +164,35 @@ class LibraryViewModel(
                         exerciseTargetMusclesError = null
                     ) }
                 }
-                newExerciseDefinition = null
+                newExerciseDefinition = ExerciseDefinition()
             }
 
             is LibraryEvent.OnBodyRegionChanged -> {
-                newExerciseDefinition = newExerciseDefinition?.copy(
+                newExerciseDefinition = newExerciseDefinition.copy(
                     bodyRegion = event.value
                 )
             }
 
             is LibraryEvent.OnDescriptionChanged -> {
-                newExerciseDefinition = newExerciseDefinition?.copy(
+                newExerciseDefinition = newExerciseDefinition.copy(
                     description = event.value
                 )
             }
 
             is LibraryEvent.OnNameChanged -> {
-                newExerciseDefinition = newExerciseDefinition?.copy(
+                newExerciseDefinition = newExerciseDefinition.copy(
                     exerciseName = event.value
                 )
             }
 
             is LibraryEvent.OnTargetMusclesChanged -> {
-                newExerciseDefinition = newExerciseDefinition?.copy(
+                newExerciseDefinition = newExerciseDefinition.copy(
                     targetMuscles = event.value
                 )
             }
 
             is LibraryEvent.SaveOrUpdateDef -> {
-                newExerciseDefinition?.let {exerciseDefinition ->
+                newExerciseDefinition.let {exerciseDefinition ->
 
                     val validationResult =
                         ExerciseDefinitionValidator.validateExerciseDefinition(exerciseDefinition)
@@ -258,7 +258,7 @@ class LibraryViewModel(
                         exerciseTargetMusclesError = null
                     ) }
                     delay(300L) //Animation delay for slide out.
-                    newExerciseDefinition = null
+                    newExerciseDefinition = ExerciseDefinition()
                 }
             }
 
@@ -320,9 +320,15 @@ class LibraryViewModel(
                     selectedExerciseDefinition = newExerciseDefinition
                 ) }
                 viewModelScope.launch {
-                    exerciseAppDataSource.insertOrReplaceDefinition(newExerciseDefinition!!)
+                    exerciseAppDataSource.insertOrReplaceDefinition(newExerciseDefinition)
                 }
 
+            }
+
+            is LibraryEvent.ToggleIsWeighted -> {
+                newExerciseDefinition = newExerciseDefinition.copy(
+                    isWeighted = !newExerciseDefinition.isWeighted
+                )
             }
         }
     }
