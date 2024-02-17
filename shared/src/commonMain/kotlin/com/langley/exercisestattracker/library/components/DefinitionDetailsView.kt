@@ -12,6 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Grade
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarOutline
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,6 +61,18 @@ fun DefinitionDetailsView(
                     imageVector = Icons.Rounded.Close,
                     contentDescription = "Close"
                 )
+            }
+
+            IconButton(
+                onClick = {
+                    onEvent(LibraryEvent.ToggleIsFavorite(selectedExerciseDefinition!!))
+                }
+            ) {
+                Icon(
+                    imageVector = if (selectedExerciseDefinition != null && selectedExerciseDefinition.isFavorite){ Icons.Filled.Star } else { Icons.Filled.StarOutline },
+                    contentDescription = "Favorite"
+                )
+
             }
 
             Text(
