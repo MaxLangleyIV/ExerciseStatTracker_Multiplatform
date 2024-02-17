@@ -37,7 +37,7 @@ import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 fun LibraryScreen(
     modifier: Modifier = Modifier,
     state: LibraryState,
-    newExerciseDefinition: ExerciseDefinition?,
+    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
     onEvent: (LibraryEvent) -> Unit,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
@@ -130,7 +130,10 @@ fun LibraryScreen(
             isVisible = state.isAddExerciseDefSheetOpen,
             state = state,
             onEvent = onEvent,
-            newExerciseDefinition = newExerciseDefinition
+            newExerciseDefinition = newExerciseDefinition,
+            focusManager = focusManager,
+            focusRequester = focusRequester,
+            interactionSource = interactionSource
         )
     }
 }
