@@ -88,7 +88,7 @@ class LibraryViewModel(
             }
             is ExerciseLibraryFilterType.Favorite -> {
                 definitionLibrary.filter {
-                    it.isFavorite.toInt() == 1
+                    it.isFavorite
                 }
             }
             is ExerciseLibraryFilterType.LowerBody -> {
@@ -236,15 +236,15 @@ class LibraryViewModel(
                     bodyRegion = "",
                     targetMuscles = "",
                     description = "",
-                    isWeighted = 0,
-                    hasReps = 0,
-                    isCardio = 0,
-                    isCalisthenic = 0,
-                    isTimed = 0,
+                    isWeighted = false,
+                    hasReps = false,
+                    isCardio = false,
+                    isCalisthenic = false,
+                    isTimed = false,
                     defaultDuration = 0,
-                    hasDistance = 0,
+                    hasDistance = false,
                     defaultDistance = 0,
-                    isFavorite = 0,
+                    isFavorite = false,
                     dateCreated = null
                 )
             }
@@ -310,6 +310,19 @@ class LibraryViewModel(
                         searchFilterType = null,
                     )
                 }
+            }
+
+            is LibraryEvent.ToggleIsFavorite -> {
+                newExerciseDefinition = _state.value.selectedExerciseDefinition!!.copy(
+                    isFavorite = !_state.value.selectedExerciseDefinition!!.isFavorite
+                )
+                _state.update { it.copy(
+                    selectedExerciseDefinition = newExerciseDefinition
+                ) }
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceDefinition(newExerciseDefinition!!)
+                }
+
             }
         }
     }
