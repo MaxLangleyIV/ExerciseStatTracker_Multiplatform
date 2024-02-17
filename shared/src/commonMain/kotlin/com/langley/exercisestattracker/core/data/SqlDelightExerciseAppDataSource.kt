@@ -43,15 +43,15 @@ class SqlDelightExerciseAppDataSource(
             definition.bodyRegion,
             definition.targetMuscles,
             definition.description,
-            definition.isWeighted,
-            definition.hasReps,
-            definition.isCardio,
-            definition.isCalisthenic,
-            definition.isTimed,
+            if (definition.isWeighted){ 1 } else { 0 },
+            if (definition.hasReps){ 1 } else { 0 },
+            if (definition.isCardio){ 1 } else { 0 },
+            if (definition.isCalisthenic){ 1 } else { 0 },
+            if (definition.isTimed){ 1 } else { 0 },
             definition.defaultDuration,
-            definition.hasDistance,
+            if (definition.hasDistance){ 1 } else { 0 },
             definition.defaultDistance,
-            definition.isFavorite,
+            if (definition.isFavorite){ 1 } else { 0 },
             Clock.System.now().toEpochMilliseconds()
         )
     }
