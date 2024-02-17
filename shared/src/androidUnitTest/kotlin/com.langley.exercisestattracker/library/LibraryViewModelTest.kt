@@ -2,7 +2,6 @@ package com.langley.exercisestattracker.library
 
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
-import com.langley.exercisestattracker.core.data.dummyData.toListOfExerciseDefinitionsWithIndex
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -64,15 +63,15 @@ class LibraryViewModelTest {
             bodyRegion = "test",
             targetMuscles = "test",
             description = "Test",
-            isWeighted = 1,
-            hasReps = 1,
-            isCardio = 0,
-            isCalisthenic = 0,
-            isTimed = 0,
+            isWeighted = true,
+            hasReps = true,
+            isCardio = false,
+            isCalisthenic = false,
+            isTimed = false,
             defaultDuration = 0,
-            hasDistance = 0,
+            hasDistance = false,
             defaultDistance = 0,
-            isFavorite = 0,
+            isFavorite = false,
             dateCreated = null
         )
     }
@@ -527,6 +526,22 @@ class LibraryViewModelTest {
 
         assertNull(currentFilterType, null)
 
+    }
+
+    @Test
+    fun onEvent_ToggleIsFavorite_valueUpdatedInDb() = runTest {
+        var state = viewModel.state.first()
+        val defToFavorite = state.exerciseDefinitions[0]
+
+        assertFalse(defToFavorite.isFavorite)
+
+        viewModel.onEvent(LibraryEvent.DefinitionSelected(defToFavorite))
+        state = viewModel.state.first()
+
+        viewModel.onEvent(LibraryEvent.ToggleIsFavorite(state.selectedExerciseDefinition!!))
+        state = viewModel.state.first()
+
+        assertTrue(state.exerciseDefinitions.last().isFavorite)
     }
 
 }
