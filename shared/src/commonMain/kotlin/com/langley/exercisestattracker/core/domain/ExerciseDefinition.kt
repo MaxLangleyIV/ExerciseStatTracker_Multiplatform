@@ -1,19 +1,19 @@
 package com.langley.exercisestattracker.core.domain
 
 data class ExerciseDefinition(
-    val exerciseDefinitionId: Long?,
-    val exerciseName: String,
-    val bodyRegion: String,
-    val targetMuscles: String,
-    val description: String,
-    val isWeighted: Boolean,
-    val hasReps: Boolean,
-    val isCardio: Boolean,
-    val isCalisthenic: Boolean,
-    val isTimed: Boolean,
-    val defaultDuration: Long,
-    val hasDistance: Boolean,
-    val defaultDistance: Long,
-    val isFavorite: Boolean,
-    val dateCreated: Long?
+    val exerciseDefinitionId: Long? = null,
+    val exerciseName: String = "",
+    val bodyRegion: String = "",
+    val targetMuscles: String = "",
+    val description: String = "",
+    val isWeighted: Boolean = false,
+    val hasReps: Boolean = false,
+    val isCardio: Boolean = false,
+    val isCalisthenic: Boolean = false,
+    val isTimed: Boolean = false,
+    val defaultDuration: Long = 0,
+    val hasDistance: Boolean = false,
+    val defaultDistance: Long = 0,
+    val isFavorite: Boolean = false,
+    val dateCreated: Long? = null
 )
