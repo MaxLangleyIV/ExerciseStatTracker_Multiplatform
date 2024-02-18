@@ -28,8 +28,9 @@ sealed interface ExerciseLibraryFilterType {
     data class Favorite(val name: String = "favorite") : ExerciseLibraryFilterType
     data class UpperBody(val name: String = "upperBody") : ExerciseLibraryFilterType
     data class LowerBody(val name: String = "lowerBody") : ExerciseLibraryFilterType
-    data class Barbell(val name: String = "barbell"): ExerciseLibraryFilterType
+    data class Barbell(val name: String = "barbell") : ExerciseLibraryFilterType
     data class Dumbbell(val name: String = "dumbbell") : ExerciseLibraryFilterType
     data class Calisthenic(val name: String = "calisthenic") : ExerciseLibraryFilterType
+    data class Cardio(val name: String = "cardio") : ExerciseLibraryFilterType
 
 }
