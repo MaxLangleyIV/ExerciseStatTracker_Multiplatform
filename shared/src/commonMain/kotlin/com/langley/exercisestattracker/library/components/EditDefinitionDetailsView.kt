@@ -2,6 +2,7 @@ package com.langley.exercisestattracker.library.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -25,6 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,8 +42,11 @@ import com.langley.exercisestattracker.library.LibraryState
 fun EditDefinitionDetailsView(
     state: LibraryState,
     isVisible: Boolean,
-    newExerciseDefinition: ExerciseDefinition?,
-    onEvent: (LibraryEvent) -> Unit
+    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
+    onEvent: (LibraryEvent) -> Unit,
+    focusRequester: FocusRequester,
+    focusManager: FocusManager,
+    interactionSource: MutableInteractionSource
 )
 {
    if (isVisible){
@@ -48,7 +55,11 @@ fun EditDefinitionDetailsView(
                .fillMaxSize()
                .background(MaterialTheme.colorScheme.surface)
                .padding(8.dp)
-               .verticalScroll(rememberScrollState()),
+               .verticalScroll(rememberScrollState())
+               .clickable(
+                   indication = null,
+                   interactionSource = interactionSource
+               ) { focusManager.clearFocus() },
            verticalArrangement = Arrangement.Top
        )
        {
@@ -92,6 +103,7 @@ fun EditDefinitionDetailsView(
            {
                Spacer(Modifier.height(16.dp))
 
+               // Name Input
                Column(
                    horizontalAlignment = Alignment.CenterHorizontally
                )
@@ -122,6 +134,7 @@ fun EditDefinitionDetailsView(
                    Modifier.height(16.dp)
                )
 
+               // Body Region Row
                Row(
                    modifier = Modifier.fillMaxWidth()
                        .clip(
@@ -148,7 +161,7 @@ fun EditDefinitionDetailsView(
                    Column()
                    {
                        ErrorDisplayingTextField(
-                           value = "${newExerciseDefinition?.bodyRegion}",
+                           value = newExerciseDefinition.bodyRegion,
                            placeholder = "Body Region",
                            error = state.exerciseBodyRegionError,
                            onValueChanged = {
@@ -160,6 +173,7 @@ fun EditDefinitionDetailsView(
 
                Spacer(Modifier.height(16.dp))
 
+               // Target Muscles Row
                Row(
                    modifier = Modifier.fillMaxWidth()
                        .clip(
@@ -185,12 +199,121 @@ fun EditDefinitionDetailsView(
                    Column()
                    {
                        ErrorDisplayingTextField(
-                           value = "${newExerciseDefinition?.targetMuscles}",
+                           value = newExerciseDefinition.targetMuscles,
                            placeholder = "Target Muscles",
                            error = state.exerciseTargetMusclesError,
                            onValueChanged = {
                                onEvent(LibraryEvent.OnTargetMusclesChanged(it))
-                                           },
+                           },
+                       )
+                   }
+               }
+
+               Spacer(Modifier.height(16.dp))
+
+               // Metrics Column
+               Column(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .clip(
+                           RoundedCornerShape(16.dp)
+                       )
+                       .background(MaterialTheme.colorScheme.secondaryContainer)
+                       .padding(8.dp)
+               ){
+                   Text( text = "Metrics:" )
+                   Spacer(Modifier.height(8.dp))
+
+                   Row(
+                       modifier = Modifier.fillMaxWidth(),
+                       horizontalArrangement = Arrangement.SpaceEvenly
+                   ){
+                       SelectableTextBox(
+                           text = "Reps",
+                           isClicked = newExerciseDefinition.hasReps,
+                           onEvent = onEvent,
+                           event = LibraryEvent.ToggleHasReps,
+                           newExerciseDefinition = newExerciseDefinition
+                       )
+
+                       Spacer(Modifier.width(8.dp))
+
+                       SelectableTextBox(
+                           text = "Weight",
+                           isClicked = newExerciseDefinition.isWeighted,
+                           onEvent = onEvent,
+                           event = LibraryEvent.ToggleIsWeighted,
+                           newExerciseDefinition = newExerciseDefinition
+                       )
+
+                       Spacer(Modifier.width(8.dp))
+
+                       SelectableTextBox(
+                           text = "Time",
+                           isClicked = newExerciseDefinition.isTimed,
+                           onEvent = onEvent,
+                           event = LibraryEvent.ToggleIsTimed,
+                           newExerciseDefinition = newExerciseDefinition
+                       )
+
+                       Spacer(Modifier.width(8.dp))
+
+                       SelectableTextBox(
+                           text = "Distance",
+                           isClicked = newExerciseDefinition.hasDistance,
+                           onEvent = onEvent,
+                           event = LibraryEvent.ToggleHasDistance,
+                           newExerciseDefinition = newExerciseDefinition
+                       )
+                   }
+               }
+
+               Spacer(Modifier.height(16.dp))
+
+               // Tags Column
+               Column(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .clip(
+                           RoundedCornerShape(16.dp)
+                       )
+                       .background(MaterialTheme.colorScheme.secondaryContainer)
+                       .padding(8.dp)
+               ){
+
+                   Text( text = "Extra Tags:" )
+                   Spacer(Modifier.height(8.dp))
+
+                   Row(
+                       modifier = Modifier.fillMaxWidth(),
+                       horizontalArrangement = Arrangement.SpaceEvenly
+                   ) {
+//                       SelectableTextBox(
+//                           text = "Weight Training",
+//                           isClicked = newExerciseDefinition.isWeighted,
+//                           onEvent = onEvent,
+//                           event = LibraryEvent.ToggleIsWeighted,
+//                           newExerciseDefinition = newExerciseDefinition
+//                       )
+//
+//                       Spacer(Modifier.width(8.dp))
+
+                       SelectableTextBox(
+                           text = "Body Weight",
+                           isClicked = newExerciseDefinition.isCalisthenic,
+                           onEvent = onEvent,
+                           event = LibraryEvent.ToggleIsCalisthenics,
+                           newExerciseDefinition = newExerciseDefinition
+                       )
+
+                       Spacer(Modifier.width(8.dp))
+
+                       SelectableTextBox(
+                           text = "Cardio",
+                           isClicked = newExerciseDefinition.isCardio,
+                           onEvent = onEvent,
+                           event = LibraryEvent.ToggleIsCardio,
+                           newExerciseDefinition = newExerciseDefinition
                        )
                    }
                }
@@ -198,7 +321,7 @@ fun EditDefinitionDetailsView(
                Spacer(Modifier.height(16.dp))
 
                OutlinedTextField(
-                   value = "${newExerciseDefinition?.description}",
+                   value = newExerciseDefinition.description,
                    onValueChange = {
                        onEvent(LibraryEvent.OnDescriptionChanged(it))
                    },
@@ -207,13 +330,6 @@ fun EditDefinitionDetailsView(
                    },
                    shape = RoundedCornerShape(20.dp)
                )
-//               Text(
-//                   text = "${selectedExerciseDefinition?.description}",
-//                   textAlign = TextAlign.Center,
-//                   modifier = Modifier.fillMaxWidth(),
-//                   fontWeight = FontWeight.Normal,
-//                   fontSize = 20.sp
-//               )
 
                Spacer(Modifier.height(16.dp))
 
@@ -229,7 +345,7 @@ fun EditDefinitionDetailsView(
 
                Button(
                    onClick = {
-                       onEvent(LibraryEvent.CloseEditDefView)
+                       onEvent(LibraryEvent.CloseAddDefClicked)
                    }
                ){
                    Text(text = "Cancel")
