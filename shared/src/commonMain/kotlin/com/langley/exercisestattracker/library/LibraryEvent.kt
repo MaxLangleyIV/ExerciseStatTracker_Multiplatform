@@ -29,6 +29,11 @@ sealed interface LibraryEvent {
     data object AddNewDefClicked : LibraryEvent
     data object CloseAddDefClicked : LibraryEvent
     data object DeleteDefinition : LibraryEvent
+    data object ToggleIsCalisthenics : LibraryEvent
+    data object ToggleIsCardio : LibraryEvent
+    data object ToggleHasReps : LibraryEvent
+    data object ToggleIsTimed : LibraryEvent
+    data object ToggleHasDistance : LibraryEvent
 
 
     // For initializing dummy data.
