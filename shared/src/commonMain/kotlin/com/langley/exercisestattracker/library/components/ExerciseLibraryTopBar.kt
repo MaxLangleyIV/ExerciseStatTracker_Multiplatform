@@ -75,6 +75,19 @@ fun ExerciseLibraryTopBar(
                     expanded = dropdownExpanded,
                     onDismissRequest = {dropdownExpanded = false}
                 ){
+
+                    DropdownMenuItem(
+                        text = { Text("Favorite") },
+                        onClick = {
+                            onEvent(
+                                LibraryEvent
+                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Favorite())
+                            )
+                        }
+                    )
+
+                    Divider()
+
                     DropdownMenuItem(
                         text = { Text("Barbell") },
                         onClick = {
@@ -100,11 +113,23 @@ fun ExerciseLibraryTopBar(
                     Divider()
 
                     DropdownMenuItem(
-                        text = { Text("Favorite") },
+                        text = { Text("Cardio") },
                         onClick = {
                             onEvent(
                                 LibraryEvent
-                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Favorite())
+                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Cardio())
+                            )
+                        }
+                    )
+
+                    Divider()
+
+                    DropdownMenuItem(
+                        text = { Text("Calisthenics") },
+                        onClick = {
+                            onEvent(
+                                LibraryEvent
+                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Calisthenic())
                             )
                         }
                     )
