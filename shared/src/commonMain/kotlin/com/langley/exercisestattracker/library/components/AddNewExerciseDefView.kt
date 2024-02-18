@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
@@ -35,6 +36,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
@@ -175,43 +177,160 @@ fun AddNewExerciseDefView(
             Spacer(Modifier.height(16.dp))
 
             // Target Muscles Row
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth()
                     .clip(
                         RoundedCornerShape(16.dp)
                     )
                     .background(MaterialTheme.colorScheme.secondaryContainer)
                     .padding(4.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
             ){
-                Column()
-                {
-                    Text(
-                        text = "Target Muscles:",
-                        textAlign = TextAlign.Left,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+//                Column()
+//                {
+//                    Text(
+//                        text = "Target Muscles:",
+//                        textAlign = TextAlign.Left,
+//                        modifier = Modifier,
+//                        fontWeight = FontWeight.Normal,
+//                        fontSize = 20.sp,
+//                        color = MaterialTheme.colorScheme.onSecondaryContainer
+//                    )
+//                }
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp),
+                    text = "Target Muscle Groups:",
+                    textAlign = TextAlign.Left,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+                Spacer(Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ){
+                    SelectableTextBox(
+                        text = "Arms",
+                        isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("arms"),
+                        onEvent = onEvent,
+                        event = LibraryEvent.OnTargetMusclesChanged("arms"),
+                        newExerciseDefinition = newExerciseDefinition
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    SelectableTextBox(
+                        text = "Back",
+                        isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("back"),
+                        onEvent = onEvent,
+                        event = LibraryEvent.OnTargetMusclesChanged("back"),
+                        newExerciseDefinition = newExerciseDefinition
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    SelectableTextBox(
+                        text = "Chest",
+                        isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("chest"),
+                        onEvent = onEvent,
+                        event = LibraryEvent.OnTargetMusclesChanged("chest"),
+                        newExerciseDefinition = newExerciseDefinition
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    SelectableTextBox(
+                        text = "Legs",
+                        isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("legs"),
+                        onEvent = onEvent,
+                        event = LibraryEvent.OnTargetMusclesChanged("legs"),
+                        newExerciseDefinition = newExerciseDefinition
                     )
                 }
 
-                Column()
-                {
-                    ErrorDisplayingTextField(
-                        value = newExerciseDefinition.targetMuscles,
-                        placeholder = "Target Muscles",
-                        error = state.exerciseTargetMusclesError,
-                        onValueChanged = {
-                            onEvent(LibraryEvent.OnTargetMusclesChanged(it))
-                        },
+//                Column()
+//                {
+//                    ErrorDisplayingTextField(
+//                        value = newExerciseDefinition.targetMuscles,
+//                        placeholder = "Target Muscles",
+//                        error = state.exerciseTargetMusclesError,
+//                        onValueChanged = {
+//                            onEvent(LibraryEvent.OnTargetMusclesChanged(it))
+//                        },
+//                    )
+//                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            // Metrics Column
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(16.dp)
+                    )
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(8.dp)
+            ){
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp),
+                    text = "Metrics:"
+                )
+                Spacer(Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ){
+                    SelectableTextBox(
+                        text = "Reps",
+                        isClicked = newExerciseDefinition.hasReps,
+                        onEvent = onEvent,
+                        event = LibraryEvent.ToggleHasReps,
+                        newExerciseDefinition = newExerciseDefinition
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    SelectableTextBox(
+                        text = "Weight",
+                        isClicked = newExerciseDefinition.isWeighted,
+                        onEvent = onEvent,
+                        event = LibraryEvent.ToggleIsWeighted,
+                        newExerciseDefinition = newExerciseDefinition
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    SelectableTextBox(
+                        text = "Time",
+                        isClicked = newExerciseDefinition.isTimed,
+                        onEvent = onEvent,
+                        event = LibraryEvent.ToggleIsTimed,
+                        newExerciseDefinition = newExerciseDefinition
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    SelectableTextBox(
+                        text = "Distance",
+                        isClicked = newExerciseDefinition.hasDistance,
+                        onEvent = onEvent,
+                        event = LibraryEvent.ToggleHasDistance,
+                        newExerciseDefinition = newExerciseDefinition
                     )
                 }
             }
 
             Spacer(Modifier.height(16.dp))
 
+            // Tags Column
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -222,38 +341,45 @@ fun AddNewExerciseDefView(
                     .padding(8.dp)
             ){
 
-                Text( text = "Exercise Type:" )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp),
+                    text = "Extra Tags:"
+                )
                 Spacer(Modifier.height(8.dp))
 
-                Row {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+//                    SelectableTextBox(
+//                        text = "Weight Training",
+//                        isClicked = newExerciseDefinition.isWeighted,
+//                        onEvent = onEvent,
+//                        event = LibraryEvent.ToggleIsWeighted,
+//                        newExerciseDefinition = newExerciseDefinition
+//                    )
+//
+//                    Spacer(Modifier.width(8.dp))
 
-                    Box(
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(
-                                RoundedCornerShape(16.dp)
-                            )
-                            .background(MaterialTheme.colorScheme.tertiaryContainer)
-                            .clickable { onEvent(LibraryEvent.ToggleIsWeighted) }
-                            .border(
-                                width = 2.dp,
+                    SelectableTextBox(
+                        text = "Body Weight",
+                        isClicked = newExerciseDefinition.isCalisthenic,
+                        onEvent = onEvent,
+                        event = LibraryEvent.ToggleIsCalisthenics,
+                        newExerciseDefinition = newExerciseDefinition
+                    )
 
-                                color = if (newExerciseDefinition.isWeighted) {
-                                    MaterialTheme.colorScheme.outline
-                                } else Color.Transparent,
+                    Spacer(Modifier.width(8.dp))
 
-                                shape = RoundedCornerShape(16.dp)
-                            )
-                            .padding(4.dp)
-
-                    ){
-                        Text(
-                            modifier = Modifier.align(Alignment.Center),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onTertiaryContainer,
-                            text = "Weight Training"
-                        )
-                    }
+                    SelectableTextBox(
+                        text = "Cardio",
+                        isClicked = newExerciseDefinition.isCardio,
+                        onEvent = onEvent,
+                        event = LibraryEvent.ToggleIsCardio,
+                        newExerciseDefinition = newExerciseDefinition
+                    )
                 }
             }
 
@@ -291,5 +417,42 @@ fun AddNewExerciseDefView(
             }
 
         }
+    }
+}
+
+@Composable
+fun SelectableTextBox(
+    text: String,
+    isClicked: Boolean,
+    onEvent: (LibraryEvent) -> Unit,
+    event: LibraryEvent,
+    newExerciseDefinition: ExerciseDefinition
+){
+    Box(
+        modifier = Modifier
+            .size(80.dp)
+            .clip(
+                RoundedCornerShape(16.dp)
+            )
+            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .clickable { onEvent(event) }
+            .border(
+                width = 2.dp,
+
+                color = if (isClicked) {
+                    MaterialTheme.colorScheme.outline
+                } else Color.Transparent,
+
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(4.dp)
+
+    ){
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
+            text = text
+        )
     }
 }
