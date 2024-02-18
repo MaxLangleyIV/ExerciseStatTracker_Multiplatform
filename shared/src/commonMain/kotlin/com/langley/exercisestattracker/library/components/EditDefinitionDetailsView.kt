@@ -233,7 +233,6 @@ fun EditDefinitionDetailsView(
                            isClicked = newExerciseDefinition.hasReps,
                            onEvent = onEvent,
                            event = LibraryEvent.ToggleHasReps,
-                           newExerciseDefinition = newExerciseDefinition
                        )
 
                        Spacer(Modifier.width(8.dp))
@@ -243,7 +242,6 @@ fun EditDefinitionDetailsView(
                            isClicked = newExerciseDefinition.isWeighted,
                            onEvent = onEvent,
                            event = LibraryEvent.ToggleIsWeighted,
-                           newExerciseDefinition = newExerciseDefinition
                        )
 
                        Spacer(Modifier.width(8.dp))
@@ -253,7 +251,6 @@ fun EditDefinitionDetailsView(
                            isClicked = newExerciseDefinition.isTimed,
                            onEvent = onEvent,
                            event = LibraryEvent.ToggleIsTimed,
-                           newExerciseDefinition = newExerciseDefinition
                        )
 
                        Spacer(Modifier.width(8.dp))
@@ -263,7 +260,6 @@ fun EditDefinitionDetailsView(
                            isClicked = newExerciseDefinition.hasDistance,
                            onEvent = onEvent,
                            event = LibraryEvent.ToggleHasDistance,
-                           newExerciseDefinition = newExerciseDefinition
                        )
                    }
                }
@@ -288,22 +284,13 @@ fun EditDefinitionDetailsView(
                        modifier = Modifier.fillMaxWidth(),
                        horizontalArrangement = Arrangement.SpaceEvenly
                    ) {
-//                       SelectableTextBox(
-//                           text = "Weight Training",
-//                           isClicked = newExerciseDefinition.isWeighted,
-//                           onEvent = onEvent,
-//                           event = LibraryEvent.ToggleIsWeighted,
-//                           newExerciseDefinition = newExerciseDefinition
-//                       )
 //
-//                       Spacer(Modifier.width(8.dp))
 
                        SelectableTextBox(
                            text = "Body Weight",
                            isClicked = newExerciseDefinition.isCalisthenic,
                            onEvent = onEvent,
                            event = LibraryEvent.ToggleIsCalisthenics,
-                           newExerciseDefinition = newExerciseDefinition
                        )
 
                        Spacer(Modifier.width(8.dp))
@@ -313,7 +300,6 @@ fun EditDefinitionDetailsView(
                            isClicked = newExerciseDefinition.isCardio,
                            onEvent = onEvent,
                            event = LibraryEvent.ToggleIsCardio,
-                           newExerciseDefinition = newExerciseDefinition
                        )
                    }
                }
