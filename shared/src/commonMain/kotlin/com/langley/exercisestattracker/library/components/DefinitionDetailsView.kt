@@ -104,7 +104,8 @@ fun DefinitionDetailsView(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 35.sp,
+                    fontSize = 36.sp,
+                    lineHeight = 40.sp,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(Modifier.height(8.dp))
