@@ -123,7 +123,10 @@ fun LibraryScreen(
             isVisible = state.isEditExerciseDefSheetOpen,
             state = state,
             onEvent = onEvent,
-            newExerciseDefinition = newExerciseDefinition
+            newExerciseDefinition = newExerciseDefinition,
+            focusManager = focusManager,
+            focusRequester = focusRequester,
+            interactionSource = interactionSource
         )
 
         AddNewExerciseDefView(
