@@ -34,7 +34,7 @@ class LibraryViewModelTest {
 
     private fun setupViewModel(
         initialState: LibraryState,
-        newExerciseDefinition: ExerciseDefinition? = null
+        newExerciseDefinition: ExerciseDefinition = ExerciseDefinition()
     ): LibraryViewModel {
 
         viewModel = viewModelFactory {
@@ -229,7 +229,11 @@ class LibraryViewModelTest {
         assertNull(state.exerciseNameError, "name error not null.")
         assertNull(state.exerciseBodyRegionError, "body region error not null.")
         assertNull(state.exerciseTargetMusclesError, "target muscle error not null.")
-        assertNull(viewModel.newExerciseDefinition, "newExerciseDef not null.")
+        assertEquals(
+            ExerciseDefinition(),
+            viewModel.newExerciseDefinition,
+            "newExerciseDefinition should equal a default ExerciseDefinition."
+        )
     }
 
     @Test
