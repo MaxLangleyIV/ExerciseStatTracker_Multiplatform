@@ -64,51 +64,58 @@ class LibraryViewModel(
         var filteredLibrary: List<ExerciseDefinition> =
             when (filterType) {
 
-            is ExerciseLibraryFilterType.Barbell -> {
-                definitionLibrary.filter {
+                is ExerciseLibraryFilterType.Barbell -> {
+                    definitionLibrary.filter {
+                        it.exerciseName.contains(
+                            "barbell",
+                            true
+                        )
+                    }
+                }
+                is ExerciseLibraryFilterType.Calisthenic -> {
+                    definitionLibrary.filter {
+                        it.isCalisthenic
+                    }
+                }
+                is ExerciseLibraryFilterType.Dumbbell -> {
+                    definitionLibrary.filter {
+                        it.exerciseName.contains(
+                            "dumbbell",
+                            true)
+                    }
+                }
+                is ExerciseLibraryFilterType.Favorite -> {
+                    definitionLibrary.filter {
+                        it.isFavorite
+                    }
+                }
+                is ExerciseLibraryFilterType.LowerBody -> {
+                    definitionLibrary.filter {
+                        it.exerciseName.contains(
+                            "leg",
+                            true)
+                    }
+                }
+                is ExerciseLibraryFilterType.UpperBody -> {
+                 definitionLibrary.filter {
                     it.exerciseName.contains(
                         "barbell",
-                        true
-                    )
-                }
-            }
-            is ExerciseLibraryFilterType.Calisthenic -> {
-                definitionLibrary.filter {
-                    it.exerciseName.contains(
-                        "body",
                         true)
+                    }
                 }
-            }
-            is ExerciseLibraryFilterType.Dumbbell -> {
-                definitionLibrary.filter {
-                    it.exerciseName.contains(
-                        "dumbbell",
-                        true)
+
+                is ExerciseLibraryFilterType.Cardio -> {
+                    definitionLibrary.filter {
+                        it.isCardio
+                    }
                 }
-            }
-            is ExerciseLibraryFilterType.Favorite -> {
-                definitionLibrary.filter {
-                    it.isFavorite
+
+                null -> {
+                    definitionLibrary
                 }
+
+
             }
-            is ExerciseLibraryFilterType.LowerBody -> {
-                definitionLibrary.filter {
-                    it.exerciseName.contains(
-                        "leg",
-                        true)
-                }
-            }
-            is ExerciseLibraryFilterType.UpperBody -> {
-                definitionLibrary.filter {
-                    it.exerciseName.contains(
-                        "barbell",
-                        true)
-                }
-            }
-            null -> {
-                definitionLibrary
-            }
-        }
 
         if (searchString.isNotBlank()){
             filteredLibrary = filteredLibrary.filter {
@@ -287,7 +294,7 @@ class LibraryViewModel(
                             isExerciseDetailsSheetOpen = false,
                         ) }
 
-                        delay(300L) //Animation delay for slide out.
+                        delay(350L) //Animation delay for slide out.
 
                         _state.update { it.copy(
                             selectedExerciseDefinition = null
@@ -328,6 +335,32 @@ class LibraryViewModel(
             is LibraryEvent.ToggleIsWeighted -> {
                 newExerciseDefinition = newExerciseDefinition.copy(
                     isWeighted = !newExerciseDefinition.isWeighted
+                )
+            }
+
+            LibraryEvent.ToggleIsCalisthenics -> {
+                newExerciseDefinition = newExerciseDefinition.copy(
+                    isCalisthenic = !newExerciseDefinition.isCalisthenic
+                )
+            }
+            LibraryEvent.ToggleIsCardio -> {
+                newExerciseDefinition = newExerciseDefinition.copy(
+                    isCardio = !newExerciseDefinition.isCardio
+                )
+            }
+            LibraryEvent.ToggleHasDistance -> {
+                newExerciseDefinition = newExerciseDefinition.copy(
+                    hasDistance = !newExerciseDefinition.hasDistance
+                )
+            }
+            LibraryEvent.ToggleHasReps -> {
+                newExerciseDefinition = newExerciseDefinition.copy(
+                    hasReps = !newExerciseDefinition.hasReps
+                )
+            }
+            LibraryEvent.ToggleIsTimed -> {
+                newExerciseDefinition = newExerciseDefinition.copy(
+                    isTimed = !newExerciseDefinition.isTimed
                 )
             }
         }
