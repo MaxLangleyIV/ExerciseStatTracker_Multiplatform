@@ -16,15 +16,13 @@ import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
-import com.langley.exercisestattracker.library.LibraryScreen
+import com.langley.exercisestattracker.library.presentation.LibraryScreen
 import com.langley.exercisestattracker.library.LibraryState
 import com.langley.exercisestattracker.library.LibraryViewModel
 import com.langley.exercisestattracker.home.HomeScreen
 import com.langley.exercisestattracker.home.HomeState
-import com.langley.exercisestattracker.library.LibraryEvent
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
-import com.langley.exercisestattracker.records.RecordsEvent
 import com.langley.exercisestattracker.records.RecordsScreen
 import com.langley.exercisestattracker.records.RecordsState
 import com.langley.exercisestattracker.records.RecordsViewModel
@@ -114,6 +112,7 @@ fun App(
                 Screen.Library -> {
 
                     LibraryScreen(
+                        appModule = appModule,
                         state = libraryState,
                         newExerciseDefinition = libraryViewModel.newExerciseDefinition,
                         onEvent = libraryViewModel::onEvent,
