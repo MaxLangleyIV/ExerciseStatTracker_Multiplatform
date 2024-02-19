@@ -26,15 +26,7 @@ class ExerciseBuilderViewModel(
     ): ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
-//    val state = combine(
-//        _state,
-//        exerciseAppDataSource.getDefinitions(),
-//    ){
-//            state, exerciseDefinitions ->
-//
-//        updateExerciseBuilderState(state, exerciseDefinitions)
-//
-//    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), LibraryState())
+
     val state = _state
         .asStateFlow()
         .stateIn(
@@ -46,12 +38,6 @@ class ExerciseBuilderViewModel(
     var newExerciseDef: ExerciseDefinition by mutableStateOf(newExerciseDef)
         private set
 
-    private fun updateExerciseBuilderState(
-        state: ExerciseBuilderState,
-        exerciseDefinitions: List<ExerciseDefinition>
-    ) {
-        TODO("Not yet implemented")
-    }
 
     fun onEvent(event: ExerciseBuilderEvent){
         when (event) {
@@ -94,11 +80,7 @@ class ExerciseBuilderViewModel(
                     )
 
                     if (errorsList.isEmpty()){
-                        _state.update {it.copy(
-
-                            isAddExerciseDefSheetOpen = false
-                        )
-                        }
+                        _state.update {it.copy() }
 
                         viewModelScope.launch {
                             exerciseAppDataSource.insertOrReplaceDefinition(exerciseDefinition)
@@ -120,11 +102,6 @@ class ExerciseBuilderViewModel(
 
                     delay(300L) //Animation delay for slide out.
                     _state.update { it.copy(
-                        introColumnVisible = true,
-                        builderVisible = false,
-                        strengthBuilderVisible = false,
-                        cardioBuilderVisible = false,
-                        isAddExerciseDefSheetOpen = false,
                         exerciseNameError = null,
                         exerciseBodyRegionError = null,
                         exerciseTargetMusclesError = null
@@ -189,18 +166,33 @@ class ExerciseBuilderViewModel(
                 )
             }
 
-            is ExerciseBuilderEvent.ExerciseTypeSelected -> {
-                val strengthBuilderVisible = event.exerciseType == ExerciseType.Strength
-                val cardioBuilderVisible = event.exerciseType == ExerciseType.Cardio
-                val customBuilderVisible = event.exerciseType == ExerciseType.Custom
+            is ExerciseBuilderEvent.ExerciseTypeSelected -> {}
+            is ExerciseBuilderEvent.ToggleBodyRegion -> {
+                when (event.bodyRegion){
+                    BodyRegion.Core -> {
+                        _state.update { it.copy(
+                            coreSelected = !_state.value.coreSelected
+                        ) }
+                    }
+                    BodyRegion.Lower -> {
+                        _state.update { it.copy(
+                            lowerBodySelected = !_state.value.lowerBodySelected
+                        ) }
+                    }
+                    BodyRegion.Upper -> {
+                        _state.update { it.copy(
+                            upperBodySelected = !_state.value.upperBodySelected
+                        ) }
+                    }
 
-                _state.update { it.copy(
-                    introColumnVisible = false,
-                    builderVisible = true,
-                    strengthBuilderVisible = strengthBuilderVisible,
-                    cardioBuilderVisible = cardioBuilderVisible,
-                ) }
+                    BodyRegion.NotApplicable -> {
+                        _state.update { it.copy(
+                            notApplicableSelected = !_state.value.notApplicableSelected
+                        ) }
+                    }
+                }
             }
+            is ExerciseBuilderEvent.ToggleTargetMuscle -> {}
         }
     }
 

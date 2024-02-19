@@ -19,7 +19,7 @@ sealed interface LibraryEvent {
     data object CloseDetailsView : LibraryEvent
 
 
-    // Edit / Add View Events
+//    // Edit / Add View Events
     data class OnNameChanged(val value: String) : LibraryEvent
     data class OnBodyRegionChanged(val value: String) : LibraryEvent
     data class OnTargetMusclesChanged(val value: String) : LibraryEvent

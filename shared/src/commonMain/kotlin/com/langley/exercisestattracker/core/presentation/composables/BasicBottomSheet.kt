@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 fun BasicBottomSheet(
     visible: Boolean,
     modifier: Modifier = Modifier,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable ColumnScope.() -> Unit
 ) {
 
@@ -44,8 +46,8 @@ fun BasicBottomSheet(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = verticalArrangement,
+            horizontalAlignment = horizontalAlignment
         ) {
             content()
         }

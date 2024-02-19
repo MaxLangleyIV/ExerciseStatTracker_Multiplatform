@@ -50,7 +50,6 @@ fun EditDefinitionDetailsView(
     isVisible: Boolean,
     newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
     onEvent: (LibraryEvent) -> Unit,
-    focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource
 )

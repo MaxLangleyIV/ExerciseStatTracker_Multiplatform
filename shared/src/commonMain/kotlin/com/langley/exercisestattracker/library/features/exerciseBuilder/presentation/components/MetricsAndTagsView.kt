@@ -11,11 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowDropDown
-import androidx.compose.material.icons.outlined.ArrowDropUp
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,21 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
-import com.langley.exercisestattracker.library.LibraryState
 import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderState
 
 @Composable
-fun CardioExerciseBuilderView(
+fun MetricsAndTagsView(
     state: ExerciseBuilderState,
     newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
     onEvent: (ExerciseBuilderEvent) -> Unit,
-    tagsSectionVisibleState: MutableState<Boolean>
 ){
-
-
 
     Column (
         modifier = Modifier.fillMaxSize()
@@ -47,40 +38,6 @@ fun CardioExerciseBuilderView(
         verticalArrangement = Arrangement.Center
     )
     {
-        Spacer(Modifier.height(8.dp))
-
-        // Name Input
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
-            ErrorDisplayingTextField(
-                value = newExerciseDefinition.exerciseName,
-                placeholder = "Exercise Name",
-                error = state.exerciseNameError,
-                onValueChanged = {
-                    onEvent(ExerciseBuilderEvent.OnNameChanged(it))
-                },
-            )
-
-            Spacer(Modifier.height(8.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-                    .background(MaterialTheme.colorScheme.tertiaryContainer)
-
-            ){}
-        }
-
-        Spacer(
-            Modifier.height(8.dp)
-        )
-
-        Spacer(Modifier.height(8.dp))
 
         // Metrics Column
         Column(
@@ -160,29 +117,37 @@ fun CardioExerciseBuilderView(
                 Text(
                     modifier = Modifier
                         .padding(start = 8.dp),
-                    text = "Extra Tags:"
+                    text = "Tags:"
                 )
 
-                IconButton(
-                    onClick = {
-                        tagsSectionVisibleState.value = !tagsSectionVisibleState.value
-                    }
-                ) {
-                    Icon(
-                        imageVector =
-                        if (tagsSectionVisibleState.value){ Icons.Outlined.ArrowDropUp }
-                        else{ Icons.Outlined.ArrowDropDown },
-                        contentDescription = "Expand Tags Section"
-                    )
-                }
+//                IconButton(
+//                    onClick = {
+//                        tagsSectionVisibleState.value = !tagsSectionVisibleState.value
+//                    }
+//                ) {
+//                    Icon(
+//                        imageVector =
+//                        if (tagsSectionVisibleState.value){ Icons.Outlined.ArrowDropUp }
+//                        else{ Icons.Outlined.ArrowDropDown },
+//                        contentDescription = "Expand Tags Section"
+//                    )
+//                }
             }
             Spacer(Modifier.height(8.dp))
 
-            if (tagsSectionVisibleState.value){
+            if (state.tagsSectionVisible){
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
+                    SelectableTextBoxWithEvent(
+                        text = "Weight Training",
+                        isClicked = newExerciseDefinition.isWeighted,
+                        onEvent = onEvent,
+                        event = ExerciseBuilderEvent.ToggleIsWeighted,
+                    )
+
+                    Spacer(Modifier.width(8.dp))
 
                     SelectableTextBoxWithEvent(
                         text = "Body Weight",
