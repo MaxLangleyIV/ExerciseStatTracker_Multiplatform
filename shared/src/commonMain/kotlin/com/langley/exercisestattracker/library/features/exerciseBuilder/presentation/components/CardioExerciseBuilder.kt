@@ -26,15 +26,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
-import com.langley.exercisestattracker.library.LibraryEvent
 import com.langley.exercisestattracker.library.LibraryState
-import com.langley.exercisestattracker.library.presentation.components.SelectableTextBoxWithEvent
+import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderState
 
 @Composable
 fun CardioExerciseBuilderView(
-    state: LibraryState,
+    state: ExerciseBuilderState,
     newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
-    onEvent: (LibraryEvent) -> Unit,
+    onEvent: (ExerciseBuilderEvent) -> Unit,
     tagsSectionVisibleState: MutableState<Boolean>
 ){
 
@@ -59,7 +59,7 @@ fun CardioExerciseBuilderView(
                 placeholder = "Exercise Name",
                 error = state.exerciseNameError,
                 onValueChanged = {
-                    onEvent(LibraryEvent.OnNameChanged(it))
+                    onEvent(ExerciseBuilderEvent.OnNameChanged(it))
                 },
             )
 
@@ -108,7 +108,7 @@ fun CardioExerciseBuilderView(
                     text = "Reps",
                     isClicked = newExerciseDefinition.hasReps,
                     onEvent = onEvent,
-                    event = LibraryEvent.ToggleHasReps,
+                    event = ExerciseBuilderEvent.ToggleHasReps,
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -117,7 +117,7 @@ fun CardioExerciseBuilderView(
                     text = "Weight",
                     isClicked = newExerciseDefinition.isWeighted,
                     onEvent = onEvent,
-                    event = LibraryEvent.ToggleIsWeighted,
+                    event = ExerciseBuilderEvent.ToggleIsWeighted,
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -126,7 +126,7 @@ fun CardioExerciseBuilderView(
                     text = "Time",
                     isClicked = newExerciseDefinition.isTimed,
                     onEvent = onEvent,
-                    event = LibraryEvent.ToggleIsTimed,
+                    event = ExerciseBuilderEvent.ToggleIsTimed,
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -135,7 +135,7 @@ fun CardioExerciseBuilderView(
                     text = "Distance",
                     isClicked = newExerciseDefinition.hasDistance,
                     onEvent = onEvent,
-                    event = LibraryEvent.ToggleHasDistance,
+                    event = ExerciseBuilderEvent.ToggleHasDistance,
                 )
             }
         }
@@ -188,7 +188,7 @@ fun CardioExerciseBuilderView(
                         text = "Body Weight",
                         isClicked = newExerciseDefinition.isCalisthenic,
                         onEvent = onEvent,
-                        event = LibraryEvent.ToggleIsCalisthenics,
+                        event = ExerciseBuilderEvent.ToggleIsCalisthenics,
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -197,7 +197,7 @@ fun CardioExerciseBuilderView(
                         text = "Cardio",
                         isClicked = newExerciseDefinition.isCardio,
                         onEvent = onEvent,
-                        event = LibraryEvent.ToggleIsCardio,
+                        event = ExerciseBuilderEvent.ToggleIsCardio,
                     )
                 }
             }
