@@ -16,16 +16,16 @@ import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
-import com.langley.exercisestattracker.library.presentation.LibraryScreen
-import com.langley.exercisestattracker.library.LibraryState
-import com.langley.exercisestattracker.library.LibraryViewModel
-import com.langley.exercisestattracker.home.HomeScreen
-import com.langley.exercisestattracker.home.HomeState
+import com.langley.exercisestattracker.features.home.HomeScreen
+import com.langley.exercisestattracker.features.home.HomeState
+import com.langley.exercisestattracker.features.library.LibraryState
+import com.langley.exercisestattracker.features.library.LibraryViewModel
+import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
+import com.langley.exercisestattracker.features.records.RecordsScreen
+import com.langley.exercisestattracker.features.records.RecordsState
+import com.langley.exercisestattracker.features.records.RecordsViewModel
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
-import com.langley.exercisestattracker.records.RecordsScreen
-import com.langley.exercisestattracker.records.RecordsState
-import com.langley.exercisestattracker.records.RecordsViewModel
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
@@ -134,6 +134,10 @@ fun App(
                         interactionSource = interactionSource,
                         navController = navController
                     )
+
+                }
+
+                Screen.ExerciseBuilder -> {
 
                 }
             }
