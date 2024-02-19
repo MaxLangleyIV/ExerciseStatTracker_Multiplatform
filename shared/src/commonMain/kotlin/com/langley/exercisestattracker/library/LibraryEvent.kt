@@ -10,6 +10,7 @@ sealed interface LibraryEvent {
     data class SetCurrentFilterType(val filterType: ExerciseLibraryFilterType): LibraryEvent
     data object ClearFilterType : LibraryEvent
     data object ToggleIsSearchDropdownOpen: LibraryEvent
+    data object AddNewDefClicked : LibraryEvent
 
 
     // Details View Events
@@ -26,7 +27,6 @@ sealed interface LibraryEvent {
     data object ToggleIsWeighted : LibraryEvent
     data object SaveOrUpdateDef : LibraryEvent
     data object CloseEditDefView : LibraryEvent
-    data object AddNewDefClicked : LibraryEvent
     data object CloseAddDefClicked : LibraryEvent
     data object DeleteDefinition : LibraryEvent
     data object ToggleIsCalisthenics : LibraryEvent
