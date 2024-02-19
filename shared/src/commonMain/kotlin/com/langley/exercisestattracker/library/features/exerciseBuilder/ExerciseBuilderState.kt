@@ -2,9 +2,13 @@ package com.langley.exercisestattracker.library.features.exerciseBuilder
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 
 data class ExerciseBuilderState(
-    //Intro Column Visibility
+    // AddExerciseDef Visibility
+    val isAddExerciseDefSheetOpen: Boolean = false,
+
+    // Intro Column Visibility
     val introColumnVisible: Boolean = true,
 
     // Main Exercise Builders
@@ -18,5 +22,17 @@ data class ExerciseBuilderState(
     val coreSelected: Boolean = false,
 
     // Tags Section Visibility
-    val tagsSectionVisible: Boolean = false
+    val tagsSectionVisible: Boolean = false,
+
+    //Input validation errors state.
+    val exerciseNameError: String? = null,
+    val exerciseBodyRegionError: String? = null,
+    val exerciseTargetMusclesError: String? = null
 )
+
+sealed interface ExerciseType {
+    data object Strength: ExerciseType
+    data object Cardio: ExerciseType
+    data object Custom: ExerciseType
+
+}
