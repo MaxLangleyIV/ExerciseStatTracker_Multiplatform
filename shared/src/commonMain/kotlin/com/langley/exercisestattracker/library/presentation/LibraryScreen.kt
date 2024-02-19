@@ -136,8 +136,8 @@ fun LibraryScreen(
         AddNewExerciseDefView(
             isVisible = state.isAddExerciseDefSheetOpen,
             appModule = appModule,
-            state = state,
-            onEvent = onEvent,
+            libraryState = state,
+            libraryOnEvent = onEvent,
             newExerciseDefinition = newExerciseDefinition,
             focusManager = focusManager,
             focusRequester = focusRequester,
