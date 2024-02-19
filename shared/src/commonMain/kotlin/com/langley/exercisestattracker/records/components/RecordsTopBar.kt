@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.library.LibraryEvent
 import com.langley.exercisestattracker.library.LibraryState
-import com.langley.exercisestattracker.library.components.BasicSearchBar
+import com.langley.exercisestattracker.library.presentation.components.BasicSearchBar
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
 import com.langley.exercisestattracker.records.RecordsEvent
