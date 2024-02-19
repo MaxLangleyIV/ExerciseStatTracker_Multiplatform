@@ -3,6 +3,10 @@ package com.langley.exercisestattracker.records
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
+import com.langley.exercisestattracker.features.records.RecordsEvent
+import com.langley.exercisestattracker.features.records.RecordsFilterType
+import com.langley.exercisestattracker.features.records.RecordsState
+import com.langley.exercisestattracker.features.records.RecordsViewModel
 import com.langley.exercisestattracker.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.flow.first
