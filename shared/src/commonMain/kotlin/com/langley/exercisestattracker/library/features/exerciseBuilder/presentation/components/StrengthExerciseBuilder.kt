@@ -29,16 +29,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
-import com.langley.exercisestattracker.library.LibraryEvent
-import com.langley.exercisestattracker.library.LibraryState
-import com.langley.exercisestattracker.library.presentation.components.SelectableTextBoxWithEvent
-import com.langley.exercisestattracker.library.presentation.components.SelectableTextBoxWithToggle
+import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderState
 
 @Composable
 fun StrengthExerciseBuilderView(
-    state: LibraryState,
-    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
-    onEvent: (LibraryEvent) -> Unit,
+    state: ExerciseBuilderState,
+    newExerciseDefinition: ExerciseDefinition,
+    onEvent: (ExerciseBuilderEvent) -> Unit,
     upperBodySelectedState: MutableState<Boolean>,
     lowerBodySelectedState: MutableState<Boolean>,
     coreBodySelectedState: MutableState<Boolean>
@@ -66,7 +64,7 @@ fun StrengthExerciseBuilderView(
                 placeholder = "Exercise Name",
                 error = state.exerciseNameError,
                 onValueChanged = {
-                    onEvent(LibraryEvent.OnNameChanged(it))
+                    onEvent(ExerciseBuilderEvent.OnNameChanged(it))
                 },
             )
 
@@ -147,7 +145,7 @@ fun StrengthExerciseBuilderView(
                         text = "Arms",
                         isClicked = newExerciseDefinition.bodyRegion.lowercase().contains("arms"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnBodyRegionChanged("arms"),
+                        event = ExerciseBuilderEvent.OnBodyRegionChanged("arms"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -156,7 +154,7 @@ fun StrengthExerciseBuilderView(
                         text = "Back",
                         isClicked = newExerciseDefinition.bodyRegion.lowercase().contains("back"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnBodyRegionChanged("back"),
+                        event = ExerciseBuilderEvent.OnBodyRegionChanged("back"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -165,7 +163,7 @@ fun StrengthExerciseBuilderView(
                         text = "Chest",
                         isClicked = newExerciseDefinition.bodyRegion.lowercase().contains("chest"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnBodyRegionChanged("chest"),
+                        event = ExerciseBuilderEvent.OnBodyRegionChanged("chest"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -174,7 +172,7 @@ fun StrengthExerciseBuilderView(
                         text = "Shoulders",
                         isClicked = newExerciseDefinition.bodyRegion.lowercase().contains("legs"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnBodyRegionChanged("legs"),
+                        event = ExerciseBuilderEvent.OnBodyRegionChanged("legs"),
                     )
 
                 }
@@ -191,7 +189,7 @@ fun StrengthExerciseBuilderView(
                         text = "Arms",
                         isClicked = newExerciseDefinition.bodyRegion.lowercase().contains("arms"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnBodyRegionChanged("arms"),
+                        event = ExerciseBuilderEvent.OnBodyRegionChanged("arms"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -200,7 +198,7 @@ fun StrengthExerciseBuilderView(
                         text = "Back",
                         isClicked = newExerciseDefinition.bodyRegion.lowercase().contains("back"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnBodyRegionChanged("back"),
+                        event = ExerciseBuilderEvent.OnBodyRegionChanged("back"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -209,7 +207,7 @@ fun StrengthExerciseBuilderView(
                         text = "Chest",
                         isClicked = newExerciseDefinition.bodyRegion.lowercase().contains("chest"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnBodyRegionChanged("chest"),
+                        event = ExerciseBuilderEvent.OnBodyRegionChanged("chest"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -218,7 +216,7 @@ fun StrengthExerciseBuilderView(
                         text = "Shoulders",
                         isClicked = newExerciseDefinition.bodyRegion.lowercase().contains("legs"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnBodyRegionChanged("legs"),
+                        event = ExerciseBuilderEvent.OnBodyRegionChanged("legs"),
                     )
 
                 }
@@ -259,7 +257,7 @@ fun StrengthExerciseBuilderView(
                         text = "Biceps",
                         isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("biceps"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnTargetMusclesChanged("biceps"),
+                        event = ExerciseBuilderEvent.OnTargetMusclesChanged("biceps"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -268,7 +266,7 @@ fun StrengthExerciseBuilderView(
                         text = "Pectoralis",
                         isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("pectoralis"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnTargetMusclesChanged("pectoralis"),
+                        event = ExerciseBuilderEvent.OnTargetMusclesChanged("pectoralis"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -277,7 +275,7 @@ fun StrengthExerciseBuilderView(
                         text = "Deltoids",
                         isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("deltoid"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnTargetMusclesChanged("deltoids"),
+                        event = ExerciseBuilderEvent.OnTargetMusclesChanged("deltoids"),
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -286,7 +284,7 @@ fun StrengthExerciseBuilderView(
                         text = "Quadriceps",
                         isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("quadriceps"),
                         onEvent = onEvent,
-                        event = LibraryEvent.OnTargetMusclesChanged("quadriceps"),
+                        event = ExerciseBuilderEvent.OnTargetMusclesChanged("quadriceps"),
                     )
                 }
             }
@@ -320,7 +318,7 @@ fun StrengthExerciseBuilderView(
                     text = "Reps",
                     isClicked = newExerciseDefinition.hasReps,
                     onEvent = onEvent,
-                    event = LibraryEvent.ToggleHasReps,
+                    event = ExerciseBuilderEvent.ToggleHasReps,
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -329,7 +327,7 @@ fun StrengthExerciseBuilderView(
                     text = "Weight",
                     isClicked = newExerciseDefinition.isWeighted,
                     onEvent = onEvent,
-                    event = LibraryEvent.ToggleIsWeighted,
+                    event = ExerciseBuilderEvent.ToggleIsWeighted,
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -338,7 +336,7 @@ fun StrengthExerciseBuilderView(
                     text = "Time",
                     isClicked = newExerciseDefinition.isTimed,
                     onEvent = onEvent,
-                    event = LibraryEvent.ToggleIsTimed,
+                    event = ExerciseBuilderEvent.ToggleIsTimed,
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -347,7 +345,7 @@ fun StrengthExerciseBuilderView(
                     text = "Distance",
                     isClicked = newExerciseDefinition.hasDistance,
                     onEvent = onEvent,
-                    event = LibraryEvent.ToggleHasDistance,
+                    event = ExerciseBuilderEvent.ToggleHasDistance,
                 )
             }
         }
@@ -400,7 +398,7 @@ fun StrengthExerciseBuilderView(
                         text = "Body Weight",
                         isClicked = newExerciseDefinition.isCalisthenic,
                         onEvent = onEvent,
-                        event = LibraryEvent.ToggleIsCalisthenics,
+                        event = ExerciseBuilderEvent.ToggleIsCalisthenics,
                     )
 
                     Spacer(Modifier.width(8.dp))
@@ -409,7 +407,7 @@ fun StrengthExerciseBuilderView(
                         text = "Cardio",
                         isClicked = newExerciseDefinition.isCardio,
                         onEvent = onEvent,
-                        event = LibraryEvent.ToggleIsCardio,
+                        event = ExerciseBuilderEvent.ToggleIsCardio,
                     )
                 }
             }
