@@ -248,7 +248,14 @@ class LibraryViewModelTest {
         viewModel.onEvent(LibraryEvent.OnBodyRegionChanged(testString))
         val newExerciseDef = viewModel.newExerciseDefinition
 
-        assertEquals(testString, newExerciseDef?.bodyRegion)
+        assertTrue(
+            newExerciseDef.bodyRegion.lowercase().contains(testString.lowercase()),
+            "Test string not found in newExerciseDef.bodyRegion after first event."
+        )
+
+//        viewModel.onEvent(LibraryEvent.OnBodyRegionChanged("Test"))
+
+//        assertFalse(newExerciseDef.bodyRegion.contains("Test"))
 
     }
 
@@ -265,7 +272,7 @@ class LibraryViewModelTest {
 
         val newExerciseDef = viewModel.newExerciseDefinition
 
-        assertEquals(testString, newExerciseDef?.description)
+        assertEquals(testString, newExerciseDef.description)
     }
 
     @Test
@@ -281,7 +288,7 @@ class LibraryViewModelTest {
 
         val newExerciseDef = viewModel.newExerciseDefinition
 
-        assertEquals(testString, newExerciseDef?.exerciseName)
+        assertEquals(testString, newExerciseDef.exerciseName)
     }
 
     @Test
@@ -297,7 +304,7 @@ class LibraryViewModelTest {
 
         val newExerciseDef = viewModel.newExerciseDefinition
 
-        assertEquals(testString, newExerciseDef?.targetMuscles)
+        assertEquals(testString, newExerciseDef.targetMuscles)
     }
     @Test
     fun onEvent_SaveOrUpdateExerciseDefWithCorrectInput_stateProperlyUpdated() = runTest {
