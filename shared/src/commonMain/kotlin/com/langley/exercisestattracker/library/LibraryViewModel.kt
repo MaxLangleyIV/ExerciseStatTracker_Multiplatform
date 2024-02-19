@@ -203,7 +203,7 @@ class LibraryViewModel(
                     searchString = event.value
                 ) }
             }
-            
+
             LibraryEvent.ToggleIsSearchDropdownOpen -> {
                 _state.update { it.copy(
                     isSearchDropdownOpen = !_state.value.isSearchDropdownOpen
