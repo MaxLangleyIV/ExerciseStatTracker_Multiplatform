@@ -19,8 +19,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
@@ -33,30 +36,41 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.library.LibraryEvent
 import com.langley.exercisestattracker.library.LibraryState
-import com.langley.exercisestattracker.library.LibraryViewModel
+import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderState
 import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderViewModel
+import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseType
 import com.langley.exercisestattracker.library.features.exerciseBuilder.presentation.components.CardioExerciseBuilderView
 import com.langley.exercisestattracker.library.features.exerciseBuilder.presentation.components.StrengthExerciseBuilderView
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddNewExerciseDefView(
     appModule: AppModule,
-    state: LibraryState,
+    libraryState: LibraryState,
+    libraryOnEvent: (LibraryEvent) -> Unit,
+    initialBuilderState: ExerciseBuilderState = ExerciseBuilderState(),
     isVisible: Boolean,
     newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
-    onEvent: (LibraryEvent) -> Unit,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource
 ){
+
     val exerciseBuilderViewModel = getViewModel(
         key = "exerciseBuilderViewModel",
         factory = viewModelFactory {
             ExerciseBuilderViewModel(appModule.exerciseAppDataSource)
         }
     )
+
+    val builderState by exerciseBuilderViewModel.state.collectAsState(initialBuilderState)
+
+
+    val viewModelOnEvent = exerciseBuilderViewModel::onEvent
 
     //Intro Column Visibility
     val introColumnVisible = remember { mutableStateOf(true) }
@@ -97,11 +111,12 @@ fun AddNewExerciseDefView(
         {
             IconButton(
                 onClick = {
-                    onEvent(LibraryEvent.CloseAddDefClicked)
-                    introColumnVisible.value = true
-                    builderVisible.value = false
-                    strengthBuilderVisible.value = false
-                    cardioBuilderVisible.value = false
+                    libraryOnEvent(LibraryEvent.CloseAddDefClicked)
+                    viewModelOnEvent(ExerciseBuilderEvent.CloseAddDefClicked)
+//                    introColumnVisible.value = true
+//                    builderVisible.value = false
+//                    strengthBuilderVisible.value = false
+//                    cardioBuilderVisible.value = false
                 }
             ) {
                 Icon(
@@ -112,7 +127,7 @@ fun AddNewExerciseDefView(
         }
 
         // Intro Column
-        if (introColumnVisible.value){
+        if (builderState.introColumnVisible){
             Column(
                 modifier = Modifier
             ) {
@@ -121,9 +136,7 @@ fun AddNewExerciseDefView(
                 )
                 Button(
                     onClick = {
-                        introColumnVisible.value = false
-                        builderVisible.value = true
-                        strengthBuilderVisible.value = true
+                        viewModelOnEvent(ExerciseBuilderEvent.ExerciseTypeSelected(ExerciseType.Strength))
                     }
                 ){
                     Text( text = "Strength Exercise" )
@@ -133,9 +146,7 @@ fun AddNewExerciseDefView(
 
                 Button(
                     onClick = {
-                        introColumnVisible.value = false
-                        builderVisible.value = true
-                        cardioBuilderVisible.value = true
+                        viewModelOnEvent(ExerciseBuilderEvent.ExerciseTypeSelected(ExerciseType.Cardio))
                     }
                 ){
                     Text( text = "Cardio Exercise" )
@@ -144,7 +155,7 @@ fun AddNewExerciseDefView(
         }
 
         // Builder Column
-        if (builderVisible.value){
+        if (builderState.builderVisible){
 
             // Title Row
             Row(
@@ -161,11 +172,11 @@ fun AddNewExerciseDefView(
             }
 
             // Content Body
-            if (strengthBuilderVisible.value){
+            if (builderState.strengthBuilderVisible){
                 StrengthExerciseBuilderView(
-                    state = state,
-                    newExerciseDefinition = newExerciseDefinition,
-                    onEvent = onEvent,
+                    state = builderState,
+                    newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
+                    onEvent = viewModelOnEvent,
                     upperBodySelectedState = upperBodySelected,
                     lowerBodySelectedState = lowerBodySelected,
                     coreBodySelectedState = coreSelected
@@ -173,12 +184,12 @@ fun AddNewExerciseDefView(
 
             }
 
-            if (cardioBuilderVisible.value){
+            if (builderState.cardioBuilderVisible){
 
                 CardioExerciseBuilderView(
-                    state = state,
-                    newExerciseDefinition = newExerciseDefinition,
-                    onEvent = onEvent,
+                    state = builderState,
+                    newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
+                    onEvent = viewModelOnEvent,
                     tagsSectionVisibleState = tagsSectionVisible
                 )
             }
@@ -189,7 +200,7 @@ fun AddNewExerciseDefView(
             OutlinedTextField(
                 value = newExerciseDefinition.description,
                 onValueChange = {
-                    onEvent(LibraryEvent.OnDescriptionChanged(it))
+                    viewModelOnEvent(ExerciseBuilderEvent.OnDescriptionChanged(it))
                 },
                 placeholder = {
                     Text(text = "Exercise Description")
@@ -201,7 +212,8 @@ fun AddNewExerciseDefView(
 
             Button(
                 onClick = {
-                    onEvent(LibraryEvent.SaveOrUpdateDef)
+                    viewModelOnEvent(ExerciseBuilderEvent.SaveOrUpdateDef)
+                    libraryOnEvent(LibraryEvent.CloseAddDefClicked)
                 }
             ){
                 Text(text = "Save")
@@ -211,7 +223,8 @@ fun AddNewExerciseDefView(
 
             Button(
                 onClick = {
-                    onEvent(LibraryEvent.CloseAddDefClicked)
+                    libraryOnEvent(LibraryEvent.CloseAddDefClicked)
+                    viewModelOnEvent(ExerciseBuilderEvent.CloseAddDefClicked)
                 }
             ){
                 Text(text = "Cancel")
