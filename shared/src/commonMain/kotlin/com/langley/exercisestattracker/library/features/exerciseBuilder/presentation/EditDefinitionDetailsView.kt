@@ -1,12 +1,15 @@
 package com.langley.exercisestattracker.library.features.exerciseBuilder.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,7 +41,8 @@ import com.langley.exercisestattracker.core.presentation.composables.ErrorDispla
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.library.LibraryEvent
 import com.langley.exercisestattracker.library.LibraryState
-import com.langley.exercisestattracker.library.presentation.components.SelectableTextBoxWithEvent
+import com.langley.exercisestattracker.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.library.features.exerciseBuilder.presentation.components.SelectableTextBoxWithEvent
 
 @Composable
 fun EditDefinitionDetailsView(
@@ -341,5 +346,44 @@ fun EditDefinitionDetailsView(
            }
        }
    }
+}
+
+@Composable
+fun SelectableTextBoxWithEvent(
+    modifier: Modifier = Modifier,
+    text: String,
+    isClicked: Boolean,
+    onEvent: (LibraryEvent) -> Unit,
+    event: LibraryEvent,
+){
+    Box(
+        modifier = modifier
+//            .size(76.dp)
+            .defaultMinSize(64.dp, 64.dp)
+            .clip(
+                RoundedCornerShape(16.dp)
+            )
+            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .clickable { onEvent(event) }
+            .border(
+                width = 2.dp,
+
+                color = if (isClicked) {
+                    MaterialTheme.colorScheme.outline
+                } else Color.Transparent,
+
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(4.dp)
+
+    ){
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
+            text = text,
+            fontSize = 16.sp,
+        )
+    }
 }
 
