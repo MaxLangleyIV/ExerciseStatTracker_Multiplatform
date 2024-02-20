@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseDefinitionValidator
+import com.langley.exercisestattracker.features.library.LibraryEvent
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,7 @@ class ExerciseBuilderViewModel(
     private val exerciseAppDataSource: ExerciseAppDataSource,
     initialState: ExerciseBuilderState = ExerciseBuilderState(),
     newExerciseDef: ExerciseDefinition = ExerciseDefinition(),
+    private val libraryOnEvent: (LibraryEvent) -> Unit
 
     ): ViewModel() {
 
@@ -82,31 +84,31 @@ class ExerciseBuilderViewModel(
             }
 
             is ExerciseBuilderEvent.SaveOrUpdateDef -> {
-                newExerciseDef.let {exerciseDefinition ->
 
-                    val validationResult =
-                        ExerciseDefinitionValidator.validateExerciseDefinition(exerciseDefinition)
+                val validationResult =
+                    ExerciseDefinitionValidator.validateExerciseDefinition(newExerciseDef)
 
-                    val errorsList = listOfNotNull(
-                        validationResult.nameErrorString,
-                        validationResult.bodyRegionErrorString,
-                        validationResult.targetMusclesErrorString
-                    )
+                val errorsList = listOfNotNull(
+                    validationResult.nameErrorString,
+                    validationResult.bodyRegionErrorString,
+                    validationResult.targetMusclesErrorString
+                )
 
-                    if (errorsList.isEmpty()){
-                        _state.update {it.copy() }
 
-                        viewModelScope.launch {
-                            exerciseAppDataSource.insertOrReplaceDefinition(exerciseDefinition)
-                        }
+                if (errorsList.isEmpty()){
+                    _state.update {it.copy() }
+
+                    viewModelScope.launch {
+                        exerciseAppDataSource.insertOrReplaceDefinition(newExerciseDef)
                     }
-                    else {
-                        _state.update { it.copy(
-                            exerciseNameError = validationResult.nameErrorString,
-                            exerciseBodyRegionError = validationResult.bodyRegionErrorString,
-                            exerciseTargetMusclesError = validationResult.targetMusclesErrorString
-                        ) }
-                    }
+                    libraryOnEvent(LibraryEvent.CloseAddDefClicked)
+                }
+                else {
+                    _state.update { it.copy(
+                        exerciseNameError = validationResult.nameErrorString,
+                        exerciseBodyRegionError = validationResult.bodyRegionErrorString,
+                        exerciseTargetMusclesError = validationResult.targetMusclesErrorString
+                    ) }
                 }
             }
 
@@ -207,8 +209,16 @@ class ExerciseBuilderViewModel(
 
                     BodyRegion.NotApplicable -> {
                         _state.update { it.copy(
-                            notApplicableSelected = !_state.value.notApplicableSelected,
                             bodyRegion = toggleBodyRegion(BodyRegion.NotApplicable),
+                            bodyRegionSubGroup =
+                            toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
+                        ) }
+                    }
+
+                    BodyRegion.Full -> {
+                        _state.update { it.copy(
+                            fullBodySelected = !_state.value.fullBodySelected,
+                            bodyRegion = toggleBodyRegion(BodyRegion.Full),
                             bodyRegionSubGroup = null
                         ) }
                     }
