@@ -95,11 +95,10 @@ fun BodyRegionView(
                 Spacer(Modifier.width(8.dp))
 
                 SelectableTextBoxWithEvent(
-                    text = "Not Applicable",
-                    textSize = 14.sp,
-                    isClicked = state.notApplicableSelected,
+                    text = "Full",
+                    isClicked = state.fullBodySelected,
                     onEvent = onEvent,
-                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.NotApplicable)
+                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Full)
                 )
             }
 
