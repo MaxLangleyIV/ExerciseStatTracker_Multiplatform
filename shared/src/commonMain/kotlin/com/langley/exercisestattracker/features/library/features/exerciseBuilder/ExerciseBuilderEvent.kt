@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.exerciseBuilder
+package com.langley.exercisestattracker.features.library.features.exerciseBuilder
 
 sealed interface ExerciseBuilderEvent {
 

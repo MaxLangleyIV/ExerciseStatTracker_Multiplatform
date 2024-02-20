@@ -1,12 +1,8 @@
-package com.langley.exercisestattracker.library
+package com.langley.exercisestattracker.features.library
 
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
-import com.langley.exercisestattracker.features.library.LibraryEvent
-import com.langley.exercisestattracker.features.library.LibraryState
-import com.langley.exercisestattracker.features.library.LibraryViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

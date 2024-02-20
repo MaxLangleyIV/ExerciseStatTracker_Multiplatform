@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.exerciseBuilder.presentation.components
+package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,11 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
 
 @Composable
 fun MetricsView(
-    state: com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState,
+    state: ExerciseBuilderState,
     newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
     onEvent: (ExerciseBuilderEvent) -> Unit,
 ){

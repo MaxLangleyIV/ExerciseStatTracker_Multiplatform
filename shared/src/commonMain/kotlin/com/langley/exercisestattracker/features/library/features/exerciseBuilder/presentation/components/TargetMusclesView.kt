@@ -1,12 +1,14 @@
-package com.langley.exercisestattracker.features.exerciseBuilder.presentation.components
+package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -24,10 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.data.TargetMuscles
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-import com.langley.exercisestattracker.features.exerciseBuilder.BodyRegion
-import com.langley.exercisestattracker.features.exerciseBuilder.BodyRegionSubGroup
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
+import com.langley.exercisestattracker.core.presentation.composables.DropdownToggle
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegion
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegionSubGroup
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
 
 @Composable
 fun TargetMusclesView(
@@ -46,18 +49,17 @@ fun TargetMusclesView(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.SpaceEvenly
     ){
-        val currentMusclesList = remember { mutableStateOf(listOf("")) }
+        val listIsVisible = remember { mutableStateOf(false) }
 
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            text = "Target Muscles (Optional):",
-            textAlign = TextAlign.Left,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
-        )
-
-        Spacer(Modifier.height(8.dp))
+        val fullMusclesList = remember { mutableStateOf(
+            TargetMuscles().coreMuscles
+                    + TargetMuscles().lowerMuscles
+                    + TargetMuscles().armMuscles
+                    + TargetMuscles().backMuscles
+                    + TargetMuscles().chestMuscles
+                    + TargetMuscles().shoulderMuscles
+        ) }
+        val currentMusclesList = remember { mutableStateOf( listOf("") ) }
 
         when(state.bodyRegion){
             BodyRegion.Core -> {
@@ -91,7 +93,7 @@ fun TargetMusclesView(
             }
 
             BodyRegion.Full -> {
-                currentMusclesList.value = listOf("Not Applicable")
+                currentMusclesList.value = fullMusclesList.value
             }
 
             null -> {
@@ -100,61 +102,46 @@ fun TargetMusclesView(
 
         }
 
-        LazyRow {
-            items(currentMusclesList.value){
-                val textSize = if (it.length >= 8){ 16.sp } else { 18.sp }
+        // Section Title Row
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(end = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(start = 8.dp),
+                text = "Target Muscles (Optional):",
+                textAlign = TextAlign.Left,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
 
-                SelectableTextBoxWithEvent(
-                    text = it,
-                    textSize = textSize,
-                    isClicked = newExerciseDefinition.targetMuscles.lowercase().contains(it),
-                    onEvent = onEvent,
-                    event = ExerciseBuilderEvent.OnTargetMusclesChanged(it),
-                    )
-
-                Spacer(Modifier.width(8.dp))
-            }
+            DropdownToggle(
+                modifier = Modifier.size(20.dp),
+                toggled = listIsVisible
+            )
         }
 
-//        Row(
-//            modifier = Modifier.fillMaxWidth(),
-//            horizontalArrangement = Arrangement.SpaceEvenly
-//        ){
-//            SelectableTextBoxWithEvent(
-//                text = "Biceps",
-//                isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("biceps"),
-//                onEvent = onEvent,
-//                event = ExerciseBuilderEvent.OnTargetMusclesChanged("biceps"),
-//            )
-//
-//            Spacer(Modifier.width(8.dp))
-//
-//            SelectableTextBoxWithEvent(
-//                text = "Pectoralis",
-//                isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("pectoralis"),
-//                onEvent = onEvent,
-//                event = ExerciseBuilderEvent.OnTargetMusclesChanged("pectoralis"),
-//            )
-//
-//            Spacer(Modifier.width(8.dp))
-//
-//            SelectableTextBoxWithEvent(
-//                text = "Deltoids",
-//                isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("deltoid"),
-//                onEvent = onEvent,
-//                event = ExerciseBuilderEvent.OnTargetMusclesChanged("deltoids"),
-//            )
-//
-//            Spacer(Modifier.width(8.dp))
-//
-//            SelectableTextBoxWithEvent(
-//                text = "Quadriceps",
-//                isClicked = newExerciseDefinition.targetMuscles.lowercase().contains("quadriceps"),
-//                onEvent = onEvent,
-//                event = ExerciseBuilderEvent.OnTargetMusclesChanged("quadriceps"),
-//            )
-//
-//        }
+        Spacer(Modifier.height(8.dp))
+
+        // Target Muscles List
+        if (listIsVisible.value){
+            LazyRow {
+                items(currentMusclesList.value){
+                    val textSize = if (it.length >= 8){ 16.sp } else { 18.sp }
+
+                    SelectableTextBoxWithEvent(
+                        text = it,
+                        textSize = textSize,
+                        isClicked = newExerciseDefinition.targetMuscles.lowercase().contains(it),
+                        onEvent = onEvent,
+                        event = ExerciseBuilderEvent.ToggleTargetMuscle(it),
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+                }
+            }
+        }
     }
     Spacer(Modifier.height(8.dp))
 }

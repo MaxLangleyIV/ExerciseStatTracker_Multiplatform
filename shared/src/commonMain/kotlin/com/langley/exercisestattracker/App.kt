@@ -136,8 +136,6 @@ fun App(
                     )
 
                 }
-
-                Screen.ExerciseBuilder -> {}
             }
         }
     }

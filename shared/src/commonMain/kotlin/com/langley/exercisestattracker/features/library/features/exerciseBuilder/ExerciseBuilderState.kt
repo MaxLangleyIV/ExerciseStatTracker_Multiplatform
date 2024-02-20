@@ -1,20 +1,13 @@
-package com.langley.exercisestattracker.features.exerciseBuilder
+package com.langley.exercisestattracker.features.library.features.exerciseBuilder
 
 data class ExerciseBuilderState(
 
-    // Body Region Toggles
-    val upperBodySelected: Boolean = false,
-    val lowerBodySelected: Boolean = false,
-    val coreSelected: Boolean = false,
-    val fullBodySelected: Boolean = false,
-
-    // Body Region Sub Group (Only for upper body as of now).
+    // Body Region (Sub Group only for upper body as of now).
     val bodyRegion: BodyRegion? = null,
     val bodyRegionSubGroup: BodyRegionSubGroup? = null,
 
-    // UI Visibility
-    val targetMusclesVisible: Boolean = false,
-    val tagsSectionVisible: Boolean = true,
+    // Target  Muscles List
+    val targetMusclesList: List<String>? = null,
 
     //Input validation errors state.
     val exerciseNameError: String? = null,

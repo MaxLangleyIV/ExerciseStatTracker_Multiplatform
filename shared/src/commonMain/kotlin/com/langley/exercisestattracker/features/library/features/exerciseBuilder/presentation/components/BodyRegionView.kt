@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.exerciseBuilder.presentation.components
+package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +21,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-import com.langley.exercisestattracker.features.exerciseBuilder.BodyRegion
-import com.langley.exercisestattracker.features.exerciseBuilder.BodyRegionSubGroup
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegion
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegionSubGroup
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
 
 
 @Composable
@@ -69,7 +69,7 @@ fun BodyRegionView(
             ) {
                 SelectableTextBoxWithEvent(
                     text = "Upper",
-                    isClicked = state.upperBodySelected,
+                    isClicked = state.bodyRegion == BodyRegion.Upper,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Upper)
                 )
@@ -78,7 +78,7 @@ fun BodyRegionView(
 
                 SelectableTextBoxWithEvent(
                     text = "Lower",
-                    isClicked = state.lowerBodySelected,
+                    isClicked = state.bodyRegion == BodyRegion.Lower,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Lower)
                 )
@@ -87,7 +87,7 @@ fun BodyRegionView(
 
                 SelectableTextBoxWithEvent(
                     text = "Core",
-                    isClicked = state.coreSelected,
+                    isClicked = state.bodyRegion == BodyRegion.Core,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Core)
                 )
@@ -96,7 +96,7 @@ fun BodyRegionView(
 
                 SelectableTextBoxWithEvent(
                     text = "Full",
-                    isClicked = state.fullBodySelected,
+                    isClicked = state.bodyRegion == BodyRegion.Full,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Full)
                 )
@@ -104,7 +104,7 @@ fun BodyRegionView(
 
             Spacer(Modifier.height(8.dp))
 
-            if (state.upperBodySelected){
+            if (state.bodyRegion == BodyRegion.Upper){
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()

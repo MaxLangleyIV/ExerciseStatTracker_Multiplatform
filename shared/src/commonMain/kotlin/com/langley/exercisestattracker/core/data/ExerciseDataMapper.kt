@@ -1,10 +1,9 @@
 package com.langley.exercisestattracker.core.data
 
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
-import com.langley.exercisestattracker.core.domain.ExerciseRecord
-
 
 fun database.ExerciseDefinition.toExerciseDefinition():
         ExerciseDefinition {

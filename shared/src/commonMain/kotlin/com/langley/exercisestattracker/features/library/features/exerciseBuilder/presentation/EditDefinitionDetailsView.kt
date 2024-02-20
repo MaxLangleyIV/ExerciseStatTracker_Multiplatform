@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.exerciseBuilder.presentation
+package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

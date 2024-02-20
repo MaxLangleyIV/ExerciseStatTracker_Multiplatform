@@ -27,8 +27,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.di.AppModule
-import com.langley.exercisestattracker.features.exerciseBuilder.presentation.EditDefinitionDetailsView
-import com.langley.exercisestattracker.features.exerciseBuilder.presentation.ExerciseBuilderScreen
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.EditDefinitionDetailsView
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.presentation.components.DefinitionDetailsView

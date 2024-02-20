@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.exerciseBuilder.presentation
+package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,14 +34,14 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
 import com.langley.exercisestattracker.di.AppModule
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderViewModel
-import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.BodyRegionView
-import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.MetricsView
-import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.TagsView
-import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.TargetMusclesView
 import com.langley.exercisestattracker.features.library.LibraryEvent
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderViewModel
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components.BodyRegionView
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components.MetricsView
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components.TagsView
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components.TargetMusclesView
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
