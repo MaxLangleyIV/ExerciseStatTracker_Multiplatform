@@ -6,7 +6,7 @@ data class ExerciseBuilderState(
     val upperBodySelected: Boolean = false,
     val lowerBodySelected: Boolean = false,
     val coreSelected: Boolean = false,
-    val notApplicableSelected: Boolean = false,
+    val fullBodySelected: Boolean = false,
 
     // Body Region Sub Group (Only for upper body as of now).
     val bodyRegion: BodyRegion? = null,
@@ -26,6 +26,7 @@ sealed interface BodyRegion {
     data object Upper: BodyRegion
     data object Lower: BodyRegion
     data object Core: BodyRegion
+    data object Full: BodyRegion
     data object NotApplicable: BodyRegion
 }
 sealed interface BodyRegionSubGroup {
