@@ -11,11 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
-import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
-import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
+import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
+import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.home.HomeScreen
 import com.langley.exercisestattracker.features.home.HomeState
 import com.langley.exercisestattracker.features.library.LibraryState
@@ -99,7 +99,7 @@ fun App(
                 Screen.Home -> {
 
                     HomeScreen(
-                        // This state is a placeholder and the
+                        // This state is a placeholder
                         state = HomeState(),
                         focusRequester = focusRequester,
                         focusManager = focusManager,
@@ -137,9 +137,7 @@ fun App(
 
                 }
 
-                Screen.ExerciseBuilder -> {
-
-                }
+                Screen.ExerciseBuilder -> {}
             }
         }
     }
