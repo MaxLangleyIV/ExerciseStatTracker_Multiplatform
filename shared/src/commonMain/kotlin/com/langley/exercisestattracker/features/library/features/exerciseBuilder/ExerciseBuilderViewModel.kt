@@ -85,7 +85,7 @@ class ExerciseBuilderViewModel(
         }
     }
 
-    private fun generateTargetMusclesString(muscleString: String): String{
+    private fun toggleTargetMuscleInList(muscleString: String){
 
         var currentTargetMuscles = _state.value.targetMusclesList
 
@@ -105,13 +105,39 @@ class ExerciseBuilderViewModel(
             }
             if (greenLightToAddMuscle){
                 currentTargetMuscles.add(muscleString)
+                _state.update { it.copy(
+                    targetMusclesList = currentTargetMuscles
+                ) }
             }
-
-            return currentTargetMuscles.joinToString { ", " }
         }
         else {
-            return "Not Specified"
+            _state.update { it.copy(
+                targetMusclesList = listOf(muscleString)
+            ) }
         }
+    }
+
+    private fun generateTargetMusclesString(): String{
+
+        val currentTargetMuscles = _state.value.targetMusclesList
+
+        var returnString = ""
+
+        if (currentTargetMuscles != null){
+
+            for ((index, muscle) in currentTargetMuscles.withIndex()){
+
+                returnString += if (index == currentTargetMuscles.lastIndex){
+                    muscle
+                } else {
+                    "$muscle, "
+                }
+
+            }
+
+        }
+
+        return returnString
     }
 
 
@@ -149,7 +175,8 @@ class ExerciseBuilderViewModel(
                     bodyRegion = generateBodyRegionString(
                         _state.value.bodyRegion,
                         _state.value.bodyRegionSubGroup
-                    )
+                    ),
+                    targetMuscles = generateTargetMusclesString()
                 )
 
                 val validationResult =
@@ -161,14 +188,23 @@ class ExerciseBuilderViewModel(
                     validationResult.targetMusclesErrorString
                 )
 
-
                 if (errorsList.isEmpty()){
-                    _state.update {it.copy() }
 
                     viewModelScope.launch {
                         exerciseAppDataSource.insertOrReplaceDefinition(newExerciseDef)
                     }
                     libraryOnEvent(LibraryEvent.CloseAddDefClicked)
+
+                    viewModelScope.launch {
+                        delay(300L)
+                        _state.update {it.copy(
+                            bodyRegion = null,
+                            bodyRegionSubGroup = null,
+                            targetMusclesList = null
+                        )}
+                        newExerciseDef = ExerciseDefinition()
+
+                    }
                 }
                 else {
                     _state.update { it.copy(
@@ -296,9 +332,7 @@ class ExerciseBuilderViewModel(
             }
 
             is ExerciseBuilderEvent.ToggleTargetMuscle -> {
-                newExerciseDef = newExerciseDef.copy(
-                    targetMuscles = generateTargetMusclesString(event.value)
-                )
+                toggleTargetMuscleInList(event.value)
             }
 
         }
