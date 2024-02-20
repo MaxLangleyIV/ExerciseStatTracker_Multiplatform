@@ -138,7 +138,7 @@ fun LibraryScreen(
             libraryOnEvent = onEvent,
             newExerciseDefinition = newExerciseDefinition,
             focusManager = focusManager,
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
         )
     }
 }
