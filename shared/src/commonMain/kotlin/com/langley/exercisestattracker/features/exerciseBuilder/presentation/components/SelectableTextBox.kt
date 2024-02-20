@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -59,7 +60,8 @@ fun SelectableTextBoxWithEvent(
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onTertiaryContainer,
             text = text,
-            fontSize = textSize
+            fontSize = textSize,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -97,6 +99,7 @@ fun SelectableTextBoxWithToggle(
             color = MaterialTheme.colorScheme.onTertiaryContainer,
             text = text,
             fontSize = 16.sp,
+
         )
     }
 }
