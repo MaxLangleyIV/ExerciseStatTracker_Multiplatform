@@ -60,12 +60,13 @@ fun ExerciseBuilderScreen(
         key = "exerciseBuilderViewModel",
         factory = viewModelFactory {
             ExerciseBuilderViewModel(
-                appModule.exerciseAppDataSource
+                exerciseAppDataSource = appModule.exerciseAppDataSource,
+                libraryOnEvent = libraryOnEvent
             )
         }
     )
 
-    val viewModelOnEvent = exerciseBuilderViewModel::onEvent
+    val builderOnEvent = exerciseBuilderViewModel::onEvent
 
     val builderState by exerciseBuilderViewModel.state.collectAsState(initialBuilderState)
 
@@ -89,7 +90,7 @@ fun ExerciseBuilderScreen(
             IconButton(
                 onClick = {
                     libraryOnEvent(LibraryEvent.CloseAddDefClicked)
-                    viewModelOnEvent(ExerciseBuilderEvent.CloseAddDefClicked)
+                    builderOnEvent(ExerciseBuilderEvent.CloseAddDefClicked)
                 }
             ) {
                 Icon(
@@ -119,11 +120,11 @@ fun ExerciseBuilderScreen(
         )
         {
             ErrorDisplayingTextField(
-                value = newExerciseDefinition.exerciseName,
+                value = exerciseBuilderViewModel.newExerciseDef.exerciseName,
                 placeholder = "Exercise Name",
                 error = builderState.exerciseNameError,
                 onValueChanged = {
-                    viewModelOnEvent(ExerciseBuilderEvent.OnNameChanged(it))
+                    builderOnEvent(ExerciseBuilderEvent.OnNameChanged(it))
                 },
             )
 
@@ -146,36 +147,36 @@ fun ExerciseBuilderScreen(
         BodyRegionView(
             state = builderState,
             newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
-            onEvent = viewModelOnEvent,
+            onEvent = builderOnEvent,
         )
 
         if (builderState.bodyRegion != null && builderState.bodyRegionSubGroup != null){
             TargetMusclesView(
                 state = builderState,
                 newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
-                onEvent = viewModelOnEvent,
+                onEvent = builderOnEvent,
             )
         }
 
         MetricsView(
             state = builderState,
             newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
-            onEvent = viewModelOnEvent
+            onEvent = builderOnEvent
         )
 
         TagsView(
             state = builderState,
             newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
-            onEvent = viewModelOnEvent
+            onEvent = builderOnEvent
         )
 
         Spacer(Modifier.height(8.dp))
 
         // Bottom Options
         OutlinedTextField(
-            value = newExerciseDefinition.description,
+            value = exerciseBuilderViewModel.newExerciseDef.description,
             onValueChange = {
-                viewModelOnEvent(ExerciseBuilderEvent.OnDescriptionChanged(it))
+                builderOnEvent(ExerciseBuilderEvent.OnDescriptionChanged(it))
             },
             placeholder = {
                 Text(text = "Exercise Description")
@@ -187,8 +188,8 @@ fun ExerciseBuilderScreen(
 
         Button(
             onClick = {
-                viewModelOnEvent(ExerciseBuilderEvent.SaveOrUpdateDef)
-                libraryOnEvent(LibraryEvent.CloseAddDefClicked)
+                builderOnEvent(ExerciseBuilderEvent.SaveOrUpdateDef)
+
             }
         ){
             Text(text = "Save")
@@ -199,7 +200,7 @@ fun ExerciseBuilderScreen(
         Button(
             onClick = {
                 libraryOnEvent(LibraryEvent.CloseAddDefClicked)
-                viewModelOnEvent(ExerciseBuilderEvent.CloseAddDefClicked)
+                builderOnEvent(ExerciseBuilderEvent.CloseAddDefClicked)
             }
         ){
             Text(text = "Cancel")
