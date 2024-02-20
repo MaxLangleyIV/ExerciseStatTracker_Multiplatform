@@ -133,7 +133,7 @@ fun TargetMusclesView(
                     SelectableTextBoxWithEvent(
                         text = it,
                         textSize = textSize,
-                        isClicked = newExerciseDefinition.targetMuscles.lowercase().contains(it),
+                        isClicked = state.targetMusclesList?.contains(it) ?: false,
                         onEvent = onEvent,
                         event = ExerciseBuilderEvent.ToggleTargetMuscle(it),
                     )
