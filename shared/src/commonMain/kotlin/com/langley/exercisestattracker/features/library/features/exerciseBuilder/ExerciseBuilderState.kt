@@ -3,6 +3,7 @@ package com.langley.exercisestattracker.features.library.features.exerciseBuilde
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 
 data class ExerciseBuilderState(
+    val readyToInitialize: Boolean = false,
     val newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
 
     // Body Region (Sub Group only for upper body as of now).
@@ -17,6 +18,7 @@ data class ExerciseBuilderState(
     val exerciseBodyRegionError: String? = null,
     val exerciseTargetMusclesError: String? = null
 )
+
 
 sealed interface BodyRegion {
     data object Upper: BodyRegion

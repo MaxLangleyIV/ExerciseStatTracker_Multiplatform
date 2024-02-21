@@ -1,7 +1,5 @@
 package com.langley.exercisestattracker.features.library.features.exerciseBuilder
 
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-
 sealed interface ExerciseBuilderEvent {
 
     // UI Toggle Events
@@ -15,12 +13,8 @@ sealed interface ExerciseBuilderEvent {
     data object ToggleHasDistance : ExerciseBuilderEvent
 
     data class OnNameChanged(val value: String) : ExerciseBuilderEvent
-    data class OnBodyRegionChanged(val value: String) : ExerciseBuilderEvent
-    data class OnTargetMusclesChanged(val value: String) : ExerciseBuilderEvent
     data class OnDescriptionChanged(val value: String) : ExerciseBuilderEvent
-    data class InitializeDefinition(
-        val initialExerciseDef: ExerciseDefinition
-    ) : ExerciseBuilderEvent
+    data object InitializeDefinition : ExerciseBuilderEvent
 
     data object ToggleIsWeighted : ExerciseBuilderEvent
     data object SaveOrUpdateDef : ExerciseBuilderEvent

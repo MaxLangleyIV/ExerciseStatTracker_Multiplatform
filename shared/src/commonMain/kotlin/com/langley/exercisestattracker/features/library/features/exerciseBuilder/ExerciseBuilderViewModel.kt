@@ -1,8 +1,5 @@
 package com.langley.exercisestattracker.features.library.features.exerciseBuilder
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseDefinitionValidator
@@ -21,9 +18,7 @@ class ExerciseBuilderViewModel(
 
     private val exerciseAppDataSource: ExerciseAppDataSource,
     initialState: ExerciseBuilderState = ExerciseBuilderState(),
-    initialExerciseDef: ExerciseDefinition = ExerciseDefinition(),
     private val libraryViewModel: LibraryViewModel,
-    private val libraryOnEvent: (LibraryEvent) -> Unit
 
     ): ViewModel() {
 
@@ -37,8 +32,29 @@ class ExerciseBuilderViewModel(
             ExerciseBuilderState()
         )
 
-    var newExerciseDef: ExerciseDefinition by mutableStateOf(initialExerciseDef)
-        private set
+    private fun updateCurrentDefinition(){
+        val newExerciseDef = libraryViewModel.state.value.selectedExerciseDefinition
+
+        if (newExerciseDef != null){
+            println("SELECTED DEF: ${newExerciseDef.exerciseName}")
+            val bodyRegion = generateBodyRegionObjectsFromString(newExerciseDef.bodyRegion)
+            _state.update { it.copy(
+                targetMusclesList = newExerciseDef.targetMuscles.split(", "),
+                bodyRegion = bodyRegion.first,
+                bodyRegionSubGroup = bodyRegion.second,
+                newExerciseDefinition = newExerciseDef
+            ) }
+            println("NEW DEF: ${_state.value.newExerciseDefinition.exerciseName}")
+        }
+        else {
+            _state.update { it.copy(
+                newExerciseDefinition = ExerciseDefinition(),
+                targetMusclesList = null,
+                bodyRegion = null,
+                bodyRegionSubGroup = null,
+            ) }
+        }
+    }
 
 
     private fun toggleBodyRegion(bodyRegion: BodyRegion): BodyRegion? {
@@ -123,6 +139,7 @@ class ExerciseBuilderViewModel(
             }
             if (musclesToRemove.isEmpty()){
                 currentTargetMuscles.add(muscleString)
+                currentTargetMuscles = currentTargetMuscles.filter { it != "Not Specified" }
                 _state.update { it.copy(
                     targetMusclesList = currentTargetMuscles
                 ) }
@@ -148,7 +165,7 @@ class ExerciseBuilderViewModel(
 
         var returnString = ""
 
-        if (currentTargetMuscles != null){
+        if (!currentTargetMuscles.isNullOrEmpty()){
 
             for ((index, muscle) in currentTargetMuscles.withIndex()){
 
@@ -171,55 +188,56 @@ class ExerciseBuilderViewModel(
     fun onEvent(event: ExerciseBuilderEvent){
         when (event) {
 
-            is ExerciseBuilderEvent.OnBodyRegionChanged -> {
-                newExerciseDef = newExerciseDef.copy(
-                    bodyRegion = event.value
-                )
-            }
-
             is ExerciseBuilderEvent.OnDescriptionChanged -> {
-                newExerciseDef = newExerciseDef.copy(
-                    description = event.value
-                )
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        description = event.value
+                    )
+                ) }
+
             }
 
             is ExerciseBuilderEvent.OnNameChanged -> {
-                newExerciseDef = newExerciseDef.copy(
-                    exerciseName = event.value
-                )
-            }
 
-            is ExerciseBuilderEvent.OnTargetMusclesChanged -> {
-                newExerciseDef = newExerciseDef.copy(
-                    targetMuscles = event.value
-                )
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        exerciseName = event.value
+                    )
+                ) }
+
             }
 
             is ExerciseBuilderEvent.SaveOrUpdateDef -> {
 
-                newExerciseDef = newExerciseDef.copy(
-                    bodyRegion = generateBodyRegionString(
-                        _state.value.bodyRegion,
-                        _state.value.bodyRegionSubGroup
-                    ),
-                    targetMuscles = generateTargetMusclesString()
-                )
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        bodyRegion = generateBodyRegionString(
+                            _state.value.bodyRegion,
+                            _state.value.bodyRegionSubGroup
+                        ),
+                        targetMuscles = generateTargetMusclesString()
+                    )
+                ) }
+
 
                 val validationResult =
-                    ExerciseDefinitionValidator.validateExerciseDefinition(newExerciseDef)
+                    ExerciseDefinitionValidator
+                        .validateExerciseDefinition(_state.value.newExerciseDefinition)
 
                 val errorsList = listOfNotNull(
                     validationResult.nameErrorString,
                     validationResult.bodyRegionErrorString,
                     validationResult.targetMusclesErrorString
                 )
+                println(errorsList)
 
                 if (errorsList.isEmpty()){
 
                     viewModelScope.launch {
-                        exerciseAppDataSource.insertOrReplaceDefinition(newExerciseDef)
+                        exerciseAppDataSource
+                            .insertOrReplaceDefinition(_state.value.newExerciseDefinition)
                     }
-                    libraryOnEvent(LibraryEvent.CloseAddDefClicked)
+                    (libraryViewModel::onEvent)(LibraryEvent.CloseAddDefClicked)
 
                     viewModelScope.launch {
                         delay(300L)
@@ -228,7 +246,9 @@ class ExerciseBuilderViewModel(
                             bodyRegionSubGroup = null,
                             targetMusclesList = null
                         )}
-                        newExerciseDef = ExerciseDefinition()
+                        _state.update { it.copy(
+                            newExerciseDefinition = ExerciseDefinition()
+                        ) }
 
                     }
                 }
@@ -242,80 +262,97 @@ class ExerciseBuilderViewModel(
             }
 
             ExerciseBuilderEvent.CloseAddDef -> {
-                _state.update { it.copy(
-                    exerciseNameError = null,
-                    exerciseBodyRegionError = null,
-                    exerciseTargetMusclesError = null,
-                    bodyRegion = null,
-                    bodyRegionSubGroup = null,
-                    targetMusclesList = null
-                ) }
+
                 viewModelScope.launch {
+                    (libraryViewModel::onEvent)(LibraryEvent.CloseAddDefClicked)
                     delay(300L) //Animation delay for slide out.
-                    newExerciseDef = ExerciseDefinition()
+                    _state.update { it.copy(
+                        exerciseNameError = null,
+                        exerciseBodyRegionError = null,
+                        exerciseTargetMusclesError = null,
+                        bodyRegion = null,
+                        bodyRegionSubGroup = null,
+                        targetMusclesList = null,
+                        newExerciseDefinition = ExerciseDefinition()
+                    ) }
                 }
             }
 
             ExerciseBuilderEvent.DeleteDefinition -> {
-                val exerciseDefId = newExerciseDef.exerciseDefinitionId
+
+                val exerciseDefId = _state.value.newExerciseDefinition.exerciseDefinitionId
 
                 if (exerciseDefId != null){
                     viewModelScope.launch {
 
                         exerciseAppDataSource.deleteDefinition(exerciseDefId)
 
-                        libraryOnEvent(LibraryEvent.CloseDetailsView)
-                        libraryOnEvent(LibraryEvent.CloseAddDefClicked)
+                        (libraryViewModel::onEvent)(LibraryEvent.CloseDetailsView)
+                        (libraryViewModel::onEvent)(LibraryEvent.CloseAddDefClicked)
 
                         delay(350L) //Animation delay for slide out.
 
-                        newExerciseDef = ExerciseDefinition()
+                        _state.update { it.copy(
+                            newExerciseDefinition = ExerciseDefinition()
+                        ) }
 
                     }
                 }
             }
 
             is ExerciseBuilderEvent.ToggleIsWeighted -> {
-                newExerciseDef = newExerciseDef.copy(
-                    isWeighted = !newExerciseDef.isWeighted
-                )
+
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        isWeighted = !_state.value.newExerciseDefinition.isWeighted
+                    )
+                ) }
             }
 
             ExerciseBuilderEvent.ToggleIsCalisthenics -> {
-                newExerciseDef = newExerciseDef.copy(
-                    isCalisthenic = !newExerciseDef.isCalisthenic
-                )
+
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        isCalisthenic = !_state.value.newExerciseDefinition.isCalisthenic
+                    )
+                ) }
             }
 
             ExerciseBuilderEvent.ToggleIsCardio -> {
-                newExerciseDef = newExerciseDef.copy(
-                    isCardio = !newExerciseDef.isCardio
-                )
+
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        isCardio = !_state.value.newExerciseDefinition.isCardio
+                    )
+                ) }
             }
 
             ExerciseBuilderEvent.ToggleHasDistance -> {
-                newExerciseDef = newExerciseDef.copy(
-                    hasDistance = !newExerciseDef.hasDistance
-                )
+
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        hasDistance = !_state.value.newExerciseDefinition.hasDistance
+                    )
+                ) }
             }
 
             ExerciseBuilderEvent.ToggleHasReps -> {
-                newExerciseDef = newExerciseDef.copy(
-                    hasReps = !newExerciseDef.hasReps
-                )
+
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        hasReps = !_state.value.newExerciseDefinition.hasReps
+                    )
+                ) }
             }
 
             ExerciseBuilderEvent.ToggleIsTimed -> {
 
-                newExerciseDef = newExerciseDef.copy(
-                    isTimed = !newExerciseDef.isTimed
-                )
+                _state.update { it.copy(
+                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
+                        isTimed = !_state.value.newExerciseDefinition.isTimed
+                    )
+                ) }
 
-//                _state.update { it.copy(
-//                    newExerciseDefinition = _state.value.newExerciseDefinition.copy(
-//                        isTimed = !_state.value.newExerciseDefinition.isTimed
-//                    )
-//                ) }
             }
 
             is ExerciseBuilderEvent.ToggleBodyRegion -> {
@@ -368,13 +405,7 @@ class ExerciseBuilderViewModel(
             }
 
             is ExerciseBuilderEvent.InitializeDefinition -> {
-                newExerciseDef = libraryViewModel.definitionForBuilder
-                val bodyRegion = generateBodyRegionObjectsFromString(newExerciseDef.bodyRegion)
-                _state.update { it.copy(
-                    targetMusclesList = newExerciseDef.targetMuscles.split(", "),
-                    bodyRegion = bodyRegion.first,
-                    bodyRegionSubGroup = bodyRegion.second
-                ) }
+                updateCurrentDefinition()
             }
         }
     }

@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.DropdownToggle
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
@@ -27,7 +26,7 @@ import com.langley.exercisestattracker.features.library.features.exerciseBuilder
 @Composable
 fun TagsView(
     state: ExerciseBuilderState,
-    newExerciseDefinition: ExerciseDefinition,
+//    newExerciseDefinition: ExerciseDefinition,
     onEvent: (ExerciseBuilderEvent) -> Unit,
 ){
     val tagsOpen = remember { mutableStateOf(false) }
@@ -68,7 +67,7 @@ fun TagsView(
             ) {
                 SelectableTextBoxWithEvent(
                     text = "Weight Training",
-                    isClicked = newExerciseDefinition.isWeighted,
+                    isClicked = state.newExerciseDefinition.isWeighted,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleIsWeighted,
                 )
@@ -77,7 +76,7 @@ fun TagsView(
 
                 SelectableTextBoxWithEvent(
                     text = "Body Weight",
-                    isClicked = newExerciseDefinition.isCalisthenic,
+                    isClicked = state.newExerciseDefinition.isCalisthenic,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleIsCalisthenics,
                 )
@@ -86,7 +85,7 @@ fun TagsView(
 
                 SelectableTextBoxWithEvent(
                     text = "Cardio",
-                    isClicked = newExerciseDefinition.isCardio,
+                    isClicked = state.newExerciseDefinition.isCardio,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleIsCardio,
                 )

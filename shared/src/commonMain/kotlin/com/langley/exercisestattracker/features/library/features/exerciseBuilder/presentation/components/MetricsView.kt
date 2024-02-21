@@ -18,14 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
 
 @Composable
 fun MetricsView(
     state: ExerciseBuilderState,
-    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
+//    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
     onEvent: (ExerciseBuilderEvent) -> Unit,
 ){
 
@@ -61,7 +60,7 @@ fun MetricsView(
             ){
                 SelectableTextBoxWithEvent(
                     text = "Reps",
-                    isClicked = newExerciseDefinition.hasReps,
+                    isClicked = state.newExerciseDefinition.hasReps,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleHasReps,
                 )
@@ -70,7 +69,7 @@ fun MetricsView(
 
                 SelectableTextBoxWithEvent(
                     text = "Weight",
-                    isClicked = newExerciseDefinition.isWeighted,
+                    isClicked = state.newExerciseDefinition.isWeighted,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleIsWeighted,
                 )
@@ -79,7 +78,7 @@ fun MetricsView(
 
                 SelectableTextBoxWithEvent(
                     text = "Time",
-                    isClicked = newExerciseDefinition.isTimed,
+                    isClicked = state.newExerciseDefinition.isTimed,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleIsTimed,
                 )
@@ -88,7 +87,7 @@ fun MetricsView(
 
                 SelectableTextBoxWithEvent(
                     text = "Distance",
-                    isClicked = newExerciseDefinition.hasDistance,
+                    isClicked = state.newExerciseDefinition.hasDistance,
                     onEvent = onEvent,
                     event = ExerciseBuilderEvent.ToggleHasDistance,
                 )

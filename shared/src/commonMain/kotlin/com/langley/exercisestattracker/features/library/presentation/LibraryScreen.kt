@@ -152,10 +152,11 @@ fun LibraryScreen(
         ExerciseBuilderScreen(
             isVisible = libraryState.isAddExerciseDefSheetOpen,
             appModule = appModule,
+//            libraryState = libraryState,
             libraryViewModel = libraryViewModel,
-            libraryOnEvent = libraryOnEvent,
-            initialExerciseDefinition =
-            libraryState.selectedExerciseDefinition?.copy() ?: ExerciseDefinition(),
+//            libraryOnEvent = libraryOnEvent,
+//            initialExerciseDefinition =
+//            libraryState.selectedExerciseDefinition?.copy() ?: ExerciseDefinition(),
             focusManager = focusManager,
             interactionSource = interactionSource,
         )

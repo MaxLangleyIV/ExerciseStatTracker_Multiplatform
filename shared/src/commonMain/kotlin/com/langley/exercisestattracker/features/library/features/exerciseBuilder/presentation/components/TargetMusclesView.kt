@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.data.TargetMuscles
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.DropdownToggle
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegion
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegionSubGroup
@@ -35,7 +34,7 @@ import com.langley.exercisestattracker.features.library.features.exerciseBuilder
 @Composable
 fun TargetMusclesView(
     state: ExerciseBuilderState,
-    newExerciseDefinition: ExerciseDefinition,
+//    newExerciseDefinition: ExerciseDefinition,
     onEvent: (ExerciseBuilderEvent) -> Unit,
 ) {
     // Target Muscles Row

@@ -20,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegion
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegionSubGroup
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
@@ -30,7 +29,7 @@ import com.langley.exercisestattracker.features.library.features.exerciseBuilder
 @Composable
 fun BodyRegionView(
     state: ExerciseBuilderState,
-    newExerciseDefinition: ExerciseDefinition,
+//    newExerciseDefinition: ExerciseDefinition,
     onEvent: (ExerciseBuilderEvent) -> Unit,
 ){
     Column (
