@@ -39,7 +39,7 @@ class ExerciseBuilderViewModel(
             println("SELECTED DEF: ${newExerciseDef.exerciseName}")
             val bodyRegion = generateBodyRegionObjectsFromString(newExerciseDef.bodyRegion)
             _state.update { it.copy(
-                targetMusclesList = newExerciseDef.targetMuscles.split(", "),
+                musclesList = newExerciseDef.targetMuscles.split(", "),
                 bodyRegion = bodyRegion.first,
                 bodyRegionSubGroup = bodyRegion.second,
                 newExerciseDefinition = newExerciseDef
@@ -49,7 +49,7 @@ class ExerciseBuilderViewModel(
         else {
             _state.update { it.copy(
                 newExerciseDefinition = ExerciseDefinition(),
-                targetMusclesList = null,
+                musclesList = null,
                 bodyRegion = null,
                 bodyRegionSubGroup = null,
             ) }
@@ -120,14 +120,39 @@ class ExerciseBuilderViewModel(
 
     }
 
+    private fun toggleStringInList(string: String, list: List<String>?): List<String>{
+        if (list.isNullOrEmpty()){
+            return listOf(string)
+        }
+        else {
+            val mutableList = list.toMutableList()
+            val stringsToRemove = mutableListOf<String>()
+
+            for (currentString in list){
+
+                if (string.lowercase() == currentString.lowercase()){
+                    stringsToRemove.add(currentString)
+                }
+            }
+            if (stringsToRemove.isEmpty()){
+                mutableList.add(string)
+            }
+            else {
+                mutableList.remove(string)
+            }
+
+            return mutableList
+        }
+    }
+
     private fun toggleTargetMuscleInList(muscleString: String){
 
-        var currentTargetMuscles = _state.value.targetMusclesList
+        var currentTargetMuscles = _state.value.musclesList
 
         if (currentTargetMuscles != null){
 
             currentTargetMuscles = currentTargetMuscles.toMutableList()
-            println(currentTargetMuscles)
+//            println(currentTargetMuscles)
             val musclesToRemove = mutableListOf<String>()
 
             for (muscle in currentTargetMuscles){
@@ -141,27 +166,27 @@ class ExerciseBuilderViewModel(
                 currentTargetMuscles.add(muscleString)
                 currentTargetMuscles = currentTargetMuscles.filter { it != "Not Specified" }
                 _state.update { it.copy(
-                    targetMusclesList = currentTargetMuscles
+                    musclesList = currentTargetMuscles
                 ) }
             }
             else {
                 currentTargetMuscles = currentTargetMuscles.filter { !musclesToRemove.contains(it) }
 
                 _state.update { it.copy(
-                    targetMusclesList = currentTargetMuscles
+                    musclesList = currentTargetMuscles
                 ) }
             }
         }
         else {
             _state.update { it.copy(
-                targetMusclesList = listOf(muscleString)
+                musclesList = listOf(muscleString)
             ) }
         }
     }
 
     private fun generateTargetMusclesString(): String{
 
-        val currentTargetMuscles = _state.value.targetMusclesList
+        val currentTargetMuscles = _state.value.musclesList
 
         var returnString = ""
 
@@ -244,12 +269,12 @@ class ExerciseBuilderViewModel(
                         _state.update {it.copy(
                             bodyRegion = null,
                             bodyRegionSubGroup = null,
-                            targetMusclesList = null
+                            musclesList = null,
+                            newExerciseDefinition = ExerciseDefinition(),
+                            exerciseNameError = null,
+                            exerciseBodyRegionError = null,
+                            exerciseTargetMusclesError = null
                         )}
-                        _state.update { it.copy(
-                            newExerciseDefinition = ExerciseDefinition()
-                        ) }
-
                     }
                 }
                 else {
@@ -272,7 +297,7 @@ class ExerciseBuilderViewModel(
                         exerciseTargetMusclesError = null,
                         bodyRegion = null,
                         bodyRegionSubGroup = null,
-                        targetMusclesList = null,
+                        musclesList = null,
                         newExerciseDefinition = ExerciseDefinition()
                     ) }
                 }
@@ -355,43 +380,50 @@ class ExerciseBuilderViewModel(
 
             }
 
+//            is ExerciseBuilderEvent.ToggleBodyRegion -> {
+//                when (event.bodyRegion){
+//                    BodyRegion.Core -> {
+//                        _state.update { it.copy(
+//                            bodyRegion = toggleBodyRegion(BodyRegion.Core),
+//                            bodyRegionSubGroup =
+//                            toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
+//                        ) }
+//                    }
+//                    BodyRegion.Lower -> {
+//                        _state.update { it.copy(
+//                            bodyRegion = toggleBodyRegion(BodyRegion.Lower),
+//                            bodyRegionSubGroup =
+//                            toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
+//                        ) }
+//                    }
+//                    BodyRegion.Upper -> {
+//                        _state.update { it.copy(
+//                            bodyRegion = toggleBodyRegion(BodyRegion.Upper)
+//                        ) }
+//                    }
+//
+//                    BodyRegion.NotApplicable -> {
+//                        _state.update { it.copy(
+//                            bodyRegion = toggleBodyRegion(BodyRegion.NotApplicable),
+//                            bodyRegionSubGroup =
+//                            toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
+//                        ) }
+//                    }
+//
+//                    BodyRegion.Full -> {
+//                        _state.update { it.copy(
+//                            bodyRegion = toggleBodyRegion(BodyRegion.Full),
+//                            bodyRegionSubGroup = toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
+//                        ) }
+//                    }
+//                }
+//            }
+
             is ExerciseBuilderEvent.ToggleBodyRegion -> {
-                when (event.bodyRegion){
-                    BodyRegion.Core -> {
-                        _state.update { it.copy(
-                            bodyRegion = toggleBodyRegion(BodyRegion.Core),
-                            bodyRegionSubGroup =
-                            toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
-                        ) }
-                    }
-                    BodyRegion.Lower -> {
-                        _state.update { it.copy(
-                            bodyRegion = toggleBodyRegion(BodyRegion.Lower),
-                            bodyRegionSubGroup =
-                            toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
-                        ) }
-                    }
-                    BodyRegion.Upper -> {
-                        _state.update { it.copy(
-                            bodyRegion = toggleBodyRegion(BodyRegion.Upper)
-                        ) }
-                    }
-
-                    BodyRegion.NotApplicable -> {
-                        _state.update { it.copy(
-                            bodyRegion = toggleBodyRegion(BodyRegion.NotApplicable),
-                            bodyRegionSubGroup =
-                            toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
-                        ) }
-                    }
-
-                    BodyRegion.Full -> {
-                        _state.update { it.copy(
-                            bodyRegion = toggleBodyRegion(BodyRegion.Full),
-                            bodyRegionSubGroup = toggleBodyRegionSubGroup(BodyRegionSubGroup.NotApplicable)
-                        ) }
-                    }
-                }
+                _state.update { it.copy(
+                    primaryTargetList =
+                    toggleStringInList(event.bodyRegion,_state.value.primaryTargetList)
+                ) }
             }
 
             is ExerciseBuilderEvent.ToggleBodyRegionSubGroup -> {
@@ -401,7 +433,11 @@ class ExerciseBuilderViewModel(
             }
 
             is ExerciseBuilderEvent.ToggleTargetMuscle -> {
-                toggleTargetMuscleInList(event.value)
+//                toggleTargetMuscleInList(event.value)
+                _state.update { it.copy(
+                    musclesList =
+                    toggleStringInList(event.value,_state.value.musclesList)
+                ) }
             }
 
             is ExerciseBuilderEvent.InitializeDefinition -> {

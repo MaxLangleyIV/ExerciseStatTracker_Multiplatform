@@ -11,7 +11,8 @@ data class ExerciseBuilderState(
     val bodyRegionSubGroup: BodyRegionSubGroup? = null,
 
     // Target  Muscles List
-    val targetMusclesList: List<String>? = null,
+    val primaryTargetList: List<String>? = null,
+    val musclesList: List<String>? = null,
 
     //Input validation errors state.
     val exerciseNameError: String? = null,

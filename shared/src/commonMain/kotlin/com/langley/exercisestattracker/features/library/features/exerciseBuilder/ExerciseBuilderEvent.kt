@@ -3,7 +3,9 @@ package com.langley.exercisestattracker.features.library.features.exerciseBuilde
 sealed interface ExerciseBuilderEvent {
 
     // UI Toggle Events
-    data class ToggleBodyRegion(val bodyRegion: BodyRegion): ExerciseBuilderEvent
+//    data class ToggleBodyRegion(val bodyRegion: BodyRegion): ExerciseBuilderEvent
+    data class ToggleBodyRegion(val bodyRegion: String): ExerciseBuilderEvent
+
     data class ToggleBodyRegionSubGroup(val subGroup: BodyRegionSubGroup): ExerciseBuilderEvent
     data class ToggleTargetMuscle(val value: String): ExerciseBuilderEvent
     data object ToggleIsCalisthenics : ExerciseBuilderEvent
