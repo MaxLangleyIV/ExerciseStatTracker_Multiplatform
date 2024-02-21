@@ -18,8 +18,6 @@ import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerThem
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.home.HomeScreen
 import com.langley.exercisestattracker.features.home.HomeState
-import com.langley.exercisestattracker.features.library.LibraryState
-import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
 import com.langley.exercisestattracker.features.records.RecordsScreen
 import com.langley.exercisestattracker.features.records.RecordsState
@@ -48,14 +46,14 @@ fun App(
 
 
 
-        // View models and related states.
-        val libraryViewModel = getViewModel(
-            key = "libraryViewModel",
-            factory = viewModelFactory {
-                LibraryViewModel(appModule.exerciseAppDataSource)
-            }
-        )
-        val libraryState by libraryViewModel.state.collectAsState(LibraryState())
+//        // View models and related states.
+//        val libraryViewModel = getViewModel(
+//            key = "libraryViewModel",
+//            factory = viewModelFactory {
+//                LibraryViewModel(appModule.exerciseAppDataSource)
+//            }
+//        )
+//        val libraryState by libraryViewModel.state.collectAsState(LibraryState())
 
         val recordsViewModel = getViewModel(
             key = "recordsViewModel",
@@ -113,9 +111,9 @@ fun App(
 
                     LibraryScreen(
                         appModule = appModule,
-                        state = libraryState,
-                        newExerciseDefinition = libraryViewModel.newExerciseDefinition,
-                        onEvent = libraryViewModel::onEvent,
+//                        state = libraryState,
+//                        newExerciseDefinition = libraryViewModel.newExerciseDefinition,
+//                        onEvent = libraryViewModel::onEvent,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,

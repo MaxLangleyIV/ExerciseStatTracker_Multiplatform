@@ -213,8 +213,8 @@ class LibraryViewModelTest {
             "isEditExerciseDefSheetOpen failed to be initialized as true."
         )
 
-        assertEquals(viewModel.newExerciseDefinition, selectedDef,
-            "newExerciseDef in viewModel: ${viewModel.newExerciseDefinition} " +
+        assertEquals(viewModel.definitionForBuilder, selectedDef,
+            "newExerciseDef in viewModel: ${viewModel.definitionForBuilder} " +
                     "does not equal $selectedDef"
         )
 
@@ -231,7 +231,7 @@ class LibraryViewModelTest {
         assertNull(state.exerciseTargetMusclesError, "target muscle error not null.")
         assertEquals(
             ExerciseDefinition(),
-            viewModel.newExerciseDefinition,
+            viewModel.definitionForBuilder,
             "newExerciseDefinition should equal a default ExerciseDefinition."
         )
     }
@@ -246,7 +246,7 @@ class LibraryViewModelTest {
         )
 
         viewModel.onEvent(LibraryEvent.OnBodyRegionChanged(testString))
-        val newExerciseDef = viewModel.newExerciseDefinition
+        val newExerciseDef = viewModel.definitionForBuilder
 
         assertTrue(
             newExerciseDef.bodyRegion.lowercase().contains(testString.lowercase()),
@@ -270,7 +270,7 @@ class LibraryViewModelTest {
 
         viewModel.onEvent(LibraryEvent.OnDescriptionChanged(testString))
 
-        val newExerciseDef = viewModel.newExerciseDefinition
+        val newExerciseDef = viewModel.definitionForBuilder
 
         assertEquals(testString, newExerciseDef.description)
     }
@@ -286,7 +286,7 @@ class LibraryViewModelTest {
 
         viewModel.onEvent(LibraryEvent.OnNameChanged(testString))
 
-        val newExerciseDef = viewModel.newExerciseDefinition
+        val newExerciseDef = viewModel.definitionForBuilder
 
         assertEquals(testString, newExerciseDef.exerciseName)
     }
@@ -302,7 +302,7 @@ class LibraryViewModelTest {
 
         viewModel.onEvent(LibraryEvent.OnTargetMusclesChanged(testString))
 
-        val newExerciseDef = viewModel.newExerciseDefinition
+        val newExerciseDef = viewModel.definitionForBuilder
 
         assertEquals(testString, newExerciseDef.targetMuscles)
     }
@@ -409,7 +409,7 @@ class LibraryViewModelTest {
         )
 
         assertNotNull(
-            viewModel.newExerciseDefinition,
+            viewModel.definitionForBuilder,
             "newExerciseDefinition is null, should be ExerciseDefinition."
             )
     }

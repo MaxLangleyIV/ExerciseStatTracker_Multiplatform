@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
@@ -35,6 +36,7 @@ import com.langley.exercisestattracker.core.presentation.composables.BasicBottom
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.library.LibraryEvent
+import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderViewModel
@@ -47,28 +49,35 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun ExerciseBuilderScreen(
+    isVisible: Boolean,
     appModule: AppModule,
+    libraryViewModel: LibraryViewModel,
     libraryOnEvent: (LibraryEvent) -> Unit,
     initialBuilderState: ExerciseBuilderState = ExerciseBuilderState(),
-    isVisible: Boolean,
-    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
+    initialExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
     focusManager: FocusManager,
-    interactionSource: MutableInteractionSource
+    interactionSource: MutableInteractionSource,
 ){
 
-    val exerciseBuilderViewModel = getViewModel(
+    val builderViewModel = getViewModel(
         key = "exerciseBuilderViewModel",
         factory = viewModelFactory {
             ExerciseBuilderViewModel(
                 exerciseAppDataSource = appModule.exerciseAppDataSource,
-                libraryOnEvent = libraryOnEvent
+                libraryViewModel = libraryViewModel,
+                libraryOnEvent = libraryOnEvent,
+                initialExerciseDef = initialExerciseDefinition
             )
         }
     )
 
-    val builderOnEvent = exerciseBuilderViewModel::onEvent
+    val builderState by builderViewModel.state.collectAsState(initialBuilderState)
 
-    val builderState by exerciseBuilderViewModel.state.collectAsState(initialBuilderState)
+    if (initialExerciseDefinition.exerciseName.isNotBlank()){
+        (builderViewModel::onEvent)(
+            ExerciseBuilderEvent.InitializeDefinition(initialExerciseDefinition)
+        )
+    }
 
 
     BasicBottomSheet(
@@ -90,12 +99,26 @@ fun ExerciseBuilderScreen(
             IconButton(
                 onClick = {
                     libraryOnEvent(LibraryEvent.CloseAddDefClicked)
-                    builderOnEvent(ExerciseBuilderEvent.CloseAddDefClicked)
+                    (builderViewModel::onEvent)(ExerciseBuilderEvent.CloseAddDef)
                 }
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
                     contentDescription = "Close"
+                )
+            }
+
+            if (libraryViewModel.state.value.selectedExerciseDefinition != null){
+                Text(
+                    text = "Delete",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp)
+                        .clickable {
+                            (builderViewModel::onEvent)(ExerciseBuilderEvent.DeleteDefinition)
+                            (builderViewModel::onEvent)(ExerciseBuilderEvent.CloseAddDef)
+                                   },
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
                 )
             }
         }
@@ -104,14 +127,25 @@ fun ExerciseBuilderScreen(
         Row(
             modifier = Modifier.fillMaxWidth(),
         ){
-            Text(
-                text = "New Exercise:",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 26.sp,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            if (libraryViewModel.state.value.selectedExerciseDefinition == null){
+                Text(
+                    text = "New Exercise:",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 26.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            } else {
+                Text(
+                    text = "Edit Exercise:",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 26.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
 
         // Name Input
@@ -120,11 +154,11 @@ fun ExerciseBuilderScreen(
         )
         {
             ErrorDisplayingTextField(
-                value = exerciseBuilderViewModel.newExerciseDef.exerciseName,
+                value = builderViewModel.newExerciseDef.exerciseName,
                 placeholder = "Exercise Name",
                 error = builderState.exerciseNameError,
                 onValueChanged = {
-                    builderOnEvent(ExerciseBuilderEvent.OnNameChanged(it))
+                    (builderViewModel::onEvent)(ExerciseBuilderEvent.OnNameChanged(it))
                 },
             )
 
@@ -146,37 +180,37 @@ fun ExerciseBuilderScreen(
         // Content Body
         BodyRegionView(
             state = builderState,
-            newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
-            onEvent = builderOnEvent,
+            newExerciseDefinition = builderViewModel.newExerciseDef,
+            onEvent = builderViewModel::onEvent,
         )
 
         if (builderState.bodyRegion != null && builderState.bodyRegionSubGroup != null){
             TargetMusclesView(
                 state = builderState,
-                newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
-                onEvent = builderOnEvent,
+                newExerciseDefinition = builderViewModel.newExerciseDef,
+                onEvent = builderViewModel::onEvent,
             )
         }
 
         MetricsView(
             state = builderState,
-            newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
-            onEvent = builderOnEvent
+            newExerciseDefinition = builderViewModel.newExerciseDef,
+            onEvent = builderViewModel::onEvent
         )
 
         TagsView(
             state = builderState,
-            newExerciseDefinition = exerciseBuilderViewModel.newExerciseDef,
-            onEvent = builderOnEvent
+            newExerciseDefinition = builderViewModel.newExerciseDef,
+            onEvent = builderViewModel::onEvent
         )
 
         Spacer(Modifier.height(8.dp))
 
         // Bottom Options
         OutlinedTextField(
-            value = exerciseBuilderViewModel.newExerciseDef.description,
+            value = builderViewModel.newExerciseDef.description,
             onValueChange = {
-                builderOnEvent(ExerciseBuilderEvent.OnDescriptionChanged(it))
+                (builderViewModel::onEvent)(ExerciseBuilderEvent.OnDescriptionChanged(it))
             },
             placeholder = {
                 Text(text = "Exercise Description")
@@ -188,8 +222,7 @@ fun ExerciseBuilderScreen(
 
         Button(
             onClick = {
-                builderOnEvent(ExerciseBuilderEvent.SaveOrUpdateDef)
-
+                (builderViewModel::onEvent)(ExerciseBuilderEvent.SaveOrUpdateDef)
             }
         ){
             Text(text = "Save")
@@ -200,7 +233,7 @@ fun ExerciseBuilderScreen(
         Button(
             onClick = {
                 libraryOnEvent(LibraryEvent.CloseAddDefClicked)
-                builderOnEvent(ExerciseBuilderEvent.CloseAddDefClicked)
+                (builderViewModel::onEvent)(ExerciseBuilderEvent.CloseAddDef)
             }
         ){
             Text(text = "Cancel")

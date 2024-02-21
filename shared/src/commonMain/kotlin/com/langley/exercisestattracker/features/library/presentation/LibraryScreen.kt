@@ -21,46 +21,62 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.di.AppModule
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.EditDefinitionDetailsView
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
+import com.langley.exercisestattracker.features.library.LibraryViewModel
+import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.presentation.components.DefinitionDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseLibraryTopBar
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun LibraryScreen(
     modifier: Modifier = Modifier,
     appModule: AppModule,
-    state: LibraryState,
-    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
-    onEvent: (LibraryEvent) -> Unit,
+//    libraryState: LibraryState,
+//    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
+//    onEvent: (LibraryEvent) -> Unit,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
     navController: ExerciseAppNavController
 ) {
+    // View models and related states.
+    val libraryViewModel = getViewModel(
+        key = "libraryViewModel",
+        factory = viewModelFactory {
+            LibraryViewModel(appModule.exerciseAppDataSource)
+        }
+    )
+    val libraryState by libraryViewModel.state.collectAsState(LibraryState())
+
+    val libraryOnEvent = libraryViewModel::onEvent
+
     Scaffold(
         modifier = Modifier,
         floatingActionButton = {
             if (
-                !state.isEditExerciseDefSheetOpen
-                and !state.isAddExerciseDefSheetOpen
-                and !state.isExerciseDetailsSheetOpen
+                !libraryState.isEditExerciseDefSheetOpen
+                and !libraryState.isAddExerciseDefSheetOpen
+                and !libraryState.isExerciseDetailsSheetOpen
                 ){
 
                 FloatingActionButton(
                     onClick = {
                         focusManager.clearFocus()
-                        onEvent(LibraryEvent.AddNewDefClicked)
+                        libraryOnEvent(LibraryEvent.ClearSelectedDef)
+                        libraryOnEvent(LibraryEvent.AddNewDefClicked)
                     },
                     shape = RoundedCornerShape(20.dp)
                 ){
@@ -85,8 +101,8 @@ fun LibraryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(0.dp,16.dp),
-                state = state,
-                onEvent = onEvent,
+                state = libraryState,
+                onEvent = libraryOnEvent,
                 focusManager = focusManager,
                 navController = navController
             )
@@ -100,7 +116,7 @@ fun LibraryScreen(
                 contentPadding = PaddingValues(vertical = 8.dp),
 
                 content = {
-                    items(state.exerciseDefinitions){ exerciseDefinition: ExerciseDefinition ->
+                    items(libraryState.exerciseDefinitions){ exerciseDefinition: ExerciseDefinition ->
                         ExerciseDefinitionListItem(
                             exerciseDefinition,
                             modifier = Modifier
@@ -109,7 +125,7 @@ fun LibraryScreen(
                                 .focusable(true)
                                 .clickable {
                                     focusManager.clearFocus()
-                                    onEvent(LibraryEvent.DefinitionSelected(exerciseDefinition))
+                                    libraryOnEvent(LibraryEvent.DefinitionSelected(exerciseDefinition))
                                 },
                         )
                     }
@@ -118,25 +134,28 @@ fun LibraryScreen(
         }
 
         DefinitionDetailsView(
-            isVisible = state.isExerciseDetailsSheetOpen,
-            onEvent = onEvent,
-            selectedExerciseDefinition = state.selectedExerciseDefinition
+            isVisible = libraryState.isExerciseDetailsSheetOpen,
+            onEvent = libraryOnEvent,
+            selectedExerciseDefinition = libraryState.selectedExerciseDefinition
         )
 
-        EditDefinitionDetailsView(
-            isVisible = state.isEditExerciseDefSheetOpen,
-            state = state,
-            onEvent = onEvent,
-            newExerciseDefinition = newExerciseDefinition,
-            focusManager = focusManager,
-            interactionSource = interactionSource
-        )
+//        EditDefinitionDetailsView(
+//            isVisible = libraryState.isEditExerciseDefSheetOpen,
+//            appModule = appModule,
+//            state = libraryState,
+//            libraryOnEvent = onEvent,
+//            newExerciseDefinition = newExerciseDefinition,
+//            focusManager = focusManager,
+//            interactionSource = interactionSource
+//        )
 
         ExerciseBuilderScreen(
-            isVisible = state.isAddExerciseDefSheetOpen,
+            isVisible = libraryState.isAddExerciseDefSheetOpen,
             appModule = appModule,
-            libraryOnEvent = onEvent,
-            newExerciseDefinition = newExerciseDefinition,
+            libraryViewModel = libraryViewModel,
+            libraryOnEvent = libraryOnEvent,
+            initialExerciseDefinition =
+            libraryState.selectedExerciseDefinition?.copy() ?: ExerciseDefinition(),
             focusManager = focusManager,
             interactionSource = interactionSource,
         )

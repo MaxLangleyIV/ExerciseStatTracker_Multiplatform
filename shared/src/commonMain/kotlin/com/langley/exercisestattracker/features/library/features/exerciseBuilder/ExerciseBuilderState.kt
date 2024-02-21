@@ -1,6 +1,9 @@
 package com.langley.exercisestattracker.features.library.features.exerciseBuilder
 
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+
 data class ExerciseBuilderState(
+    val newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
 
     // Body Region (Sub Group only for upper body as of now).
     val bodyRegion: BodyRegion? = null,

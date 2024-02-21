@@ -30,7 +30,7 @@ class ExerciseBuilderViewModelTest {
                     ExerciseDefinitionDummyData().definitionList
                 ),
                 initialState = initialState,
-                newExerciseDef = newExerciseDefinition,
+                initialExerciseDef = newExerciseDefinition,
                 libraryOnEvent = {}
             )
         }.createViewModel()
