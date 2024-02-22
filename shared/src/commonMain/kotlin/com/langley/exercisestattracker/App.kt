@@ -11,23 +11,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
-import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
-import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
-import com.langley.exercisestattracker.library.LibraryScreen
-import com.langley.exercisestattracker.library.LibraryState
-import com.langley.exercisestattracker.library.LibraryViewModel
-import com.langley.exercisestattracker.home.HomeScreen
-import com.langley.exercisestattracker.home.HomeState
-import com.langley.exercisestattracker.library.LibraryEvent
+import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
+import com.langley.exercisestattracker.di.AppModule
+import com.langley.exercisestattracker.features.home.HomeScreen
+import com.langley.exercisestattracker.features.home.HomeState
+import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
+import com.langley.exercisestattracker.features.records.RecordsScreen
+import com.langley.exercisestattracker.features.records.RecordsState
+import com.langley.exercisestattracker.features.records.RecordsViewModel
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
-import com.langley.exercisestattracker.records.RecordsEvent
-import com.langley.exercisestattracker.records.RecordsScreen
-import com.langley.exercisestattracker.records.RecordsState
-import com.langley.exercisestattracker.records.RecordsViewModel
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
@@ -50,14 +46,14 @@ fun App(
 
 
 
-        // View models and related states.
-        val libraryViewModel = getViewModel(
-            key = "libraryViewModel",
-            factory = viewModelFactory {
-                LibraryViewModel(appModule.exerciseAppDataSource)
-            }
-        )
-        val libraryState by libraryViewModel.state.collectAsState(LibraryState())
+//        // View models and related states.
+//        val libraryViewModel = getViewModel(
+//            key = "libraryViewModel",
+//            factory = viewModelFactory {
+//                LibraryViewModel(appModule.exerciseAppDataSource)
+//            }
+//        )
+//        val libraryState by libraryViewModel.state.collectAsState(LibraryState())
 
         val recordsViewModel = getViewModel(
             key = "recordsViewModel",
@@ -70,8 +66,7 @@ fun App(
 
         // Initialize dummy data for exercise library.
         val exerciseDefDummyData = ExerciseDefinitionDummyData()
-        val exerciseDefList = exerciseDefDummyData
-            .convertDummyDataToExerciseDef(exerciseDefDummyData.dummyDefinitionData)
+        val exerciseDefList = exerciseDefDummyData.definitionList
 
         val exerciseRecordList = exerciseDefDummyData.getListOfDummyExerciseRecords()
 
@@ -92,7 +87,6 @@ fun App(
 //        }
 
 
-        //
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
@@ -103,7 +97,7 @@ fun App(
                 Screen.Home -> {
 
                     HomeScreen(
-                        // This state is a placeholder and the
+                        // This state is a placeholder
                         state = HomeState(),
                         focusRequester = focusRequester,
                         focusManager = focusManager,
@@ -116,9 +110,10 @@ fun App(
                 Screen.Library -> {
 
                     LibraryScreen(
-                        state = libraryState,
-                        newExerciseDefinition = libraryViewModel.newExerciseDefinition,
-                        onEvent = libraryViewModel::onEvent,
+                        appModule = appModule,
+//                        state = libraryState,
+//                        newExerciseDefinition = libraryViewModel.newExerciseDefinition,
+//                        onEvent = libraryViewModel::onEvent,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,

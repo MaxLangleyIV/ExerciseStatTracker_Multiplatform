@@ -1,7 +1,5 @@
 package com.langley.exercisestattracker.core.domain
 
-import com.langley.exercisestattracker.library.ExerciseLibraryFilterType
-
 data class ExerciseRecord(
     val exerciseRecordId: Long?,
     val dateCompleted: Long,

@@ -1,10 +1,9 @@
 package com.langley.exercisestattracker.core.data
 
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
-import com.langley.exercisestattracker.core.domain.ExerciseRecord
-
 
 fun database.ExerciseDefinition.toExerciseDefinition():
         ExerciseDefinition {
@@ -15,14 +14,15 @@ fun database.ExerciseDefinition.toExerciseDefinition():
         bodyRegion = bodyRegion,
         targetMuscles = targetMuscles,
         description = description,
-        isWeighted = isWeighted,
-        isCardio = isCardio,
-        isCalisthenic = isCalisthenic,
-        isTimed = isTimed,
+        isWeighted = isWeighted.toInt() == 1,
+        hasReps = hasReps.toInt() == 1,
+        isCardio = isCardio.toInt() == 1,
+        isCalisthenic = isCalisthenic.toInt() == 1,
+        isTimed = isTimed.toInt() == 1,
         defaultDuration = defaultDuration,
-        hasDistance = 0,
+        hasDistance = hasDistance.toInt() == 1,
         defaultDistance = defaultDistance,
-        isFavorite = isFavorite,
+        isFavorite = isFavorite.toInt() == 1,
         dateCreated = dateCreated
     )
 }
