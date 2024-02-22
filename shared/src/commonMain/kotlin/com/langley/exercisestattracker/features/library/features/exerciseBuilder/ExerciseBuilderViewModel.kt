@@ -37,7 +37,6 @@ class ExerciseBuilderViewModel(
 
         if (newExerciseDef != null){
             println("SELECTED DEF: ${newExerciseDef.exerciseName}")
-            val bodyRegion = generateBodyRegionObjectsFromString(newExerciseDef.bodyRegion)
             _state.update { it.copy(
                 musclesList = newExerciseDef.targetMuscles.split(", "),
                 primaryTargetList = newExerciseDef.bodyRegion.split(", "),
@@ -76,49 +75,6 @@ class ExerciseBuilderViewModel(
         }
     }
 
-    private fun generateBodyRegionString(
-        bodyRegion: BodyRegion?,
-        subGroup: BodyRegionSubGroup?
-    ): String {
-        when(bodyRegion){
-            BodyRegion.Core -> return "Core"
-
-            BodyRegion.Full -> return "Full"
-
-            BodyRegion.Lower -> return "Lower"
-
-            BodyRegion.NotApplicable -> return "Not Applicable"
-
-            BodyRegion.Upper -> {
-                return when (subGroup){
-                    BodyRegionSubGroup.Arms -> "Arms"
-                    BodyRegionSubGroup.Back -> "Back"
-                    BodyRegionSubGroup.Chest -> "Chest"
-                    BodyRegionSubGroup.NotApplicable -> "Not Applicable"
-                    BodyRegionSubGroup.Shoulders -> "Shoulders"
-                    null -> "Upper"
-                }
-            }
-
-            null -> return  "Not Applicable"
-        }
-    }
-
-    private fun generateBodyRegionObjectsFromString(string: String):
-            Pair<BodyRegion, BodyRegionSubGroup?>{
-
-        return when (string) {
-            "Core" -> Pair(BodyRegion.Core, BodyRegionSubGroup.NotApplicable)
-            "Full" -> Pair(BodyRegion.Full, BodyRegionSubGroup.NotApplicable)
-            "Lower" -> Pair(BodyRegion.Lower, BodyRegionSubGroup.NotApplicable)
-            "Arms" -> Pair(BodyRegion.Upper, BodyRegionSubGroup.Arms)
-            "Back" -> Pair(BodyRegion.Upper, BodyRegionSubGroup.Back)
-            "Chest" -> Pair(BodyRegion.Upper, BodyRegionSubGroup.Chest)
-            "Shoulders" -> Pair(BodyRegion.Upper, BodyRegionSubGroup.Shoulders)
-            else -> Pair(BodyRegion.NotApplicable, null)
-        }
-
-    }
 
     private fun toggleStringInList(string: String, list: List<String>?): List<String>{
         if (list.isNullOrEmpty()){
