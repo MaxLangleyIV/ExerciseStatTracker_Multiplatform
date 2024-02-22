@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components
+package com.langley.exercisestattracker.features.exerciseBuilder.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
 
 
 @Composable

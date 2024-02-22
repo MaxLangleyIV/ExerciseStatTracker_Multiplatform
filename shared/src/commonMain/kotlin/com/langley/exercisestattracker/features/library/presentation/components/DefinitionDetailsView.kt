@@ -34,8 +34,8 @@ import com.langley.exercisestattracker.features.library.LibraryEvent
 @Composable
 fun DefinitionDetailsView(
     isVisible: Boolean,
-    selectedExerciseDefinition: ExerciseDefinition?,
-    onEvent: (LibraryEvent) -> Unit
+    selectedExerciseDefinition: ExerciseDefinition,
+    libraryOnEvent: (LibraryEvent) -> Unit,
 )
 {
     BasicBottomSheet(
@@ -51,7 +51,7 @@ fun DefinitionDetailsView(
         {
             IconButton(
                 onClick = {
-                    onEvent(LibraryEvent.CloseDetailsView)
+                    libraryOnEvent(LibraryEvent.CloseDetailsView)
                 }
             ) {
                 Icon(
@@ -62,17 +62,17 @@ fun DefinitionDetailsView(
 
             IconButton(
                 onClick = {
-                    onEvent(LibraryEvent.ToggleIsFavorite(selectedExerciseDefinition!!))
+                    libraryOnEvent(LibraryEvent.ToggleIsFavorite(selectedExerciseDefinition))
                 }
             ) {
                 Icon(
 
                     imageVector =
                     if (
-                        selectedExerciseDefinition != null
-                        && selectedExerciseDefinition.isFavorite
-                        ){ Icons.Filled.Star }
-
+                        selectedExerciseDefinition.isFavorite
+                        ) {
+                        Icons.Filled.Star
+                    }
                     else { Icons.Filled.StarOutline },
 
                     contentDescription = "Favorite"
@@ -85,8 +85,11 @@ fun DefinitionDetailsView(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(16.dp)
                     .clickable {
-                        onEvent(
-                            LibraryEvent.EditDefinition(selectedExerciseDefinition!!)
+//                        defBuilderOnEvent(
+//                            ExerciseBuilderEvent.InitializeDefinition
+//                        )
+                        libraryOnEvent(
+                            LibraryEvent.EditDefinition(selectedExerciseDefinition)
                         ) },
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
@@ -105,7 +108,7 @@ fun DefinitionDetailsView(
             Column()
             {
                 Text(
-                    text = "${selectedExerciseDefinition?.exerciseName}",
+                    text = selectedExerciseDefinition.exerciseName,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Bold,
@@ -156,7 +159,7 @@ fun DefinitionDetailsView(
                 Column()
                 {
                     Text(
-                        text = "${selectedExerciseDefinition?.bodyRegion}",
+                        text = selectedExerciseDefinition.bodyRegion,
                         textAlign = TextAlign.Center,
                         modifier = Modifier,
                         fontWeight = FontWeight.Normal,
@@ -193,7 +196,7 @@ fun DefinitionDetailsView(
                 Column()
                 {
                     Text(
-                        text = "${selectedExerciseDefinition?.targetMuscles}",
+                        text = selectedExerciseDefinition.targetMuscles,
                         textAlign = TextAlign.Center,
                         modifier = Modifier,
                         fontWeight = FontWeight.Normal,
@@ -206,7 +209,7 @@ fun DefinitionDetailsView(
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = "${selectedExerciseDefinition?.description}",
+                text = selectedExerciseDefinition.description,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 fontWeight = FontWeight.Normal,

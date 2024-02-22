@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation
+package com.langley.exercisestattracker.features.exerciseBuilder.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,30 +31,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
 import com.langley.exercisestattracker.di.AppModule
-import com.langley.exercisestattracker.features.library.LibraryViewModel
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderViewModel
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components.BodyRegionView
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components.MetricsView
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components.TagsView
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components.TargetMusclesView
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderViewModel
+import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.BodyRegionView
+import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.MetricsView
+import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.TagsView
+import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.TargetMusclesView
+import com.langley.exercisestattracker.features.library.LibraryEvent
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun ExerciseBuilderScreen(
-    isVisible: Boolean,
     appModule: AppModule,
-    libraryViewModel: LibraryViewModel,
-//    libraryOnEvent: (LibraryEvent) -> Unit,
+    selectedExercise: ExerciseDefinition? = null,
+    libraryOnEvent: (LibraryEvent) -> Unit,
     initialBuilderState: ExerciseBuilderState = ExerciseBuilderState(),
-//    initialExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
+    isVisible: Boolean
 ){
 
     val builderViewModel = getViewModel(
@@ -62,20 +62,20 @@ fun ExerciseBuilderScreen(
         factory = viewModelFactory {
             ExerciseBuilderViewModel(
                 exerciseAppDataSource = appModule.exerciseAppDataSource,
-                libraryViewModel = libraryViewModel,
-//                libraryOnEvent = libraryOnEvent,
-//                initialExerciseDef = initialExerciseDefinition
+                libraryOnEvent = libraryOnEvent,
             )
         }
     )
 
     val builderState by builderViewModel.state.collectAsState(initialBuilderState)
 
-    if (isVisible){
-        println("INITIALIZING BUILD SCREEN")
-        (builderViewModel::onEvent)(ExerciseBuilderEvent.InitializeDefinition)
+    if (selectedExercise != null && isVisible){
+        if (!builderState.initialized){
+            println("INITIALIZING BUILD SCREEN")
+            (builderViewModel::onEvent)(ExerciseBuilderEvent.InitializeDefinition(selectedExercise))
+            (builderViewModel::onEvent)(ExerciseBuilderEvent.DeclareAsInitialized)
+        }
     }
-
 
 
     BasicBottomSheet(
@@ -96,7 +96,6 @@ fun ExerciseBuilderScreen(
         {
             IconButton(
                 onClick = {
-//                    libraryOnEvent(LibraryEvent.CloseAddDefClicked)
                     (builderViewModel::onEvent)(ExerciseBuilderEvent.CloseAddDef)
                 }
             ) {
@@ -106,7 +105,7 @@ fun ExerciseBuilderScreen(
                 )
             }
 
-            if (libraryViewModel.state.value.selectedExerciseDefinition != null){
+            if (selectedExercise != null){
                 Text(
                     text = "Delete",
                     textAlign = TextAlign.Center,
@@ -125,7 +124,7 @@ fun ExerciseBuilderScreen(
         Row(
             modifier = Modifier.fillMaxWidth(),
         ){
-            if (libraryViewModel.state.value.selectedExerciseDefinition == null){
+            if (selectedExercise == null){
                 Text(
                     text = "New Exercise:",
                     textAlign = TextAlign.Center,
@@ -178,28 +177,24 @@ fun ExerciseBuilderScreen(
         // Content Body
         BodyRegionView(
             state = builderState,
-//            newExerciseDefinition = builderViewModel.newExerciseDef,
-            onEvent = builderViewModel::onEvent,
+            onEvent = builderViewModel::onEvent
         )
 
-//        if (builderState.bodyRegion != null && builderState.bodyRegionSubGroup != null){
+
         if (!builderState.primaryTargetList.isNullOrEmpty()){
             TargetMusclesView(
                 state = builderState,
-//                newExerciseDefinition = builderViewModel.newExerciseDef,
-                onEvent = builderViewModel::onEvent,
+                onEvent = builderViewModel::onEvent
             )
         }
 
         MetricsView(
             state = builderState,
-//            newExerciseDefinition = builderViewModel.newExerciseDef,
             onEvent = builderViewModel::onEvent
         )
 
         TagsView(
             state = builderState,
-//            newExerciseDefinition = builderViewModel.newExerciseDef,
             onEvent = builderViewModel::onEvent
         )
 
@@ -231,13 +226,11 @@ fun ExerciseBuilderScreen(
 
         Button(
             onClick = {
-//                libraryOnEvent(LibraryEvent.CloseAddDefClicked)
                 (builderViewModel::onEvent)(ExerciseBuilderEvent.CloseAddDef)
             }
         ){
             Text(text = "Cancel")
         }
-
     }
 }
 

@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components
+package com.langley.exercisestattracker.features.exerciseBuilder.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,8 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.data.TargetMuscles
 import com.langley.exercisestattracker.core.presentation.composables.DropdownToggle
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
+import com.langley.exercisestattracker.features.exerciseBuilder.utils.filterTargetMuscles
 
 @Composable
 fun TargetMusclesView(
@@ -45,7 +46,6 @@ fun TargetMusclesView(
     verticalArrangement = Arrangement.SpaceEvenly
     ){
         val listIsVisible = remember { mutableStateOf(false) }
-        val musclesMap = remember { mutableStateOf(TargetMuscles().musclesMap) }
 
         val fullMusclesList = remember { mutableStateOf(
             TargetMuscles().coreMuscles
@@ -61,71 +61,9 @@ fun TargetMusclesView(
             currentMusclesList.value = fullMusclesList.value
         }
         else {
-
-            var regions = state.primaryTargetList
-            val newCurrentList = mutableListOf<String>()
-
-
-            if (
-                regions.contains("Upper Body")
-                && (regions.contains("Arms")
-                        || regions.contains("Back")
-                        || regions.contains("Chest")
-                        || regions.contains("Shoulders")
-                        )
-                ) { regions = regions.filter { it != "Upper Body" }}
-
-            for (region in regions){
-
-
-                newCurrentList.addAll(musclesMap.value.getValue(region.lowercase()))
-            }
-
-            currentMusclesList.value = newCurrentList.toSet().toList()
+            currentMusclesList.value = filterTargetMuscles(state.primaryTargetList)
         }
 
-
-
-//        when(state.bodyRegion){
-//            BodyRegion.Core -> {
-//                currentMusclesList.value = TargetMuscles().coreMuscles
-//            }
-//            BodyRegion.Lower -> {
-//                currentMusclesList.value = TargetMuscles().lowerMuscles
-//            }
-//            BodyRegion.NotApplicable -> {
-//                currentMusclesList.value = listOf("Not Applicable")
-//            }
-//            BodyRegion.Upper -> {
-//                when (state.bodyRegionSubGroup){
-//                    BodyRegionSubGroup.Arms -> {
-//                        currentMusclesList.value = TargetMuscles().armMuscles
-//                    }
-//                    BodyRegionSubGroup.Back -> {
-//                        currentMusclesList.value = TargetMuscles().backMuscles
-//                    }
-//                    BodyRegionSubGroup.Chest -> {
-//                        currentMusclesList.value = TargetMuscles().chestMuscles
-//                    }
-//                    BodyRegionSubGroup.NotApplicable -> {
-//                        currentMusclesList.value = listOf("Not Applicable")
-//                    }
-//                    BodyRegionSubGroup.Shoulders -> {
-//                        currentMusclesList.value = TargetMuscles().shoulderMuscles
-//                    }
-//                    null -> {}
-//                }
-//            }
-//
-//            BodyRegion.Full -> {
-//                currentMusclesList.value = fullMusclesList.value
-//            }
-//
-//            null -> {
-//                currentMusclesList.value = listOf("Not Applicable")
-//            }
-//
-//        }
 
         // Section Title Row
         Row(
@@ -151,32 +89,16 @@ fun TargetMusclesView(
 
         // Target Muscles List
         if (listIsVisible.value){
-//            LazyRow {
-//                items(currentMusclesList.value){
-//                    val textSize = if (it.length >= 8){ 16.sp } else { 18.sp }
-//
-//                    SelectableTextBoxWithEvent(
-//                        text = it,
-//                        textSize = textSize,
-//                        isClicked = state.musclesList?.contains(it) ?: false,
-//                        onEvent = onEvent,
-//                        event = ExerciseBuilderEvent.ToggleTargetMuscle(it),
-//                    )
-//
-//                    Spacer(Modifier.width(8.dp))
-//                }
-//            }
+
             LazyColumn(
                 modifier = Modifier.heightIn(min = 0.dp, max = 300.dp)
             ) {
                 items(currentMusclesList.value){
-//                    val textSize = if (it.length >= 8){ 16.sp } else { 18.sp }
 
                     SelectableTextBoxWithEvent(
                         modifier = Modifier.fillMaxWidth()
                             .height(44.dp),
                         text = it,
-//                        textSize = textSize,
                         isClicked = state.musclesList?.contains(it) ?: false,
                         onEvent = onEvent,
                         event = ExerciseBuilderEvent.ToggleTargetMuscle(it),

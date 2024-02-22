@@ -29,10 +29,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.di.AppModule
+import com.langley.exercisestattracker.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.LibraryViewModel
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.presentation.components.DefinitionDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseLibraryTopBar
@@ -44,24 +44,35 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 fun LibraryScreen(
     modifier: Modifier = Modifier,
     appModule: AppModule,
-//    libraryState: LibraryState,
-//    newExerciseDefinition: ExerciseDefinition = ExerciseDefinition(),
-//    onEvent: (LibraryEvent) -> Unit,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
     navController: ExerciseAppNavController
 ) {
-    // View models and related states.
     val libraryViewModel = getViewModel(
         key = "libraryViewModel",
         factory = viewModelFactory {
             LibraryViewModel(appModule.exerciseAppDataSource)
         }
     )
+
     val libraryState by libraryViewModel.state.collectAsState(LibraryState())
 
-    val libraryOnEvent = libraryViewModel::onEvent
+//    val defBuilderViewModel = getViewModel(
+//        key = "exerciseBuilderViewModel",
+//        factory = viewModelFactory {
+//            ExerciseBuilderViewModel(
+//                exerciseAppDataSource = appModule.exerciseAppDataSource,
+////                libraryState = libraryState,
+////                libraryOnEvent = libraryOnEvent
+//                libraryViewModel = libraryViewModel,
+////                libraryOnEvent = libraryOnEvent,
+////                initialExerciseDef = initialExerciseDefinition
+//            )
+//        }
+//    )
+
+//    val exerciseBuilderState by defBuilderViewModel.state.collectAsState(ExerciseBuilderState())
 
     Scaffold(
         modifier = Modifier,
@@ -75,8 +86,8 @@ fun LibraryScreen(
                 FloatingActionButton(
                     onClick = {
                         focusManager.clearFocus()
-                        libraryOnEvent(LibraryEvent.ClearSelectedDef)
-                        libraryOnEvent(LibraryEvent.AddNewDefClicked)
+                        (libraryViewModel::onEvent)(LibraryEvent.ClearSelectedDef)
+                        (libraryViewModel::onEvent)(LibraryEvent.AddNewDefClicked)
                     },
                     shape = RoundedCornerShape(20.dp)
                 ){
@@ -102,7 +113,7 @@ fun LibraryScreen(
                     .fillMaxWidth()
                     .padding(0.dp,16.dp),
                 state = libraryState,
-                onEvent = libraryOnEvent,
+                onEvent = libraryViewModel::onEvent,
                 focusManager = focusManager,
                 navController = navController
             )
@@ -125,7 +136,7 @@ fun LibraryScreen(
                                 .focusable(true)
                                 .clickable {
                                     focusManager.clearFocus()
-                                    libraryOnEvent(LibraryEvent.DefinitionSelected(exerciseDefinition))
+                                    (libraryViewModel::onEvent)(LibraryEvent.DefinitionSelected(exerciseDefinition))
                                 },
                         )
                     }
@@ -135,28 +146,22 @@ fun LibraryScreen(
 
         DefinitionDetailsView(
             isVisible = libraryState.isExerciseDetailsSheetOpen,
-            onEvent = libraryOnEvent,
-            selectedExerciseDefinition = libraryState.selectedExerciseDefinition
+            libraryOnEvent = libraryViewModel::onEvent,
+//            defBuilderOnEvent = defBuilderViewModel::onEvent,
+            selectedExerciseDefinition =
+            libraryState.selectedExerciseDefinition?: ExerciseDefinition()
         )
 
-//        EditDefinitionDetailsView(
-//            isVisible = libraryState.isEditExerciseDefSheetOpen,
-//            appModule = appModule,
-//            state = libraryState,
-//            libraryOnEvent = onEvent,
-//            newExerciseDefinition = newExerciseDefinition,
-//            focusManager = focusManager,
-//            interactionSource = interactionSource
-//        )
 
         ExerciseBuilderScreen(
-            isVisible = libraryState.isAddExerciseDefSheetOpen,
             appModule = appModule,
+            isVisible = libraryState.isAddExerciseDefSheetOpen,
+            selectedExercise = libraryState.selectedExerciseDefinition,
+            libraryOnEvent = libraryViewModel::onEvent,
 //            libraryState = libraryState,
-            libraryViewModel = libraryViewModel,
-//            libraryOnEvent = libraryOnEvent,
-//            initialExerciseDefinition =
-//            libraryState.selectedExerciseDefinition?.copy() ?: ExerciseDefinition(),
+//            libraryOnEvent = libraryViewModel::onEvent,
+//            builderState = exerciseBuilderState,
+//            builderOnEvent = defBuilderViewModel::onEvent,
             focusManager = focusManager,
             interactionSource = interactionSource,
         )

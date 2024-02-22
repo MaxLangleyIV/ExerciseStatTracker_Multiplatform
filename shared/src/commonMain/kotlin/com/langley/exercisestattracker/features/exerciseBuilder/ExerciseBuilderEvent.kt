@@ -1,4 +1,6 @@
-package com.langley.exercisestattracker.features.library.features.exerciseBuilder
+package com.langley.exercisestattracker.features.exerciseBuilder
+
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 
 sealed interface ExerciseBuilderEvent {
 
@@ -13,7 +15,8 @@ sealed interface ExerciseBuilderEvent {
 
     data class OnNameChanged(val value: String) : ExerciseBuilderEvent
     data class OnDescriptionChanged(val value: String) : ExerciseBuilderEvent
-    data object InitializeDefinition : ExerciseBuilderEvent
+    data class InitializeDefinition(val value: ExerciseDefinition) : ExerciseBuilderEvent
+    data object DeclareAsInitialized : ExerciseBuilderEvent
 
     data object ToggleIsWeighted : ExerciseBuilderEvent
     data object SaveOrUpdateDef : ExerciseBuilderEvent

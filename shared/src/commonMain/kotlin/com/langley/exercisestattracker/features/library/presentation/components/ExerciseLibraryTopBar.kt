@@ -48,6 +48,7 @@ fun ExerciseLibraryTopBar(
         modifier = modifier
     ){
 
+        // Filter
         Column(
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -148,18 +149,19 @@ fun ExerciseLibraryTopBar(
             }
         }
 
+        // Search Bar
         Column(
             modifier = Modifier.align(Alignment.Center)
         ) {
             BasicSearchBar(
-                state,
+                state = state,
                 modifier = Modifier.width(256.dp),
-                query = state.searchString,
                 onEvent = onEvent,
                 isDropdownOpen = state.isSearchDropdownOpen
             )
         }
 
+        // Clear button
         if (state.searchString != "" || state.searchFilterType != null){
             Column(
                 modifier = Modifier

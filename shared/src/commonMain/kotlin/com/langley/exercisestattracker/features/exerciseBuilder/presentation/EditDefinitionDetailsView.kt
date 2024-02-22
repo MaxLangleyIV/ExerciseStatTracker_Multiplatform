@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation
+package com.langley.exercisestattracker.features.exerciseBuilder.presentation
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
