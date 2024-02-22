@@ -389,12 +389,7 @@ class ExerciseBuilderViewModel(
                     toggleStringInList(event.bodyRegion,_state.value.primaryTargetList)
                 ) }
             }
-
-            is ExerciseBuilderEvent.ToggleBodyRegionSubGroup -> {
-                _state.update { it.copy(
-                    bodyRegionSubGroup = toggleBodyRegionSubGroup(event.subGroup)
-                ) }
-            }
+            
 
             is ExerciseBuilderEvent.ToggleTargetMuscle -> {
 //                toggleTargetMuscleInList(event.value)
