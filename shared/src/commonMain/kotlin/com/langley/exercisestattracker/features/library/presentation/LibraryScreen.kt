@@ -58,21 +58,6 @@ fun LibraryScreen(
 
     val libraryState by libraryViewModel.state.collectAsState(LibraryState())
 
-//    val defBuilderViewModel = getViewModel(
-//        key = "exerciseBuilderViewModel",
-//        factory = viewModelFactory {
-//            ExerciseBuilderViewModel(
-//                exerciseAppDataSource = appModule.exerciseAppDataSource,
-////                libraryState = libraryState,
-////                libraryOnEvent = libraryOnEvent
-//                libraryViewModel = libraryViewModel,
-////                libraryOnEvent = libraryOnEvent,
-////                initialExerciseDef = initialExerciseDefinition
-//            )
-//        }
-//    )
-
-//    val exerciseBuilderState by defBuilderViewModel.state.collectAsState(ExerciseBuilderState())
 
     Scaffold(
         modifier = Modifier,
@@ -147,7 +132,6 @@ fun LibraryScreen(
         DefinitionDetailsView(
             isVisible = libraryState.isExerciseDetailsSheetOpen,
             libraryOnEvent = libraryViewModel::onEvent,
-//            defBuilderOnEvent = defBuilderViewModel::onEvent,
             selectedExerciseDefinition =
             libraryState.selectedExerciseDefinition?: ExerciseDefinition()
         )
@@ -158,10 +142,6 @@ fun LibraryScreen(
             isVisible = libraryState.isAddExerciseDefSheetOpen,
             selectedExercise = libraryState.selectedExerciseDefinition,
             libraryOnEvent = libraryViewModel::onEvent,
-//            libraryState = libraryState,
-//            libraryOnEvent = libraryViewModel::onEvent,
-//            builderState = exerciseBuilderState,
-//            builderOnEvent = defBuilderViewModel::onEvent,
             focusManager = focusManager,
             interactionSource = interactionSource,
         )
