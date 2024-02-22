@@ -11,7 +11,7 @@ class ExerciseDefinitionDummyData {
         ExerciseDefinition(
             exerciseDefinitionId = 0,
             exerciseName = "Barbell Squat",
-            bodyRegion = "Legs",
+            bodyRegion = "Lower Body",
             targetMuscles = "Quadriceps, Hamstrings, Glutes, Calves, Lower Back, Core",
             description = "The barbell squat is a compound exercise that primarily targets the muscles of the lower body. It is often considered the king of all leg exercises.",
             isWeighted = true,
@@ -28,7 +28,7 @@ class ExerciseDefinitionDummyData {
         ExerciseDefinition(
             exerciseDefinitionId = 1,
             exerciseName = "Barbell Deadlift",
-            bodyRegion = "Back",
+            bodyRegion = "Lower Body, Upper Body, Back",
             targetMuscles = "Lower Back, Glutes, Hamstrings, Forearms, Grip Strength",
             description = "The barbell deadlift is a compound exercise that involves lifting a loaded barbell from the ground to a standing position. It targets multiple muscle groups and is an excellent strength-building exercise.",
             isWeighted = true,
@@ -504,7 +504,7 @@ class ExerciseDefinitionDummyData {
         ExerciseDefinition(
             exerciseDefinitionId = 29,
             exerciseName = "Treadmill Running",
-            bodyRegion = "Legs, Cardiovascular",
+            bodyRegion = "Lower Body",
             targetMuscles = "Quadriceps, Hamstrings, Calves",
             description = "Treadmill running is a popular cardiovascular exercise that primarily targets the muscles of the legs and improves cardiovascular endurance. It involves running on a motorized treadmill at various speeds and inclines.",
             isWeighted = false,
@@ -521,7 +521,7 @@ class ExerciseDefinitionDummyData {
         ExerciseDefinition(
             exerciseDefinitionId = 30,
             exerciseName = "Stationary Bike",
-            bodyRegion = "Legs, Cardiovascular",
+            bodyRegion = "Lower Body",
             targetMuscles = "Quadriceps, Hamstrings, Calves",
             description = "The stationary bike is a low-impact cardiovascular exercise that primarily targets the muscles of the legs. It involves pedaling on a stationary bike at various resistance levels to simulate outdoor cycling.",
             isWeighted = false,

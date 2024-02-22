@@ -54,7 +54,7 @@ fun BodyRegionView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 8.dp),
-                text = "Body Region:",
+                text = "Primary Target:",
                 textAlign = TextAlign.Left,
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )

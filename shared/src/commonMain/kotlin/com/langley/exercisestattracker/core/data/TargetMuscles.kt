@@ -40,11 +40,18 @@ data class TargetMuscles(
     ),
 
     val musclesMap: Map<String,List<String>> = mapOf(
+        "upper body" to armMuscles + backMuscles + chestMuscles + shoulderMuscles,
         "arms" to armMuscles,
         "back" to backMuscles,
         "chest" to chestMuscles,
         "core" to coreMuscles,
-        "lower" to lowerMuscles,
-        "shoulders" to shoulderMuscles
+        "lower body" to lowerMuscles,
+        "shoulders" to shoulderMuscles,
+        "full body" to armMuscles
+                + backMuscles
+                + chestMuscles
+                + shoulderMuscles
+                + coreMuscles
+                + lowerMuscles
     )
 )

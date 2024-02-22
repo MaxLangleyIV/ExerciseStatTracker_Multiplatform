@@ -31,13 +31,11 @@ class ExerciseBuilderViewModelTest {
                     ExerciseDefinitionDummyData().definitionList
                 ),
                 initialState = initialState,
-                initialExerciseDef = newExerciseDefinition,
                 libraryViewModel =
                 viewModelFactory {
                     LibraryViewModel(
                         TestExerciseAppDataSource(ExerciseDefinitionDummyData().definitionList)
                     ) }.createViewModel(),
-                libraryOnEvent = {}
             )
         }.createViewModel()
 

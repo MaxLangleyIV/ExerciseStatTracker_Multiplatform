@@ -40,8 +40,7 @@ class ExerciseBuilderViewModel(
             val bodyRegion = generateBodyRegionObjectsFromString(newExerciseDef.bodyRegion)
             _state.update { it.copy(
                 musclesList = newExerciseDef.targetMuscles.split(", "),
-                bodyRegion = bodyRegion.first,
-                bodyRegionSubGroup = bodyRegion.second,
+                primaryTargetList = newExerciseDef.bodyRegion.split(", "),
                 newExerciseDefinition = newExerciseDef
             ) }
             println("NEW DEF: ${_state.value.newExerciseDefinition.exerciseName}")
@@ -49,6 +48,7 @@ class ExerciseBuilderViewModel(
         else {
             _state.update { it.copy(
                 newExerciseDefinition = ExerciseDefinition(),
+                primaryTargetList = null,
                 musclesList = null,
                 bodyRegion = null,
                 bodyRegionSubGroup = null,
@@ -275,6 +275,7 @@ class ExerciseBuilderViewModel(
                         _state.update {it.copy(
                             bodyRegion = null,
                             bodyRegionSubGroup = null,
+                            primaryTargetList = null,
                             musclesList = null,
                             newExerciseDefinition = ExerciseDefinition(),
                             exerciseNameError = null,
@@ -303,6 +304,7 @@ class ExerciseBuilderViewModel(
                         exerciseTargetMusclesError = null,
                         bodyRegion = null,
                         bodyRegionSubGroup = null,
+                        primaryTargetList = null,
                         musclesList = null,
                         newExerciseDefinition = ExerciseDefinition()
                     ) }

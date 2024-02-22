@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,7 +57,34 @@ fun TargetMusclesView(
         ) }
         val currentMusclesList = remember { mutableStateOf( listOf("") ) }
 
-        currentMusclesList.value = fullMusclesList.value
+        if (state.primaryTargetList.isNullOrEmpty()){
+            currentMusclesList.value = fullMusclesList.value
+        }
+        else {
+
+            var regions = state.primaryTargetList
+            val newCurrentList = mutableListOf<String>()
+
+
+            if (
+                regions.contains("Upper Body")
+                && (regions.contains("Arms")
+                        || regions.contains("Back")
+                        || regions.contains("Chest")
+                        || regions.contains("Shoulders")
+                        )
+                ) { regions = regions.filter { it != "Upper Body" }}
+
+            for (region in regions){
+
+
+                newCurrentList.addAll(musclesMap.value.getValue(region.lowercase()))
+            }
+
+            currentMusclesList.value = newCurrentList.toSet().toList()
+        }
+
+
 
 //        when(state.bodyRegion){
 //            BodyRegion.Core -> {
@@ -139,12 +166,15 @@ fun TargetMusclesView(
 //                    Spacer(Modifier.width(8.dp))
 //                }
 //            }
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.heightIn(min = 0.dp, max = 300.dp)
+            ) {
                 items(currentMusclesList.value){
 //                    val textSize = if (it.length >= 8){ 16.sp } else { 18.sp }
 
                     SelectableTextBoxWithEvent(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
+                            .height(44.dp),
                         text = it,
 //                        textSize = textSize,
                         isClicked = state.musclesList?.contains(it) ?: false,
@@ -152,7 +182,7 @@ fun TargetMusclesView(
                         event = ExerciseBuilderEvent.ToggleTargetMuscle(it),
                     )
 
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.height(12.dp))
                 }
             }
         }
