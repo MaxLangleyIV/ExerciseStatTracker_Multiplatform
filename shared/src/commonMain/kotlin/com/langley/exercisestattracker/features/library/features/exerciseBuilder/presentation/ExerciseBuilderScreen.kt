@@ -182,7 +182,8 @@ fun ExerciseBuilderScreen(
             onEvent = builderViewModel::onEvent,
         )
 
-        if (builderState.bodyRegion != null && builderState.bodyRegionSubGroup != null){
+//        if (builderState.bodyRegion != null && builderState.bodyRegionSubGroup != null){
+        if (!builderState.primaryTargetList.isNullOrEmpty()){
             TargetMusclesView(
                 state = builderState,
 //                newExerciseDefinition = builderViewModel.newExerciseDef,

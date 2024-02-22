@@ -20,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegion
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
 
@@ -67,7 +66,7 @@ fun BodyRegionView(
             ) {
                 SelectableTextBoxWithEvent(
                     text = "Upper",
-                    isClicked = state.bodyRegion == BodyRegion.Upper,
+                    isClicked = state.primaryTargetList?.contains("Upper Body") ?: false,
                     onEvent = onEvent,
 //                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Upper)
                     event = ExerciseBuilderEvent.ToggleBodyRegion("Upper Body")
@@ -77,7 +76,7 @@ fun BodyRegionView(
 
                 SelectableTextBoxWithEvent(
                     text = "Lower",
-                    isClicked = state.bodyRegion == BodyRegion.Lower,
+                    isClicked = state.primaryTargetList?.contains("Lower Body") ?: false,
                     onEvent = onEvent,
 //                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Lower)
                     event = ExerciseBuilderEvent.ToggleBodyRegion("Lower Body")
@@ -87,7 +86,7 @@ fun BodyRegionView(
 
                 SelectableTextBoxWithEvent(
                     text = "Core",
-                    isClicked = state.bodyRegion == BodyRegion.Core,
+                    isClicked = state.primaryTargetList?.contains("Core") ?: false,
                     onEvent = onEvent,
 //                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Core)
                     event = ExerciseBuilderEvent.ToggleBodyRegion("Core")
@@ -97,7 +96,7 @@ fun BodyRegionView(
 
                 SelectableTextBoxWithEvent(
                     text = "Full",
-                    isClicked = state.bodyRegion == BodyRegion.Full,
+                    isClicked = state.primaryTargetList?.contains("Full Body") ?: false,
                     onEvent = onEvent,
 //                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Full)
                     event = ExerciseBuilderEvent.ToggleBodyRegion("Full Body")

@@ -25,15 +25,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.data.TargetMuscles
 import com.langley.exercisestattracker.core.presentation.composables.DropdownToggle
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegion
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.BodyRegionSubGroup
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
 
 @Composable
 fun TargetMusclesView(
     state: ExerciseBuilderState,
-//    newExerciseDefinition: ExerciseDefinition,
     onEvent: (ExerciseBuilderEvent) -> Unit,
 ) {
     // Target Muscles Row
@@ -48,6 +45,7 @@ fun TargetMusclesView(
     verticalArrangement = Arrangement.SpaceEvenly
     ){
         val listIsVisible = remember { mutableStateOf(false) }
+        val musclesMap = remember { mutableStateOf(TargetMuscles().musclesMap) }
 
         val fullMusclesList = remember { mutableStateOf(
             TargetMuscles().coreMuscles
@@ -59,46 +57,48 @@ fun TargetMusclesView(
         ) }
         val currentMusclesList = remember { mutableStateOf( listOf("") ) }
 
-        when(state.bodyRegion){
-            BodyRegion.Core -> {
-                currentMusclesList.value = TargetMuscles().coreMuscles
-            }
-            BodyRegion.Lower -> {
-                currentMusclesList.value = TargetMuscles().lowerMuscles
-            }
-            BodyRegion.NotApplicable -> {
-                currentMusclesList.value = listOf("Not Applicable")
-            }
-            BodyRegion.Upper -> {
-                when (state.bodyRegionSubGroup){
-                    BodyRegionSubGroup.Arms -> {
-                        currentMusclesList.value = TargetMuscles().armMuscles
-                    }
-                    BodyRegionSubGroup.Back -> {
-                        currentMusclesList.value = TargetMuscles().backMuscles
-                    }
-                    BodyRegionSubGroup.Chest -> {
-                        currentMusclesList.value = TargetMuscles().chestMuscles
-                    }
-                    BodyRegionSubGroup.NotApplicable -> {
-                        currentMusclesList.value = listOf("Not Applicable")
-                    }
-                    BodyRegionSubGroup.Shoulders -> {
-                        currentMusclesList.value = TargetMuscles().shoulderMuscles
-                    }
-                    null -> {}
-                }
-            }
+        currentMusclesList.value = fullMusclesList.value
 
-            BodyRegion.Full -> {
-                currentMusclesList.value = fullMusclesList.value
-            }
-
-            null -> {
-                currentMusclesList.value = listOf("Not Applicable")
-            }
-
-        }
+//        when(state.bodyRegion){
+//            BodyRegion.Core -> {
+//                currentMusclesList.value = TargetMuscles().coreMuscles
+//            }
+//            BodyRegion.Lower -> {
+//                currentMusclesList.value = TargetMuscles().lowerMuscles
+//            }
+//            BodyRegion.NotApplicable -> {
+//                currentMusclesList.value = listOf("Not Applicable")
+//            }
+//            BodyRegion.Upper -> {
+//                when (state.bodyRegionSubGroup){
+//                    BodyRegionSubGroup.Arms -> {
+//                        currentMusclesList.value = TargetMuscles().armMuscles
+//                    }
+//                    BodyRegionSubGroup.Back -> {
+//                        currentMusclesList.value = TargetMuscles().backMuscles
+//                    }
+//                    BodyRegionSubGroup.Chest -> {
+//                        currentMusclesList.value = TargetMuscles().chestMuscles
+//                    }
+//                    BodyRegionSubGroup.NotApplicable -> {
+//                        currentMusclesList.value = listOf("Not Applicable")
+//                    }
+//                    BodyRegionSubGroup.Shoulders -> {
+//                        currentMusclesList.value = TargetMuscles().shoulderMuscles
+//                    }
+//                    null -> {}
+//                }
+//            }
+//
+//            BodyRegion.Full -> {
+//                currentMusclesList.value = fullMusclesList.value
+//            }
+//
+//            null -> {
+//                currentMusclesList.value = listOf("Not Applicable")
+//            }
+//
+//        }
 
         // Section Title Row
         Row(

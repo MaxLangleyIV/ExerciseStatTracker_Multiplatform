@@ -236,11 +236,17 @@ class ExerciseBuilderViewModel(
 
                 _state.update { it.copy(
                     newExerciseDefinition = _state.value.newExerciseDefinition.copy(
-                        bodyRegion = generateBodyRegionString(
-                            _state.value.bodyRegion,
-                            _state.value.bodyRegionSubGroup
-                        ),
-                        targetMuscles = generateTargetMusclesString()
+//                        bodyRegion = generateBodyRegionString(
+//                            _state.value.bodyRegion,
+//                            _state.value.bodyRegionSubGroup
+//                        ),
+//                        targetMuscles = generateTargetMusclesString()
+                        bodyRegion =
+                        _state.value
+                            .primaryTargetList?.joinToString(", ")?: "Not Specified",
+                        targetMuscles =
+                        _state.value
+                            .musclesList?.joinToString(", ")?: "Not Specified"
                     )
                 ) }
 
