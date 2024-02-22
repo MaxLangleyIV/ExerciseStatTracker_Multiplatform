@@ -66,7 +66,15 @@ fun DefinitionDetailsView(
                 }
             ) {
                 Icon(
-                    imageVector = if (selectedExerciseDefinition != null && selectedExerciseDefinition.isFavorite){ Icons.Filled.Star } else { Icons.Filled.StarOutline },
+
+                    imageVector =
+                    if (
+                        selectedExerciseDefinition != null
+                        && selectedExerciseDefinition.isFavorite
+                        ){ Icons.Filled.Star }
+
+                    else { Icons.Filled.StarOutline },
+
                     contentDescription = "Favorite"
                 )
 
