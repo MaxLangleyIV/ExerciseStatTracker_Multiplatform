@@ -132,7 +132,7 @@ fun LibraryScreen(
         DefinitionDetailsView(
             isVisible = libraryState.isExerciseDetailsSheetOpen,
             libraryOnEvent = libraryViewModel::onEvent,
-            selectedExerciseDefinition =
+            definition =
             libraryState.selectedExerciseDefinition?: ExerciseDefinition()
         )
 
