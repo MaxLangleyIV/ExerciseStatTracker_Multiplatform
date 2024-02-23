@@ -79,6 +79,7 @@ fun ExerciseLibraryTopBar(
                     DropdownMenuItem(
                         text = { Text("Favorite") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 LibraryEvent
                                     .SetCurrentFilterType(ExerciseLibraryFilterType.Favorite())
@@ -91,6 +92,7 @@ fun ExerciseLibraryTopBar(
                     DropdownMenuItem(
                         text = { Text("Barbell") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 LibraryEvent
                                     .SetCurrentFilterType(ExerciseLibraryFilterType.Barbell())
@@ -103,6 +105,7 @@ fun ExerciseLibraryTopBar(
                     DropdownMenuItem(
                         text = { Text("Dumbbell") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 LibraryEvent
                                     .SetCurrentFilterType(ExerciseLibraryFilterType.Dumbbell())
@@ -115,6 +118,7 @@ fun ExerciseLibraryTopBar(
                     DropdownMenuItem(
                         text = { Text("Cardio") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 LibraryEvent
                                     .SetCurrentFilterType(ExerciseLibraryFilterType.Cardio())
@@ -127,6 +131,7 @@ fun ExerciseLibraryTopBar(
                     DropdownMenuItem(
                         text = { Text("Calisthenics") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 LibraryEvent
                                     .SetCurrentFilterType(ExerciseLibraryFilterType.Calisthenic())
@@ -139,6 +144,7 @@ fun ExerciseLibraryTopBar(
                     DropdownMenuItem(
                         text = { Text("None") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 LibraryEvent.ClearFilterType
                             )
