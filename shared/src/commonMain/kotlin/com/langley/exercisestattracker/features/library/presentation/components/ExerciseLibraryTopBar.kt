@@ -62,8 +62,7 @@ fun ExerciseLibraryTopBar(
                 )
             }
 
-            Box(
-            ) {
+            Box {
                 IconButton(onClick = { dropdownExpanded = true }) {
                     Icon(
                         modifier = Modifier.size(400.dp),
