@@ -11,7 +11,7 @@ fun DefDetailsViewPreview(){
 
     DefinitionDetailsView(
         isVisible = true,
-        definition = ExerciseDefinitionDummyData().definitionList[0],
+        selectedDefinition = ExerciseDefinitionDummyData().definitionList[0],
         libraryOnEvent = {}
     )
 }
