@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -71,11 +72,22 @@ fun RoundedTextContainer(
     modifier: Modifier = Modifier,
     text: String,
     textSize: TextUnit = 18.sp,
-    boxSize: Dp = 84.dp,
+    boxMinWidth: Dp = 0.dp,
+    boxMaxWidth: Dp = 200.dp,
+    boxMinHeight:Dp = 0.dp,
+    boxMaxHeight:Dp = 200.dp,
+    maxLines: Int = 2,
+    overFlow: TextOverflow = TextOverflow.Ellipsis
 ){
     Box(
         modifier = modifier
-            .size(boxSize)
+//            .size(boxSize)
+            .sizeIn(
+                minWidth = boxMinWidth,
+                maxWidth = boxMaxWidth,
+                minHeight = boxMinHeight,
+                maxHeight = boxMaxHeight
+                )
             .clip(
                 RoundedCornerShape(16.dp)
             )
@@ -96,7 +108,8 @@ fun RoundedTextContainer(
             color = MaterialTheme.colorScheme.onTertiaryContainer,
             text = text,
             fontSize = textSize,
-            overflow = TextOverflow.Ellipsis
+            maxLines = maxLines,
+            overflow = overFlow
         )
     }
 }
