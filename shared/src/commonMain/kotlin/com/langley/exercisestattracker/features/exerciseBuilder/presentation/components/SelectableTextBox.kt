@@ -67,6 +67,42 @@ fun SelectableTextBoxWithEvent(
 }
 
 @Composable
+fun RoundedTextContainer(
+    modifier: Modifier = Modifier,
+    text: String,
+    textSize: TextUnit = 18.sp,
+    boxSize: Dp = 84.dp,
+){
+    Box(
+        modifier = modifier
+            .size(boxSize)
+            .clip(
+                RoundedCornerShape(16.dp)
+            )
+            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .border(
+                width = 2.dp,
+
+                color = MaterialTheme.colorScheme.outlineVariant,
+
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(4.dp)
+
+    ){
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
+            text = text,
+            fontSize = textSize,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+
+@Composable
 fun SelectableTextBoxWithToggle(
     modifier: Modifier = Modifier,
     text: String,
