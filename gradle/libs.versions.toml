@@ -21,6 +21,8 @@ sqliteDriver = "2.0.1"
 uiToolingPreview = "1.4.1"
 uiToolingPreviewAndroid = "1.5.4"
 junitKtx = "1.1.5"
+glancePreview = "1.0.0-alpha06"
+uiTooling = "1.6.2"
 
 [libraries]
 androidx-activity-compose-v172 = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -50,6 +52,8 @@ sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "s
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
 ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
+androidx-glance-preview = { group = "androidx.glance", name = "glance-preview", version.ref = "glancePreview" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
