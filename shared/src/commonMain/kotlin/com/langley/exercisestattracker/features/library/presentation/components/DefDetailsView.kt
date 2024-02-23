@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -25,8 +24,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,29 +37,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
-import com.langley.exercisestattracker.core.presentation.composables.DropdownToggle
 import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.RoundedTextContainer
 import com.langley.exercisestattracker.features.library.LibraryEvent
 
 @Composable
 fun DefinitionDetailsView(
     isVisible: Boolean,
-    definition: ExerciseDefinition,
+    selectedDefinition: ExerciseDefinition,
     libraryOnEvent: (LibraryEvent) -> Unit,
 )
 {
-    val showMuscles = remember { mutableStateOf(false) }
-    val primaryTargetList = remember { mutableStateOf(listOf<String>()) }
-    val musclesList = remember { mutableStateOf(listOf<String>()) }
+    var showMuscles by remember { mutableStateOf(true) }
 
-    if (definition.exerciseName.isNotBlank()){
-        primaryTargetList.value = definition.bodyRegion.split(", ")
-        musclesList.value = definition.targetMuscles.split(", ")
+    val definition by remember(selectedDefinition) { mutableStateOf(selectedDefinition) }
+
+    val primaryTargetList by remember(selectedDefinition) {
+        mutableStateOf(selectedDefinition.bodyRegion.split(", "))
     }
-    else {
-        primaryTargetList.value = listOf()
-        musclesList.value = listOf()
+
+    val musclesList by remember(selectedDefinition) {
+        mutableStateOf(selectedDefinition.targetMuscles.split(", "))
     }
+
 
     BasicBottomSheet(
         visible = isVisible,
@@ -119,6 +119,7 @@ fun DefinitionDetailsView(
             )
         }
 
+        // Title Section
         Column (
             modifier = Modifier.fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface),
@@ -128,7 +129,7 @@ fun DefinitionDetailsView(
         {
             Spacer(Modifier.height(16.dp))
 
-            // Title Section
+
             Column()
             {
 
@@ -154,9 +155,58 @@ fun DefinitionDetailsView(
                 ){}
             }
 
-            Spacer(
-                Modifier.height(16.dp)
-            )
+            Spacer(Modifier.height(16.dp))
+
+            // Tags Section
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (definition.isWeighted){
+                    RoundedTextContainer(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Weight Training",
+                        maxLines = 1
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
+                if (definition.isCalisthenic){
+                    RoundedTextContainer(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Calisthenics",
+                        maxLines = 1
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
+                if (definition.isCardio){
+                    RoundedTextContainer(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Cardio",
+                        maxLines = 1
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
+                if (definition.isTimed){
+                    RoundedTextContainer(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Timed Exercise",
+                        maxLines = 1
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
+                if (definition.hasDistance){
+                    RoundedTextContainer(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Distance Measured",
+                        maxLines = 1
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
 
             // Primary Target Section
             Column(
@@ -181,14 +231,15 @@ fun DefinitionDetailsView(
                     modifier = Modifier.heightIn(36.dp, 200.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     columns =
-                    if (primaryTargetList.value.isEmpty()) { GridCells.Fixed(1)}
-                    else if (primaryTargetList.value.size >= 3) { GridCells.Fixed(3) }
-                    else { GridCells.Fixed(primaryTargetList.value.size) }
+                    if (primaryTargetList.isEmpty()) { GridCells.Fixed(1)}
+                    else if (primaryTargetList.size >= 3) { GridCells.Fixed(3) }
+                    else { GridCells.Fixed(primaryTargetList.size) }
                 ){
-                    items(primaryTargetList.value){
+                    items(primaryTargetList){
                         RoundedTextContainer(
                             text = it,
-                            boxSize = 64.dp
+                            boxMinWidth = 64.dp,
+                            boxMinHeight = 64.dp
                         )
                     }
                 }
@@ -203,6 +254,7 @@ fun DefinitionDetailsView(
                         RoundedCornerShape(16.dp)
                     )
                     .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .clickable { showMuscles = !showMuscles }
                     .padding(4.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -225,29 +277,26 @@ fun DefinitionDetailsView(
                         color = MaterialTheme.colorScheme.onSecondaryContainer
                     )
 
-                    DropdownToggle(
-                        modifier = Modifier.size(20.dp),
-                        toggled = showMuscles
-                    )
                 }
 
                 Spacer(Modifier.height(8.dp))
 
                 // Target Muscles List
-                if (showMuscles.value){
+                if (showMuscles){
 
                     LazyVerticalGrid(
                         modifier = Modifier.heightIn(min = 0.dp, max = 300.dp),
                         columns =
-                        if (musclesList.value.isEmpty()) { GridCells.Fixed(1)}
-                        else if (musclesList.value.size >= 3) { GridCells.Fixed(3) }
-                        else { GridCells.Fixed(musclesList.value.size) }
+                        if (musclesList.isEmpty()) { GridCells.Fixed(1)}
+                        else if (musclesList.size >= 3) { GridCells.Fixed(3) }
+                        else { GridCells.Fixed(musclesList.size) }
                     ) {
-                        items(musclesList.value){
+                        items(musclesList){
                             RoundedTextContainer(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = it,
-                                boxSize = 64.dp
+                                boxMinWidth = 64.dp,
+                                boxMinHeight = 64.dp
                             )
 
                             Spacer(Modifier.height(12.dp))
@@ -256,44 +305,6 @@ fun DefinitionDetailsView(
                 }
             }
         }
-
-        Spacer(Modifier.height(16.dp))
-
-        // Target Muscles Section
-//        Row(
-//            modifier = Modifier.fillMaxWidth()
-//                .clip(
-//                    RoundedCornerShape(16.dp)
-//                )
-//                .background(MaterialTheme.colorScheme.secondaryContainer)
-//                .padding(4.dp),
-//                horizontalArrangement = Arrangement.SpaceEvenly,
-//                verticalAlignment = Alignment.CenterVertically
-//        ){
-//            Column()
-//            {
-//                Text(
-//                    text = "Target Muscles:",
-//                    textAlign = TextAlign.Left,
-//                    modifier = Modifier,
-//                    fontWeight = FontWeight.Normal,
-//                    fontSize = 20.sp,
-//                    color = MaterialTheme.colorScheme.onSecondaryContainer
-//                )
-//            }
-//
-//            Column()
-//            {
-//                Text(
-//                    text = definition.targetMuscles,
-//                    textAlign = TextAlign.Center,
-//                    modifier = Modifier,
-//                    fontWeight = FontWeight.Normal,
-//                    fontSize = 24.sp,
-//                    color = MaterialTheme.colorScheme.onSecondaryContainer
-//                )
-//            }
-//        }
 
         Spacer(Modifier.height(16.dp))
 
