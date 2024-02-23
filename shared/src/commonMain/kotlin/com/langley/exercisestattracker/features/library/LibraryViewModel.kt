@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-import com.langley.exercisestattracker.core.domain.ExerciseDefinitionValidator
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
@@ -92,40 +91,6 @@ class LibraryViewModel(
                 definitionForBuilder = _state.value.selectedExerciseDefinition!!.copy()
             }
 
-            is LibraryEvent.SaveOrUpdateDef -> {
-                definitionForBuilder.let { exerciseDefinition ->
-
-                    val validationResult =
-                        ExerciseDefinitionValidator.validateExerciseDefinition(exerciseDefinition)
-
-                    val errorsList = listOfNotNull(
-                        validationResult.nameErrorString,
-                        validationResult.bodyRegionErrorString,
-                        validationResult.targetMusclesErrorString
-                    )
-
-                    if (errorsList.isEmpty()){
-                        _state.update {it.copy(
-                            selectedExerciseDefinition = definitionForBuilder,
-                            isEditExerciseDefSheetOpen = false,
-                            isAddExerciseDefSheetOpen = false
-                        )
-                        }
-
-                        viewModelScope.launch {
-                            exerciseAppDataSource.insertOrReplaceDefinition(exerciseDefinition)
-                        }
-                    }
-                    else {
-                        _state.update { it.copy(
-                            exerciseNameError = validationResult.nameErrorString,
-                            exerciseBodyRegionError = validationResult.bodyRegionErrorString,
-                            exerciseTargetMusclesError = validationResult.targetMusclesErrorString
-                        ) }
-                    }
-                }
-            }
-
             LibraryEvent.AddNewDefClicked -> {
                 _state.update { it.copy(
                     isAddExerciseDefSheetOpen = true,
@@ -175,29 +140,6 @@ class LibraryViewModel(
                 ) }
             }
 
-            LibraryEvent.DeleteDefinition -> {
-                val exerciseDefId = _state.value.selectedExerciseDefinition?.exerciseDefinitionId
-
-                if (exerciseDefId != null){
-                    viewModelScope.launch {
-
-                        exerciseAppDataSource.deleteDefinition(exerciseDefId)
-
-                        _state.update { it.copy(
-                            isAddExerciseDefSheetOpen = false,
-                            isExerciseDetailsSheetOpen = false,
-                        ) }
-
-                        delay(350L) //Animation delay for slide out.
-
-                        _state.update { it.copy(
-                            selectedExerciseDefinition = null
-                        ) }
-                        definitionForBuilder = ExerciseDefinition()
-                    }
-                }
-            }
-
             is LibraryEvent.SetCurrentFilterType -> {
                 _state.update {
                     it.copy(
@@ -230,6 +172,15 @@ class LibraryViewModel(
             LibraryEvent.ClearSelectedDef -> {
                 _state.update { it.copy(
                     selectedExerciseDefinition = null
+                ) }
+            }
+
+            is LibraryEvent.UpdateSelectedDefinition -> {
+
+                definitionForBuilder = event.definition
+                _state.update { it.copy(
+                    selectedExerciseDefinition = event.definition,
+                    isExerciseDetailsSheetOpen = true
                 ) }
             }
         }
