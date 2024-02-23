@@ -112,7 +112,8 @@ fun LibraryScreen(
                 contentPadding = PaddingValues(vertical = 8.dp),
 
                 content = {
-                    items(libraryState.exerciseDefinitions){ exerciseDefinition: ExerciseDefinition ->
+                    items(libraryState.exerciseDefinitions)
+                    { exerciseDefinition: ExerciseDefinition ->
                         ExerciseDefinitionListItem(
                             exerciseDefinition,
                             modifier = Modifier
@@ -121,7 +122,9 @@ fun LibraryScreen(
                                 .focusable(true)
                                 .clickable {
                                     focusManager.clearFocus()
-                                    (libraryViewModel::onEvent)(LibraryEvent.DefinitionSelected(exerciseDefinition))
+                                    (libraryViewModel::onEvent)(
+                                        LibraryEvent.DefinitionSelected(exerciseDefinition)
+                                    )
                                 },
                         )
                     }
@@ -132,7 +135,7 @@ fun LibraryScreen(
         DefinitionDetailsView(
             isVisible = libraryState.isExerciseDetailsSheetOpen,
             libraryOnEvent = libraryViewModel::onEvent,
-            definition =
+            selectedDefinition =
             libraryState.selectedExerciseDefinition?: ExerciseDefinition()
         )
 
