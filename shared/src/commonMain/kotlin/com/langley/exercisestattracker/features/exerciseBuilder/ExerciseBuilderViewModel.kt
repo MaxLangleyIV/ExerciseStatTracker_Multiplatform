@@ -100,15 +100,19 @@ class ExerciseBuilderViewModel(
                     viewModelScope.launch {
                         exerciseAppDataSource
                             .insertOrReplaceDefinition(_state.value.newExerciseDefinition)
-                    }
-
-                    libraryOnEvent(
-                        LibraryEvent.DefinitionSelected(_state.value.newExerciseDefinition)
-                    )
-                    libraryOnEvent(LibraryEvent.CloseAddDefClicked)
-
-                    viewModelScope.launch {
+                        if (_state.value.initialized){
+                            libraryOnEvent(
+                                LibraryEvent.UpdateSelectedDefinition(
+                                    _state.value.newExerciseDefinition
+                                )
+                            )
+                        }
+                        else {
+                            libraryOnEvent(LibraryEvent.CloseDetailsView)
+                        }
+                        libraryOnEvent(LibraryEvent.CloseAddDefClicked)
                         delay(300L)
+
                         _state.update {it.copy(
                             initialized = false,
                             primaryTargetList = null,
@@ -119,6 +123,10 @@ class ExerciseBuilderViewModel(
                             exerciseTargetMusclesError = null
                         )}
                     }
+
+
+
+
                 }
                 else {
                     _state.update { it.copy(
@@ -151,15 +159,12 @@ class ExerciseBuilderViewModel(
                 val exerciseDefId = _state.value.newExerciseDefinition.exerciseDefinitionId
 
                 if (exerciseDefId != null){
+                    libraryOnEvent(LibraryEvent.CloseDetailsView)
+                    libraryOnEvent(LibraryEvent.CloseAddDefClicked)
+
                     viewModelScope.launch {
-
                         exerciseAppDataSource.deleteDefinition(exerciseDefId)
-
-                        libraryOnEvent(LibraryEvent.CloseDetailsView)
-                        libraryOnEvent(LibraryEvent.CloseAddDefClicked)
-
                         delay(350L) //Animation delay for slide out.
-
                         _state.update { it.copy(
                             initialized = false,
                             newExerciseDefinition = ExerciseDefinition()
