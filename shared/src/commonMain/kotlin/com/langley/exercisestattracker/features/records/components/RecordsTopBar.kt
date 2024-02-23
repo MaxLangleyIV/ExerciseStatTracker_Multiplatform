@@ -61,8 +61,7 @@ fun RecordsTopBar(
                     contentDescription = "Back Button"
                 )
             }
-            Box(
-            ) {
+            Box {
                 IconButton(onClick = { dropdownExpanded = true }) {
                     Icon(
                         modifier = Modifier.size(400.dp),
