@@ -3,6 +3,8 @@ CREATE TABLE ExerciseRecord (
     dateCompleted INTEGER NOT NULL,
     exerciseName TEXT NOT NULL,
     weightUsed REAL NOT NULL,
+    weightIsPounds INTEGER NOT NULL,
+    weightIsKilos INTEGER NOT NULL,
     isCardio INTEGER NOT NULL,
     isCalisthenic INTEGER NOT NULL,
     duration REAL NOT NULL,
@@ -26,6 +28,8 @@ INTO ExerciseRecord(
     dateCompleted,
     exerciseName,
     weightUsed,
+    weightIsPounds,
+    weightIsKilos,
     isCardio,
     isCalisthenic,
     duration,
@@ -38,6 +42,8 @@ INTO ExerciseRecord(
 
 )
 VALUES (
+    ?,
+    ?,
     ?,
     ?,
     ?,
