@@ -74,7 +74,10 @@ fun RecordsScreen(
             contentPadding = PaddingValues(vertical = 8.dp),
 
             content = {
-                items(state.exerciseRecords){ exerciseRecord: ExerciseRecord ->
+                items(
+                    items = state.exerciseRecords,
+                    key = {item: ExerciseRecord ->  item.exerciseRecordId!!}
+                ){ exerciseRecord: ExerciseRecord ->
                     RecordListItem(
                         exerciseRecord,
                         modifier = Modifier
