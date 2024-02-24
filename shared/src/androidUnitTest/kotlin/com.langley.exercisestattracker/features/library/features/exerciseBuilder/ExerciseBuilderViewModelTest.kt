@@ -5,7 +5,6 @@ import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDum
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
 import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderViewModel
-import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.test.runTest
@@ -33,11 +32,7 @@ class ExerciseBuilderViewModelTest {
                     ExerciseDefinitionDummyData().definitionList
                 ),
                 initialState = initialState,
-                libraryViewModel =
-                viewModelFactory {
-                    LibraryViewModel(
-                        TestExerciseAppDataSource(ExerciseDefinitionDummyData().definitionList)
-                    ) }.createViewModel(),
+                libraryOnEvent = {}
             )
         }.createViewModel()
 
