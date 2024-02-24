@@ -74,9 +74,12 @@ fun RecordsTopBar(
                     expanded = dropdownExpanded,
                     onDismissRequest = {dropdownExpanded = false}
                 ){
+
+
                     DropdownMenuItem(
                         text = { Text("Barbell") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 RecordsEvent
                                     .SetCurrentFilterType(RecordsFilterType.Barbell())
@@ -89,6 +92,7 @@ fun RecordsTopBar(
                     DropdownMenuItem(
                         text = { Text("Dumbbell") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 RecordsEvent
                                     .SetCurrentFilterType(RecordsFilterType.Dumbbell())
@@ -99,14 +103,84 @@ fun RecordsTopBar(
                     Divider()
 
                     DropdownMenuItem(
+                        text = { Text("Cardio") },
+                        onClick = {
+                            dropdownExpanded = false
+                            onEvent(
+                                RecordsEvent
+                                    .SetCurrentFilterType(RecordsFilterType.Cardio())
+                            )
+                        }
+                    )
+
+                    Divider()
+
+                    DropdownMenuItem(
+                        text = { Text("Calisthenics") },
+                        onClick = {
+                            dropdownExpanded = false
+                            onEvent(
+                                RecordsEvent
+                                    .SetCurrentFilterType(RecordsFilterType.Calisthenic())
+                            )
+                        }
+                    )
+
+                    Divider()
+
+                    DropdownMenuItem(
                         text = { Text("None") },
                         onClick = {
+                            dropdownExpanded = false
                             onEvent(
                                 RecordsEvent.ClearFilterType
                             )
                         }
                     )
                 }
+
+//                RecordsDropdownMenu(
+//                    onEvent = onEvent,
+//                    dropdownExpanded = dropdownExpanded
+//                )
+
+//                DropdownMenu(
+//                    expanded = dropdownExpanded,
+//                    onDismissRequest = {dropdownExpanded = false}
+//                ){
+//                    DropdownMenuItem(
+//                        text = { Text("Barbell") },
+//                        onClick = {
+//                            onEvent(
+//                                RecordsEvent
+//                                    .SetCurrentFilterType(RecordsFilterType.Barbell())
+//                            )
+//                        }
+//                    )
+//
+//                    Divider()
+//
+//                    DropdownMenuItem(
+//                        text = { Text("Dumbbell") },
+//                        onClick = {
+//                            onEvent(
+//                                RecordsEvent
+//                                    .SetCurrentFilterType(RecordsFilterType.Dumbbell())
+//                            )
+//                        }
+//                    )
+//
+//                    Divider()
+//
+//                    DropdownMenuItem(
+//                        text = { Text("None") },
+//                        onClick = {
+//                            onEvent(
+//                                RecordsEvent.ClearFilterType
+//                            )
+//                        }
+//                    )
+//                }
             }
         }
 
