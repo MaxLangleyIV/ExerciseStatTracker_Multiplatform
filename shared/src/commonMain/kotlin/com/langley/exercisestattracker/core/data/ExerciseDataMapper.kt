@@ -31,13 +31,13 @@ fun database.ExerciseRoutine.toExerciseRoutine():
         ExerciseRoutine {
 
     return ExerciseRoutine(
-        exerciseRoutineId,
-        routineName,
-        exercisesCSV,
-        repsCSV,
-        description,
-        isFavorite,
-        dateCreated
+        exerciseRoutineId = exerciseRoutineId,
+        routineName = routineName,
+        exerciseCSV = exercisesCSV,
+        repsCSV = repsCSV,
+        description = description,
+        isFavorite = isFavorite,
+        dateCreated = dateCreated
     )
 }
 
@@ -45,11 +45,11 @@ fun database.ExerciseSchedule.toExerciseSchedule():
         ExerciseSchedule {
 
     return ExerciseSchedule(
-        exerciseScheduleId,
-        exerciseScheduleName,
-        exerciseRoutineCSV,
-        isFavorite,
-        dateCreated
+        exerciseScheduleId = exerciseScheduleId,
+        exerciseScheduleName = exerciseScheduleName,
+        exerciseRoutineCSV = exerciseRoutineCSV,
+        isFavorite = isFavorite,
+        dateCreated = dateCreated
     )
 }
 
@@ -57,19 +57,21 @@ fun database.ExerciseRecord.toExerciseRecord():
         ExerciseRecord {
 
     return ExerciseRecord(
-        exerciseRecordId,
-        dateCompleted,
-        exerciseName,
-        weightUsed.toFloat(),
-        isCardio == 1L,
-        isCalisthenic == 1L,
-        duration.toFloat(),
-        distance.toFloat(),
-        repsCompleted.toInt(),
-        rpe.toInt(),
-        notes,
-        userId,
-        currentBodyWeight.toInt()
+        exerciseRecordId =exerciseRecordId,
+        dateCompleted = dateCompleted,
+        exerciseName = exerciseName,
+        weightUsed = weightUsed.toFloat(),
+        weightIsPounds = weightIsPounds.toInt() == 1,
+        weightIsKilos = weightIsKilos.toInt() == 1,
+        isCardio = isCardio == 1L,
+        isCalisthenic = isCalisthenic == 1L,
+        duration = duration.toFloat(),
+        distance = distance.toFloat(),
+        repsCompleted = repsCompleted.toInt(),
+        rpe = rpe.toInt(),
+        notes = notes,
+        userId = userId,
+        currentBodyWeight = currentBodyWeight.toInt()
     )
 
 }
