@@ -112,7 +112,10 @@ fun LibraryScreen(
                 contentPadding = PaddingValues(vertical = 8.dp),
 
                 content = {
-                    items(libraryState.exerciseDefinitions)
+                    items(
+                        items = libraryState.exerciseDefinitions,
+                        key = {item: ExerciseDefinition ->  item.exerciseDefinitionId!!}
+                        )
                     { exerciseDefinition: ExerciseDefinition ->
                         ExerciseDefinitionListItem(
                             exerciseDefinition,
