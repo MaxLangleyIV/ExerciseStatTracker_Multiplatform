@@ -37,7 +37,7 @@ fun App(
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
 
-        val navController = remember { ExerciseAppNavController(Screen.Library) }
+        val navController = remember { ExerciseAppNavController(Screen.Records) }
         val currentScreen by navController.currentScreen.collectAsState()
 
         // Initialize dummy data for exercise library.
