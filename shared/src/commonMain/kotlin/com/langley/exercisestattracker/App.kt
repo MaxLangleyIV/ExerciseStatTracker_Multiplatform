@@ -20,12 +20,8 @@ import com.langley.exercisestattracker.features.home.HomeScreen
 import com.langley.exercisestattracker.features.home.HomeState
 import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
 import com.langley.exercisestattracker.features.records.RecordsScreen
-import com.langley.exercisestattracker.features.records.RecordsState
-import com.langley.exercisestattracker.features.records.RecordsViewModel
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun App(
@@ -41,28 +37,8 @@ fun App(
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
 
-        val navController = remember { ExerciseAppNavController() }
+        val navController = remember { ExerciseAppNavController(Screen.Records) }
         val currentScreen by navController.currentScreen.collectAsState()
-
-
-
-//        // View models and related states.
-//        val libraryViewModel = getViewModel(
-//            key = "libraryViewModel",
-//            factory = viewModelFactory {
-//                LibraryViewModel(appModule.exerciseAppDataSource)
-//            }
-//        )
-//        val libraryState by libraryViewModel.state.collectAsState(LibraryState())
-
-        val recordsViewModel = getViewModel(
-            key = "recordsViewModel",
-            factory = viewModelFactory {
-                RecordsViewModel(appModule.exerciseAppDataSource)
-            }
-        )
-        val recordsState by recordsViewModel.state.collectAsState(RecordsState())
-
 
         // Initialize dummy data for exercise library.
         val exerciseDefDummyData = ExerciseDefinitionDummyData()
@@ -76,6 +52,7 @@ fun App(
         println("OUTPUTTING RECORDS: $exerciseRecordList")
 
         println("OUTPUTTING ROUTINES: $exerciseRoutineList")
+
 
         // Add definitions to SQLDelight db.
 //        for (exerciseDefinition in exerciseDefList){
@@ -111,9 +88,6 @@ fun App(
 
                     LibraryScreen(
                         appModule = appModule,
-//                        state = libraryState,
-//                        newExerciseDefinition = libraryViewModel.newExerciseDefinition,
-//                        onEvent = libraryViewModel::onEvent,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,
@@ -125,8 +99,7 @@ fun App(
                 Screen.Records -> {
 
                     RecordsScreen(
-                        state = recordsState,
-                        onEvent = recordsViewModel::onEvent,
+                        appModule = appModule,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,

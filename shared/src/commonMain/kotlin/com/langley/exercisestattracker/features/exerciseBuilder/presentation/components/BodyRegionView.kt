@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.library.features.exerciseBuilder.presentation.components
+package com.langley.exercisestattracker.features.exerciseBuilder.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,14 +20,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderEvent
-import com.langley.exercisestattracker.features.library.features.exerciseBuilder.ExerciseBuilderState
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
 
 
 @Composable
 fun BodyRegionView(
     state: ExerciseBuilderState,
-//    newExerciseDefinition: ExerciseDefinition,
     onEvent: (ExerciseBuilderEvent) -> Unit,
 ){
     Column (
@@ -68,7 +67,6 @@ fun BodyRegionView(
                     text = "Upper",
                     isClicked = state.primaryTargetList?.contains("Upper Body") ?: false,
                     onEvent = onEvent,
-//                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Upper)
                     event = ExerciseBuilderEvent.ToggleBodyRegion("Upper Body")
                 )
 
@@ -78,7 +76,6 @@ fun BodyRegionView(
                     text = "Lower",
                     isClicked = state.primaryTargetList?.contains("Lower Body") ?: false,
                     onEvent = onEvent,
-//                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Lower)
                     event = ExerciseBuilderEvent.ToggleBodyRegion("Lower Body")
                 )
 
@@ -88,7 +85,6 @@ fun BodyRegionView(
                     text = "Core",
                     isClicked = state.primaryTargetList?.contains("Core") ?: false,
                     onEvent = onEvent,
-//                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Core)
                     event = ExerciseBuilderEvent.ToggleBodyRegion("Core")
                 )
 
@@ -98,7 +94,6 @@ fun BodyRegionView(
                     text = "Full",
                     isClicked = state.primaryTargetList?.contains("Full Body") ?: false,
                     onEvent = onEvent,
-//                    event = ExerciseBuilderEvent.ToggleBodyRegion(BodyRegion.Full)
                     event = ExerciseBuilderEvent.ToggleBodyRegion("Full Body")
                 )
             }
@@ -106,7 +101,6 @@ fun BodyRegionView(
             Spacer(Modifier.height(8.dp))
 
             // Sub Group Section
-//            if (state.bodyRegion == BodyRegion.Upper){
             if (state.primaryTargetList?.contains("Upper Body") == true){
                 Text(
                     modifier = Modifier
@@ -124,11 +118,8 @@ fun BodyRegionView(
                 ){
                     SelectableTextBoxWithEvent(
                         text = "Arms",
-//                        isClicked = state.bodyRegionSubGroup == BodyRegionSubGroup.Arms,
                         isClicked = state.primaryTargetList.contains("Arms"),
                         onEvent = onEvent,
-//                        event = ExerciseBuilderEvent
-//                            .ToggleBodyRegionSubGroup(BodyRegionSubGroup.Arms)
                         event = ExerciseBuilderEvent.ToggleBodyRegion("Arms")
                     )
 
@@ -136,11 +127,8 @@ fun BodyRegionView(
 
                     SelectableTextBoxWithEvent(
                         text = "Back",
-//                        isClicked = state.bodyRegionSubGroup == BodyRegionSubGroup.Back,
                         isClicked = state.primaryTargetList.contains("Back"),
                         onEvent = onEvent,
-//                        event = ExerciseBuilderEvent
-//                            .ToggleBodyRegionSubGroup(BodyRegionSubGroup.Back)
                         event = ExerciseBuilderEvent.ToggleBodyRegion("Back")
                     )
 
@@ -148,11 +136,8 @@ fun BodyRegionView(
 
                     SelectableTextBoxWithEvent(
                         text = "Chest",
-//                        isClicked = state.bodyRegionSubGroup == BodyRegionSubGroup.Chest,
                         isClicked = state.primaryTargetList.contains("Chest"),
                         onEvent = onEvent,
-//                        event = ExerciseBuilderEvent
-//                            .ToggleBodyRegionSubGroup(BodyRegionSubGroup.Chest)
                         event = ExerciseBuilderEvent.ToggleBodyRegion("Chest")
 
                     )
@@ -162,11 +147,8 @@ fun BodyRegionView(
                     SelectableTextBoxWithEvent(
                         text = "Shoulders",
                         textSize = 16.sp,
-//                        isClicked = state.bodyRegionSubGroup == BodyRegionSubGroup.Shoulders,
                         isClicked = state.primaryTargetList.contains("Shoulders"),
                         onEvent = onEvent,
-//                        event = ExerciseBuilderEvent
-//                            .ToggleBodyRegionSubGroup(BodyRegionSubGroup.Shoulders),
                         event = ExerciseBuilderEvent.ToggleBodyRegion("Shoulders")
                     )
 

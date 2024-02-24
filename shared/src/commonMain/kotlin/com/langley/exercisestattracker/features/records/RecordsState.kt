@@ -25,5 +25,6 @@ sealed interface RecordsFilterType {
     data class Barbell(val name: String = "barbell"): RecordsFilterType
     data class Dumbbell(val name: String = "dumbbell") : RecordsFilterType
     data class Calisthenic(val name: String = "calisthenic") : RecordsFilterType
+    data class Cardio(val name: String = "cardio") : RecordsFilterType
 
 }

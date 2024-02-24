@@ -14,25 +14,38 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
+import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.records.components.RecordListItem
 import com.langley.exercisestattracker.features.records.components.RecordsTopBar
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun RecordsScreen(
     modifier: Modifier = Modifier,
-    state: RecordsState,
-    onEvent: (RecordsEvent) -> Unit,
+    appModule: AppModule,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
     navController: ExerciseAppNavController
 ){
+
+    val recordsViewModel = getViewModel(
+        key = "recordsViewModel",
+        factory = viewModelFactory {
+            RecordsViewModel(appModule.exerciseAppDataSource)
+        }
+    )
+    val state by recordsViewModel.state.collectAsState(RecordsState())
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +60,7 @@ fun RecordsScreen(
                 .fillMaxWidth()
                 .padding(0.dp,16.dp),
             state = state,
-            onEvent = onEvent,
+            onEvent = recordsViewModel::onEvent,
             focusManager = focusManager,
             navController = navController
         )
@@ -61,7 +74,10 @@ fun RecordsScreen(
             contentPadding = PaddingValues(vertical = 8.dp),
 
             content = {
-                items(state.exerciseRecords){ exerciseRecord: ExerciseRecord ->
+                items(
+                    items = state.exerciseRecords,
+                    key = {item: ExerciseRecord ->  item.exerciseRecordId!!}
+                ){ exerciseRecord: ExerciseRecord ->
                     RecordListItem(
                         exerciseRecord,
                         modifier = Modifier
@@ -70,7 +86,9 @@ fun RecordsScreen(
                             .focusable(true)
                             .clickable {
                                 focusManager.clearFocus()
-                                onEvent(RecordsEvent.RecordSelected(exerciseRecord))
+                                (recordsViewModel::onEvent)(
+                                    RecordsEvent.RecordSelected(exerciseRecord)
+                                )
                             },
                     )
                 }

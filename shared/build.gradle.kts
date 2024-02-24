@@ -100,6 +100,7 @@ dependencies {
     commonMainApi(libs.mvvm.compose)
     commonMainApi(libs.mvvm.flow)
     commonMainApi(libs.mvvm.flow.compose)
+    debugImplementation(libs.androidx.ui.tooling)
 
 }
 

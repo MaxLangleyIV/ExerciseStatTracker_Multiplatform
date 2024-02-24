@@ -8,13 +8,13 @@ sealed interface LibraryEvent {
     data class DefinitionSelected(val exerciseDefinition: ExerciseDefinition): LibraryEvent
     data class OnSearchStringChanged(val value: String) : LibraryEvent
     data class SetCurrentFilterType(val filterType: ExerciseLibraryFilterType): LibraryEvent
+    data class UpdateSelectedDefinition(val definition: ExerciseDefinition): LibraryEvent
     data object ClearFilterType : LibraryEvent
     data object ToggleIsSearchDropdownOpen: LibraryEvent
     data object AddNewDefClicked : LibraryEvent
-    data object SaveOrUpdateDef : LibraryEvent
     data object CloseAddDefClicked : LibraryEvent
-    data object DeleteDefinition : LibraryEvent
     data object ClearSelectedDef : LibraryEvent
+
 
 
     // Details View Events

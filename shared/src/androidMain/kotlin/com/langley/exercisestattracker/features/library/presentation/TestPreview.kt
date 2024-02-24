@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.library.presentation
+package com.langley.exercisestattracker.features.library.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +21,6 @@ fun TestComposable() {
 }
 @Preview
 @Composable
-fun TestComposablePreview() {
+fun Preview() {
     TestComposable()
 }

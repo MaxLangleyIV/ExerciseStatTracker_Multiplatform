@@ -63,9 +63,7 @@ class RecordsViewModel(
                 }
                 is RecordsFilterType.Calisthenic -> {
                     records.filter {
-                        it.exerciseName.contains(
-                            "body",
-                            true)
+                        it.isCalisthenic
                     }
                 }
                 is RecordsFilterType.Dumbbell -> {
@@ -89,8 +87,16 @@ class RecordsViewModel(
                             true)
                     }
                 }
-                null -> {
-                    records                }
+
+                is RecordsFilterType.Cardio -> {
+                    records.filter {
+                        it.isCardio
+                    }
+                }
+
+                null -> { records }
+
+
             }
 
         if (searchString.isNotBlank()){

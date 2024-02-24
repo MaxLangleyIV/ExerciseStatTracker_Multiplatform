@@ -306,96 +306,96 @@ class LibraryViewModelTest {
 //
 //        assertEquals(testString, newExerciseDef.targetMuscles)
 //    }
-    @Test
-    fun onEvent_SaveOrUpdateExerciseDefWithCorrectInput_stateProperlyUpdated() = runTest {
-        setupViewModel(
-            LibraryState(),
-            newExerciseDefinition = testExerciseDefinition
-        )
+//    @Test
+//    fun onEvent_SaveOrUpdateExerciseDefWithCorrectInput_stateProperlyUpdated() = runTest {
+//        setupViewModel(
+//            LibraryState(),
+//            newExerciseDefinition = testExerciseDefinition
+//        )
+//
+//        viewModel.onEvent(LibraryEvent.SaveOrUpdateDef)
+//
+//        val state = viewModel.state.first()
+//
+//        var savedExerciseDefFoundInState = false
+//
+//        for (def in state.exerciseDefinitions){
+//
+//            if (def.exerciseName == testExerciseDefinition.exerciseName){
+//                savedExerciseDefFoundInState = true
+//            }
+//
+//        }
+//
+//        assertTrue(savedExerciseDefFoundInState,
+//            "testExercise not found in state after SaveOrUpdate event."
+//        )
+//    }
 
-        viewModel.onEvent(LibraryEvent.SaveOrUpdateDef)
+//    @Test
+//    fun onEvent_SaveOrUpdateExerciseDefWithIncorrectInput_stateProperlyUpdated() = runTest {
+//        testExerciseDefinition = testExerciseDefinition.copy(
+//            exerciseName = "",
+//            bodyRegion = "",
+//            targetMuscles = "",
+//        )
+//
+//        setupViewModel(
+//            LibraryState(),
+//            newExerciseDefinition = testExerciseDefinition
+//        )
+//
+//        viewModel.onEvent(LibraryEvent.SaveOrUpdateDef)
+//
+//        val state = viewModel.state.first()
+//
+//        assertNotNull(state.exerciseNameError,
+//            "Name error is null in state."
+//        )
+//        assertNotNull(state.exerciseBodyRegionError,
+//            "Body Region error is null in state."
+//        )
+//        assertNotNull(state.exerciseTargetMusclesError,
+//            "Target Muscles error is null in state."
+//        )
+//    }
 
-        val state = viewModel.state.first()
-
-        var savedExerciseDefFoundInState = false
-
-        for (def in state.exerciseDefinitions){
-
-            if (def.exerciseName == testExerciseDefinition.exerciseName){
-                savedExerciseDefFoundInState = true
-            }
-
-        }
-
-        assertTrue(savedExerciseDefFoundInState,
-            "testExercise not found in state after SaveOrUpdate event."
-        )
-    }
-
-    @Test
-    fun onEvent_SaveOrUpdateExerciseDefWithIncorrectInput_stateProperlyUpdated() = runTest {
-        testExerciseDefinition = testExerciseDefinition.copy(
-            exerciseName = "",
-            bodyRegion = "",
-            targetMuscles = "",
-        )
-
-        setupViewModel(
-            LibraryState(),
-            newExerciseDefinition = testExerciseDefinition
-        )
-
-        viewModel.onEvent(LibraryEvent.SaveOrUpdateDef)
-
-        val state = viewModel.state.first()
-
-        assertNotNull(state.exerciseNameError,
-            "Name error is null in state."
-        )
-        assertNotNull(state.exerciseBodyRegionError,
-            "Body Region error is null in state."
-        )
-        assertNotNull(state.exerciseTargetMusclesError,
-            "Target Muscles error is null in state."
-        )
-    }
-
-    @Test
-    fun onEvent_SaveOrUpdateExerciseDefWithDuplicateDef_stateProperlyUpdated() = runTest {
-
-
-        testExerciseDefinition = testExerciseDefinition.copy(
-            exerciseDefinitionId = 0
-        )
-
-        setupViewModel(
-            LibraryState(),
-            newExerciseDefinition = testExerciseDefinition
-        )
-
-        var state = viewModel.state.first()
-        val initialDefinitionListSize = state.exerciseDefinitions.size
-
-        viewModel.onEvent(LibraryEvent.SaveOrUpdateDef)
-
-        state = viewModel.state.first()
-
-        val finalDefinitionListSize = state.exerciseDefinitions.size
-        val updatedDefinition = state.exerciseDefinitions[finalDefinitionListSize - 1]
-
-        assertEquals(
-            initialDefinitionListSize,
-            finalDefinitionListSize,
-            "List size changed after updating event."
-            )
-
-        assertEquals(
-            testExerciseDefinition.exerciseName,
-            updatedDefinition.exerciseName,
-            "Last element in definitions list doesn't match updated definition."
-        )
-
-    }
+//    @Test
+//    fun onEvent_SaveOrUpdateExerciseDefWithDuplicateDef_stateProperlyUpdated() = runTest {
+//
+//
+//        testExerciseDefinition = testExerciseDefinition.copy(
+//            exerciseDefinitionId = 0
+//        )
+//
+//        setupViewModel(
+//            LibraryState(),
+//            newExerciseDefinition = testExerciseDefinition
+//        )
+//
+//        var state = viewModel.state.first()
+//        val initialDefinitionListSize = state.exerciseDefinitions.size
+//
+//        viewModel.onEvent(LibraryEvent.SaveOrUpdateDef)
+//
+//        state = viewModel.state.first()
+//
+//        val finalDefinitionListSize = state.exerciseDefinitions.size
+//        val updatedDefinition = state.exerciseDefinitions[finalDefinitionListSize - 1]
+//
+//        assertEquals(
+//            initialDefinitionListSize,
+//            finalDefinitionListSize,
+//            "List size changed after updating event."
+//            )
+//
+//        assertEquals(
+//            testExerciseDefinition.exerciseName,
+//            updatedDefinition.exerciseName,
+//            "Last element in definitions list doesn't match updated definition."
+//        )
+//
+//    }
 
     @Test
     fun onEvent_AddNewExerciseDefClicked_stateProperlyUpdated() = runTest {
@@ -472,27 +472,27 @@ class LibraryViewModelTest {
         )
 
     }
-    @Test
-    fun onEvent_DeleteExerciseDefinition_stateProperlyUpdated() = runTest {
-
-        var state = viewModel.state.first()
-        val exerciseDefToDelete = state.exerciseDefinitions[0]
-
-        viewModel.onEvent(
-            LibraryEvent.DefinitionSelected(exerciseDefToDelete)
-        )
-
-        viewModel.onEvent(LibraryEvent.DeleteDefinition)
-
-        state = viewModel.state.first()
-
-        assertFalse(
-            state.exerciseDefinitions.contains(exerciseDefToDelete),
-            "${exerciseDefToDelete.exerciseName} " +
-                    "found in definitions after deletion event."
-        )
-
-    }
+//    @Test
+//    fun onEvent_DeleteExerciseDefinition_stateProperlyUpdated() = runTest {
+//
+//        var state = viewModel.state.first()
+//        val exerciseDefToDelete = state.exerciseDefinitions[0]
+//
+//        viewModel.onEvent(
+//            LibraryEvent.DefinitionSelected(exerciseDefToDelete)
+//        )
+//
+//        viewModel.onEvent(LibraryEvent.DeleteDefinition)
+//
+//        state = viewModel.state.first()
+//
+//        assertFalse(
+//            state.exerciseDefinitions.contains(exerciseDefToDelete),
+//            "${exerciseDefToDelete.exerciseName} " +
+//                    "found in definitions after deletion event."
+//        )
+//
+//    }
 
     @Test
     fun onEvent_setCurrentFilterType_typeReflectedInState() = runTest {

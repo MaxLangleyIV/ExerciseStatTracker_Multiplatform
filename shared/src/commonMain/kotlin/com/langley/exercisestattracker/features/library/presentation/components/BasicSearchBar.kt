@@ -26,7 +26,6 @@ import com.langley.exercisestattracker.features.library.LibraryState
 fun BasicSearchBar(
     state: LibraryState,
     modifier: Modifier = Modifier,
-    query: String = "",
     onEvent: (LibraryEvent) -> Unit,
     isDropdownOpen: Boolean = false,
 ){
@@ -44,7 +43,7 @@ fun BasicSearchBar(
             OutlinedTextField(
                 modifier = Modifier.focusRequester(FocusRequester())
                     .clickable { onEvent(LibraryEvent.ToggleIsSearchDropdownOpen) },
-                value = query,
+                value = state.searchString,
                 onValueChange = {
                     onEvent(LibraryEvent.OnSearchStringChanged(it))
                 },
