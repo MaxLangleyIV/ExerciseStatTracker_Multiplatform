@@ -175,6 +175,7 @@ fun RecordDetailsView(
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Text(
+                            modifier = Modifier.weight(0.30f),
                             text = "Weight Used:",
                             textAlign = TextAlign.Center
                         )
@@ -200,6 +201,7 @@ fun RecordDetailsView(
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Text(
+                            modifier = Modifier.weight(0.30f),
                             text = "Reps:",
                             textAlign = TextAlign.Center
                         )
@@ -214,19 +216,47 @@ fun RecordDetailsView(
                 }
 
                 if (record.duration > 0){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Timed Exercise",
-                        maxLines = 1
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Text(
+                            modifier = Modifier.weight(0.30f),
+                            text = "Duration:",
+                            textAlign = TextAlign.Center
+                        )
+                        RoundedTextContainer(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f),
+                            text = record.duration.toString(),
+                            maxLines = 1
+                        )
+                    }
                     Spacer(Modifier.height(4.dp))
                 }
                 if (record.distance > 0){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Distance Measured",
-                        maxLines = 1
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Text(
+                            modifier = Modifier.weight(0.30f),
+                            text = "Distance:",
+                            textAlign = TextAlign.Center
+                        )
+                        RoundedTextContainer(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f),
+                            text = record.distance.toString(),
+                            maxLines = 1
+                        )
+                    }
                     Spacer(Modifier.height(4.dp))
                 }
 
