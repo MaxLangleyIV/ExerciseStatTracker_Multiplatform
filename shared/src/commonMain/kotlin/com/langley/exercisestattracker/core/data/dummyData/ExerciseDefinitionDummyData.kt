@@ -1087,8 +1087,18 @@ fun ExerciseDefinitionDummyData.getListOfDummyExerciseRecords(): List<ExerciseRe
                 weightUsed = if (randomDef.isWeighted){ Random.nextInt(300).toFloat() } else { 0.toFloat() },
                 isCardio = randomDef.isCardio,
                 isCalisthenic = randomDef.isCalisthenic,
-                duration = if (randomDef.isCardio) {Random.nextFloat()} else { 0f},
-                distance = if (randomDef.isCardio) {Random.nextFloat()} else { 0f},
+                duration =
+                if (randomDef.isCardio) {
+                    "${Random.nextInt(60)}:${Random.nextInt(from = 10, until = 60)}"
+                }
+                else { "0" },
+                distance =
+                if (randomDef.isCardio) {
+                    ((((Random.nextInt(5).toFloat() + Random.nextFloat()) * 100.0).toInt()).toFloat()
+                            / 100.0).toFloat()
+                }
+                else { 0f },
+                distanceUnit = "miles",
                 repsCompleted = if (randomDef.hasReps){ Random.nextInt(20) } else { 0 },
                 rpe = Random.nextInt(11),
                 notes = "",
