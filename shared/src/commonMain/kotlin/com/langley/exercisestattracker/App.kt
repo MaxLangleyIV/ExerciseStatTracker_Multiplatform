@@ -34,12 +34,10 @@ fun App(
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
 
-        val navController = remember { ExerciseAppNavController(Screen.Records) }
+        val navController = remember { ExerciseAppNavController() }
         val currentScreen by navController.currentScreen.collectAsState()
 
-//        // Initialize dummy data for exercise library.
-//        val exerciseDefDummyData = ExerciseDefinitionDummyData()
-//        val exerciseDefList = exerciseDefDummyData.definitionList
+
 
 //        val exerciseRecordList = exerciseDefDummyData.getListOfDummyExerciseRecords()
 
@@ -50,7 +48,9 @@ fun App(
 //
 //        println("OUTPUTTING ROUTINES: $exerciseRoutineList")
 
-
+//        // Initialize dummy data for exercise library.
+//        val exerciseDefDummyData = ExerciseDefinitionDummyData()
+//        val exerciseDefList = exerciseDefDummyData.definitionList
 //        // Initialize dummy data for exercise library.
 //        val exerciseDefDummyData = ExerciseDefinitionDummyData()
 //        val exerciseDefList = exerciseDefDummyData.definitionList
