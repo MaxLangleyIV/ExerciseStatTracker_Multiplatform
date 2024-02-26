@@ -59,6 +59,15 @@ fun LibraryScreen(
     val libraryState by libraryViewModel.state.collectAsState(LibraryState())
 
 
+//    // Initialize dummy data for exercise library.
+//    val exerciseDefDummyData = ExerciseDefinitionDummyData()
+//    val exerciseDefList = exerciseDefDummyData.definitionList
+//    // Add definitions to SQLDelight db.
+//    for (exerciseDefinition in exerciseDefList){
+//        libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
+//    }
+
+
     Scaffold(
         modifier = Modifier,
         floatingActionButton = {
