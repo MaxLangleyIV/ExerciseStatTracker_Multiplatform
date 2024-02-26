@@ -138,22 +138,22 @@ fun RecordDetailsView(
                     )
                     Spacer(Modifier.height(4.dp))
                 }
-                if (record.duration > 0){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Timed Exercise",
-                        maxLines = 1
-                    )
-                    Spacer(Modifier.height(4.dp))
-                }
-                if (record.distance > 0){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Distance Measured",
-                        maxLines = 1
-                    )
-                    Spacer(Modifier.height(4.dp))
-                }
+//                if (record.duration > 0){
+//                    RoundedTextContainer(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        text = "Timed Exercise",
+//                        maxLines = 1
+//                    )
+//                    Spacer(Modifier.height(4.dp))
+//                }
+//                if (record.distance > 0){
+//                    RoundedTextContainer(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        text = "Distance Measured",
+//                        maxLines = 1
+//                    )
+//                    Spacer(Modifier.height(4.dp))
+//                }
             }
 
             Spacer(Modifier.height(16.dp))
@@ -183,8 +183,7 @@ fun RecordDetailsView(
                             modifier = Modifier.fillMaxWidth()
                                 .weight(1f),
                             text =
-                            record.weightUsed.toString()
-                            + if (record.weightIsPounds){" lbs."} else { " kg."}
+                            record.weightUsed.toString() + " " + record.weightUnit
                             ,
                             maxLines = 1
                         )
@@ -215,7 +214,7 @@ fun RecordDetailsView(
                     Spacer(Modifier.height(4.dp))
                 }
 
-                if (record.duration > 0){
+                if (record.duration != "0"){
                     Row(
                         modifier = Modifier.fillMaxWidth()
                             .clip(RoundedCornerShape(16.dp))
@@ -225,13 +224,13 @@ fun RecordDetailsView(
                     ){
                         Text(
                             modifier = Modifier.weight(0.30f),
-                            text = "Duration:",
+                            text = "Time:",
                             textAlign = TextAlign.Center
                         )
                         RoundedTextContainer(
                             modifier = Modifier.fillMaxWidth()
                                 .weight(1f),
-                            text = record.duration.toString(),
+                            text = record.duration,
                             maxLines = 1
                         )
                     }
