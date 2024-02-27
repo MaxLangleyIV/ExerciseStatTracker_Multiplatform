@@ -212,6 +212,27 @@ fun RecordDetailsView(
                         )
                     }
                     Spacer(Modifier.height(4.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Text(
+                            modifier = Modifier.weight(0.30f),
+                            text = "RIR:",
+                            textAlign = TextAlign.Center
+                        )
+                        RoundedTextContainer(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f),
+                            text = record.rir.toString(),
+                            maxLines = 1
+                        )
+                    }
+                    Spacer(Modifier.height(4.dp))
                 }
 
                 if (record.duration != "0"){
