@@ -125,7 +125,7 @@ class SqlDelightExerciseAppDataSource(
                 }
             }
     }
-
+ 
     override suspend fun insertOrReplaceRecord(record: ExerciseRecord) {
         exerciseRecordQueries.insertOrReplaceExerciseRecord(
             exerciseRecordId = record.exerciseRecordId,
@@ -133,15 +133,13 @@ class SqlDelightExerciseAppDataSource(
             exerciseName = record.exerciseName,
             weightUsed = record.weightUsed.toDouble(),
             weightUnit = record.weightUnit,
-//            weightIsPounds = if (record.weightIsPounds){ 1 } else{ 0 },
-//            weightIsKilos = if (record.weightIsKilos){ 1 } else{ 0 },
             isCardio = if (record.isCardio){ 1 } else{ 0 },
             isCalisthenic = if (record.isCalisthenic){ 1 } else{ 0 },
             duration = record.duration,
             distance = record.distance.toDouble(),
             distanceUnit = record.distanceUnit,
             repsCompleted = record.repsCompleted.toLong(),
-            rpe = record.rpe.toLong(),
+            rir = record.rir.toLong(),
             notes = record.notes,
             userId = record.userId,
             currentBodyWeight = record.currentBodyWeight.toLong()
