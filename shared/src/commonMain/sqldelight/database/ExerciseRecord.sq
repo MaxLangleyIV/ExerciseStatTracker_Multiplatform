@@ -11,7 +11,7 @@ CREATE TABLE ExerciseRecord (
     distance REAL NOT NULL,
     distanceUnit TEXT NOT NULL,
     repsCompleted INTEGER NOT NULL,
-    rpe INTEGER NOT NULL,
+    rir INTEGER NOT NULL,
     notes TEXT NOT NULL,
     userId INTEGER NOT NULL,
     currentBodyWeight INTEGER NOT NULL
@@ -37,7 +37,7 @@ INTO ExerciseRecord(
     distance,
     distanceUnit,
     repsCompleted,
-    rpe,
+    rir,
     notes,
     userId,
     currentBodyWeight
