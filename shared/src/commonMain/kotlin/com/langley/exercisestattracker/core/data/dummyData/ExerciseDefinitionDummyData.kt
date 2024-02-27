@@ -1100,7 +1100,7 @@ fun ExerciseDefinitionDummyData.getListOfDummyExerciseRecords(): List<ExerciseRe
                 else { 0f },
                 distanceUnit = "miles",
                 repsCompleted = if (randomDef.hasReps){ Random.nextInt(20) } else { 0 },
-                rpe = Random.nextInt(11),
+                rir = Random.nextInt(5),
                 notes = "",
                 userId = 0.toLong(),
                 currentBodyWeight = 0
