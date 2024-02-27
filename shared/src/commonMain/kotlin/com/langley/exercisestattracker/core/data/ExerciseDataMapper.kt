@@ -68,7 +68,7 @@ fun database.ExerciseRecord.toExerciseRecord():
         distance = distance.toFloat(),
         distanceUnit = distanceUnit,
         repsCompleted = repsCompleted.toInt(),
-        rpe = rpe.toInt(),
+        rir = rir.toInt(),
         notes = notes,
         userId = userId,
         currentBodyWeight = currentBodyWeight.toInt()
