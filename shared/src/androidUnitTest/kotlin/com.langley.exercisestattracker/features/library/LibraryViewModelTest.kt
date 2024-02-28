@@ -271,27 +271,7 @@ class LibraryViewModelTest {
         )
 
     }
-//    @Test
-//    fun onEvent_DeleteExerciseDefinition_stateProperlyUpdated() = runTest {
-//
-//        var state = viewModel.state.first()
-//        val exerciseDefToDelete = state.exerciseDefinitions[0]
-//
-//        viewModel.onEvent(
-//            LibraryEvent.DefinitionSelected(exerciseDefToDelete)
-//        )
-//
-//        viewModel.onEvent(LibraryEvent.DeleteDefinition)
-//
-//        state = viewModel.state.first()
-//
-//        assertFalse(
-//            state.exerciseDefinitions.contains(exerciseDefToDelete),
-//            "${exerciseDefToDelete.exerciseName} " +
-//                    "found in definitions after deletion event."
-//        )
-//
-//    }
+
 
     @Test
     fun onEvent_setCurrentFilterType_typeReflectedInState() = runTest {
@@ -353,48 +333,6 @@ class LibraryViewModelTest {
 
         assertTrue(state.exerciseDefinitions.last().isFavorite)
     }
-
-    //    @Test
-//    fun onEvent_closeEditExerciseDefinition_stateProperlyUpdated() = runTest {
-//        val selectedDef = viewModel.state.first().exerciseDefinitions[0]
-//
-//        setupViewModel(
-//            initialState = LibraryState(
-//                isExerciseDetailsSheetOpen = true,
-//                isEditExerciseDefSheetOpen = true,
-//                selectedExerciseDefinition = selectedDef
-//            ),
-//            newExerciseDefinition = selectedDef
-//        )
-//
-//        var state = viewModel.state.first()
-//
-//        assertTrue(state.isEditExerciseDefSheetOpen,
-//            "isEditExerciseDefSheetOpen failed to be initialized as true."
-//        )
-//
-//        assertEquals(viewModel.definitionForBuilder, selectedDef,
-//            "newExerciseDef in viewModel: ${viewModel.definitionForBuilder} " +
-//                    "does not equal $selectedDef"
-//        )
-//
-//        viewModel.onEvent(LibraryEvent.CloseEditDefView)
-//
-//        state = viewModel.state.first()
-//
-//        assertFalse(state.isEditExerciseDefSheetOpen,
-//            "isEditExerciseDefSheetOpen still true after CloseEdit' event"
-//        )
-//
-//        assertNull(state.exerciseNameError, "name error not null.")
-//        assertNull(state.exerciseBodyRegionError, "body region error not null.")
-//        assertNull(state.exerciseTargetMusclesError, "target muscle error not null.")
-//        assertEquals(
-//            ExerciseDefinition(),
-//            viewModel.definitionForBuilder,
-//            "newExerciseDefinition should equal a default ExerciseDefinition."
-//        )
-//    }
 
 }
 
