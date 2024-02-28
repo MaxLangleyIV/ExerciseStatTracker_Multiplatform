@@ -55,7 +55,7 @@ class ExerciseRoutineDummyData(
                 exerciseCSV = currentExerciseString,
                 repsCSV = repSchemesCSV[Random.nextInt(repSchemesCSV.size)],
                 description = "A test exercise routine.",
-                isFavorite = 0,
+                isFavorite = false,
                 dateCreated = Clock.System.now().toEpochMilliseconds()
             )
 
