@@ -107,6 +107,8 @@ fun App(
                     )
 
                 }
+
+                Screen.Workout -> {}
             }
         }
     }
