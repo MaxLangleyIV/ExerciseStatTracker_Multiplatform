@@ -11,9 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
-import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
-import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
-import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.home.HomeScreen
@@ -37,28 +34,31 @@ fun App(
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
 
-        val navController = remember { ExerciseAppNavController(Screen.Records) }
+        val navController = remember { ExerciseAppNavController() }
         val currentScreen by navController.currentScreen.collectAsState()
 
-        // Initialize dummy data for exercise library.
-        val exerciseDefDummyData = ExerciseDefinitionDummyData()
-        val exerciseDefList = exerciseDefDummyData.definitionList
-
-        val exerciseRecordList = exerciseDefDummyData.getListOfDummyExerciseRecords()
-
-        val exerciseRoutineDummyData = ExerciseRoutineDummyData(exerciseDefList)
-        val exerciseRoutineList = exerciseRoutineDummyData.getRoutines()
-
-        println("OUTPUTTING RECORDS: $exerciseRecordList")
-
-        println("OUTPUTTING ROUTINES: $exerciseRoutineList")
 
 
-        // Add definitions to SQLDelight db.
+//        val exerciseRecordList = exerciseDefDummyData.getListOfDummyExerciseRecords()
+
+//        val exerciseRoutineDummyData = ExerciseRoutineDummyData(exerciseDefList)
+//        val exerciseRoutineList = exerciseRoutineDummyData.getRoutines()
+
+//        println("OUTPUTTING RECORDS: $exerciseRecordList")
+//
+//        println("OUTPUTTING ROUTINES: $exerciseRoutineList")
+
+//        // Initialize dummy data for exercise library.
+//        val exerciseDefDummyData = ExerciseDefinitionDummyData()
+//        val exerciseDefList = exerciseDefDummyData.definitionList
+//        // Initialize dummy data for exercise library.
+//        val exerciseDefDummyData = ExerciseDefinitionDummyData()
+//        val exerciseDefList = exerciseDefDummyData.definitionList
+//        // Add definitions to SQLDelight db.
 //        for (exerciseDefinition in exerciseDefList){
 //            libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
 //        }
-        // Add records to SQLDelight db.
+//        // Add records to SQLDelight db.
 //        for (exerciseRecord in exerciseRecordList){
 //            recordsViewModel.onEvent(RecordsEvent.SaveRecord(exerciseRecord))
 //        }

@@ -2,7 +2,6 @@ package com.langley.exercisestattracker.features.records.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -82,63 +81,139 @@ fun RecordListItem(exerciseRecord: ExerciseRecord, modifier: Modifier = Modifier
 
         Spacer(Modifier.height(4.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ){
-            Row {
-                Text(
-                    modifier = Modifier,
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    text = "Reps:"
-                )
-
-                Spacer(Modifier.width(4.dp))
-
-                Text(
-                    modifier = Modifier,
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    text = exerciseRecord.repsCompleted.toString()
-                )
-            }
-
-
-
+        // Reps and Weights
+        if (exerciseRecord.repsCompleted > 0 || exerciseRecord.weightUsed > 0){
             Row(
                 modifier = Modifier
-            ) {
-                Text(
-                    modifier = Modifier,
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    text = "Weight:"
-                )
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ){
 
-                Spacer(Modifier.width(4.dp))
+                if (exerciseRecord.repsCompleted > 0){
+                    Row {
+                        Text(
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            text = "Reps:"
+                        )
 
-                Text(
-                    modifier = Modifier,
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    text = exerciseRecord.weightUsed.toString()
-                )
+                        Spacer(Modifier.width(4.dp))
+
+                        Text(
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            text = exerciseRecord.repsCompleted.toString()
+                        )
+                    }
+                }
+
+
+
+                if (exerciseRecord.weightUsed > 0){
+                    Row(
+                        modifier = Modifier
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            text = "Weight:"
+                        )
+
+                        Spacer(Modifier.width(4.dp))
+
+                        Text(
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            text = exerciseRecord.weightUsed.toString()
+                                    + " " + exerciseRecord.weightUnit
+                        )
+                    }
+                }
+
             }
         }
+
+        // Distance and duration.
+        if (exerciseRecord.distance > 0 || exerciseRecord.duration != "0"){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ){
+                if (exerciseRecord.distance > 0){
+                    Row {
+                        Text(
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            text = "Distance:"
+                        )
+
+                        Spacer(Modifier.width(4.dp))
+
+                        Text(
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            text = exerciseRecord.distance.toString() + " "
+                                    + exerciseRecord.distanceUnit
+                        )
+                    }
+                }
+
+
+                if (exerciseRecord.duration != "0"){
+                    Row(
+                        modifier = Modifier
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            text = "Time:"
+                        )
+
+                        Spacer(Modifier.width(4.dp))
+
+                        Text(
+                            modifier = Modifier,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            text = exerciseRecord.duration
+                        )
+                    }
+                }
+            }
+        }
+
 
     }
 

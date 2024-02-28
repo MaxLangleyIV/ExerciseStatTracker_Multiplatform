@@ -3,12 +3,9 @@ package com.langley.exercisestattracker.features.records
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
-import com.langley.exercisestattracker.features.records.RecordsEvent
-import com.langley.exercisestattracker.features.records.RecordsFilterType
-import com.langley.exercisestattracker.features.records.RecordsState
-import com.langley.exercisestattracker.features.records.RecordsViewModel
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -172,6 +169,7 @@ class RecordsViewModelTest{
         )
 
         viewModel.onEvent(RecordsEvent.CloseDetailsView)
+        delay(300L)
         state = viewModel.state.first()
 
         assertNull(

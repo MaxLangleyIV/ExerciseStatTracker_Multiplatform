@@ -3,6 +3,7 @@ package com.langley.exercisestattracker.features.records
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -149,10 +150,15 @@ class RecordsViewModel(
                 TODO() // Might choose to keep records immutable.
             }
             RecordsEvent.CloseDetailsView -> {
-                _state.update { it.copy(
-                    isRecordDetailsSheetOpen = false,
-                    selectedRecord = null
-                ) }
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        isRecordDetailsSheetOpen = false
+                    ) }
+                    delay(300L) //BottomSheet animation delay
+                    _state.update { it.copy(
+                        selectedRecord = null
+                    ) }
+                }
             }
 
             // Edit View Events

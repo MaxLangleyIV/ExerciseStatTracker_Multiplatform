@@ -2,12 +2,12 @@ package com.langley.exercisestattracker.core.data
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.langley.exercisestattracker.database.ExerciseStatTrackerDatabase
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
+import com.langley.exercisestattracker.database.ExerciseStatTrackerDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -125,19 +125,21 @@ class SqlDelightExerciseAppDataSource(
                 }
             }
     }
-
+ 
     override suspend fun insertOrReplaceRecord(record: ExerciseRecord) {
         exerciseRecordQueries.insertOrReplaceExerciseRecord(
             exerciseRecordId = record.exerciseRecordId,
             dateCompleted = record.dateCompleted,
             exerciseName = record.exerciseName,
             weightUsed = record.weightUsed.toDouble(),
+            weightUnit = record.weightUnit,
             isCardio = if (record.isCardio){ 1 } else{ 0 },
             isCalisthenic = if (record.isCalisthenic){ 1 } else{ 0 },
-            duration = record.duration.toDouble(),
+            duration = record.duration,
             distance = record.distance.toDouble(),
+            distanceUnit = record.distanceUnit,
             repsCompleted = record.repsCompleted.toLong(),
-            rpe = record.rpe.toLong(),
+            rir = record.rir.toLong(),
             notes = record.notes,
             userId = record.userId,
             currentBodyWeight = record.currentBodyWeight.toLong()

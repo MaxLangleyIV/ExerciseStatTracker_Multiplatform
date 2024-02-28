@@ -19,9 +19,8 @@ class LibraryViewModel(
 
     private val exerciseAppDataSource: ExerciseAppDataSource,
     initialState: LibraryState = LibraryState(),
-    initialExerciseDef: ExerciseDefinition = ExerciseDefinition(),
-
-    ): ViewModel() {
+    initialExerciseDef: ExerciseDefinition = ExerciseDefinition()
+): ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
 

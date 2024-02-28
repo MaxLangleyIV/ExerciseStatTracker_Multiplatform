@@ -31,13 +31,13 @@ fun database.ExerciseRoutine.toExerciseRoutine():
         ExerciseRoutine {
 
     return ExerciseRoutine(
-        exerciseRoutineId,
-        routineName,
-        exercisesCSV,
-        repsCSV,
-        description,
-        isFavorite,
-        dateCreated
+        exerciseRoutineId = exerciseRoutineId,
+        routineName = routineName,
+        exerciseCSV = exercisesCSV,
+        repsCSV = repsCSV,
+        description = description,
+        isFavorite = isFavorite,
+        dateCreated = dateCreated
     )
 }
 
@@ -45,11 +45,11 @@ fun database.ExerciseSchedule.toExerciseSchedule():
         ExerciseSchedule {
 
     return ExerciseSchedule(
-        exerciseScheduleId,
-        exerciseScheduleName,
-        exerciseRoutineCSV,
-        isFavorite,
-        dateCreated
+        exerciseScheduleId = exerciseScheduleId,
+        exerciseScheduleName = exerciseScheduleName,
+        exerciseRoutineCSV = exerciseRoutineCSV,
+        isFavorite = isFavorite,
+        dateCreated = dateCreated
     )
 }
 
@@ -57,19 +57,21 @@ fun database.ExerciseRecord.toExerciseRecord():
         ExerciseRecord {
 
     return ExerciseRecord(
-        exerciseRecordId,
-        dateCompleted,
-        exerciseName,
-        weightUsed.toFloat(),
-        isCardio == 1L,
-        isCalisthenic == 1L,
-        duration.toFloat(),
-        distance.toFloat(),
-        repsCompleted.toInt(),
-        rpe.toInt(),
-        notes,
-        userId,
-        currentBodyWeight.toInt()
+        exerciseRecordId =exerciseRecordId,
+        dateCompleted = dateCompleted,
+        exerciseName = exerciseName,
+        weightUsed = weightUsed.toFloat(),
+        weightUnit = weightUnit,
+        isCardio = isCardio == 1L,
+        isCalisthenic = isCalisthenic == 1L,
+        duration = duration,
+        distance = distance.toFloat(),
+        distanceUnit = distanceUnit,
+        repsCompleted = repsCompleted.toInt(),
+        rir = rir.toInt(),
+        notes = notes,
+        userId = userId,
+        currentBodyWeight = currentBodyWeight.toInt()
     )
 
 }

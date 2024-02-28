@@ -15,13 +15,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ExerciseBuilderViewModel(
-
     private val exerciseAppDataSource: ExerciseAppDataSource,
     initialState: ExerciseBuilderState = ExerciseBuilderState(),
-    private val libraryOnEvent: (LibraryEvent) -> Unit,
-
-
-    ): ViewModel() {
+    private val libraryOnEvent: (LibraryEvent) -> Unit
+): ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
 
@@ -32,6 +29,8 @@ class ExerciseBuilderViewModel(
             SharingStarted.WhileSubscribed(5000L),
             ExerciseBuilderState()
         )
+
+    val definitions = exerciseAppDataSource.getDefinitions()
 
     private fun initialize(definition: ExerciseDefinition){
         println("SELECTED DEF: ${definition.exerciseName}")
