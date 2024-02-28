@@ -36,7 +36,7 @@ fun database.ExerciseRoutine.toExerciseRoutine():
         exerciseCSV = exercisesCSV,
         repsCSV = repsCSV,
         description = description,
-        isFavorite = isFavorite,
+        isFavorite = isFavorite.toInt() == 1,
         dateCreated = dateCreated
     )
 }
