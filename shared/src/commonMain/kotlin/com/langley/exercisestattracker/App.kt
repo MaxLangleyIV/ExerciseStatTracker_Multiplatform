@@ -17,6 +17,7 @@ import com.langley.exercisestattracker.features.home.HomeScreen
 import com.langley.exercisestattracker.features.home.HomeState
 import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
 import com.langley.exercisestattracker.features.records.RecordsScreen
+import com.langley.exercisestattracker.features.workout.presentation.WorkoutScreen
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
 
@@ -34,34 +35,8 @@ fun App(
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
 
-        val navController = remember { ExerciseAppNavController() }
+        val navController = remember { ExerciseAppNavController(Screen.Workout) }
         val currentScreen by navController.currentScreen.collectAsState()
-
-
-
-//        val exerciseRecordList = exerciseDefDummyData.getListOfDummyExerciseRecords()
-
-//        val exerciseRoutineDummyData = ExerciseRoutineDummyData(exerciseDefList)
-//        val exerciseRoutineList = exerciseRoutineDummyData.getRoutines()
-
-//        println("OUTPUTTING RECORDS: $exerciseRecordList")
-//
-//        println("OUTPUTTING ROUTINES: $exerciseRoutineList")
-
-//        // Initialize dummy data for exercise library.
-//        val exerciseDefDummyData = ExerciseDefinitionDummyData()
-//        val exerciseDefList = exerciseDefDummyData.definitionList
-//        // Initialize dummy data for exercise library.
-//        val exerciseDefDummyData = ExerciseDefinitionDummyData()
-//        val exerciseDefList = exerciseDefDummyData.definitionList
-//        // Add definitions to SQLDelight db.
-//        for (exerciseDefinition in exerciseDefList){
-//            libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
-//        }
-//        // Add records to SQLDelight db.
-//        for (exerciseRecord in exerciseRecordList){
-//            recordsViewModel.onEvent(RecordsEvent.SaveRecord(exerciseRecord))
-//        }
 
 
         Surface(
@@ -87,7 +62,7 @@ fun App(
                 Screen.Library -> {
 
                     LibraryScreen(
-                        appModule = appModule,
+                        dataSource = appModule.exerciseAppDataSource,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,
@@ -99,7 +74,7 @@ fun App(
                 Screen.Records -> {
 
                     RecordsScreen(
-                        appModule = appModule,
+                        dataSource = appModule.exerciseAppDataSource,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,
@@ -108,7 +83,15 @@ fun App(
 
                 }
 
-                Screen.Workout -> {}
+                Screen.Workout -> {
+                    WorkoutScreen(
+                        dataSource = appModule.exerciseAppDataSource,
+                        focusRequester = focusRequester,
+                        focusManager = focusManager,
+                        interactionSource = interactionSource,
+                        navController = navController
+                    )
+                }
             }
         }
     }
