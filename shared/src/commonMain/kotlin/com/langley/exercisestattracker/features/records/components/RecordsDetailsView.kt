@@ -46,7 +46,8 @@ fun RecordDetailsView(
 
     BasicBottomSheet(
         visible = isVisible,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center
     )
     {
 
