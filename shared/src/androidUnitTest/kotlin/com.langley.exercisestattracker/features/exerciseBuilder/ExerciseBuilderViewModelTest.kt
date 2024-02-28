@@ -5,7 +5,9 @@ import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDum
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -13,6 +15,8 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ExerciseBuilderViewModelTest {
@@ -20,15 +24,15 @@ class ExerciseBuilderViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var viewModel: ExerciseBuilderViewModel
-    private lateinit var testExerciseDefinition: ExerciseDefinition
+    private lateinit var builderViewModel: ExerciseBuilderViewModel
+    private lateinit var testDefinition: ExerciseDefinition
     private val testString = "Test"
 
     private fun setupViewModel(
         initialState: ExerciseBuilderState = ExerciseBuilderState(),
     ): ExerciseBuilderViewModel {
 
-        viewModel = viewModelFactory {
+        builderViewModel = viewModelFactory {
 
             ExerciseBuilderViewModel(
 
@@ -40,7 +44,7 @@ class ExerciseBuilderViewModelTest {
             )
         }.createViewModel()
 
-        return viewModel
+        return builderViewModel
     }
 
     @Before
@@ -48,7 +52,7 @@ class ExerciseBuilderViewModelTest {
 
         setupViewModel(ExerciseBuilderState())
 
-        testExerciseDefinition = ExerciseDefinition(
+        testDefinition = ExerciseDefinition(
             exerciseDefinitionId = null,
             exerciseName = "Test",
             bodyRegion = "Test",
@@ -70,25 +74,25 @@ class ExerciseBuilderViewModelTest {
 
     @Test
     fun onEvent_OnToggleBodyRegion_primaryTargetListUpdated() = runTest {
-        var state = viewModel.state.first()
+        var state = builderViewModel.state.first()
 
         assertFalse(
             state.primaryTargetList?.contains(testString)?: false,
             "Test string should not be found before toggling."
         )
 
-        viewModel.onEvent(ExerciseBuilderEvent.ToggleBodyRegion(testString))
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleBodyRegion(testString))
 
-        state = viewModel.state.first()
+        state = builderViewModel.state.first()
 
         assertTrue(
             state.primaryTargetList?.contains(testString)?: false,
             "Test string not found after toggling on."
         )
 
-        viewModel.onEvent(ExerciseBuilderEvent.ToggleBodyRegion(testString))
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleBodyRegion(testString))
 
-        state = viewModel.state.first()
+        state = builderViewModel.state.first()
 
         assertFalse(
             state.primaryTargetList?.contains(testString)?: false,
@@ -99,16 +103,16 @@ class ExerciseBuilderViewModelTest {
 
     @Test
     fun onEvent_ExerciseDescriptionChanged_newExerciseProperlyUpdated() = runTest {
-        var state = viewModel.state.first()
+        var state = builderViewModel.state.first()
 
         assertFalse(
             state.newExerciseDefinition.description.contains(testString),
             "Description must not contain test string before event."
         )
 
-        viewModel.onEvent(ExerciseBuilderEvent.OnDescriptionChanged(testString))
+        builderViewModel.onEvent(ExerciseBuilderEvent.OnDescriptionChanged(testString))
 
-        state = viewModel.state.first()
+        state = builderViewModel.state.first()
 
         assertTrue(
             state.newExerciseDefinition.description.contains(testString),
@@ -118,7 +122,7 @@ class ExerciseBuilderViewModelTest {
 
     @Test
     fun onEvent_OnExerciseNameChanged_newExerciseProperlyUpdated() = runTest {
-        var state = viewModel.state.first()
+        var state = builderViewModel.state.first()
 
         assertNotEquals(
             testString,
@@ -126,9 +130,9 @@ class ExerciseBuilderViewModelTest {
             "Exercise name should not equal test string yet."
         )
 
-        viewModel.onEvent(ExerciseBuilderEvent.OnNameChanged(testString))
+        builderViewModel.onEvent(ExerciseBuilderEvent.OnNameChanged(testString))
 
-        state = viewModel.state.first()
+        state = builderViewModel.state.first()
 
         assertEquals(
             expected =testString,
@@ -140,15 +144,15 @@ class ExerciseBuilderViewModelTest {
     @Test
     fun onEvent_OnToggleTargetMuscles_musclesListProperlyUpdated() = runTest {
 
-        var state = viewModel.state.first()
+        var state = builderViewModel.state.first()
 
         assertFalse(
             state.musclesList?.contains(testString) ?: false
         )
 
-        viewModel.onEvent(ExerciseBuilderEvent.ToggleTargetMuscle(testString))
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleTargetMuscle(testString))
 
-        state = viewModel.state.first()
+        state = builderViewModel.state.first()
 
 
         assertTrue(
@@ -156,9 +160,9 @@ class ExerciseBuilderViewModelTest {
             "Test string not found after toggling on."
         )
 
-        viewModel.onEvent(ExerciseBuilderEvent.ToggleTargetMuscle(testString))
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleTargetMuscle(testString))
 
-        state = viewModel.state.first()
+        state = builderViewModel.state.first()
 
         assertFalse(
             state.musclesList?.contains(testString)?: false,
@@ -167,90 +171,272 @@ class ExerciseBuilderViewModelTest {
     }
 
     @Test
+    fun onEvent_toggleDefinitionFields_newExerciseDefUpdatedCorrectly()= runTest {
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleIsWeighted)
+        var state: ExerciseBuilderState = builderViewModel.state.first()
+        assertTrue(
+            state.newExerciseDefinition.isWeighted,
+            "isWeighted should be true."
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleIsWeighted)
+        state = builderViewModel.state.first()
+        assertFalse(
+            state.newExerciseDefinition.isWeighted,
+            "isWeighted should be false."
+        )
+
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleHasReps)
+        state = builderViewModel.state.first()
+        assertTrue(
+            state.newExerciseDefinition.hasReps,
+            "hasReps should be true."
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleHasReps)
+        state = builderViewModel.state.first()
+        assertFalse(
+            state.newExerciseDefinition.hasReps,
+            "hasReps should be false."
+        )
+
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleIsCardio)
+        state = builderViewModel.state.first()
+        assertTrue(
+            state.newExerciseDefinition.isCardio,
+            "isCardio should be true."
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleIsCardio)
+        state = builderViewModel.state.first()
+        assertFalse(
+            state.newExerciseDefinition.isCardio,
+            "isCardio should be false."
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleIsTimed)
+        state = builderViewModel.state.first()
+        assertTrue(
+            state.newExerciseDefinition.isTimed,
+            "isTimed should be true."
+        )
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleIsTimed)
+        state = builderViewModel.state.first()
+        assertFalse(
+            state.newExerciseDefinition.isTimed,
+            "isTimed should be false."
+        )
+
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleHasDistance)
+        state = builderViewModel.state.first()
+        assertTrue(
+            state.newExerciseDefinition.hasDistance,
+            "hasDistance should be true."
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleHasDistance)
+        state = builderViewModel.state.first()
+        assertFalse(
+            state.newExerciseDefinition.hasDistance,
+            "hasDistance should be false."
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleIsCalisthenics)
+        state = builderViewModel.state.first()
+        assertTrue(
+            state.newExerciseDefinition.isCalisthenic,
+            "isCalisthenic should be true."
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.ToggleIsCalisthenics)
+        state = builderViewModel.state.first()
+        assertFalse(
+            state.newExerciseDefinition.isCalisthenic,
+            "isCalisthenic should be false."
+        )
+
+
+
+    }
+
+    @Test
+    fun onEvent_InitializeDefinition_newExerciseDefUpdated() = runTest {
+        var state = builderViewModel.state.first()
+
+        assertTrue(
+            state.newExerciseDefinition.exerciseName.isBlank(),
+            "NewExerciseDef name should be blank initially."
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.InitializeDefinition(testDefinition))
+
+        state = builderViewModel.state.first()
+
+        assertEquals(
+            expected = testDefinition,
+            actual = state.newExerciseDefinition,
+            "NewExerciseDef should equal testDefinition after event."
+        )
+
+    }
+
+    @Test
+    fun onEvent_DeclareAsInitialized() = runTest {
+        var state = builderViewModel.state.first()
+
+        assertFalse(state.initialized, "Initialized should be set to false.")
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.DeclareAsInitialized)
+
+        state = builderViewModel.state.first()
+
+        assertTrue(state.initialized, "Initialized should be set to true.")
+
+    }
+
+    @Test
     fun onEvent_SaveOrUpdateExerciseDefWithCorrectInput_stateProperlyUpdated() = runTest {
 
-        viewModel.onEvent(ExerciseBuilderEvent.SaveOrUpdateDef)
+        // Check that testDef isn't already in the data source.
+        for (def in builderViewModel.definitions.first()){
 
-        val state = viewModel.state.first()
+            assertNotEquals(
+                illegal = testDefinition.exerciseName,
+                actual = def.exerciseName,
+                message = "TestDef found in datasource before saving."
+            )
+
+        }
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.InitializeDefinition(testDefinition))
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.SaveOrUpdateDef)
 
         var savedExerciseDefFoundInState = false
 
-//        for (def in state.exerciseDefinitions){
-//
-//            if (def.exerciseName == testExerciseDefinition.exerciseName){
-//                savedExerciseDefFoundInState = true
-//            }
-//
-//        }
+        for (def in builderViewModel.definitions.first()){
 
-//        assertTrue(savedExerciseDefFoundInState,
-//            "testExercise not found in state after SaveOrUpdate event."
-//        )
+            if (def.exerciseName == testDefinition.exerciseName){
+                savedExerciseDefFoundInState = true
+            }
+
+        }
+
+
+        assertTrue(savedExerciseDefFoundInState,
+            "testExercise not found in state after SaveOrUpdate event."
+        )
     }
-//
-//    @Test
-//    fun onEvent_SaveOrUpdateExerciseDefWithIncorrectInput_stateProperlyUpdated() = runTest {
-//        testExerciseDefinition = testExerciseDefinition.copy(
-//            exerciseName = "",
-//            bodyRegion = "",
-//            targetMuscles = "",
-//        )
-//
-//        setupViewModel(
-//            LibraryState(),
-//            newExerciseDefinition = testExerciseDefinition
-//        )
-//
-//        viewModel.onEvent(LibraryEvent.SaveOrUpdateDef)
-//
-//        val state = viewModel.state.first()
-//
-//        assertNotNull(state.exerciseNameError,
-//            "Name error is null in state."
-//        )
-//        assertNotNull(state.exerciseBodyRegionError,
-//            "Body Region error is null in state."
-//        )
-//        assertNotNull(state.exerciseTargetMusclesError,
-//            "Target Muscles error is null in state."
-//        )
-//    }
-//
-//    @Test
-//    fun onEvent_SaveOrUpdateExerciseDefWithDuplicateDef_stateProperlyUpdated() = runTest {
-//
-//
-//        testExerciseDefinition = testExerciseDefinition.copy(
-//            exerciseDefinitionId = 0
-//        )
-//
-//        setupViewModel(
-//            LibraryState(),
-//            newExerciseDefinition = testExerciseDefinition
-//        )
-//
-//        var state = viewModel.state.first()
-//        val initialDefinitionListSize = state.exerciseDefinitions.size
-//
-//        viewModel.onEvent(LibraryEvent.SaveOrUpdateDef)
-//
-//        state = viewModel.state.first()
-//
-//        val finalDefinitionListSize = state.exerciseDefinitions.size
-//        val updatedDefinition = state.exerciseDefinitions[finalDefinitionListSize - 1]
-//
-//        assertEquals(
-//            initialDefinitionListSize,
-//            finalDefinitionListSize,
-//            "List size changed after updating event."
-//            )
-//
-//        assertEquals(
-//            testExerciseDefinition.exerciseName,
-//            updatedDefinition.exerciseName,
-//            "Last element in definitions list doesn't match updated definition."
-//        )
-//
-//    }
+
+    @Test
+    fun onEvent_SaveOrUpdateExerciseDefWithIncorrectInput_stateProperlyUpdated() = runTest {
+        testDefinition = testDefinition.copy(
+            exerciseName = "",
+            bodyRegion = "",
+            targetMuscles = "",
+        )
+
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.InitializeDefinition(testDefinition))
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.SaveOrUpdateDef)
+
+        val state = builderViewModel.state.first()
+
+        assertNotNull(
+            actual = state.exerciseNameError,
+            message = "Exercise name error should not be null."
+        )
+    }
+
+    @Test
+    fun onEvent_SaveOrUpdateExerciseDefWithDuplicateDef_stateProperlyUpdated() = runTest {
+
+
+        testDefinition = testDefinition.copy(
+            exerciseDefinitionId = 0
+        )
+
+        val initialDefinitionListSize = builderViewModel.definitions.first().size
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.InitializeDefinition(testDefinition))
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.SaveOrUpdateDef)
+
+
+
+        val finalDefinitionListSize = builderViewModel.definitions.first().size
+        val updatedDefinition = builderViewModel.definitions.first()[finalDefinitionListSize - 1]
+
+        assertEquals(
+            expected = initialDefinitionListSize,
+            actual = finalDefinitionListSize,
+            message = "List size changed after updating event."
+            )
+
+        assertEquals(
+            expected = testDefinition.exerciseName,
+            actual = updatedDefinition.exerciseName,
+            message = "Last element in definitions list doesn't match updated definition."
+        )
+
+    }
+
+    @Test
+    fun onEvent_DeleteExerciseDefinition_stateProperlyUpdated() = runTest {
+
+        val exerciseDefToDelete = builderViewModel.definitions.first()[0]
+
+        builderViewModel.onEvent(
+            ExerciseBuilderEvent.InitializeDefinition(exerciseDefToDelete)
+        )
+
+        builderViewModel.onEvent(ExerciseBuilderEvent.DeleteDefinition)
+
+
+        assertFalse(
+            builderViewModel.definitions.first().contains(exerciseDefToDelete),
+            "${exerciseDefToDelete.exerciseName} " +
+                    "found in definitions after deletion event."
+        )
+
+    }
+
+    @Test
+    fun onEvent_CloseAddDef_stateUpdatedProperly() = runTest {
+
+        launch {
+            builderViewModel.onEvent(ExerciseBuilderEvent.InitializeDefinition(testDefinition))
+            builderViewModel.onEvent(ExerciseBuilderEvent.DeclareAsInitialized)
+
+            var state = builderViewModel.state.first()
+
+            assertTrue(state.initialized, "Initialized should be true.")
+
+            builderViewModel.onEvent(ExerciseBuilderEvent.CloseAddDef)
+
+            delay(300L)
+
+            state = builderViewModel.state.first()
+
+            assertFalse(state.initialized, "Initialized should be false.")
+            assertNull(state.exerciseNameError, "exerciseNameError should be null.")
+            assertNull(state.exerciseBodyRegionError, "Body regions should be null.")
+            assertNull(state.exerciseTargetMusclesError, "Target muscles should be null.")
+            assertNull(state.primaryTargetList, "Primary targets list should be null.")
+            assertNull(state.musclesList, "Muscle list should be null.")
+            assertFalse(state.initialized, "Initialized should be false.")
+            assertEquals(
+                expected = ExerciseDefinition(),
+                actual = state.newExerciseDefinition,
+                message = "NewExerciseDefinition should equal default definition."
+            )
+        }
+
+    }
 
 }
