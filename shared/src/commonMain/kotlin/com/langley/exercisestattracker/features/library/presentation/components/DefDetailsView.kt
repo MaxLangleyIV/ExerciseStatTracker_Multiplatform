@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
-import com.langley.exercisestattracker.features.exerciseBuilder.presentation.components.RoundedTextContainer
+import com.langley.exercisestattracker.core.presentation.composables.RoundedTextContainer
 import com.langley.exercisestattracker.features.library.LibraryEvent
 
 @Composable
