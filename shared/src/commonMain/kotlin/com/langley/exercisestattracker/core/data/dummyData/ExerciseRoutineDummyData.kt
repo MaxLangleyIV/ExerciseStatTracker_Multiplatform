@@ -41,10 +41,12 @@ class ExerciseRoutineDummyData(
 
                 if (currentExerciseString !== ""){
                     currentExerciseString =
-                        currentExerciseString + ", " + exerciseDefinitions[randomIndex].exerciseName
+                        currentExerciseString + "," +
+                                exerciseDefinitions[randomIndex].exerciseDefinitionId.toString()
                 }
                 else {
-                    currentExerciseString = exerciseDefinitions[randomIndex].exerciseName
+                    currentExerciseString =
+                        exerciseDefinitions[randomIndex].exerciseDefinitionId.toString()
                 }
 
             }
