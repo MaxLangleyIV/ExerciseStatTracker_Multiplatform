@@ -39,14 +39,17 @@ class WorkoutViewModel(
 
             val currentExerciseQueue = mutableListOf<ExerciseRecord>()
 
+            val newMap = _state.value.exerciseMap.toMutableMap()
+
             for ((index,idString) in exerciseIdList.withIndex()){
                 try {
                     val def = definitions[idString.toInt()]
                     val reps = repsList[index].toInt()
 
-                    if (_state.value.exerciseMap[def.exerciseName] == null){
-                        _state.value.exerciseMap[def.exerciseName] =
-                            mutableListOf(
+                    if (newMap[def.exerciseName] == null){
+
+                        newMap[def.exerciseName] =
+                            listOf(
                                 ExerciseRecord(
                                     exerciseName = def.exerciseName,
                                     isCardio = def.isCardio,
@@ -57,15 +60,20 @@ class WorkoutViewModel(
 
                     }
                     else {
-                        _state.value.exerciseMap[def.exerciseName]!!.add(
-                            ExerciseRecord(
+                        newMap[def.exerciseName] =
+                            newMap[def.exerciseName]!!
+                                .toMutableList() + ExerciseRecord(
                                 exerciseName = def.exerciseName,
                                 isCardio = def.isCardio,
                                 isCalisthenic = def.isCalisthenic,
                                 repsCompleted = reps
-                            )
-                        )
+                                )
+
                     }
+
+                    _state.update { it.copy(
+                        exerciseMap = newMap
+                    ) }
 
                 }
                 catch (error : IndexOutOfBoundsException){
@@ -79,7 +87,23 @@ class WorkoutViewModel(
                 exerciseQueue = currentExerciseQueue,
             ) }
         }
+    }
 
+    fun addToMap(record: ExerciseRecord?){
+        if (record == null) { return }
+
+        val newMap = _state.value.exerciseMap.toMutableMap()
+
+        if (newMap[record.exerciseName] == null){
+            newMap[record.exerciseName] = listOf(record).toMutableList()
+        }
+        else {
+            newMap[record.exerciseName] = newMap[record.exerciseName]!!.toMutableList() + record
+        }
+
+        _state.update { it.copy(
+            exerciseMap = newMap
+        ) }
     }
 
 }
