@@ -88,7 +88,7 @@ fun WorkoutScreen(
         ){
 
             // Empty Workout View
-            if (state.exerciseQueue.isEmpty()){
+            if (state.exerciseMap.isEmpty()){
                 Text(
                     text = "This workout is currently empty.",
                     color = MaterialTheme.colorScheme.onBackground
@@ -173,12 +173,17 @@ fun WorkoutScreen(
             else {
 
                 // Exercises
-                for (exercise in state.exerciseQueue){
+                for (exercise in state.exerciseMap.keys){
 
                     Column {
-                        Row {
-                            Text( text = exercise.exerciseName )
+                        for (set in state.exerciseMap[exercise]?: listOf()){
+                            Row {
+                                Text( text = exercise )
+                            }
+                            Text( text = set.repsCompleted.toString() )
                         }
+
+
                     }
 
                 }
