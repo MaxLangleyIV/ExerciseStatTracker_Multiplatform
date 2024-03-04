@@ -12,7 +12,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +55,7 @@ fun WorkoutScreen(
     navController: ExerciseAppNavController,
     visible: Boolean = true
 ){
+    println("RECOMPOSING WORKOUT SCREEN")
     val workoutViewModel = getViewModel(
         key = "workoutViewModel",
         factory = viewModelFactory { WorkoutViewModel(dataSource) }
@@ -62,16 +71,37 @@ fun WorkoutScreen(
     ) {
 
         // Top Bar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .weight(0.1F),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(text = "Top Bar")
+        Column(
+            modifier = Modifier.weight(0.1F)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ){
+                IconButton(
+                    onClick = {
+                        navController.navigateBack()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBackIos,
+                        contentDescription = "Close"
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+
+                Text(text = "Top Bar")
+
+            }
         }
 
         Spacer(Modifier.height(8.dp))
@@ -82,7 +112,9 @@ fun WorkoutScreen(
                 .fillMaxSize()
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.background)
-                .weight(0.8F),
+                .weight(0.8F)
+                .verticalScroll(rememberScrollState()),
+
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
@@ -95,7 +127,10 @@ fun WorkoutScreen(
                 )
 
                 // Buttons Column
-                Column {
+                Column(
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     // Add Exercise Button
                     Row(
                         modifier = Modifier
@@ -175,22 +210,77 @@ fun WorkoutScreen(
                 // Exercises
                 for (exercise in state.exerciseMap.keys){
 
-                    Column {
-                        for (set in state.exerciseMap[exercise]?: listOf()){
-                            Row {
-                                Text( text = exercise )
+                    // Exercise Group
+                    Column(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = exercise,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        // Exercise Sets
+                        Column(
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            for (set in state.exerciseMap[exercise]?: listOf()){
+
+                                Text( text = set.repsCompleted.toString() )
+
                             }
-                            Text( text = set.repsCompleted.toString() )
                         }
 
-
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Button(
+                                onClick = {
+                                    workoutViewModel.addToMap(state.exerciseMap[exercise]?.last())
+                                }
+                            ){
+                                Text( text = "Add another set." )
+                            }
+                        }
                     }
-
+                    Spacer(Modifier.height(8.dp))
                 }
 
             }
 
 
+        }
+
+        // Save / Cancel Section
+        Column(
+            modifier = Modifier.weight(0.1F),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = {  }
+                ){
+                    Text( text = "Cancel Session" )
+                }
+
+                Spacer(Modifier.width(8.dp))
+
+                Button(
+                    onClick = {  }
+                ){
+                    Text( text = "Save Session" )
+                }
+            }
         }
     }
 
