@@ -26,6 +26,7 @@ class ExerciseRoutineDummyData(
         "10, 10, 10, 10, 10"
     )
     private var currentExerciseString = ""
+    private var currentRepsString = ""
 
     private lateinit var currentRoutine: ExerciseRoutine
 
@@ -39,14 +40,19 @@ class ExerciseRoutineDummyData(
 
                 randomIndex = Random.nextInt(exerciseDefinitionsSize)
 
-                if (currentExerciseString !== ""){
-                    currentExerciseString =
-                        currentExerciseString + "," +
-                                exerciseDefinitions[randomIndex].exerciseDefinitionId.toString()
-                }
-                else {
-                    currentExerciseString =
-                        exerciseDefinitions[randomIndex].exerciseDefinitionId.toString()
+                for (k in 1..3){
+                    if (currentExerciseString.isBlank()){
+                        currentExerciseString =
+                            exerciseDefinitions[randomIndex].exerciseDefinitionId.toString()
+                        currentRepsString = "5"
+                    }
+                    else {
+                        currentExerciseString =
+                            currentExerciseString + "," +
+                                    exerciseDefinitions[randomIndex].exerciseDefinitionId.toString()
+                        currentRepsString = "$currentRepsString,5"
+                    }
+
                 }
 
             }
@@ -55,7 +61,7 @@ class ExerciseRoutineDummyData(
                 exerciseRoutineId = (i - 1).toLong(),
                 routineName = "Test Routine $i",
                 exerciseCSV = currentExerciseString,
-                repsCSV = repSchemesCSV[Random.nextInt(repSchemesCSV.size)],
+                repsCSV = currentRepsString,
                 description = "A test exercise routine.",
                 isFavorite = false,
                 dateCreated = Clock.System.now().toEpochMilliseconds()
