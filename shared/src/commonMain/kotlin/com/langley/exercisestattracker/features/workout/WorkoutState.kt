@@ -11,7 +11,7 @@ data class WorkoutState(
 
     val completedExercises: List<ExerciseRecord> = mutableListOf(),
 
-    val exerciseMap: MutableMap<String, MutableList<ExerciseRecord>> = mutableMapOf()
+    val exerciseMap: Map<String, List<ExerciseRecord>> = mapOf()
 
 
 
