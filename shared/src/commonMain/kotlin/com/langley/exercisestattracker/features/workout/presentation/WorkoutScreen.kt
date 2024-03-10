@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -38,9 +39,13 @@ import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import com.langley.exercisestattracker.features.workout.WorkoutViewModel
+import com.langley.exercisestattracker.features.workout.subfeature.ExerciseSelectorView
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
 
 @Composable
 fun WorkoutScreen(
@@ -55,7 +60,7 @@ fun WorkoutScreen(
     navController: ExerciseAppNavController,
     visible: Boolean = true
 ){
-    println("RECOMPOSING WORKOUT SCREEN")
+
     val workoutViewModel = getViewModel(
         key = "workoutViewModel",
         factory = viewModelFactory { WorkoutViewModel(dataSource) }
@@ -66,222 +71,236 @@ fun WorkoutScreen(
     var isSingleExerciseMode by mutableStateOf( true )
 
     // Full Screen Container
-    Column(
-        modifier = modifier
-    ) {
-
-        // Top Bar
+    Surface {
         Column(
-            modifier = Modifier.weight(0.1F)
+            modifier = modifier,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
-            ){
-                IconButton(
-                    onClick = {
-                        navController.navigateBack()
+
+            // Top Bar
+            Column(
+                modifier = Modifier.weight(0.1F)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start
+                ){
+                    IconButton(
+                        onClick = {
+                            navController.navigateBack()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBackIos,
+                            contentDescription = "Close"
+                        )
                     }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBackIos,
-                        contentDescription = "Close"
+                }
+                // Routine Name
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(4.dp),
+
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+
+                    Text(
+                        text = state.routine.routineName.ifBlank {
+                            "New Workout"
+                        } + " - " + Clock.System.todayIn(TimeZone.currentSystemDefault())
                     )
+
                 }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
 
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+            Spacer(Modifier.height(8.dp))
+
+            // Workout Content
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.background)
+                    .weight(0.8F)
+                    .verticalScroll(rememberScrollState()),
+
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
             ){
 
-                Text(text = "Top Bar")
+                // Empty Workout View
+                if (state.exerciseMap.isEmpty()){
+                    Text(
+                        text = "This workout is currently empty.",
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
 
-            }
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        // Workout Content
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.background)
-                .weight(0.8F)
-                .verticalScroll(rememberScrollState()),
-
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-
-            // Empty Workout View
-            if (state.exerciseMap.isEmpty()){
-                Text(
-                    text = "This workout is currently empty.",
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-
-                // Buttons Column
-                Column(
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Add Exercise Button
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 0.dp, max = 60.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .clickable {  }
-                            .background(MaterialTheme.colorScheme.primaryContainer)
-                            .padding(4.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ){
-
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1F),
-                            text = "Add an exercise.",
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-
-                    Spacer(Modifier.height(8.dp))
-
-                    // Select Routine Button
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 0.dp, max = 60.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .clickable {  }
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
-                            .padding(4.dp),
-                        horizontalArrangement = Arrangement.Center,
-                    ){
-
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1F),
-                            text = "Select a routine.",
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-
-                    Spacer(Modifier.height(8.dp))
-
-                    // Cancel
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 0.dp, max = 60.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .clickable {  }
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
-                            .padding(4.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ){
-
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1F),
-                            text = "Cancel",
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
-
-
-            }
-            // Non-empty Workout View
-            else {
-
-                // Exercises
-                for (exercise in state.exerciseMap.keys){
-
-                    // Exercise Group
+                    // Buttons Column
                     Column(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(MaterialTheme.colorScheme.surfaceVariant),
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = exercise,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        // Add Exercise Button
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 0.dp, max = 60.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .clickable {  }
+                                .background(MaterialTheme.colorScheme.primaryContainer)
+                                .padding(4.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ){
 
-                        // Exercise Sets
-                        Column(
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            for (set in state.exerciseMap[exercise]?: listOf()){
-
-                                Text( text = set.repsCompleted.toString() )
-
-                            }
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1F),
+                                text = "Add an exercise.",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                textAlign = TextAlign.Center,
+                            )
                         }
 
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Button(
-                                onClick = {
-                                    workoutViewModel.addToMap(state.exerciseMap[exercise]?.last())
-                                }
-                            ){
-                                Text( text = "Add another set." )
-                            }
+                        Spacer(Modifier.height(8.dp))
+
+                        // Select Routine Button
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 0.dp, max = 60.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .clickable {  }
+                                .background(MaterialTheme.colorScheme.secondaryContainer)
+                                .padding(4.dp),
+                            horizontalArrangement = Arrangement.Center,
+                        ){
+
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1F),
+                                text = "Select a routine.",
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                textAlign = TextAlign.Center,
+                            )
                         }
+
+                        Spacer(Modifier.height(8.dp))
                     }
-                    Spacer(Modifier.height(8.dp))
+
+
                 }
+                // Non-empty Workout View
+                else {
+
+                    // Exercises
+                    for (exercise in state.exerciseMap.keys){
+
+                        // Exercise Group
+                        Column(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant),
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = exercise,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+
+                            // Exercise Sets
+                            Column(
+                                verticalArrangement = Arrangement.SpaceEvenly,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                for (set in state.exerciseMap[exercise]?: listOf()){
+
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceEvenly
+                                    ) {
+                                        Column {
+                                            Text(
+                                                text = set.repsCompleted.toString(),
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+
+                                            Spacer(Modifier.height(4.dp))
+
+                                            Text(
+                                                text = set.repsCompleted.toString(),
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+
+
+
+                                }
+                            }
+
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.SpaceEvenly,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Button(
+                                    onClick = {
+                                        workoutViewModel.addToMap(state.exerciseMap[exercise]?.last())
+                                    }
+                                ){
+                                    Text( text = "Add another set." )
+                                }
+                            }
+                        }
+                        Spacer(Modifier.height(8.dp))
+                    }
+
+                }
+
 
             }
 
-
-        }
-
-        // Save / Cancel Section
-        Column(
-            modifier = Modifier.weight(0.1F),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            // Save / Cancel Section
+            Column(
+                modifier = Modifier.weight(0.1F),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(
-                    onClick = {  }
-                ){
-                    Text( text = "Cancel Session" )
-                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
+                        onClick = {  }
+                    ){
+                        Text( text = "Cancel Session" )
+                    }
 
-                Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.width(8.dp))
 
-                Button(
-                    onClick = {  }
-                ){
-                    Text( text = "Save Session" )
+                    Button(
+                        onClick = {  }
+                    ){
+                        Text( text = "Save Session" )
+                    }
                 }
             }
         }
-    }
 
+        // Exercise Selector
+        ExerciseSelectorView(
+            workoutViewModel = workoutViewModel,
+            focusManager = focusManager,
+            focusRequester = focusRequester,
+            interactionSource = interactionSource
+        )
+
+
+    }
 }
