@@ -295,7 +295,8 @@ fun WorkoutScreen(
 
         // Exercise Selector
         ExerciseSelectorView(
-            workoutViewModel = workoutViewModel,
+//            exerciseList = ,
+            onEvent = workoutViewModel::onEvent,
             focusManager = focusManager,
             focusRequester = focusRequester,
             interactionSource = interactionSource
