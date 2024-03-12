@@ -9,17 +9,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
-import com.langley.exercisestattracker.features.workout.WorkoutViewModel
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.features.workout.WorkoutEvent
 
 @Composable
 fun ExerciseSelectorView(
     modifier: Modifier = Modifier,
-    workoutViewModel: WorkoutViewModel,
+    exerciseList: List<ExerciseDefinition> = listOf(),
+    onEvent: (WorkoutEvent) -> Unit,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
 
-) {
+    ) {
 
     Column(
         modifier = Modifier
