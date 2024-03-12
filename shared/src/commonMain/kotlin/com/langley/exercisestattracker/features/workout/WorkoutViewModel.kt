@@ -25,6 +25,7 @@ class WorkoutViewModel(
         )
 
 
+
     // FOR DEVELOPMENT
 //    init {
 //        viewModelScope.launch {
@@ -101,6 +102,16 @@ class WorkoutViewModel(
         _state.update { it.copy(
             exerciseMap = newMap
         ) }
+    }
+
+    fun onEvent(workoutEvent: WorkoutEvent){
+
+        when (workoutEvent){
+            WorkoutEvent.AddNewExercise -> {}
+            is WorkoutEvent.AddSetOf -> {}
+            WorkoutEvent.RemoveExercise -> {}
+        }
+
     }
 
 }
