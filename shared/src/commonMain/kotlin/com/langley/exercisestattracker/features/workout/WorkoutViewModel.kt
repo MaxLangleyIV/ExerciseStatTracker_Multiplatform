@@ -151,7 +151,30 @@ class WorkoutViewModel(
                 ) }
             }
 
-            is WorkoutEvent.RemoveRecord -> {}
+            is WorkoutEvent.RemoveRecord -> {
+
+                if (_state.value.exerciseMap[workoutEvent.recordName] != null){
+
+                    val newMap = _state.value.exerciseMap.toMutableMap()
+                    val newList = newMap[workoutEvent.recordName]!!.toMutableList()
+
+                    newList.removeAt(workoutEvent.index)
+
+                    if (newList.isEmpty()){
+
+                        newMap.remove(workoutEvent.recordName)
+
+                    }
+                    else {
+                        newMap[workoutEvent.recordName] = newList
+                    }
+
+                    _state.update { it.copy(
+                        exerciseMap = newMap
+                    ) }
+                }
+            }
+
             WorkoutEvent.CloseExerciseSelector -> {
 
                 _state.update { it.copy(
@@ -166,6 +189,8 @@ class WorkoutViewModel(
                 ) }
 
             }
+
+            WorkoutEvent.SaveWorkout -> {}
 
         }
 
