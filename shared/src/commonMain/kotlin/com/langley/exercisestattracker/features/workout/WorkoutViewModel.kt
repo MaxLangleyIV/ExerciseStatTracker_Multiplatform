@@ -1,11 +1,13 @@
 package com.langley.exercisestattracker.features.workout
 
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
@@ -23,6 +25,23 @@ class WorkoutViewModel(
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = WorkoutState()
         )
+
+    private val _definitions = MutableStateFlow(dataSource.getDefinitions())
+
+    val definitions = combine(
+        _definitions,
+        dataSource.getDefinitions()
+    ){
+        currentDefinitions, newDefinitions ->
+
+        newDefinitions
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = listOf<ExerciseDefinition>()
+    )
+
+
 
 
 
@@ -107,9 +126,47 @@ class WorkoutViewModel(
     fun onEvent(workoutEvent: WorkoutEvent){
 
         when (workoutEvent){
-            WorkoutEvent.AddNewExercise -> {}
-            is WorkoutEvent.AddSetOf -> {}
-            WorkoutEvent.RemoveExercise -> {}
+
+            is WorkoutEvent.AddRecord -> {
+                val newRecord = workoutEvent.record
+                val newMap = _state.value.exerciseMap.toMutableMap()
+
+                if (newMap[newRecord.exerciseName] == null){
+
+                    newMap[newRecord.exerciseName] = listOf(workoutEvent.record)
+
+                }
+
+                else {
+                    val newList = newMap[workoutEvent.record.exerciseName]!!.toMutableList()
+
+                    newList.add(workoutEvent.record)
+
+                    newMap[workoutEvent.record.exerciseName] = newList
+
+                }
+
+                _state.update { it.copy(
+                    exerciseMap = newMap
+                ) }
+            }
+
+            is WorkoutEvent.RemoveRecord -> {}
+            WorkoutEvent.CloseExerciseSelector -> {
+
+                _state.update { it.copy(
+                    exerciseSelectorVisible = false
+                ) }
+
+            }
+            WorkoutEvent.OpenExerciseSelector -> {
+
+                _state.update { it.copy(
+                    exerciseSelectorVisible = true
+                ) }
+
+            }
+
         }
 
     }
