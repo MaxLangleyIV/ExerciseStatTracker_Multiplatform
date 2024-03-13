@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 
 @Composable
@@ -20,18 +21,23 @@ fun ExerciseSelectorView(
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
+    visible: Boolean = false
 
     ) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .focusable(true)
-            .clickable(
-                indication = null,
-                interactionSource = interactionSource
-            ) { focusManager.clearFocus() },
+    BasicBottomSheet(
+        visible = visible
     ){
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .focusable(true)
+                .clickable(
+                    indication = null,
+                    interactionSource = interactionSource
+                ) { focusManager.clearFocus() },
+        ){
 //        ExerciseLibraryTopBar(
 //            modifier = Modifier
 //                .fillMaxWidth()
@@ -72,6 +78,8 @@ fun ExerciseSelectorView(
 //                }
 //            }
 //        )
+        }
+
     }
 
 }
