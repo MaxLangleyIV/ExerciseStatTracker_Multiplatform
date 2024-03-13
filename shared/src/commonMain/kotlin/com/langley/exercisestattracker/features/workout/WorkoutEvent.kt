@@ -1,11 +1,12 @@
 package com.langley.exercisestattracker.features.workout
 
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRecord
 
 sealed interface WorkoutEvent {
-    data object AddNewExercise: WorkoutEvent
-    data class AddSetOf(val exercise: ExerciseDefinition): WorkoutEvent
-    data object RemoveExercise: WorkoutEvent
+    data object OpenExerciseSelector: WorkoutEvent
+    data object CloseExerciseSelector: WorkoutEvent
+    data class AddRecord(val record: ExerciseRecord): WorkoutEvent
+    data class RemoveRecord(val record: ExerciseRecord): WorkoutEvent
     data object MarkCompleted
     data object NextExercise
 }
