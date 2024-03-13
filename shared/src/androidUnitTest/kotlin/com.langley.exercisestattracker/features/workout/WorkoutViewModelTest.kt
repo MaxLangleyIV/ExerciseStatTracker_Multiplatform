@@ -13,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -47,6 +48,7 @@ class WorkoutViewModelTest {
         setupViewModel(WorkoutState())
         state = viewModel.state.first()
         testRecord = ExerciseRecord(
+            exerciseRecordId = 0,
             exerciseName = "Test"
         )
 
@@ -86,7 +88,7 @@ class WorkoutViewModelTest {
         assertFalse(state.exerciseSelectorVisible)
     }
     @Test
-    fun onEvent_AddRecord() = runTest {
+    fun onEvent_AddRecord_mapUpdatedCorrectly() = runTest {
 
         assertTrue(
             actual = state.exerciseMap.isEmpty(),
@@ -108,10 +110,43 @@ class WorkoutViewModelTest {
             message = "First record in Map[testRecord name] not equal to testRecord."
         )
 
+        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord.copy(exerciseRecordId = 1)))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = testRecord.copy(exerciseRecordId = 1),
+            actual = state.exerciseMap[testRecord.exerciseName]!![1],
+            message = "Record with id 1 not equal to record at Map[testRecord.exerciseName][1]"
+        )
+
 
     }
     @Test
     fun onEvent_RemoveRecord() = runTest {
+
+        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord))
+
+        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord.copy(exerciseRecordId = 1)))
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.exerciseMap.isNotEmpty(),
+            message = "ExerciseMap should not be empty initially."
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveRecord(testRecord.exerciseName,0))
+
+        state = viewModel.state.first()
+
+        assertNotEquals(
+            illegal = testRecord,
+            actual = state.exerciseMap[testRecord.exerciseName]!![0],
+            message = "Map[testRecord.exerciseName][0] should no longer equal testRecord"
+        )
+
+
 
 
 
