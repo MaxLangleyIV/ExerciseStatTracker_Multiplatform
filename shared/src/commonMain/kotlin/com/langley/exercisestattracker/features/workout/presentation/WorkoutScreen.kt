@@ -37,6 +37,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import com.langley.exercisestattracker.features.workout.WorkoutViewModel
 import com.langley.exercisestattracker.features.workout.subfeature.ExerciseSelectorView
@@ -67,6 +68,8 @@ fun WorkoutScreen(
     )
 
     val state by workoutViewModel.state.collectAsState(WorkoutState())
+
+    val definitions by workoutViewModel.definitions.collectAsState(listOf())
 
     var isSingleExerciseMode by mutableStateOf( true )
 
@@ -149,7 +152,9 @@ fun WorkoutScreen(
                                 .fillMaxWidth()
                                 .heightIn(min = 0.dp, max = 60.dp)
                                 .clip(RoundedCornerShape(16.dp))
-                                .clickable {  }
+                                .clickable {
+                                    workoutViewModel.onEvent(WorkoutEvent.OpenExerciseSelector)
+                                }
                                 .background(MaterialTheme.colorScheme.primaryContainer)
                                 .padding(4.dp),
                             horizontalArrangement = Arrangement.Center
@@ -295,11 +300,12 @@ fun WorkoutScreen(
 
         // Exercise Selector
         ExerciseSelectorView(
-//            exerciseList = ,
+            exerciseList = definitions,
             onEvent = workoutViewModel::onEvent,
             focusManager = focusManager,
             focusRequester = focusRequester,
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            visible = state.exerciseSelectorVisible
         )
 
 
