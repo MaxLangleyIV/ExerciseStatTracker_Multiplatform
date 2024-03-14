@@ -24,7 +24,14 @@ class WorkoutViewModelTest {
 
     private lateinit var viewModel: WorkoutViewModel
     private lateinit var state: WorkoutState
-    private lateinit var testRecord: ExerciseRecord
+    private lateinit var testRecord0: ExerciseRecord
+    private lateinit var testRecord1: ExerciseRecord
+    private lateinit var testRecord2: ExerciseRecord
+    private lateinit var testRecord3: ExerciseRecord
+
+    private val testDataSource = TestExerciseAppDataSource(
+        dummyRecords = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
+    )
 
     private fun setupViewModel( initialState: WorkoutState){
 
@@ -32,9 +39,7 @@ class WorkoutViewModelTest {
 
             WorkoutViewModel(
 
-                TestExerciseAppDataSource(
-                    dummyRecords = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
-                ),
+                testDataSource,
                 initialState
 
                 )
@@ -45,12 +50,28 @@ class WorkoutViewModelTest {
     @Before
     fun setup() = runTest{
 
-        setupViewModel(WorkoutState())
-        state = viewModel.state.first()
-        testRecord = ExerciseRecord(
+        testRecord0 = ExerciseRecord(
             exerciseRecordId = 0,
             exerciseName = "Test"
         )
+        testRecord1 = ExerciseRecord(
+            exerciseRecordId = 1,
+            exerciseName = "Test"
+        )
+        testRecord2 = ExerciseRecord(
+            exerciseRecordId = 2,
+            exerciseName = "Test"
+        )
+        testRecord3 = ExerciseRecord(
+            exerciseRecordId = 3,
+            exerciseName = "Test"
+        )
+
+        setupViewModel(WorkoutState(
+            completedExercises = listOf(testRecord0, testRecord1, testRecord2)
+        ))
+
+        state = viewModel.state.first()
 
     }
 
@@ -87,6 +108,7 @@ class WorkoutViewModelTest {
 
         assertFalse(state.exerciseSelectorVisible)
     }
+
     @Test
     fun onEvent_AddRecord_mapUpdatedCorrectly() = runTest {
 
@@ -95,39 +117,40 @@ class WorkoutViewModelTest {
             message = "ExerciseMap should be empty initially."
         )
 
-        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord))
+        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord0))
 
         state = viewModel.state.first()
 
         assertNotNull(
-            actual = state.exerciseMap[testRecord.exerciseName],
+            actual = state.exerciseMap[testRecord0.exerciseName],
             message = "Record name not found as key in map."
         )
 
         assertEquals(
-            expected = testRecord,
-            actual = state.exerciseMap[testRecord.exerciseName]!![0],
+            expected = testRecord0,
+            actual = state.exerciseMap[testRecord0.exerciseName]!![0],
             message = "First record in Map[testRecord name] not equal to testRecord."
         )
 
-        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord.copy(exerciseRecordId = 1)))
+        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord0.copy(exerciseRecordId = 1)))
 
         state = viewModel.state.first()
 
         assertEquals(
-            expected = testRecord.copy(exerciseRecordId = 1),
-            actual = state.exerciseMap[testRecord.exerciseName]!![1],
+            expected = testRecord0.copy(exerciseRecordId = 1),
+            actual = state.exerciseMap[testRecord0.exerciseName]!![1],
             message = "Record with id 1 not equal to record at Map[testRecord.exerciseName][1]"
         )
 
 
     }
+
     @Test
     fun onEvent_RemoveRecord() = runTest {
 
-        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord))
+        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord0))
 
-        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord.copy(exerciseRecordId = 1)))
+        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord0.copy(exerciseRecordId = 1)))
 
         state = viewModel.state.first()
 
@@ -136,24 +159,107 @@ class WorkoutViewModelTest {
             message = "ExerciseMap should not be empty initially."
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveRecord(testRecord.exerciseName,0))
+        viewModel.onEvent(WorkoutEvent.RemoveRecord(testRecord0.exerciseName,0))
 
         state = viewModel.state.first()
 
         assertNotEquals(
-            illegal = testRecord,
-            actual = state.exerciseMap[testRecord.exerciseName]!![0],
+            illegal = testRecord0,
+            actual = state.exerciseMap[testRecord0.exerciseName]!![0],
             message = "Map[testRecord.exerciseName][0] should no longer equal testRecord"
         )
+    }
+
+    @Test
+    fun onEvent_MarkCompleted_completedExercisesListUpdatedCorrectly() = runTest {
+
+        assertFalse(
+            actual = state.completedExercises.contains(testRecord3),
+            message = "CompletedExercises should not already contain testRecord"
+        )
+
+        viewModel.onEvent(WorkoutEvent.MarkCompleted(testRecord3))
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.completedExercises.contains(testRecord3),
+            message = "CompletedExercises does not contain testRecord."
+        )
+
+    }
+
+    @Test
+    fun onEvent_RemoveFromCompletedInMiddle_completedExercisesListUpdatedCorrectly() = runTest {
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.completedExercises.contains(testRecord1),
+            message = "CompletedExercises should contain testRecord1"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(1))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.completedExercises.contains(testRecord1),
+            message = "CompletedExercises should not contain testRecord1"
+        )
+    }
+
+    @Test
+    fun onEvent_RemoveFromCompletedAtFront_completedExercisesListUpdatedCorrectly() = runTest {
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.completedExercises.contains(testRecord0),
+            message = "CompletedExercises should contain testRecord0"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(0))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.completedExercises.contains(testRecord0),
+            message = "CompletedExercises should not contain testRecord0"
+        )
+    }
+
+    @Test
+    fun onEvent_RemoveFromCompletedAtEnd_completedExercisesListUpdatedCorrectly() = runTest {
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.completedExercises.contains(testRecord2),
+            message = "CompletedExercises should contain testRecord2"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(2))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.completedExercises.contains(testRecord2),
+            message = "CompletedExercises should not contain testRecord2"
+        )
+    }
+
+    @Test
+    fun onEvent_saveWorkout() = runTest {
+
 
 
 
 
 
     }
+
     @Test
-    fun onEvent_MarkCompleted() = runTest {  }
-    @Test
-    fun onEvent_4() = runTest {  }
+    fun onEvent__() = runTest {  }
 
 }
