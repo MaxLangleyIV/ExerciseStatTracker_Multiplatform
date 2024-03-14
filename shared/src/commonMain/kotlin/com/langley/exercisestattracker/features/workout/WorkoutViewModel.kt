@@ -41,10 +41,6 @@ class WorkoutViewModel(
         initialValue = listOf<ExerciseDefinition>()
     )
 
-
-
-
-
     // FOR DEVELOPMENT
 //    init {
 //        viewModelScope.launch {
@@ -188,6 +184,29 @@ class WorkoutViewModel(
                     exerciseSelectorVisible = true
                 ) }
 
+            }
+
+            is WorkoutEvent.MarkCompleted -> {
+
+                val mutableList = _state.value.completedExercises.toMutableList()
+
+                mutableList.add(workoutEvent.record)
+
+                _state.update { it.copy(
+                    completedExercises = mutableList
+                ) }
+
+            }
+
+            is WorkoutEvent.RemoveFromCompleted -> {
+
+                val mutableList = _state.value.completedExercises.toMutableList()
+
+                mutableList.removeAt(workoutEvent.index)
+
+                _state.update { it.copy(
+                    completedExercises = mutableList
+                ) }
             }
 
             WorkoutEvent.SaveWorkout -> {}
