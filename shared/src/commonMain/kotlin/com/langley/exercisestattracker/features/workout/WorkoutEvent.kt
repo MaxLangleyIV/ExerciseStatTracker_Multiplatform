@@ -9,6 +9,7 @@ sealed interface WorkoutEvent {
     data class RemoveRecord(val recordName: String, val index: Int): WorkoutEvent
     data object SaveWorkout: WorkoutEvent
     data class MarkCompleted(val record: ExerciseRecord): WorkoutEvent
+    data class RemoveFromCompleted(val index: Int): WorkoutEvent
 
     data object NextExercise
 }
