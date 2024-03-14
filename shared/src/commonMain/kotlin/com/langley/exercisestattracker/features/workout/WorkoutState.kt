@@ -7,9 +7,9 @@ data class WorkoutState(
 
     val routine: ExerciseRoutine = ExerciseRoutine(),
 
-    val exerciseQueue: List<ExerciseRecord> = mutableListOf(),
+    val exerciseQueue: List<ExerciseRecord> = listOf(),
 
-    val completedExercises: List<ExerciseRecord> = mutableListOf(),
+    val completedExercises: List<ExerciseRecord> = listOf(),
 
     val exerciseMap: Map<String, List<ExerciseRecord>> = mapOf(),
 
