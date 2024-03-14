@@ -223,7 +223,7 @@ fun WorkoutScreen(
                                 verticalArrangement = Arrangement.SpaceEvenly,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                for (set in state.exerciseMap[exercise]?: listOf()){
+                                for ((index, set) in state.exerciseMap[exercise]!!.withIndex()){
 
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
