@@ -69,7 +69,7 @@ fun LibraryScreen(
 
 
     Scaffold(
-        modifier = Modifier,
+        modifier = modifier,
         floatingActionButton = {
             if (
                 !libraryState.isEditExerciseDefSheetOpen
@@ -153,7 +153,6 @@ fun LibraryScreen(
 
 
         ExerciseBuilderScreen(
-//            appModule = appModule,
             dataSource = dataSource,
             isVisible = libraryState.isAddExerciseDefSheetOpen,
             selectedExercise = libraryState.selectedExerciseDefinition,
