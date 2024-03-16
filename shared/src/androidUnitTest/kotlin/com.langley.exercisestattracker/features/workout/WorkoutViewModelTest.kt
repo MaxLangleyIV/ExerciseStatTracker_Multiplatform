@@ -3,6 +3,7 @@ package com.langley.exercisestattracker.features.workout
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -252,7 +253,43 @@ class WorkoutViewModelTest {
     @Test
     fun onEvent_saveWorkout() = runTest {
 
+        viewModel.onEvent(WorkoutEvent.SaveWorkout)
 
+        state = viewModel.state.first()
+
+        for (record in state.completedExercises){
+
+            assertTrue(
+                actual = testDataSource.getRecords().first().contains(record),
+                message =
+                record.exerciseName + "${record.exerciseRecordId} not found in data source."
+            )
+
+        }
+    }
+
+    @Test
+    fun onEvent_DefinitionSelected_defToggledInSelectedDefList() = runTest {
+
+        val testDef = ExerciseDefinition( exerciseName = "Test" )
+
+        viewModel.onEvent(WorkoutEvent.DefinitionSelected(testDef))
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.selectedExercises.contains(testDef),
+            message = "testDef not found in list after being selected"
+        )
+
+        viewModel.onEvent(WorkoutEvent.DefinitionSelected(testDef))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.selectedExercises.contains(testDef),
+            message = "testDef found in list after being selected a second time"
+        )
 
 
 
