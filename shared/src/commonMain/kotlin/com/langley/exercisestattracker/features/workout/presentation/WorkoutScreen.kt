@@ -243,9 +243,6 @@ fun WorkoutScreen(
                                             )
                                         }
                                     }
-
-
-
                                 }
                             }
 
@@ -256,7 +253,12 @@ fun WorkoutScreen(
                             ) {
                                 Button(
                                     onClick = {
-                                        workoutViewModel.addToMap(state.exerciseMap[exercise]?.last())
+//                                        workoutViewModel.addToMap(state.exerciseMap[exercise]?.last())
+                                        workoutViewModel.onEvent(
+                                            WorkoutEvent.AddRecord(
+                                                state.exerciseMap[exercise]!!.last()
+                                            )
+                                        )
                                     }
                                 ){
                                     Text( text = "Add another set." )
@@ -265,10 +267,7 @@ fun WorkoutScreen(
                         }
                         Spacer(Modifier.height(8.dp))
                     }
-
                 }
-
-
             }
 
             // Save / Cancel Section
@@ -300,7 +299,9 @@ fun WorkoutScreen(
 
         // Exercise Selector
         ExerciseSelectorView(
+            modifier = Modifier.fillMaxSize(),
             exerciseList = definitions,
+            selectedExercises = state.selectedExercises,
             onEvent = workoutViewModel::onEvent,
             focusManager = focusManager,
             focusRequester = focusRequester,
