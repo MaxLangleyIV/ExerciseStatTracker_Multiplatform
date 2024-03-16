@@ -47,7 +47,7 @@ class WorkoutViewModel(
 
         when (workoutEvent){
 
-            is WorkoutEvent.AddRecord -> {
+            is WorkoutEvent.AddRecordToMap -> {
                 val newRecord = workoutEvent.record
                 val newMap = _state.value.exerciseMap.toMutableMap()
 
@@ -71,7 +71,7 @@ class WorkoutViewModel(
                 ) }
             }
 
-            is WorkoutEvent.RemoveRecord -> {
+            is WorkoutEvent.RemoveRecordFromMap -> {
 
                 if (_state.value.exerciseMap[workoutEvent.recordName] != null){
 
@@ -163,6 +163,27 @@ class WorkoutViewModel(
                 ) }
 
             }
+
+            is WorkoutEvent.AddToListOfExercises -> {
+
+                val mutableList = _state.value.exerciseList.toMutableList()
+
+                for (def in workoutEvent.exercises){
+
+                    mutableList.add(def)
+
+                }
+
+                mutableList.toSet().toList()
+
+                _state.update { it.copy(
+                    exerciseList = mutableList
+                ) }
+
+            }
+            is WorkoutEvent.AddToListOfRecords -> {}
+            is WorkoutEvent.RemoveFromListOfExercises -> {}
+            is WorkoutEvent.RemoveFromListOfRecords -> {}
         }
 
     }
