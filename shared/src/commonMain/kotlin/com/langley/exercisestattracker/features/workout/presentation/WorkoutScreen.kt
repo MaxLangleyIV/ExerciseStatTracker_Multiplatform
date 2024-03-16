@@ -255,7 +255,7 @@ fun WorkoutScreen(
                                     onClick = {
 //                                        workoutViewModel.addToMap(state.exerciseMap[exercise]?.last())
                                         workoutViewModel.onEvent(
-                                            WorkoutEvent.AddRecord(
+                                            WorkoutEvent.AddRecordToMap(
                                                 state.exerciseMap[exercise]!!.last()
                                             )
                                         )
