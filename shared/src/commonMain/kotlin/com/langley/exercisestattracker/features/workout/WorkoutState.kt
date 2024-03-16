@@ -1,5 +1,6 @@
 package com.langley.exercisestattracker.features.workout
 
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 
@@ -13,8 +14,8 @@ data class WorkoutState(
 
     val exerciseMap: Map<String, List<ExerciseRecord>> = mapOf(),
 
-    val exerciseSelectorVisible: Boolean = false
+    val exerciseSelectorVisible: Boolean = false,
 
-
+    val selectedExercises: List<ExerciseDefinition> = listOf()
 
 )
