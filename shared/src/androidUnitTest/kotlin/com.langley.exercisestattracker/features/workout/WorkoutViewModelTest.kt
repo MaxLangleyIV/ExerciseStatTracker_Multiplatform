@@ -29,6 +29,9 @@ class WorkoutViewModelTest {
     private lateinit var testRecord1: ExerciseRecord
     private lateinit var testRecord2: ExerciseRecord
     private lateinit var testRecord3: ExerciseRecord
+    private lateinit var testDef0: ExerciseDefinition
+    private lateinit var testDef1: ExerciseDefinition
+    private lateinit var testDef2: ExerciseDefinition
 
     private val testDataSource = TestExerciseAppDataSource(
         dummyRecords = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
@@ -67,6 +70,10 @@ class WorkoutViewModelTest {
             exerciseRecordId = 3,
             exerciseName = "Test"
         )
+
+        testDef0 = ExerciseDefinition( exerciseName = "Test0" )
+        testDef1 = ExerciseDefinition( exerciseName = "Test1" )
+        testDef2 = ExerciseDefinition( exerciseName = "Test2" )
 
         setupViewModel(WorkoutState(
             completedExercises = listOf(testRecord0, testRecord1, testRecord2)
@@ -111,14 +118,14 @@ class WorkoutViewModelTest {
     }
 
     @Test
-    fun onEvent_AddRecord_mapUpdatedCorrectly() = runTest {
+    fun onEvent_AddRecordToMap_stateUpdatedCorrectly() = runTest {
 
         assertTrue(
             actual = state.exerciseMap.isEmpty(),
             message = "ExerciseMap should be empty initially."
         )
 
-        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord0))
+        viewModel.onEvent(WorkoutEvent.AddRecordToMap(testRecord0))
 
         state = viewModel.state.first()
 
@@ -133,7 +140,7 @@ class WorkoutViewModelTest {
             message = "First record in Map[testRecord name] not equal to testRecord."
         )
 
-        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord0.copy(exerciseRecordId = 1)))
+        viewModel.onEvent(WorkoutEvent.AddRecordToMap(testRecord0.copy(exerciseRecordId = 1)))
 
         state = viewModel.state.first()
 
@@ -144,14 +151,16 @@ class WorkoutViewModelTest {
         )
 
 
+
+
     }
 
     @Test
-    fun onEvent_RemoveRecord() = runTest {
+    fun onEvent_RemoveRecordFromMap_stateUpdatedCorrectly() = runTest {
 
-        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord0))
+        viewModel.onEvent(WorkoutEvent.AddRecordToMap(testRecord0))
 
-        viewModel.onEvent(WorkoutEvent.AddRecord(testRecord0.copy(exerciseRecordId = 1)))
+        viewModel.onEvent(WorkoutEvent.AddRecordToMap(testRecord0.copy(exerciseRecordId = 1)))
 
         state = viewModel.state.first()
 
@@ -160,7 +169,7 @@ class WorkoutViewModelTest {
             message = "ExerciseMap should not be empty initially."
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveRecord(testRecord0.exerciseName,0))
+        viewModel.onEvent(WorkoutEvent.RemoveRecordFromMap(testRecord0.exerciseName,0))
 
         state = viewModel.state.first()
 
@@ -293,6 +302,24 @@ class WorkoutViewModelTest {
 
 
 
+
+    }
+
+    @Test
+    fun onEvent_AddToListOfExercises_addSingleDef_exerciseFoundInList() = runTest {
+
+        assertFalse(
+            actual = state.exerciseList.contains(testDef0),
+            message = "exerciseList should not already contain testDef0"
+        )
+
+        viewModel.onEvent(WorkoutEvent.AddToListOfExercises(listOf(testDef0)))
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.exerciseList.contains(testDef0)
+        )
 
     }
 
