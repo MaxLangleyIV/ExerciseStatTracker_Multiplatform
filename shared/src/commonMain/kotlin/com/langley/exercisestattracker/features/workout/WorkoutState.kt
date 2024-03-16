@@ -14,6 +14,10 @@ data class WorkoutState(
 
     val exerciseMap: Map<String, List<ExerciseRecord>> = mapOf(),
 
+    val exerciseList: List<ExerciseDefinition> = listOf(),
+
+    val recordsList: List<ExerciseRecord> = listOf(),
+
     val exerciseSelectorVisible: Boolean = false,
 
     val selectedExercises: List<ExerciseDefinition> = listOf()
