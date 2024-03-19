@@ -352,6 +352,87 @@ class WorkoutViewModelTest {
     }
 
     @Test
+    fun onEvent_RemoveFromListOfExercisesAtFront_exerciseListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                exerciseList = listOf(testDef0,testDef1,testDef2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.exerciseList.contains(testDef0),
+            message = "exerciseList should contain testDef0"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(0))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.exerciseList.contains(testDef0),
+            message = "exerciseList should not contain testDef0"
+        )
+
+    }
+
+    @Test
+    fun onEvent_RemoveFromListOfExercisesInMiddle_exerciseListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                exerciseList = listOf(testDef0,testDef1,testDef2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.exerciseList.contains(testDef1),
+            message = "exerciseList should contain testDef1"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(1))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.exerciseList.contains(testDef1),
+            message = "exerciseList should not contain testDef1"
+        )
+
+    }
+
+    @Test
+    fun onEvent_RemoveFromListOfExercisesAtEnd_exerciseListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                exerciseList = listOf(testDef0,testDef1,testDef2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.exerciseList.contains(testDef2),
+            message = "exerciseList should contain testDef2"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(2))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.exerciseList.contains(testDef2),
+            message = "exerciseList should not contain testDef2"
+        )
+
+    }
+
+    @Test
     fun onEvent_AddToListOfRecords_addSingleRecord_recordFoundInList() = runTest {
 
         assertFalse(
@@ -398,6 +479,86 @@ class WorkoutViewModelTest {
         }
 
     }
+
+    @Test
+    fun onEvent_RemoveFromListOfRecordsAtFront_recordsListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                recordsList = listOf(testRecord0,testRecord1,testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.recordsList.contains(testRecord0),
+            message = "recordsList should contain testRecord0"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(0))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.recordsList.contains(testRecord0),
+            message = "recordsList should not contain testRecord0"
+        )
+
+    }
+
+    @Test
+    fun onEvent_RemoveFromListOfRecordsInMiddle_recordsListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                recordsList = listOf(testRecord0,testRecord1,testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.recordsList.contains(testRecord1),
+            message = "recordsList should contain testRecord1"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(1))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.recordsList.contains(testRecord1),
+            message = "recordsList should not contain testRecord1"
+        )
+    }
+
+    @Test
+    fun onEvent_RemoveFromListOfRecordsAtEnd_recordsListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                recordsList = listOf(testRecord0,testRecord1,testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.recordsList.contains(testRecord2),
+            message = "recordsList should contain testRecord2"
+        )
+
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(2))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.recordsList.contains(testRecord2),
+            message = "recordsList should not contain testRecord2"
+        )
+    }
+
 
     @Test
     fun onEvent__() = runTest {  }
