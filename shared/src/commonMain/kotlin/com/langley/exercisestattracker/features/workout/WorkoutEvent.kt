@@ -14,8 +14,8 @@ sealed interface WorkoutEvent {
     data class DefinitionSelected(val exerciseDefinition: ExerciseDefinition) : WorkoutEvent
     data class AddToListOfExercises(val exercises: List<ExerciseDefinition>) : WorkoutEvent
     data class RemoveFromListOfExercises(val exercise: ExerciseDefinition) : WorkoutEvent
-    data class AddToListOfRecords(val exercises: List<ExerciseDefinition>) : WorkoutEvent
-    data class RemoveFromListOfRecords(val exercise: ExerciseDefinition) : WorkoutEvent
+    data class AddToListOfRecords(val exercises: List<ExerciseRecord>) : WorkoutEvent
+    data class RemoveFromListOfRecords(val exercise: ExerciseRecord) : WorkoutEvent
 
 
     data object NextExercise
