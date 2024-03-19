@@ -318,8 +318,84 @@ class WorkoutViewModelTest {
         state = viewModel.state.first()
 
         assertTrue(
-            actual = state.exerciseList.contains(testDef0)
+            actual = state.exerciseList.contains(testDef0),
+            message = "testDef0 not found in exerciseList after adding"
         )
+
+    }
+
+    @Test
+    fun onEvent_AddToListOfExercises_addMultipleDef_exercisesFoundInList() = runTest {
+
+        val listToAdd = listOf(testDef0,testDef1,testDef2)
+
+        for (def in listToAdd){
+            assertFalse(
+                actual = state.exerciseList.contains(def),
+                message = "exerciseList should not already contain ${def.exerciseName}"
+            )
+        }
+
+        viewModel.onEvent(
+            WorkoutEvent.AddToListOfExercises(listToAdd)
+        )
+
+        state = viewModel.state.first()
+
+        for (def in listToAdd){
+            assertTrue(
+                actual = state.exerciseList.contains(def),
+                message = "${def.exerciseName} not found in exerciseList after adding"
+            )
+        }
+
+    }
+
+    @Test
+    fun onEvent_AddToListOfRecords_addSingleRecord_recordFoundInList() = runTest {
+
+        assertFalse(
+            actual = state.recordsList.contains(testRecord0),
+            message = "recordsList should not already contain testRecord0"
+        )
+
+        viewModel.onEvent(
+            WorkoutEvent.AddToListOfRecords(listOf(testRecord0))
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.recordsList.contains(testRecord0),
+            message = "testRecord0 not found in recordsList after adding"
+        )
+
+    }
+
+    @Test
+    fun onEvent_AddToListOfRecords_addMultipleRecords_recordsFoundInList() = runTest {
+
+        val listToAdd = listOf(testRecord0,testRecord1,testRecord2)
+
+        for (record in listToAdd){
+            assertFalse(
+                actual = state.recordsList.contains(record),
+                message = "exerciseList should not already contain ${record.exerciseName}"
+            )
+        }
+
+        viewModel.onEvent(
+            WorkoutEvent.AddToListOfRecords(listToAdd)
+        )
+
+        state = viewModel.state.first()
+
+        for (record in listToAdd){
+            assertTrue(
+                actual = state.recordsList.contains(record),
+                message = "${record.exerciseName} not found in exerciseList after adding"
+            )
+        }
 
     }
 
