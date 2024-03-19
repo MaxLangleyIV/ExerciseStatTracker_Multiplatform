@@ -181,9 +181,45 @@ class WorkoutViewModel(
                 ) }
 
             }
-            is WorkoutEvent.AddToListOfRecords -> {}
-            is WorkoutEvent.RemoveFromListOfExercises -> {}
-            is WorkoutEvent.RemoveFromListOfRecords -> {}
+            is WorkoutEvent.AddToListOfRecords -> {
+
+                val mutableList = _state.value.recordsList.toMutableList()
+
+                for (record in workoutEvent.records){
+
+                    mutableList.add(record)
+
+                }
+
+                mutableList.toSet().toList()
+
+                _state.update { it.copy(
+                    recordsList = mutableList
+                ) }
+
+            }
+            is WorkoutEvent.RemoveFromListOfExercises -> {
+
+                val mutableList = _state.value.exerciseList.toMutableList()
+
+                mutableList.removeAt(workoutEvent.index)
+
+                _state.update { it.copy(
+                    exerciseList = mutableList
+                ) }
+
+            }
+            is WorkoutEvent.RemoveFromListOfRecords -> {
+
+                val mutableList = _state.value.recordsList.toMutableList()
+
+                mutableList.removeAt(workoutEvent.index)
+
+                _state.update { it.copy(
+                    recordsList = mutableList
+                ) }
+
+            }
         }
 
     }
