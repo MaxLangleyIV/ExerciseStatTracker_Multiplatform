@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheetNoScroll
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
@@ -267,21 +269,25 @@ fun ExerciseSelectorView(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            // Back Button
+            Button(
+                onClick = {
+                    onEvent(WorkoutEvent.AddToListOfExercises(selectedExercises))
+                    for (exercise in selectedExercises){
+                        onEvent(WorkoutEvent.AddToListOfRecords(listOf(exercise.toBlankRecord())))
+                    }
+                    onEvent(WorkoutEvent.CloseExerciseSelector)
+                }
+            ){
+                Text( text = "Add Exercise${if(selectedExercises.size > 1){"s"}else{""}}" )
+            }
 
-
-            // Search Bar
-            OutlinedTextField(
-                modifier = Modifier.focusRequester(FocusRequester())
-                    .weight(0.5F),
-                value = searchString,
-                onValueChange = {
-                    onEvent(WorkoutEvent.OnSearchStringChanged(it))
-                },
-                shape = RoundedCornerShape(20.dp),
-                maxLines = 1
-            )
-
+            Button(
+                onClick = {
+                    onEvent(WorkoutEvent.CloseExerciseSelector)
+                }
+            ){
+                Text( text = "Cancel" )
+            }
         }
 
     } // End of screen containers
