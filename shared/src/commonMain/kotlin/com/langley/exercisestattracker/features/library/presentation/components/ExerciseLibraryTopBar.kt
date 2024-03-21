@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -57,7 +57,7 @@ fun ExerciseLibraryTopBar(
             IconButton(onClick = { navController.navigateBack() }){
                 Icon(
                     modifier = Modifier.size(200.dp),
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.Default.ArrowBackIos,
                     contentDescription = "Back Button"
                 )
             }
