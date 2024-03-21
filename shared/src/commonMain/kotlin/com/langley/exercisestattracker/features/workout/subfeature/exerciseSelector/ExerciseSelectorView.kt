@@ -273,7 +273,7 @@ fun ExerciseSelectorView(
                 onClick = {
                     onEvent(WorkoutEvent.AddToListOfExercises(selectedExercises))
                     for (exercise in selectedExercises){
-                        onEvent(WorkoutEvent.AddToListOfRecords(listOf(exercise.toBlankRecord())))
+                        onEvent(WorkoutEvent.AddToListOfRecords(listOf(exercise.toBlankRecord().copy(completed = false))))
                     }
                     onEvent(WorkoutEvent.CloseExerciseSelector)
                 }
