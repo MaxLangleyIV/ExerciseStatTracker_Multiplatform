@@ -3,6 +3,7 @@ package com.langley.exercisestattracker.features.workout
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 
 data class WorkoutState(
 
@@ -18,7 +19,14 @@ data class WorkoutState(
 
     val recordsList: List<ExerciseRecord> = listOf(),
 
+
+    // Exercise Selector
+
     val exerciseSelectorVisible: Boolean = false,
+
+    val searchString: String = "",
+
+    val searchFilter: ExerciseLibraryFilterType? = null,
 
     val selectedExercises: List<ExerciseDefinition> = listOf()
 
