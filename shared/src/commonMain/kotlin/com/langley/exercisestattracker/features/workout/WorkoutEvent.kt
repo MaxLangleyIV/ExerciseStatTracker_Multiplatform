@@ -11,10 +11,11 @@ sealed interface WorkoutEvent {
     data object CloseExerciseSelector: WorkoutEvent
     data object SaveWorkout: WorkoutEvent
     data class MarkCompleted(val record: ExerciseRecord): WorkoutEvent
-    data class RemoveFromCompleted(val index: Int): WorkoutEvent
-    data class RemoveFromListOfExercises(val index: Int) : WorkoutEvent
+    data class RemoveFromCompleted(val record: ExerciseRecord): WorkoutEvent
+    data class RemoveFromListOfExercises(val exercise: ExerciseDefinition) : WorkoutEvent
     data class AddToListOfRecords(val records: List<ExerciseRecord>) : WorkoutEvent
     data class RemoveFromListOfRecords(val index: Int) : WorkoutEvent
+    data class ToggleCompleted(val record: ExerciseRecord) : WorkoutEvent
 
     // Exercise Selector Events
     data class DefinitionSelected(val exerciseDefinition: ExerciseDefinition) : WorkoutEvent
@@ -30,5 +31,6 @@ sealed interface WorkoutEvent {
 
 
     data object NextExercise
+
 
 }
