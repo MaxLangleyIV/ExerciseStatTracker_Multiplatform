@@ -26,7 +26,7 @@ sealed interface WorkoutEvent {
     // Deprecated
     data class AddRecordToMap(val record: ExerciseRecord): WorkoutEvent
     data class RemoveRecordFromMap(val recordName: String, val index: Int): WorkoutEvent
-    data class SetCurrentFilterType(val favorite: ExerciseLibraryFilterType) : WorkoutEvent
+    data class SetCurrentFilterType(val filter: ExerciseLibraryFilterType) : WorkoutEvent
 
 
     data object NextExercise
