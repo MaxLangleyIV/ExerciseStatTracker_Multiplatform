@@ -40,7 +40,7 @@ import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import com.langley.exercisestattracker.features.workout.WorkoutViewModel
-import com.langley.exercisestattracker.features.workout.subfeature.ExerciseSelectorView
+import com.langley.exercisestattracker.features.workout.subfeature.exerciseSelector.ExerciseSelectorView
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -301,6 +301,8 @@ fun WorkoutScreen(
         ExerciseSelectorView(
             modifier = Modifier.fillMaxSize(),
             exerciseList = definitions,
+            searchString = state.searchString,
+            searchFilterType = state.searchFilter,
             selectedExercises = state.selectedExercises,
             onEvent = workoutViewModel::onEvent,
             focusManager = focusManager,
