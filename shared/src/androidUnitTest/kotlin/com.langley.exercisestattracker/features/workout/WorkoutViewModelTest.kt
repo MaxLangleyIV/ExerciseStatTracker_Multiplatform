@@ -211,7 +211,7 @@ class WorkoutViewModelTest {
             message = "CompletedExercises should contain testRecord1"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(1))
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(testRecord1))
 
         state = viewModel.state.first()
 
@@ -231,7 +231,7 @@ class WorkoutViewModelTest {
             message = "CompletedExercises should contain testRecord0"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(0))
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(testRecord0))
 
         state = viewModel.state.first()
 
@@ -251,7 +251,7 @@ class WorkoutViewModelTest {
             message = "CompletedExercises should contain testRecord2"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(2))
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(testRecord2))
 
         state = viewModel.state.first()
 
@@ -369,7 +369,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef0"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(0))
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(testDef0))
 
         state = viewModel.state.first()
 
@@ -396,7 +396,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef1"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(1))
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(testDef1))
 
         state = viewModel.state.first()
 
@@ -423,7 +423,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef2"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(2))
+        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(testDef2))
 
         state = viewModel.state.first()
 
