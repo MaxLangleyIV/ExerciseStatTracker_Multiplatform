@@ -126,7 +126,7 @@ class WorkoutViewModel(
 
                 val mutableList = _state.value.completedExercises.toMutableList()
 
-                mutableList.removeAt(workoutEvent.index)
+                mutableList.remove(workoutEvent.record)
 
                 _state.update { it.copy(
                     completedExercises = mutableList
@@ -135,9 +135,9 @@ class WorkoutViewModel(
 
             WorkoutEvent.SaveWorkout -> {
 
-                viewModelScope.launch {
+                for (record in _state.value.completedExercises){
 
-                    for (record in _state.value.completedExercises){
+                    viewModelScope.launch {
 
                         dataSource.insertOrReplaceRecord(record)
 
@@ -202,7 +202,7 @@ class WorkoutViewModel(
 
                 val mutableList = _state.value.exerciseList.toMutableList()
 
-                mutableList.removeAt(workoutEvent.index)
+                mutableList.remove(workoutEvent.exercise)
 
                 _state.update { it.copy(
                     exerciseList = mutableList
@@ -265,6 +265,11 @@ class WorkoutViewModel(
 
             }
 
+            is WorkoutEvent.ToggleCompleted -> {
+
+
+
+            }
         }
 
     }
