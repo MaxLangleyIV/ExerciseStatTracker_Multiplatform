@@ -28,6 +28,8 @@ data class WorkoutState(
 
     val searchFilter: ExerciseLibraryFilterType? = null,
 
+    val exerciseLibrary: List<ExerciseDefinition> = listOf(),
+
     val selectedExercises: List<ExerciseDefinition> = listOf()
 
 )
