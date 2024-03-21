@@ -69,7 +69,7 @@ fun WorkoutScreen(
 
     val state by workoutViewModel.state.collectAsState(WorkoutState())
 
-    val definitions by workoutViewModel.definitions.collectAsState(listOf())
+//    val definitions by workoutViewModel.definitions.collectAsState(listOf())
 
     var isSingleExerciseMode by mutableStateOf( true )
 
@@ -300,7 +300,7 @@ fun WorkoutScreen(
         // Exercise Selector
         ExerciseSelectorView(
             modifier = Modifier.fillMaxSize(),
-            exerciseList = definitions,
+            exerciseList = state.exerciseLibrary,
             searchString = state.searchString,
             searchFilterType = state.searchFilter,
             selectedExercises = state.selectedExercises,
