@@ -5,6 +5,7 @@ import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDum
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
+import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.flow.first
@@ -16,6 +17,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class WorkoutViewModelTest {
@@ -557,6 +559,65 @@ class WorkoutViewModelTest {
             actual = state.recordsList.contains(testRecord2),
             message = "recordsList should not contain testRecord2"
         )
+    }
+
+    @Test
+    fun onEvent_clearFilterType_filterNullInState() = runTest {
+        val testFilterType = ExerciseLibraryFilterType.Barbell()
+
+        setupViewModel(
+            WorkoutState(
+                searchFilter = testFilterType
+            )
+        )
+        var state = viewModel.state.first()
+        var currentFilterType = state.searchFilter
+
+
+        assertNotNull(currentFilterType, "Filter should be $testFilterType.")
+
+        viewModel.onEvent(WorkoutEvent.ClearFilterType)
+
+        state = viewModel.state.first()
+        currentFilterType = state.searchFilter
+
+        assertNull(currentFilterType, null)
+
+    }
+
+    @Test
+    fun onEvent_setCurrentFilterType_typeReflectedInState() = runTest {
+        var state = viewModel.state.first()
+        var currentFilterType = state.searchFilter
+        val testFilterType = ExerciseLibraryFilterType.Barbell()
+
+        assertNull(currentFilterType, "Filter should be null initially.")
+
+        viewModel.onEvent(WorkoutEvent.SetCurrentFilterType(testFilterType))
+
+        state = viewModel.state.first()
+        currentFilterType = state.searchFilter
+
+        assertEquals(
+            testFilterType,
+            currentFilterType,
+            "Filter type not updated properly."
+        )
+
+    }
+
+    @Test
+    fun onEvent_OnSearchStringChanged_stateProperlyUpdated() = runTest {
+        viewModel.onEvent(WorkoutEvent.OnSearchStringChanged("Test"))
+
+        val state = viewModel.state.first()
+
+        assertEquals(
+            state.searchString,
+            "Test",
+            "SearchString does not equal 'Test'"
+        )
+
     }
 
 
