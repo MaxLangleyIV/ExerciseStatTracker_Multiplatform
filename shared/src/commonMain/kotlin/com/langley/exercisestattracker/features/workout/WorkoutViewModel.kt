@@ -1,12 +1,13 @@
 package com.langley.exercisestattracker.features.workout
 
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -26,21 +27,13 @@ class WorkoutViewModel(
             initialValue = WorkoutState()
         )
 
-    private val _definitions = MutableStateFlow(dataSource.getDefinitions())
-
-    val definitions = combine(
-        _definitions,
-        dataSource.getDefinitions()
-    ){
-        currentDefinitions, newDefinitions ->
-
-        newDefinitions
-
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000L),
-        initialValue = listOf<ExerciseDefinition>()
-    )
+//    private val _definitions = MutableStateFlow(dataSource.getDefinitions())
+//
+//    val definitions = _definitions.stateIn(
+//        scope = viewModelScope,
+//        started = SharingStarted.WhileSubscribed(5000L),
+//        initialValue = listOf<ExerciseDefinition>()
+//    )
 
 
     fun onEvent(workoutEvent: WorkoutEvent){
@@ -97,16 +90,31 @@ class WorkoutViewModel(
 
             WorkoutEvent.CloseExerciseSelector -> {
 
-                _state.update { it.copy(
-                    exerciseSelectorVisible = false
-                ) }
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        exerciseSelectorVisible = false,
+                    ) }
+
+                    delay(300L)
+
+                    _state.update { it.copy(
+                        exerciseLibrary = listOf(),
+                        searchFilter = null,
+                        searchString = "",
+                        selectedExercises = listOf()
+                    ) }
+
+                }
 
             }
             WorkoutEvent.OpenExerciseSelector -> {
 
-                _state.update { it.copy(
-                    exerciseSelectorVisible = true
-                ) }
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        exerciseLibrary = dataSource.getDefinitions().first(),
+                        exerciseSelectorVisible = true
+                    ) }
+                }
 
             }
 
@@ -220,6 +228,51 @@ class WorkoutViewModel(
                 ) }
 
             }
+
+            is WorkoutEvent.SetCurrentFilterType -> {
+
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        searchFilter = workoutEvent.filter,
+                        exerciseLibrary = filterDefinitionLibrary(
+                            definitionLibrary = dataSource.getDefinitions().first(),
+                            filterType = workoutEvent.filter,
+                            searchString = state.value.searchString
+                        )
+                    ) }
+                }
+
+            }
+
+            WorkoutEvent.ClearFilterType -> {
+
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        searchFilter = null,
+                        exerciseLibrary = filterDefinitionLibrary(
+                            definitionLibrary = dataSource.getDefinitions().first(),
+                            filterType = null,
+                            searchString = state.value.searchString
+                        )
+                    ) }
+                }
+
+            }
+            is WorkoutEvent.OnSearchStringChanged -> {
+
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        searchString = workoutEvent.string,
+                        exerciseLibrary = filterDefinitionLibrary(
+                            definitionLibrary = dataSource.getDefinitions().first(),
+                            filterType = _state.value.searchFilter,
+                            searchString = workoutEvent.string
+                        )
+                    ) }
+                }
+
+            }
+
         }
 
     }
