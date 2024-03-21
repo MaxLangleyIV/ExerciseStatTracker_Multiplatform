@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -71,200 +70,220 @@ fun ExerciseSelectorView(
 
         var dropdownExpanded by remember { mutableStateOf(false) }
 
-        Column(
+        // Top Bar
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .focusable(true)
-                .clickable(
-                    indication = null,
-                    interactionSource = interactionSource
-                ) { focusManager.clearFocus() },
-        ){
+                .fillMaxWidth()
+                .weight(0.1F)
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-            // Top Bar
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
+            // Back Button
+            IconButton(
+                onClick = {
+                    onEvent(WorkoutEvent.CloseExerciseSelector)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBackIos,
+                    contentDescription = "Close"
+                )
+            }
+
+            // Search Bar
+            OutlinedTextField(
+                modifier = Modifier.focusRequester(FocusRequester())
+                    .weight(0.5F),
+                value = searchString,
+                onValueChange = {
+                    onEvent(WorkoutEvent.OnSearchStringChanged(it))
+                },
+                shape = RoundedCornerShape(20.dp),
+                maxLines = 1
+            )
+
+            // Filter
+            Column(
+                modifier = Modifier
+                    .padding(12.dp)
             ) {
 
-                // Back Button
-                IconButton(
-                    onClick = {
-                        onEvent(WorkoutEvent.CloseExerciseSelector)
+                Box {
+                    IconButton(onClick = { dropdownExpanded = true }) {
+                        Icon(
+                            modifier = Modifier.size(400.dp),
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Filter",
+                        )
                     }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBackIos,
-                        contentDescription = "Close"
-                    )
-                }
 
-                // Search Bar
-                OutlinedTextField(
-                    modifier = Modifier.focusRequester(FocusRequester())
-                        .weight(0.5F),
-                    value = searchString,
-                    onValueChange = {
-                        onEvent(WorkoutEvent.OnSearchStringChanged(it))
-                    },
-                    shape = RoundedCornerShape(20.dp),
-                    maxLines = 1
-                )
+                    DropdownMenu(
+                        expanded = dropdownExpanded,
+                        onDismissRequest = {dropdownExpanded = false}
+                    ){
 
-                // Filter
-                Column(
-                    modifier = Modifier
-                        .padding(12.dp)
-                ) {
+                        DropdownMenuItem(
+                            text = { Text("Favorite") },
+                            onClick = {
+                                dropdownExpanded = false
+                                onEvent(
+                                    WorkoutEvent
+                                        .SetCurrentFilterType(ExerciseLibraryFilterType.Favorite())
+                                )
+                            }
+                        )
 
-                    Box {
-                        IconButton(onClick = { dropdownExpanded = true }) {
-                            Icon(
-                                modifier = Modifier.size(400.dp),
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Filter",
-                            )
-                        }
+                        Divider()
 
-                        DropdownMenu(
-                            expanded = dropdownExpanded,
-                            onDismissRequest = {dropdownExpanded = false}
-                        ){
+                        DropdownMenuItem(
+                            text = { Text("Barbell") },
+                            onClick = {
+                                dropdownExpanded = false
+                                onEvent(
+                                    WorkoutEvent
+                                        .SetCurrentFilterType(ExerciseLibraryFilterType.Barbell())
+                                )
+                            }
+                        )
 
-                            DropdownMenuItem(
-                                text = { Text("Favorite") },
-                                onClick = {
-                                    dropdownExpanded = false
-                                    onEvent(
-                                        WorkoutEvent
-                                            .SetCurrentFilterType(ExerciseLibraryFilterType.Favorite())
-                                    )
-                                }
-                            )
+                        Divider()
 
-                            Divider()
+                        DropdownMenuItem(
+                            text = { Text("Dumbbell") },
+                            onClick = {
+                                dropdownExpanded = false
+                                onEvent(
+                                    WorkoutEvent
+                                        .SetCurrentFilterType(ExerciseLibraryFilterType.Dumbbell())
+                                )
+                            }
+                        )
 
-                            DropdownMenuItem(
-                                text = { Text("Barbell") },
-                                onClick = {
-                                    dropdownExpanded = false
-                                    onEvent(
-                                        WorkoutEvent
-                                            .SetCurrentFilterType(ExerciseLibraryFilterType.Barbell())
-                                    )
-                                }
-                            )
+                        Divider()
 
-                            Divider()
+                        DropdownMenuItem(
+                            text = { Text("Cardio") },
+                            onClick = {
+                                dropdownExpanded = false
+                                onEvent(
+                                    WorkoutEvent
+                                        .SetCurrentFilterType(ExerciseLibraryFilterType.Cardio())
+                                )
+                            }
+                        )
 
-                            DropdownMenuItem(
-                                text = { Text("Dumbbell") },
-                                onClick = {
-                                    dropdownExpanded = false
-                                    onEvent(
-                                        WorkoutEvent
-                                            .SetCurrentFilterType(ExerciseLibraryFilterType.Dumbbell())
-                                    )
-                                }
-                            )
+                        Divider()
 
-                            Divider()
+                        DropdownMenuItem(
+                            text = { Text("Calisthenics") },
+                            onClick = {
+                                dropdownExpanded = false
+                                onEvent(
+                                    WorkoutEvent
+                                        .SetCurrentFilterType(ExerciseLibraryFilterType.Calisthenic())
+                                )
+                            }
+                        )
 
-                            DropdownMenuItem(
-                                text = { Text("Cardio") },
-                                onClick = {
-                                    dropdownExpanded = false
-                                    onEvent(
-                                        WorkoutEvent
-                                            .SetCurrentFilterType(ExerciseLibraryFilterType.Cardio())
-                                    )
-                                }
-                            )
+                        Divider()
 
-                            Divider()
-
-                            DropdownMenuItem(
-                                text = { Text("Calisthenics") },
-                                onClick = {
-                                    dropdownExpanded = false
-                                    onEvent(
-                                        WorkoutEvent
-                                            .SetCurrentFilterType(ExerciseLibraryFilterType.Calisthenic())
-                                    )
-                                }
-                            )
-
-                            Divider()
-
-                            DropdownMenuItem(
-                                text = { Text("None") },
-                                onClick = {
-                                    dropdownExpanded = false
-                                    onEvent(
-                                        WorkoutEvent.ClearFilterType
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }
-
-                // Clear button
-                if (searchString != "" || searchFilterType != null) {
-                    Column(
-                        modifier = Modifier
-                            .padding(16.dp)
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .clickable {
-                                    onEvent(
-                                        WorkoutEvent.ClearFilterType
-                                    )
-                                    onEvent(WorkoutEvent.OnSearchStringChanged(""))
-                                },
-                            text = "Clear",
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
+                        DropdownMenuItem(
+                            text = { Text("None") },
+                            onClick = {
+                                dropdownExpanded = false
+                                onEvent(
+                                    WorkoutEvent.ClearFilterType
+                                )
+                            }
                         )
                     }
                 }
             }
 
-            // Exercise List
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-                    .background(MaterialTheme.colorScheme.background),
-                contentPadding = PaddingValues(vertical = 8.dp),
-            ){
-                items(
-                    items = exerciseList,
-                    key = { item: ExerciseDefinition ->  item.exerciseDefinitionId!! }
-                ) { exerciseDefinition: ExerciseDefinition ->
-                    ExerciseDefinitionListItem(
-                        exerciseDefinition,
+            // Clear button
+            if (searchString != "" || searchFilterType != null) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                ) {
+                    Text(
                         modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(8.dp)
-                            .focusable(true)
+                            .padding(4.dp)
                             .clickable {
-                                focusManager.clearFocus()
                                 onEvent(
-                                    WorkoutEvent.DefinitionSelected(exerciseDefinition)
+                                    WorkoutEvent.ClearFilterType
                                 )
+                                onEvent(WorkoutEvent.OnSearchStringChanged(""))
                             },
-                        selectable = true,
-                        isClicked = selectedExercises.contains(exerciseDefinition)
+                        text = "Clear",
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
                     )
                 }
             }
         }
-    }
-}
+
+        // Exercise List
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .weight(0.7F)
+                .padding(8.dp)
+                .background(MaterialTheme.colorScheme.background),
+            contentPadding = PaddingValues(vertical = 8.dp),
+        ){
+            items(
+                items = exerciseList,
+                key = { item: ExerciseDefinition ->  item.exerciseDefinitionId!! }
+            ) { exerciseDefinition: ExerciseDefinition ->
+                ExerciseDefinitionListItem(
+                    exerciseDefinition,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(8.dp)
+                        .focusable(true)
+                        .clickable {
+                            focusManager.clearFocus()
+                            onEvent(
+                                WorkoutEvent.DefinitionSelected(exerciseDefinition)
+                            )
+                        },
+                    selectable = true,
+                    isClicked = selectedExercises.contains(exerciseDefinition)
+                )
+            }
+        }
+
+        // Bottom Bar
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.1F)
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // Back Button
+
+
+            // Search Bar
+            OutlinedTextField(
+                modifier = Modifier.focusRequester(FocusRequester())
+                    .weight(0.5F),
+                value = searchString,
+                onValueChange = {
+                    onEvent(WorkoutEvent.OnSearchStringChanged(it))
+                },
+                shape = RoundedCornerShape(20.dp),
+                maxLines = 1
+            )
+
+        }
+
+    } // End of screen containers
+
+} // End of container wrapper.
