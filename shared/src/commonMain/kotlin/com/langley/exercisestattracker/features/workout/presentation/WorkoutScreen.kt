@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -226,31 +227,50 @@ fun WorkoutScreen(
                             ) {
                                 var lastSetEntered: ExerciseRecord? = null
 
-                                for ((index, set) in state.recordsList.withIndex()){
+                                for (set in state.recordsList){
 
                                     if (set.exerciseName == exercise.exerciseName){
                                         Row(
                                             modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.Center
+                                            horizontalArrangement = Arrangement.Center,
+                                            verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Text(
-                                                text = set.exerciseName,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
+
+                                            Column {
+                                                Text(
+                                                    text = "Reps:",
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                            }
 
                                             Spacer(Modifier.width(4.dp))
 
-                                            Text(
-                                                text = "Reps:",
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
+                                            Column {
+                                                Text(
+                                                    text = set.repsCompleted.toString(),
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                            }
 
                                             Spacer(Modifier.width(4.dp))
 
-                                            Text(
-                                                text = set.repsCompleted.toString(),
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
+                                            Column {
+                                                Checkbox(
+                                                    onCheckedChange = {isChecked ->
+                                                        if (isChecked){
+                                                            workoutViewModel.onEvent(
+                                                                WorkoutEvent.MarkCompleted(set)
+                                                            )
+                                                        }
+                                                        else {
+                                                            workoutViewModel.onEvent(
+                                                                WorkoutEvent.RemoveFromCompleted(set)
+                                                            )
+                                                        }
+                                                    },
+                                                    checked = set.completed
+                                                )
+                                            }
                                         }
 
                                         lastSetEntered = set
@@ -266,7 +286,11 @@ fun WorkoutScreen(
                                         onClick = {
                                             if (lastSetEntered != null){
                                                 workoutViewModel.onEvent(
-                                                    WorkoutEvent.AddToListOfRecords(listOf(lastSetEntered))
+                                                    WorkoutEvent.AddToListOfRecords(
+                                                        listOf(
+                                                            lastSetEntered.copy()
+                                                        )
+                                                    )
                                                 )
                                             }
                                         }
@@ -293,7 +317,7 @@ fun WorkoutScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = {  }
+                        onClick = { navController.navigateBack() }
                     ){
                         Text( text = "Cancel Session" )
                     }
@@ -301,7 +325,10 @@ fun WorkoutScreen(
                     Spacer(Modifier.width(8.dp))
 
                     Button(
-                        onClick = {  }
+                        onClick = {
+                            workoutViewModel.onEvent(WorkoutEvent.SaveWorkout)
+                            navController.navigateBack()
+                        }
                     ){
                         Text( text = "Save Session" )
                     }
