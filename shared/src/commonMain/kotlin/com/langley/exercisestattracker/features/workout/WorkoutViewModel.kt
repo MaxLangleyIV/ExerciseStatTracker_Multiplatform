@@ -27,14 +27,6 @@ class WorkoutViewModel(
             initialValue = WorkoutState()
         )
 
-//    private val _definitions = MutableStateFlow(dataSource.getDefinitions())
-//
-//    val definitions = _definitions.stateIn(
-//        scope = viewModelScope,
-//        started = SharingStarted.WhileSubscribed(5000L),
-//        initialValue = listOf<ExerciseDefinition>()
-//    )
-
 
     fun onEvent(workoutEvent: WorkoutEvent){
 
