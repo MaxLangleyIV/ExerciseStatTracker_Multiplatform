@@ -37,6 +37,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import com.langley.exercisestattracker.features.workout.WorkoutViewModel
@@ -135,7 +136,7 @@ fun WorkoutScreen(
             ){
 
                 // Empty Workout View
-                if (state.exerciseMap.isEmpty()){
+                if (state.exerciseList.isEmpty()){
                     Text(
                         text = "This workout is currently empty.",
                         color = MaterialTheme.colorScheme.onBackground
@@ -203,7 +204,7 @@ fun WorkoutScreen(
                 else {
 
                     // Exercises
-                    for (exercise in state.exerciseMap.keys){
+                    for (exercise in state.exerciseList){
 
                         // Exercise Group
                         Column(
@@ -214,7 +215,7 @@ fun WorkoutScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = exercise,
+                                text = exercise.exerciseName,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
 
@@ -223,46 +224,57 @@ fun WorkoutScreen(
                                 verticalArrangement = Arrangement.SpaceEvenly,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                for ((index, set) in state.exerciseMap[exercise]!!.withIndex()){
+                                var lastSetEntered: ExerciseRecord? = null
 
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceEvenly
-                                    ) {
-                                        Column {
+                                for ((index, set) in state.recordsList.withIndex()){
+
+                                    if (set.exerciseName == exercise.exerciseName){
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.Center
+                                        ) {
                                             Text(
-                                                text = set.repsCompleted.toString(),
+                                                text = set.exerciseName,
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
 
-                                            Spacer(Modifier.height(4.dp))
+                                            Spacer(Modifier.width(4.dp))
+
+                                            Text(
+                                                text = "Reps:",
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+
+                                            Spacer(Modifier.width(4.dp))
 
                                             Text(
                                                 text = set.repsCompleted.toString(),
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         }
-                                    }
-                                }
-                            }
 
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalArrangement = Arrangement.SpaceEvenly,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Button(
-                                    onClick = {
-//                                        workoutViewModel.addToMap(state.exerciseMap[exercise]?.last())
-                                        workoutViewModel.onEvent(
-                                            WorkoutEvent.AddRecordToMap(
-                                                state.exerciseMap[exercise]!!.last()
-                                            )
-                                        )
+                                        lastSetEntered = set
                                     }
-                                ){
-                                    Text( text = "Add another set." )
                                 }
+
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalArrangement = Arrangement.SpaceEvenly,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            if (lastSetEntered != null){
+                                                workoutViewModel.onEvent(
+                                                    WorkoutEvent.AddToListOfRecords(listOf(lastSetEntered))
+                                                )
+                                            }
+                                        }
+                                    ){
+                                        Text( text = "Add another set." )
+                                    }
+                                }
+
                             }
                         }
                         Spacer(Modifier.height(8.dp))
