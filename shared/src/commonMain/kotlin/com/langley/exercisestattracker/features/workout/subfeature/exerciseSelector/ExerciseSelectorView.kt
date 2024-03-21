@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -35,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
@@ -83,8 +83,10 @@ fun ExerciseSelectorView(
 
             // Top Bar
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
+                modifier = Modifier.fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
                 // Back Button
@@ -99,11 +101,10 @@ fun ExerciseSelectorView(
                     )
                 }
 
-                Divider(Modifier.width(4.dp))
-
                 // Search Bar
                 OutlinedTextField(
-                    modifier = Modifier.focusRequester(FocusRequester()),
+                    modifier = Modifier.focusRequester(FocusRequester())
+                        .weight(0.5F),
                     value = searchString,
                     onValueChange = {
                         onEvent(WorkoutEvent.OnSearchStringChanged(it))
@@ -242,30 +243,28 @@ fun ExerciseSelectorView(
                     .padding(8.dp)
                     .background(MaterialTheme.colorScheme.background),
                 contentPadding = PaddingValues(vertical = 8.dp),
-
-                content = {
-                    items(
-                        items = exerciseList,
-                        key = { item: ExerciseDefinition ->  item.exerciseDefinitionId!! }
-                    ) { exerciseDefinition: ExerciseDefinition ->
-                        ExerciseDefinitionListItem(
-                            exerciseDefinition,
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .padding(8.dp)
-                                .focusable(true)
-                                .clickable {
-                                    focusManager.clearFocus()
-                                    onEvent(
-                                        WorkoutEvent.DefinitionSelected(exerciseDefinition)
-                                    )
-                                },
-                            selectable = true,
-                            isClicked = selectedExercises.contains(exerciseDefinition)
-                        )
-                    }
+            ){
+                items(
+                    items = exerciseList,
+                    key = { item: ExerciseDefinition ->  item.exerciseDefinitionId!! }
+                ) { exerciseDefinition: ExerciseDefinition ->
+                    ExerciseDefinitionListItem(
+                        exerciseDefinition,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(8.dp)
+                            .focusable(true)
+                            .clickable {
+                                focusManager.clearFocus()
+                                onEvent(
+                                    WorkoutEvent.DefinitionSelected(exerciseDefinition)
+                                )
+                            },
+                        selectable = true,
+                        isClicked = selectedExercises.contains(exerciseDefinition)
+                    )
                 }
-            )
+            }
         }
     }
 }
