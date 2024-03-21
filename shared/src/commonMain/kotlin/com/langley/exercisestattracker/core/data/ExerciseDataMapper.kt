@@ -80,6 +80,6 @@ fun ExerciseDefinition.toBlankRecord(): ExerciseRecord {
     return ExerciseRecord(
         exerciseName = exerciseName,
         isCardio = isCardio,
-        isCalisthenic = isCalisthenic
+        isCalisthenic = isCalisthenic,
     )
 }
