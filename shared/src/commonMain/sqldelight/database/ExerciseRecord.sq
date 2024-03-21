@@ -30,7 +30,6 @@ INTO ExerciseRecord(
     exerciseName,
     weightUsed,
     weightUnit,
---     weightIsKilos,
     isCardio,
     isCalisthenic,
     duration,
