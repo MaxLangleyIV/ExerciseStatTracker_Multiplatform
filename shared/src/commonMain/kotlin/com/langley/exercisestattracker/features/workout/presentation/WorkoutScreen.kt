@@ -236,23 +236,50 @@ fun WorkoutScreen(
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
 
-                                            Column {
-                                                Text(
-                                                    text = "Reps:",
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                                )
+                                            if (exercise.hasReps){
+
+                                                Column {
+                                                    Text(
+                                                        text = "Reps:",
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    )
+                                                }
+
+                                                Spacer(Modifier.width(4.dp))
+
+                                                Column {
+                                                    Text(
+                                                        text = set.repsCompleted.toString(),
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    )
+                                                }
+
+                                                Spacer(Modifier.width(4.dp))
                                             }
 
-                                            Spacer(Modifier.width(4.dp))
 
-                                            Column {
-                                                Text(
-                                                    text = set.repsCompleted.toString(),
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                                )
+
+                                            if (exercise.isWeighted){
+
+                                                Column {
+                                                    Text(
+                                                        text = "Weight:",
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    )
+                                                }
+
+                                                Spacer(Modifier.width(4.dp))
+
+                                                Column {
+                                                    Text(
+                                                        text = set.weightUsed.toString(),
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    )
+                                                }
+
+                                                Spacer(Modifier.width(4.dp))
+
                                             }
-
-                                            Spacer(Modifier.width(4.dp))
 
                                             Column {
                                                 Checkbox(
