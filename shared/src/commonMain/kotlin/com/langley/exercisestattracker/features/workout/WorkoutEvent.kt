@@ -10,8 +10,9 @@ sealed interface WorkoutEvent {
     data object OpenExerciseSelector: WorkoutEvent
     data object CloseExerciseSelector: WorkoutEvent
     data object SaveWorkout: WorkoutEvent
-    data class MarkCompleted(val record: ExerciseRecord): WorkoutEvent
-    data class RemoveFromCompleted(val record: ExerciseRecord): WorkoutEvent
+    data class MarkCompleted(val index: Int, val record: ExerciseRecord): WorkoutEvent
+    data class MarkIncomplete(val index: Int, val record: ExerciseRecord): WorkoutEvent
+    data class RemoveFromCompleted(val index: Int, val record: ExerciseRecord): WorkoutEvent
     data class RemoveFromListOfExercises(val exercise: ExerciseDefinition) : WorkoutEvent
     data class AddToListOfRecords(val records: List<ExerciseRecord>) : WorkoutEvent
     data class RemoveFromListOfRecords(val index: Int) : WorkoutEvent
