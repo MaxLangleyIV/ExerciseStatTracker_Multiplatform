@@ -9,6 +9,7 @@ import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterTyp
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -58,19 +59,23 @@ class WorkoutViewModelTest {
 
         testRecord0 = ExerciseRecord(
             exerciseRecordId = 0,
-            exerciseName = "Test"
+            exerciseName = "Test0",
+            completed = false
         )
         testRecord1 = ExerciseRecord(
             exerciseRecordId = 1,
-            exerciseName = "Test"
+            exerciseName = "Test1",
+            completed = false
         )
         testRecord2 = ExerciseRecord(
             exerciseRecordId = 2,
-            exerciseName = "Test"
+            exerciseName = "Test2",
+            completed = false
         )
         testRecord3 = ExerciseRecord(
             exerciseRecordId = 3,
-            exerciseName = "Test"
+            exerciseName = "Test3",
+            completed = false
         )
 
         testDef0 = ExerciseDefinition( exerciseName = "Test0" )
@@ -185,18 +190,53 @@ class WorkoutViewModelTest {
     @Test
     fun onEvent_MarkCompleted_completedExercisesListUpdatedCorrectly() = runTest {
 
-        assertFalse(
-            actual = state.completedExercises.contains(testRecord3),
-            message = "CompletedExercises should not already contain testRecord"
+        setupViewModel(
+            WorkoutState(
+                recordsList = listOf(testRecord0, testRecord1, testRecord2)
+            )
         )
 
-        viewModel.onEvent(WorkoutEvent.MarkCompleted(testRecord3))
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.recordsList[1].completed,
+            message = "recordsList[1].completed should equal false"
+        )
+
+        viewModel.onEvent(WorkoutEvent.MarkCompleted(1, testRecord1))
 
         state = viewModel.state.first()
 
         assertTrue(
-            actual = state.completedExercises.contains(testRecord3),
-            message = "CompletedExercises does not contain testRecord."
+            actual = state.recordsList[1].completed,
+            message = "recordsList[1].completed should equal true"
+        )
+
+    }
+
+    @Test
+    fun onEvent_MarkIncomplete_completedExercisesListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                recordsList = listOf(testRecord0, testRecord1.copy(completed = true), testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.recordsList[1].completed,
+            message = "recordsList[1].completed should equal true"
+        )
+
+        viewModel.onEvent(WorkoutEvent.MarkIncomplete(1, testRecord1))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.recordsList[1].completed,
+            message = "recordsList[1].completed should equal false"
         )
 
     }
@@ -211,7 +251,7 @@ class WorkoutViewModelTest {
             message = "CompletedExercises should contain testRecord1"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(testRecord1))
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(1, testRecord1))
 
         state = viewModel.state.first()
 
@@ -231,7 +271,7 @@ class WorkoutViewModelTest {
             message = "CompletedExercises should contain testRecord0"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(testRecord0))
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(0, testRecord0))
 
         state = viewModel.state.first()
 
@@ -251,7 +291,7 @@ class WorkoutViewModelTest {
             message = "CompletedExercises should contain testRecord2"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(testRecord2))
+        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(2, testRecord2))
 
         state = viewModel.state.first()
 
@@ -264,17 +304,37 @@ class WorkoutViewModelTest {
     @Test
     fun onEvent_saveWorkout() = runTest {
 
+        setupViewModel(
+            WorkoutState(
+                recordsList = listOf(
+                    testRecord0.copy(completed = true),
+                    testRecord1,
+                    testRecord2
+                )
+            )
+        )
+
         viewModel.onEvent(WorkoutEvent.SaveWorkout)
 
         state = viewModel.state.first()
 
-        for (record in state.completedExercises){
+        for (record in state.recordsList){
 
-            assertTrue(
-                actual = testDataSource.getRecords().first().contains(record),
-                message =
-                record.exerciseName + "${record.exerciseRecordId} not found in data source."
-            )
+            if (record.completed){
+                assertTrue(
+                    actual = testDataSource.getRecords().first().contains(record),
+                    message =
+                    record.exerciseName + " ${record.exerciseRecordId} not found in data source."
+                )
+            }
+            else {
+                assertFalse(
+                    actual = testDataSource.getRecords().first().contains(record),
+                    message =
+                    record.exerciseName +
+                            " ${record.exerciseRecordId} should not be found in data source."
+                )
+            }
 
         }
     }
