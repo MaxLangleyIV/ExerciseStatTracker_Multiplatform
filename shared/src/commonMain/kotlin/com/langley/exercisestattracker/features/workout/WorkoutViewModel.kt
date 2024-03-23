@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 
 class WorkoutViewModel(
     private val dataSource: ExerciseAppDataSource,
@@ -112,12 +113,31 @@ class WorkoutViewModel(
 
             is WorkoutEvent.MarkCompleted -> {
 
-                val mutableList = _state.value.completedExercises.toMutableList()
+                val mutableList = _state.value.recordsList.toMutableList()
 
-                mutableList.add(workoutEvent.record)
+                mutableList[workoutEvent.index] =
+                    workoutEvent.record.copy(
+                        completed = true,
+                        dateCompleted = Clock.System.now().toEpochMilliseconds()
+                    )
 
                 _state.update { it.copy(
-                    completedExercises = mutableList
+                    recordsList = mutableList
+                ) }
+
+            }
+
+            is WorkoutEvent.MarkIncomplete -> {
+
+                val mutableList = _state.value.recordsList.toMutableList()
+
+                mutableList[workoutEvent.index] =
+                    workoutEvent.record.copy(
+                        completed = false,
+                    )
+
+                _state.update { it.copy(
+                    recordsList = mutableList
                 ) }
 
             }
@@ -135,11 +155,15 @@ class WorkoutViewModel(
 
             WorkoutEvent.SaveWorkout -> {
 
-                for (record in _state.value.completedExercises){
+                for (record in _state.value.recordsList){
 
-                    viewModelScope.launch {
+                    if (record.completed){
 
-                        dataSource.insertOrReplaceRecord(record)
+                        viewModelScope.launch {
+
+                            dataSource.insertOrReplaceRecord(record)
+
+                        }
 
                     }
 
