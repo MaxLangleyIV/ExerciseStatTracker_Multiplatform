@@ -71,10 +71,6 @@ fun WorkoutScreen(
 
     val state by workoutViewModel.state.collectAsState(WorkoutState())
 
-//    val definitions by workoutViewModel.definitions.collectAsState(listOf())
-
-    var isSingleExerciseMode by mutableStateOf( true )
-
     // Full Screen Container
     Surface {
         Column(
@@ -201,11 +197,12 @@ fun WorkoutScreen(
 
 
                 }
+
                 // Non-empty Workout View
                 else {
 
                     // Exercises
-                    for (exercise in state.exerciseList){
+                    for ((exerciseIndex, exercise) in state.exerciseList.withIndex()){
 
                         // Exercise Group
                         Column(
@@ -227,7 +224,7 @@ fun WorkoutScreen(
                             ) {
                                 var lastSetEntered: ExerciseRecord? = null
 
-                                for (set in state.recordsList){
+                                for ((recordIndex, set) in state.recordsList.withIndex()){
 
                                     if (set.exerciseName == exercise.exerciseName){
                                         Row(
@@ -286,12 +283,12 @@ fun WorkoutScreen(
                                                     onCheckedChange = {isChecked ->
                                                         if (isChecked){
                                                             workoutViewModel.onEvent(
-                                                                WorkoutEvent.MarkCompleted(set)
+                                                                WorkoutEvent.MarkCompleted(recordIndex, set)
                                                             )
                                                         }
                                                         else {
                                                             workoutViewModel.onEvent(
-                                                                WorkoutEvent.RemoveFromCompleted(set)
+                                                                WorkoutEvent.MarkIncomplete(recordIndex, set)
                                                             )
                                                         }
                                                     },
@@ -315,7 +312,10 @@ fun WorkoutScreen(
                                                 workoutViewModel.onEvent(
                                                     WorkoutEvent.AddToListOfRecords(
                                                         listOf(
-                                                            lastSetEntered.copy()
+                                                            lastSetEntered.copy(
+                                                                dateCompleted = Clock.System.now().toEpochMilliseconds(),
+                                                                completed = false
+                                                            )
                                                         )
                                                     )
                                                 )
