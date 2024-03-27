@@ -33,52 +33,15 @@ class WorkoutViewModel(
 
         when (workoutEvent){
 
-            is WorkoutEvent.AddRecordToMap -> {
-                val newRecord = workoutEvent.record
-                val newMap = _state.value.exerciseMap.toMutableMap()
+            WorkoutEvent.OpenExerciseSelector -> {
 
-                if (newMap[newRecord.exerciseName] == null){
-
-                    newMap[newRecord.exerciseName] = listOf(workoutEvent.record)
-
-                }
-
-                else {
-                    val newList = newMap[workoutEvent.record.exerciseName]!!.toMutableList()
-
-                    newList.add(workoutEvent.record)
-
-                    newMap[workoutEvent.record.exerciseName] = newList
-
-                }
-
-                _state.update { it.copy(
-                    exerciseMap = newMap
-                ) }
-            }
-
-            is WorkoutEvent.RemoveRecordFromMap -> {
-
-                if (_state.value.exerciseMap[workoutEvent.recordName] != null){
-
-                    val newMap = _state.value.exerciseMap.toMutableMap()
-                    val newList = newMap[workoutEvent.recordName]!!.toMutableList()
-
-                    newList.removeAt(workoutEvent.index)
-
-                    if (newList.isEmpty()){
-
-                        newMap.remove(workoutEvent.recordName)
-
-                    }
-                    else {
-                        newMap[workoutEvent.recordName] = newList
-                    }
-
+                viewModelScope.launch {
                     _state.update { it.copy(
-                        exerciseMap = newMap
+                        exerciseLibrary = dataSource.getDefinitions().first(),
+                        exerciseSelectorVisible = true
                     ) }
                 }
+
             }
 
             WorkoutEvent.CloseExerciseSelector -> {
@@ -97,16 +60,6 @@ class WorkoutViewModel(
                         selectedExercises = listOf()
                     ) }
 
-                }
-
-            }
-            WorkoutEvent.OpenExerciseSelector -> {
-
-                viewModelScope.launch {
-                    _state.update { it.copy(
-                        exerciseLibrary = dataSource.getDefinitions().first(),
-                        exerciseSelectorVisible = true
-                    ) }
                 }
 
             }
@@ -142,16 +95,6 @@ class WorkoutViewModel(
 
             }
 
-            is WorkoutEvent.RemoveFromCompleted -> {
-
-                val mutableList = _state.value.completedExercises.toMutableList()
-
-                mutableList.remove(workoutEvent.record)
-
-                _state.update { it.copy(
-                    completedExercises = mutableList
-                ) }
-            }
 
             WorkoutEvent.SaveWorkout -> {
 
@@ -289,9 +232,15 @@ class WorkoutViewModel(
 
             }
 
-            is WorkoutEvent.ToggleCompleted -> {
+            is WorkoutEvent.UpdateRecordInList -> {
 
+                val mutableList = _state.value.recordsList.toMutableList()
 
+                mutableList[workoutEvent.index] = workoutEvent.newRecord
+
+                _state.update { it.copy(
+                    recordsList = mutableList
+                ) }
 
             }
         }
