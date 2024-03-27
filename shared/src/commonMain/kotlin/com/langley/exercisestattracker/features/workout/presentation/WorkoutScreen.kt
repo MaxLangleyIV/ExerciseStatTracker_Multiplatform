@@ -10,45 +10,32 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
-import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import com.langley.exercisestattracker.features.workout.WorkoutViewModel
+import com.langley.exercisestattracker.features.workout.presentation.components.TopBar
+import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutContentHolder
 import com.langley.exercisestattracker.features.workout.subfeature.exerciseSelector.ExerciseSelectorView
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
 
 @Composable
 fun WorkoutScreen(
@@ -74,264 +61,34 @@ fun WorkoutScreen(
     // Full Screen Container
     Surface {
         Column(
-            modifier = modifier,
+            modifier = modifier
+                .clickable(
+                    indication = null,
+                    interactionSource = interactionSource
+                ) { focusManager.clearFocus() },
         ) {
 
             // Top Bar
-            Column(
-                modifier = Modifier.weight(0.1F)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start
-                ){
-                    IconButton(
-                        onClick = {
-                            navController.navigateBack()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBackIos,
-                            contentDescription = "Close"
-                        )
-                    }
-                }
-                // Routine Name
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(4.dp),
-
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-
-                    Text(
-                        text = state.routine.routineName.ifBlank {
-                            "New Workout"
-                        } + " - " + Clock.System.todayIn(TimeZone.currentSystemDefault())
-                    )
-
-                }
-            }
+            TopBar(
+                modifier = Modifier.weight(0.1F),
+                navController = navController,
+                workoutState = state,
+                onEvent = workoutViewModel::onEvent
+            )
 
             Spacer(Modifier.height(8.dp))
 
-            // Workout Content
-            Column(
+            // Content
+            WorkoutContentHolder(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.background)
-                    .weight(0.8F)
-                    .verticalScroll(rememberScrollState()),
+                    .weight(0.8F),
 
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-
-                // Empty Workout View
-                if (state.exerciseList.isEmpty()){
-                    Text(
-                        text = "This workout is currently empty.",
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-
-                    // Buttons Column
-                    Column(
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        // Add Exercise Button
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 0.dp, max = 60.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .clickable {
-                                    workoutViewModel.onEvent(WorkoutEvent.OpenExerciseSelector)
-                                }
-                                .background(MaterialTheme.colorScheme.primaryContainer)
-                                .padding(4.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ){
-
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1F),
-                                text = "Add an exercise.",
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                textAlign = TextAlign.Center,
-                            )
-                        }
-
-                        Spacer(Modifier.height(8.dp))
-
-                        // Select Routine Button
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 0.dp, max = 60.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .clickable {  }
-                                .background(MaterialTheme.colorScheme.secondaryContainer)
-                                .padding(4.dp),
-                            horizontalArrangement = Arrangement.Center,
-                        ){
-
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1F),
-                                text = "Select a routine.",
-                                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                textAlign = TextAlign.Center,
-                            )
-                        }
-
-                        Spacer(Modifier.height(8.dp))
-                    }
-
-
-                }
-
-                // Non-empty Workout View
-                else {
-
-                    // Exercises
-                    for ((exerciseIndex, exercise) in state.exerciseList.withIndex()){
-
-                        // Exercise Group
-                        Column(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(MaterialTheme.colorScheme.surfaceVariant),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = exercise.exerciseName,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-
-                            // Exercise Sets
-                            Column(
-                                verticalArrangement = Arrangement.SpaceEvenly,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                var lastSetEntered: ExerciseRecord? = null
-
-                                for ((recordIndex, set) in state.recordsList.withIndex()){
-
-                                    if (set.exerciseName == exercise.exerciseName){
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.Center,
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-
-                                            if (exercise.hasReps){
-
-                                                Column {
-                                                    Text(
-                                                        text = "Reps:",
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                                    )
-                                                }
-
-                                                Spacer(Modifier.width(4.dp))
-
-                                                Column {
-                                                    Text(
-                                                        text = set.repsCompleted.toString(),
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                                    )
-                                                }
-
-                                                Spacer(Modifier.width(4.dp))
-                                            }
-
-
-
-                                            if (exercise.isWeighted){
-
-                                                Column {
-                                                    Text(
-                                                        text = "Weight:",
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                                    )
-                                                }
-
-                                                Spacer(Modifier.width(4.dp))
-
-                                                Column {
-                                                    Text(
-                                                        text = set.weightUsed.toString(),
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                                    )
-                                                }
-
-                                                Spacer(Modifier.width(4.dp))
-
-                                            }
-
-                                            Column {
-                                                Checkbox(
-                                                    onCheckedChange = {isChecked ->
-                                                        if (isChecked){
-                                                            workoutViewModel.onEvent(
-                                                                WorkoutEvent.MarkCompleted(recordIndex, set)
-                                                            )
-                                                        }
-                                                        else {
-                                                            workoutViewModel.onEvent(
-                                                                WorkoutEvent.MarkIncomplete(recordIndex, set)
-                                                            )
-                                                        }
-                                                    },
-                                                    checked = set.completed
-                                                )
-                                            }
-                                        }
-
-                                        lastSetEntered = set
-                                    }
-                                }
-
-                                Column(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalArrangement = Arrangement.SpaceEvenly,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Button(
-                                        onClick = {
-                                            if (lastSetEntered != null){
-                                                workoutViewModel.onEvent(
-                                                    WorkoutEvent.AddToListOfRecords(
-                                                        listOf(
-                                                            lastSetEntered.copy(
-                                                                dateCompleted = Clock.System.now().toEpochMilliseconds(),
-                                                                completed = false
-                                                            )
-                                                        )
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    ){
-                                        Text( text = "Add another set." )
-                                    }
-                                }
-
-                            }
-                        }
-                        Spacer(Modifier.height(8.dp))
-                    }
-                }
-            }
+                workoutState = state,
+                onEvent = workoutViewModel::onEvent
+            )
 
             // Save / Cancel Section
             Column(
