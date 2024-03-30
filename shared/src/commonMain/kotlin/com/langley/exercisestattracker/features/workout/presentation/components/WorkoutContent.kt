@@ -6,15 +6,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
@@ -35,17 +36,20 @@ fun WorkoutContent(
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(4.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = exercise.exerciseName,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.Bold
             )
 
             // Exercise Sets
             Column(
+                modifier = Modifier.padding(2.dp),
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -55,18 +59,17 @@ fun WorkoutContent(
 
                     if (set.exerciseName == exercise.exerciseName){
 
-                        ExerciseRecordRow(
+                        WeightTrainingRecordRow(
                             exercise = exercise,
                             set = set,
                             recordIndex = recordIndex,
                             onEvent = onEvent
                         )
 
-                        Divider(
+                        Spacer(
                             modifier = modifier
-                                .fillMaxWidth(),
-                            color = MaterialTheme.colorScheme.outline,
-                            thickness = 4.dp
+                                .fillMaxWidth()
+                                .height(4.dp),
                         )
 
                         lastSetEntered = set
