@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
-import com.langley.exercisestattracker.core.presentation.composables.DividerRow
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import kotlinx.datetime.Clock
@@ -62,7 +62,12 @@ fun WorkoutContent(
                             onEvent = onEvent
                         )
 
-                        DividerRow()
+                        Divider(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.outline,
+                            thickness = 4.dp
+                        )
 
                         lastSetEntered = set
                     }
