@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
-import com.langley.exercisestattracker.core.presentation.composables.DividerColumn
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 
 @Composable
@@ -40,12 +39,13 @@ fun ExerciseRecordRow(
 
             Column {
                 Text(
-                    text = "Reps:",
+                    text = "Reps: ",
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            DividerColumn()
+//            DividerColumn()
+
 
             Column {
                 Text(
@@ -54,7 +54,14 @@ fun ExerciseRecordRow(
                 )
             }
 
-            DividerColumn()
+//            Divider(
+//                modifier = Modifier
+//                    .height(32.dp)
+//                    .width(32.dp),
+//                color = Color.Red
+//            )
+
+//            DividerColumn()
 
         }
 
@@ -62,12 +69,12 @@ fun ExerciseRecordRow(
 
             Column {
                 Text(
-                    text = "Weight:",
+                    text = "Weight: ",
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            DividerColumn()
+//            DividerColumn()
 
             Column(
                 modifier = Modifier.clickable {
@@ -80,7 +87,7 @@ fun ExerciseRecordRow(
                 )
             }
 
-            DividerColumn()
+//            DividerColumn()
 
         }
 
