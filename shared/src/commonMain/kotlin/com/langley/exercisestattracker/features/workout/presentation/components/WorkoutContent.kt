@@ -12,6 +12,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +36,8 @@ fun WorkoutContent(
     // Exercises
     for ((exerciseIndex, exercise) in workoutState.exerciseList.withIndex()){
 
+        var numberOfSets by remember { mutableStateOf( 0 ) }
+
         // Exercise Group
         Column(
             modifier = Modifier
@@ -47,6 +53,8 @@ fun WorkoutContent(
                 fontWeight = FontWeight.Bold
             )
 
+            Spacer( Modifier.height(4.dp).fillMaxWidth() )
+
             // Exercise Sets
             Column(
                 modifier = Modifier.padding(2.dp),
@@ -59,9 +67,12 @@ fun WorkoutContent(
 
                     if (set.exerciseName == exercise.exerciseName){
 
+                        numberOfSets += 1
+
                         WeightTrainingRecordRow(
                             exercise = exercise,
                             set = set,
+                            setNumber = numberOfSets,
                             recordIndex = recordIndex,
                             onEvent = onEvent
                         )
@@ -74,7 +85,11 @@ fun WorkoutContent(
 
                         lastSetEntered = set
                     }
+
+
                 }
+
+                numberOfSets = 0
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
