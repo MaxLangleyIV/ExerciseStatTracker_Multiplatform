@@ -65,7 +65,10 @@ fun WorkoutScreen(
                 .clickable(
                     indication = null,
                     interactionSource = interactionSource
-                ) { focusManager.clearFocus() },
+                ) {
+                    focusManager.clearFocus()
+                    workoutViewModel.onEvent(WorkoutEvent.ClearSelectedSet)
+                  },
         ) {
 
             // Top Bar
