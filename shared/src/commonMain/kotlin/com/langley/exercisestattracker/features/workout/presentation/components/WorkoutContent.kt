@@ -2,6 +2,7 @@ package com.langley.exercisestattracker.features.workout.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,92 +34,119 @@ fun WorkoutContent(
     onEvent: (WorkoutEvent) -> Unit = {}
 ){
 
-    // Exercises
-    for ((exerciseIndex, exercise) in workoutState.exerciseList.withIndex()){
-
-        var numberOfSets by remember { mutableStateOf( 0 ) }
-
-        // Exercise Group
+    Box(
+        modifier = modifier
+    ) {
+        // Main Exercises View
         Column(
-            modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(4.dp),
+            modifier = modifier,
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = exercise.exerciseName,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Bold
-            )
+            for ((exerciseIndex, exercise) in workoutState.exerciseList.withIndex()){
 
-            Spacer( Modifier.height(4.dp).fillMaxWidth() )
+                var numberOfSets by remember { mutableStateOf( 0 ) }
 
-            // Exercise Sets
-            Column(
-                modifier = Modifier.padding(2.dp),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                var lastSetEntered: ExerciseRecord? = null
-
-                for ((recordIndex, set) in workoutState.recordsList.withIndex()){
-
-                    if (set.exerciseName == exercise.exerciseName){
-
-                        numberOfSets += 1
-
-                        WeightTrainingRecordRow(
-                            exercise = exercise,
-                            set = set,
-                            setNumber = numberOfSets,
-                            recordIndex = recordIndex,
-                            onEvent = onEvent
-                        )
-
-                        Spacer(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .height(4.dp),
-                        )
-
-                        lastSetEntered = set
-                    }
-
-
-                }
-
-                numberOfSets = 0
-
+                // Exercise Group
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(4.dp),
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(
-                        onClick = {
-                            if (lastSetEntered != null){
-                                onEvent(
-                                    WorkoutEvent.AddToListOfRecords(
-                                        listOf(
-                                            lastSetEntered.copy(
-                                                dateCompleted =
-                                                Clock.System.now().toEpochMilliseconds(),
-                                                completed = false
+                    Text(
+                        text = exercise.exerciseName,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer( Modifier.height(4.dp).fillMaxWidth() )
+
+                    // Exercise Sets
+                    Column(
+                        modifier = Modifier.padding(2.dp),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        var lastSetEntered: ExerciseRecord? = null
+
+                        for ((recordIndex, set) in workoutState.recordsList.withIndex()){
+
+                            if (set.exerciseName == exercise.exerciseName){
+
+                                numberOfSets += 1
+
+                                WeightTrainingRecordRow(
+                                    exercise = exercise,
+                                    set = set,
+                                    setNumber = numberOfSets,
+                                    recordIndex = recordIndex,
+                                    onEvent = onEvent
+                                )
+
+                                Spacer(
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .height(4.dp),
+                                )
+
+                                lastSetEntered = set
+                            }
+
+
+                        }
+
+                        numberOfSets = 0
+
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Button(
+                                onClick = {
+                                    if (lastSetEntered != null){
+                                        onEvent(
+                                            WorkoutEvent.AddToListOfRecords(
+                                                listOf(
+                                                    lastSetEntered.copy(
+                                                        dateCompleted =
+                                                        Clock.System.now().toEpochMilliseconds(),
+                                                        completed = false
+                                                    )
+                                                )
                                             )
                                         )
-                                    )
-                                )
+                                    }
+                                }
+                            ){
+                                Text( text = "Add another set." )
                             }
                         }
-                    ){
-                        Text( text = "Add another set." )
+
                     }
                 }
+                Spacer(Modifier.height(8.dp))
+            }
 
+            Button(
+                onClick = {
+                    onEvent(
+                        WorkoutEvent.OpenExerciseSelector
+                    )
+                }
+            ){
+                Text( text = "Add a new exercise." )
             }
         }
-        Spacer(Modifier.height(8.dp))
+
+        // Set Details View
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {  }
     }
 }
