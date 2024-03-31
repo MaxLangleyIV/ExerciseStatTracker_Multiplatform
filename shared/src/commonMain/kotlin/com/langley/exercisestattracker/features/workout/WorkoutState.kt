@@ -19,6 +19,8 @@ data class WorkoutState(
 
     val recordsList: List<ExerciseRecord> = listOf(),
 
+    val selectedSet: ExerciseRecord? = null,
+
 
     // Exercise Selector
 
