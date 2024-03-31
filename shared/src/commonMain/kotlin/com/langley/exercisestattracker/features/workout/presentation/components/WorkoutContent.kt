@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
@@ -59,7 +61,8 @@ fun WorkoutContent(
                     Text(
                         text = exercise.exerciseName,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp
                     )
 
                     Spacer( Modifier.height(4.dp).fillMaxWidth() )
@@ -71,6 +74,12 @@ fun WorkoutContent(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         var lastSetEntered: ExerciseRecord? = null
+
+                        WeightTrainingLabelsRow()
+
+                        Divider(
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
                         for ((recordIndex, set) in workoutState.recordsList.withIndex()){
 
@@ -86,11 +95,11 @@ fun WorkoutContent(
                                     onEvent = onEvent
                                 )
 
-                                Spacer(
-                                    modifier = modifier
-                                        .fillMaxWidth()
-                                        .height(4.dp),
-                                )
+//                                Spacer(
+//                                    modifier = modifier
+//                                        .fillMaxWidth()
+//                                        .height(4.dp),
+//                                )
 
                                 lastSetEntered = set
                             }
@@ -143,10 +152,20 @@ fun WorkoutContent(
         }
 
         // Set Details View
-        Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {  }
+//        if (workoutState.selectedSet != null){
+//
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(Color.Red)
+//                    .alpha(0.3F),
+//                verticalArrangement = Arrangement.SpaceEvenly,
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                Text( text = "Test" )
+//            }
+//
+//
+//        }
     }
 }
