@@ -243,6 +243,23 @@ class WorkoutViewModel(
                 ) }
 
             }
+
+            is WorkoutEvent.SelectSet -> {
+
+                _state.update { it.copy(
+                    selectedSet = workoutEvent.record
+                ) }
+
+            }
+
+            WorkoutEvent.ClearSelectedSet -> {
+
+                _state.update { it.copy(
+                    selectedSet = null
+                ) }
+
+            }
+
         }
 
     }
