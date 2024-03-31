@@ -134,6 +134,5 @@ fun WorkoutScreen(
             visible = state.exerciseSelectorVisible
         )
 
-
     }
 }
