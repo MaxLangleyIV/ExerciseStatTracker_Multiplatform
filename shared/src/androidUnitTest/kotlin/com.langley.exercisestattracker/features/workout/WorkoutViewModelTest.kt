@@ -698,6 +698,41 @@ class WorkoutViewModelTest {
 
     }
 
+    @Test
+    fun onEvent_SelectSet_stateUpdatedCorrectly() = runTest {
+
+        assertNull(
+            actual = state.selectedSet,
+            message = "SelectedSet should be null at start"
+            )
+
+        viewModel.onEvent(WorkoutEvent.SelectSet(testRecord0))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = testRecord0,
+            actual = state.selectedSet,
+            message = "testRecord0 not found in state.selectedSet"
+        )
+
+    }
+
+    @Test
+    fun onEvent_ClearSelectedSet_selectedSetEqualsNull() = runTest {
+
+        viewModel.onEvent(WorkoutEvent.SelectSet(testRecord0))
+
+        viewModel.onEvent(WorkoutEvent.ClearSelectedSet)
+
+        state = viewModel.state.first()
+
+        assertNull(
+            actual = state.selectedSet,
+            message = "selectedSet should be null in state"
+        )
+
+    }
 
     @Test
     fun onEvent__() = runTest {  }
