@@ -16,7 +16,8 @@ sealed interface WorkoutEvent {
     data class AddToListOfRecords(val records: List<ExerciseRecord>) : WorkoutEvent
     data class RemoveFromListOfRecords(val index: Int) : WorkoutEvent
     data class UpdateRecordInList(val index: Int, val newRecord: ExerciseRecord) : WorkoutEvent
-//    data class ToggleCompleted(val record: ExerciseRecord) : WorkoutEvent
+    data class SelectSet(val record: ExerciseRecord): WorkoutEvent
+    data object ClearSelectedSet: WorkoutEvent
 
     // Exercise Selector Events
     data class DefinitionSelected(val exerciseDefinition: ExerciseDefinition) : WorkoutEvent
