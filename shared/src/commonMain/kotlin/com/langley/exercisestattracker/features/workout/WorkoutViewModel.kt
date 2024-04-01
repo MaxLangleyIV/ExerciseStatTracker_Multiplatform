@@ -260,6 +260,9 @@ class WorkoutViewModel(
 
             }
 
+            is WorkoutEvent.UpdateRepsFromString -> {}
+
+            is WorkoutEvent.UpdateWeightFromString -> {}
         }
 
     }
