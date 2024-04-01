@@ -735,6 +735,27 @@ class WorkoutViewModelTest {
     }
 
     @Test
+    fun onEvent_UpdateRepsFromString_recordsListProperlyUpdated() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                recordsList = listOf(testRecord0,testRecord1,testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        viewModel.onEvent(WorkoutEvent.UpdateRepsFromString(index = 0, value = ""))
+
+        state = viewModel.state.first()
+
+
+    }
+
+    @Test
+    fun onEvent_UpdateWeight_recordsListProperlyUpdated() = runTest {  }
+
+    @Test
     fun onEvent__() = runTest {  }
 
 }
