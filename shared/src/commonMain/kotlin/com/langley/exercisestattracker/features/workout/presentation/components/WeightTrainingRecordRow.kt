@@ -1,6 +1,7 @@
 package com.langley.exercisestattracker.features.workout.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -18,11 +20,15 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -165,7 +171,6 @@ fun WeightTrainingRecordRow(
             modifier = Modifier
                 .weight(0.2F)
                 .clip(RoundedCornerShape(8.dp))
-//                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(4.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -175,36 +180,62 @@ fun WeightTrainingRecordRow(
                 text = setNumber.toString()
             )
 
-
         }
 
         Divider(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(1.dp),
-//            color = MaterialTheme.colorScheme.outline
         )
 
         // Weight Used
+        var isWeightInputFocused by remember { mutableStateOf( false ) }
+
         Column(
             modifier = Modifier
                 .weight(0.2F)
-//                .border(
-//                    width = 4.dp,
-//                    color = MaterialTheme.colorScheme.outline,
-//                    shape = RoundedCornerShape(8.dp)
-//                )
                 .padding(4.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.secondaryContainer),
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .border(
+                    width = 2.dp,
+                    color =
+                    if (isWeightInputFocused) {
+                        MaterialTheme.colorScheme.outline
+                    }
+                    else {
+                        Color.Transparent} ,
+                    shape = RoundedCornerShape(8.dp)
+                ),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text(
-                text = set.weightUsed.toString(),
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                textAlign = TextAlign.Center
+            var textFieldValue by remember { mutableStateOf(set.weightUsed.toString()) }
+
+
+            BasicTextField(
+                modifier = Modifier
+                    .onFocusChanged {
+                        isWeightInputFocused = it.isFocused
+                    }
+                    .widthIn(min = 32.dp, max = 64.dp)
+                    .heightIn(min = 24.dp, max = 64.dp)
+                    .padding(4.dp),
+                value = textFieldValue,
+                onValueChange = {
+                    textFieldValue = it
+                    onEvent(
+                        WorkoutEvent.UpdateWeightFromString(index = recordIndex, value = it)
+                    )
+                },
+                maxLines = 1,
+                textStyle =
+                TextStyle(
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp
+                )
             )
 
 
@@ -214,46 +245,48 @@ fun WeightTrainingRecordRow(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(1.dp),
-//            color = MaterialTheme.colorScheme.outline
         )
 
         // Reps Performed
+        var isRepsInputFocused by remember { mutableStateOf( false ) }
+
         Column(
             modifier = Modifier
                 .weight(0.2F)
                 .padding(4.dp)
                 .clip(RoundedCornerShape(8.dp))
-//                .border(
-//                    width = 4.dp,
-//                    color = MaterialTheme.colorScheme.outline,
-//                    shape = RoundedCornerShape(8.dp)
-//                )
-                .background(MaterialTheme.colorScheme.secondaryContainer),
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .border(
+                    width = 2.dp,
+                    color =
+                    if (isRepsInputFocused) {
+                        MaterialTheme.colorScheme.outline
+                    }
+                    else {
+                        Color.Transparent} ,
+                    shape = RoundedCornerShape(8.dp)
+                ),
 
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-//            Text(
-//                text = set.repsCompleted.toString(),
-//                color = MaterialTheme.colorScheme.onSecondaryContainer,
-//                textAlign = TextAlign.Center
-//            )
-//            TextField(
-//                modifier = Modifier,
-//                value = set.repsCompleted.toString(),
-//                onValueChange = {},
-//            )
-
-            val text = remember { mutableStateOf("0") }
-
+            var textFieldValue by remember { mutableStateOf(set.repsCompleted.toString()) }
             BasicTextField(
                 modifier = Modifier
+                    .onFocusChanged {
+                        isRepsInputFocused = it.isFocused
+                    }
                     .widthIn(min = 32.dp, max = 64.dp)
-                    .height(IntrinsicSize.Min),
-//                value = set.repsCompleted.toString(),
-                value = text.value,
-                onValueChange = { text.value = it },
+                    .heightIn(min = 24.dp, max = 64.dp)
+                    .padding(4.dp),
+                value = textFieldValue,
+                onValueChange = {
+                    textFieldValue = it
+                    onEvent(
+                        WorkoutEvent.UpdateRepsFromString(index = recordIndex, value = it)
+                    )
+                },
                 maxLines = 1,
                 textStyle =
                 TextStyle(
