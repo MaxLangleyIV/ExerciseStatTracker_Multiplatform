@@ -95,15 +95,8 @@ fun WorkoutContent(
                                     onEvent = onEvent
                                 )
 
-//                                Spacer(
-//                                    modifier = modifier
-//                                        .fillMaxWidth()
-//                                        .height(4.dp),
-//                                )
-
                                 lastSetEntered = set
                             }
-
 
                         }
 
@@ -152,20 +145,6 @@ fun WorkoutContent(
         }
 
         // Set Details View
-//        if (workoutState.selectedSet != null){
-//
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .background(Color.Red)
-//                    .alpha(0.3F),
-//                verticalArrangement = Arrangement.SpaceEvenly,
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Text( text = "Test" )
-//            }
-//
-//
-//        }
+
     }
 }
