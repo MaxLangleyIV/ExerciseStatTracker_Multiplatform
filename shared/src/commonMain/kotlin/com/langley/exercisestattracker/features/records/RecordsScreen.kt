@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
-import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.records.components.RecordDetailsView
 import com.langley.exercisestattracker.features.records.components.RecordListItem
 import com.langley.exercisestattracker.features.records.components.RecordsTopBar
@@ -33,7 +33,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 @Composable
 fun RecordsScreen(
     modifier: Modifier = Modifier,
-    appModule: AppModule,
+    dataSource: ExerciseAppDataSource,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
@@ -43,7 +43,7 @@ fun RecordsScreen(
     val recordsViewModel = getViewModel(
         key = "recordsViewModel",
         factory = viewModelFactory {
-            RecordsViewModel(appModule.exerciseAppDataSource)
+            RecordsViewModel(dataSource)
         }
     )
     val state by recordsViewModel.state.collectAsState(RecordsState())

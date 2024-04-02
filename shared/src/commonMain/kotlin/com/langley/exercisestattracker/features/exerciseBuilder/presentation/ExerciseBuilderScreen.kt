@@ -31,10 +31,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
-import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
 import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderViewModel
@@ -48,7 +48,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun ExerciseBuilderScreen(
-    appModule: AppModule,
+    dataSource: ExerciseAppDataSource,
     selectedExercise: ExerciseDefinition? = null,
     libraryOnEvent: (LibraryEvent) -> Unit,
     initialBuilderState: ExerciseBuilderState = ExerciseBuilderState(),
@@ -61,7 +61,7 @@ fun ExerciseBuilderScreen(
         key = "exerciseBuilderViewModel",
         factory = viewModelFactory {
             ExerciseBuilderViewModel(
-                exerciseAppDataSource = appModule.exerciseAppDataSource,
+                exerciseAppDataSource = dataSource,
                 libraryOnEvent = libraryOnEvent,
             )
         }
@@ -80,7 +80,9 @@ fun ExerciseBuilderScreen(
 
     BasicBottomSheet(
         visible = isVisible,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .clickable(
                 indication = null,
                 interactionSource = interactionSource

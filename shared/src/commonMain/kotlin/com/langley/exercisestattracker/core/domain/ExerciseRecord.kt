@@ -13,8 +13,9 @@ data class ExerciseRecord(
     val distance: Float = 0F,
     val distanceUnit: String = "m",
     val repsCompleted: Int = 0,
-    val rir: Int = 2,
+    val rir: Int = 0,
     val notes: String = "",
     val userId: Long = 0,
-    val currentBodyWeight: Int = 0
+    val currentBodyWeight: Int = 0,
+    val completed: Boolean = true
 )

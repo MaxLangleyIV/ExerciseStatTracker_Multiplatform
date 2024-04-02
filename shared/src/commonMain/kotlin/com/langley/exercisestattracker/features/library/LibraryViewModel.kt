@@ -44,11 +44,14 @@ class LibraryViewModel(
     ): LibraryState {
 
         return currentState.copy(
-            exerciseDefinitions = filterDefinitionLibrary(
+
+            exerciseDefinitions =
+            filterDefinitionLibrary(
                 definitionLibrary = definitionsList,
                 filterType = currentState.searchFilterType,
                 searchString = currentState.searchString
             )
+
         )
 
     }

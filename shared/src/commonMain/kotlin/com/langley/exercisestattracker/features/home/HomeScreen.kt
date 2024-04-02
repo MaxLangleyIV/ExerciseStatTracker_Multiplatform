@@ -45,6 +45,14 @@ fun HomeScreen(
             ){
                 Text( text = "Open Records" )
             }
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Button(
+                onClick = { navController.navigateTo(Screen.Workout) }
+            ){
+                Text( text = "Workout" )
+            }
         }
     }
 

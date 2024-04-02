@@ -79,7 +79,7 @@ class SqlDelightExerciseAppDataSource(
             exercisesCSV = routine.exerciseCSV,
             repsCSV = routine.repsCSV,
             description = routine.description,
-            isFavorite = routine.isFavorite,
+            isFavorite = if (routine.isFavorite){ 1 } else{ 0 },
             dateCreated = Clock.System.now().toEpochMilliseconds()
         )
     }

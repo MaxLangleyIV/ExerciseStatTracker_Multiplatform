@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -67,52 +66,7 @@ fun SelectableTextBoxWithEvent(
     }
 }
 
-@Composable
-fun RoundedTextContainer(
-    modifier: Modifier = Modifier,
-    text: String,
-    textSize: TextUnit = 18.sp,
-    boxMinWidth: Dp = 0.dp,
-    boxMaxWidth: Dp = 200.dp,
-    boxMinHeight:Dp = 0.dp,
-    boxMaxHeight:Dp = 200.dp,
-    maxLines: Int = 2,
-    overFlow: TextOverflow = TextOverflow.Ellipsis
-){
-    Box(
-        modifier = modifier
-//            .size(boxSize)
-            .sizeIn(
-                minWidth = boxMinWidth,
-                maxWidth = boxMaxWidth,
-                minHeight = boxMinHeight,
-                maxHeight = boxMaxHeight
-                )
-            .clip(
-                RoundedCornerShape(16.dp)
-            )
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
-            .border(
-                width = 2.dp,
 
-                color = MaterialTheme.colorScheme.outlineVariant,
-
-                shape = RoundedCornerShape(16.dp)
-            )
-            .padding(4.dp)
-
-    ){
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onTertiaryContainer,
-            text = text,
-            fontSize = textSize,
-            maxLines = maxLines,
-            overflow = overFlow
-        )
-    }
-}
 
 
 @Composable

@@ -27,8 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
@@ -43,7 +44,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 @Composable
 fun LibraryScreen(
     modifier: Modifier = Modifier,
-    appModule: AppModule,
+    dataSource: ExerciseAppDataSource,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
@@ -52,7 +53,7 @@ fun LibraryScreen(
     val libraryViewModel = getViewModel(
         key = "libraryViewModel",
         factory = viewModelFactory {
-            LibraryViewModel(appModule.exerciseAppDataSource)
+            LibraryViewModel(dataSource)
         }
     )
 
@@ -69,7 +70,7 @@ fun LibraryScreen(
 
 
     Scaffold(
-        modifier = Modifier,
+        modifier = modifier,
         floatingActionButton = {
             if (
                 !libraryState.isEditExerciseDefSheetOpen
@@ -153,7 +154,7 @@ fun LibraryScreen(
 
 
         ExerciseBuilderScreen(
-            appModule = appModule,
+            dataSource = dataSource,
             isVisible = libraryState.isAddExerciseDefSheetOpen,
             selectedExercise = libraryState.selectedExerciseDefinition,
             libraryOnEvent = libraryViewModel::onEvent,

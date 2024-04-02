@@ -36,7 +36,7 @@ fun database.ExerciseRoutine.toExerciseRoutine():
         exerciseCSV = exercisesCSV,
         repsCSV = repsCSV,
         description = description,
-        isFavorite = isFavorite,
+        isFavorite = isFavorite.toInt() == 1,
         dateCreated = dateCreated
     )
 }
@@ -74,4 +74,12 @@ fun database.ExerciseRecord.toExerciseRecord():
         currentBodyWeight = currentBodyWeight.toInt()
     )
 
+}
+
+fun ExerciseDefinition.toBlankRecord(): ExerciseRecord {
+    return ExerciseRecord(
+        exerciseName = exerciseName,
+        isCardio = isCardio,
+        isCalisthenic = isCalisthenic,
+    )
 }

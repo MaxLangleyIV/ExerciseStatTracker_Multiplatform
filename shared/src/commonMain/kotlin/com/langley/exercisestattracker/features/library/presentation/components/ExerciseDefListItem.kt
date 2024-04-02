@@ -1,6 +1,7 @@
 package com.langley.exercisestattracker.features.library.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,14 +31,42 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 @Composable
 fun ExerciseDefinitionListItem(
     exerciseDefinition: ExerciseDefinition,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selectable: Boolean = false,
+    isClicked: Boolean = false
 ){
     Box(
-        modifier = modifier
-            .size(128.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.secondary)
-            .padding(4.dp),
+        modifier =
+        if (selectable){
+            modifier
+                .size(128.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(
+                    if (isClicked){
+                        MaterialTheme.colorScheme.primary
+                    }
+                    else{
+                        MaterialTheme.colorScheme.secondary
+                    }
+                )
+                .border(
+                    width = 4.dp,
+
+                    color = if (isClicked) {
+                        MaterialTheme.colorScheme.outline
+                    } else Color.Transparent,
+
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .padding(4.dp)
+        }
+        else{
+            modifier
+                .size(128.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.secondary)
+                .padding(4.dp)
+        },
 
         contentAlignment = Alignment.Center
 
@@ -56,7 +86,13 @@ fun ExerciseDefinitionListItem(
                     modifier = Modifier.weight(1f)
                         .wrapContentWidth(Alignment.CenterHorizontally),
                     text = exerciseDefinition.exerciseName,
-                    color = MaterialTheme.colorScheme.onSecondary,
+                    color =
+                    if (isClicked){
+                        MaterialTheme.colorScheme.onPrimary
+                    }
+                    else{
+                        MaterialTheme.colorScheme.onSecondary
+                    },
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -72,7 +108,13 @@ fun ExerciseDefinitionListItem(
             ){
                 Text(
                     text = exerciseDefinition.description,
-                    color = MaterialTheme.colorScheme.onSecondary,
+                    color =
+                    if (isClicked){
+                        MaterialTheme.colorScheme.onPrimary
+                    }
+                    else{
+                        MaterialTheme.colorScheme.onSecondary
+                    },
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis
                 )
