@@ -745,15 +745,61 @@ class WorkoutViewModelTest {
 
         state = viewModel.state.first()
 
+        viewModel.onEvent(WorkoutEvent.UpdateRepsFromString(index = 0, value = "5"))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = 5,
+            actual = state.recordsList[0].repsCompleted,
+            message = "recordsList[0].repsCompleted should equal 5"
+        )
+
         viewModel.onEvent(WorkoutEvent.UpdateRepsFromString(index = 0, value = ""))
 
         state = viewModel.state.first()
+
+        assertEquals(
+            expected = 0,
+            actual = state.recordsList[0].repsCompleted,
+            message = "recordsList[0].repsCompleted should equal 0 when input is an empty string"
+        )
 
 
     }
 
     @Test
-    fun onEvent_UpdateWeight_recordsListProperlyUpdated() = runTest {  }
+    fun onEvent_UpdateWeight_recordsListProperlyUpdated() = runTest {
+
+        setupViewModel(
+            WorkoutState(
+                recordsList = listOf(testRecord0,testRecord1,testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        viewModel.onEvent(WorkoutEvent.UpdateWeightFromString(index = 0, value = "135"))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = 135F,
+            actual = state.recordsList[0].weightUsed,
+            message = "recordsList[0].weightUsed should equal 135"
+        )
+
+        viewModel.onEvent(WorkoutEvent.UpdateWeightFromString(index = 0, value = ""))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = 0F,
+            actual = state.recordsList[0].weightUsed,
+            message = "recordsList[0].weightUsed should equal 0 when input is an empty string"
+        )
+
+    }
 
     @Test
     fun onEvent__() = runTest {  }
