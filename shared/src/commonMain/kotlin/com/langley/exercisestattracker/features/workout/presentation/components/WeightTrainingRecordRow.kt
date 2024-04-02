@@ -229,7 +229,7 @@ fun WeightTrainingRecordRow(
                         WorkoutEvent.UpdateWeightFromString(index = recordIndex, value = it)
                     )
                 },
-                maxLines = 1,
+                singleLine = true,
                 textStyle =
                 TextStyle(
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -287,7 +287,7 @@ fun WeightTrainingRecordRow(
                         WorkoutEvent.UpdateRepsFromString(index = recordIndex, value = it)
                     )
                 },
-                maxLines = 1,
+                singleLine = true,
                 textStyle =
                 TextStyle(
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
