@@ -260,9 +260,41 @@ class WorkoutViewModel(
 
             }
 
-            is WorkoutEvent.UpdateRepsFromString -> {}
+            is WorkoutEvent.UpdateRepsFromString -> {
 
-            is WorkoutEvent.UpdateWeightFromString -> {}
+                val reps = try {
+                    workoutEvent.value.toInt()
+                } catch (formatException: NumberFormatException) { 0 }
+
+                val mutableList = _state.value.recordsList.toMutableList()
+
+                mutableList[workoutEvent.index] = mutableList[workoutEvent.index].copy(
+                    repsCompleted = reps
+                )
+
+                _state.update { it.copy(
+                    recordsList = mutableList
+                ) }
+
+            }
+
+            is WorkoutEvent.UpdateWeightFromString -> {
+
+                val weight = try {
+                    workoutEvent.value.toFloat()
+                } catch (formatException: NumberFormatException) { 0F }
+
+                val mutableList = _state.value.recordsList.toMutableList()
+
+                mutableList[workoutEvent.index] = mutableList[workoutEvent.index].copy(
+                    weightUsed = weight
+                )
+
+                _state.update { it.copy(
+                    recordsList = mutableList
+                ) }
+
+            }
         }
 
     }
