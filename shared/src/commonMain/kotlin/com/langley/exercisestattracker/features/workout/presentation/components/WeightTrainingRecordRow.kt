@@ -303,20 +303,12 @@ fun WeightTrainingRecordRow(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(1.dp),
-//            color = MaterialTheme.colorScheme.outline
         )
 
         // Completion Status
         Column(
             modifier = Modifier
                 .weight(0.2F)
-//                .clip(RoundedCornerShape(8.dp))
-////                .border(
-////                    width = 4.dp,
-////                    color = MaterialTheme.colorScheme.outline,
-////                    shape = RoundedCornerShape(8.dp)
-////                )
-//                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(4.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
