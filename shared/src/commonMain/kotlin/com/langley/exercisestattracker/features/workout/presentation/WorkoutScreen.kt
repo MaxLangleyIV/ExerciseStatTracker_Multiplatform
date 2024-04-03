@@ -18,24 +18,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
-import com.langley.exercisestattracker.features.workout.WorkoutViewModel
 import com.langley.exercisestattracker.features.workout.presentation.components.TopBar
 import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutContentHolder
 import com.langley.exercisestattracker.features.workout.subfeature.exerciseSelector.ExerciseSelectorView
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun WorkoutScreen(
@@ -43,20 +37,14 @@ fun WorkoutScreen(
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.background)
         .padding(8.dp),
-    dataSource: ExerciseAppDataSource,
+    workoutState: WorkoutState = WorkoutState(),
+    onEvent: (WorkoutEvent) -> Unit,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
     navController: ExerciseAppNavController,
     visible: Boolean = true
 ){
-
-    val workoutViewModel = getViewModel(
-        key = "workoutViewModel",
-        factory = viewModelFactory { WorkoutViewModel(dataSource) }
-    )
-
-    val state by workoutViewModel.state.collectAsState(WorkoutState())
 
     // Full Screen Container
     Surface {
@@ -67,7 +55,7 @@ fun WorkoutScreen(
                     interactionSource = interactionSource
                 ) {
                     focusManager.clearFocus()
-                    workoutViewModel.onEvent(WorkoutEvent.ClearSelectedSet)
+                    onEvent(WorkoutEvent.ClearSelectedSet)
                   },
         ) {
 
@@ -75,8 +63,8 @@ fun WorkoutScreen(
             TopBar(
                 modifier = Modifier.weight(0.1F),
                 navController = navController,
-                workoutState = state,
-                onEvent = workoutViewModel::onEvent
+                workoutState = workoutState,
+                onEvent = onEvent
             )
 
             Spacer(Modifier.height(8.dp))
@@ -89,8 +77,8 @@ fun WorkoutScreen(
                     .background(MaterialTheme.colorScheme.background)
                     .weight(0.8F),
 
-                workoutState = state,
-                onEvent = workoutViewModel::onEvent
+                workoutState = workoutState,
+                onEvent = onEvent
             )
 
             // Save / Cancel Section
@@ -113,7 +101,7 @@ fun WorkoutScreen(
 
                     Button(
                         onClick = {
-                            workoutViewModel.onEvent(WorkoutEvent.SaveWorkout)
+                            onEvent(WorkoutEvent.SaveWorkout)
                             navController.navigateBack()
                         }
                     ){
@@ -126,15 +114,15 @@ fun WorkoutScreen(
         // Exercise Selector
         ExerciseSelectorView(
             modifier = Modifier.fillMaxSize(),
-            exerciseList = state.exerciseLibrary,
-            searchString = state.searchString,
-            searchFilterType = state.searchFilter,
-            selectedExercises = state.selectedExercises,
-            onEvent = workoutViewModel::onEvent,
+            exerciseList = workoutState.exerciseLibrary,
+            searchString = workoutState.searchString,
+            searchFilterType = workoutState.searchFilter,
+            selectedExercises = workoutState.selectedExercises,
+            onEvent = onEvent,
             focusManager = focusManager,
             focusRequester = focusRequester,
             interactionSource = interactionSource,
-            visible = state.exerciseSelectorVisible
+            visible = workoutState.exerciseSelectorVisible
         )
 
     }
