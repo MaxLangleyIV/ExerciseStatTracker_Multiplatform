@@ -21,53 +21,31 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
-import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.presentation.components.DefinitionDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseLibraryTopBar
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun LibraryScreen(
     modifier: Modifier = Modifier,
+    libraryState: LibraryState = LibraryState(),
+    onEvent: (LibraryEvent) -> Unit = {},
     dataSource: ExerciseAppDataSource,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
     navController: ExerciseAppNavController
 ) {
-    val libraryViewModel = getViewModel(
-        key = "libraryViewModel",
-        factory = viewModelFactory {
-            LibraryViewModel(dataSource)
-        }
-    )
-
-    val libraryState by libraryViewModel.state.collectAsState(LibraryState())
-
-
-//    // Initialize dummy data for exercise library.
-//    val exerciseDefDummyData = ExerciseDefinitionDummyData()
-//    val exerciseDefList = exerciseDefDummyData.definitionList
-//    // Add definitions to SQLDelight db.
-//    for (exerciseDefinition in exerciseDefList){
-//        libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
-//    }
-
 
     Scaffold(
         modifier = modifier,
@@ -81,8 +59,8 @@ fun LibraryScreen(
                 FloatingActionButton(
                     onClick = {
                         focusManager.clearFocus()
-                        (libraryViewModel::onEvent)(LibraryEvent.ClearSelectedDef)
-                        (libraryViewModel::onEvent)(LibraryEvent.AddNewDefClicked)
+                        onEvent(LibraryEvent.ClearSelectedDef)
+                        onEvent(LibraryEvent.AddNewDefClicked)
                     },
                     shape = RoundedCornerShape(20.dp)
                 ){
@@ -108,7 +86,7 @@ fun LibraryScreen(
                     .fillMaxWidth()
                     .padding(0.dp,16.dp),
                 state = libraryState,
-                onEvent = libraryViewModel::onEvent,
+                onEvent = onEvent,
                 focusManager = focusManager,
                 navController = navController
             )
@@ -135,7 +113,7 @@ fun LibraryScreen(
                                 .focusable(true)
                                 .clickable {
                                     focusManager.clearFocus()
-                                    (libraryViewModel::onEvent)(
+                                    onEvent(
                                         LibraryEvent.DefinitionSelected(exerciseDefinition)
                                     )
                                 },
@@ -147,7 +125,7 @@ fun LibraryScreen(
 
         DefinitionDetailsView(
             isVisible = libraryState.isExerciseDetailsSheetOpen,
-            libraryOnEvent = libraryViewModel::onEvent,
+            libraryOnEvent = onEvent,
             selectedDefinition =
             libraryState.selectedExerciseDefinition?: ExerciseDefinition()
         )
@@ -157,7 +135,7 @@ fun LibraryScreen(
             dataSource = dataSource,
             isVisible = libraryState.isAddExerciseDefSheetOpen,
             selectedExercise = libraryState.selectedExerciseDefinition,
-            libraryOnEvent = libraryViewModel::onEvent,
+            libraryOnEvent = onEvent,
             focusManager = focusManager,
             interactionSource = interactionSource,
         )
