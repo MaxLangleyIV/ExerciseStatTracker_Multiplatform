@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.outlined.Book
-import androidx.compose.material.icons.outlined.FitnessCenter
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
@@ -62,26 +61,22 @@ fun App(
         // View Models and States
         val libraryViewModel = getViewModel(
             key = "libraryViewModel",
-            factory = viewModelFactory {
-                LibraryViewModel(appModule.exerciseAppDataSource)
-            }
+            factory = viewModelFactory { LibraryViewModel(appModule.exerciseAppDataSource) }
         )
-
         val libraryState by libraryViewModel.state.collectAsState(LibraryState())
+
 
         val recordsViewModel = getViewModel(
             key = "recordsViewModel",
-            factory = viewModelFactory {
-                RecordsViewModel(appModule.exerciseAppDataSource)
-            }
+            factory = viewModelFactory { RecordsViewModel(appModule.exerciseAppDataSource) }
         )
         val recordsState by recordsViewModel.state.collectAsState(RecordsState())
+
 
         val workoutViewModel = getViewModel(
             key = "workoutViewModel",
             factory = viewModelFactory { WorkoutViewModel(appModule.exerciseAppDataSource) }
         )
-
         val workoutState by workoutViewModel.state.collectAsState(WorkoutState())
 
 
@@ -169,20 +164,24 @@ fun App(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
 
-                    // Library Button
+                    // Home
                     IconButton(
                         onClick = {
-                            navController.navigateTo(Screen.Library)
+                            navController.navigateTo(Screen.Home)
                         }
                     ) {
                         Icon(
-                            imageVector = if (currentScreen == Screen.Library){
-                                Icons.Filled.Book
-                            }
-                            else{
-                                Icons.Outlined.Book
-                            },
-                            contentDescription = "Library"
+                            modifier = Modifier.alpha(
+                                if (currentScreen == Screen.Home){
+                                    1F
+                                }
+                                else{
+                                    0.6F
+                                }
+                            ),
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Home",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -193,25 +192,38 @@ fun App(
                         }
                     ) {
                         Icon(
-                            imageVector = if (currentScreen == Screen.Workout){
-                                Icons.Filled.FitnessCenter
-                            }
-                            else{
-                                Icons.Outlined.FitnessCenter
-                            },
-                            contentDescription = "Workout"
+                            modifier = Modifier.alpha(
+                                if (currentScreen == Screen.Workout){
+                                    1F
+                                }
+                                else{
+                                    0.6F
+                                }
+                            ),
+                            imageVector = Icons.Filled.FitnessCenter,
+                            contentDescription = "Workout",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
-
+                    // Library Button
                     IconButton(
                         onClick = {
-                            navController.navigateBack()
+                            navController.navigateTo(Screen.Library)
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBackIos,
-                            contentDescription = "Close"
+                            modifier = Modifier.alpha(
+                                if (currentScreen == Screen.Library){
+                                    1F
+                                }
+                                else{
+                                    0.6F
+                                }
+                            ),
+                            imageVector = Icons.Filled.MenuBook,
+                            contentDescription = "Library",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
