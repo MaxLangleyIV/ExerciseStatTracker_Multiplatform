@@ -43,87 +43,92 @@ fun WorkoutScreen(
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
     navController: ExerciseAppNavController,
-    visible: Boolean = true
+    visible: Boolean = false
 ){
 
-    // Full Screen Container
-    Surface {
-        Column(
-            modifier = modifier
-                .clickable(
-                    indication = null,
-                    interactionSource = interactionSource
-                ) {
-                    focusManager.clearFocus()
-                    onEvent(WorkoutEvent.ClearSelectedSet)
-                  },
-        ) {
+    if (visible){
 
-            // Top Bar
-            TopBar(
-                modifier = Modifier.weight(0.1F),
-                navController = navController,
-                workoutState = workoutState,
-                onEvent = onEvent
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            // Content
-            WorkoutContentHolder(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.background)
-                    .weight(0.8F),
-
-                workoutState = workoutState,
-                onEvent = onEvent
-            )
-
-            // Save / Cancel Section
+        // Full Screen Container
+        Surface {
             Column(
-                modifier = Modifier.weight(0.1F),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = interactionSource
+                    ) {
+                        focusManager.clearFocus()
+                        onEvent(WorkoutEvent.ClearSelectedSet)
+                    },
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+
+                // Top Bar
+                TopBar(
+                    modifier = Modifier.weight(0.1F),
+                    navController = navController,
+                    workoutState = workoutState,
+                    onEvent = onEvent
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                // Content
+                WorkoutContentHolder(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.background)
+                        .weight(0.8F),
+
+                    workoutState = workoutState,
+                    onEvent = onEvent
+                )
+
+                // Save / Cancel Section
+                Column(
+                    modifier = Modifier.weight(0.1F),
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(
-                        onClick = { navController.navigateBack() }
-                    ){
-                        Text( text = "Cancel Session" )
-                    }
-
-                    Spacer(Modifier.width(8.dp))
-
-                    Button(
-                        onClick = {
-                            onEvent(WorkoutEvent.SaveWorkout)
-                            navController.navigateBack()
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Button(
+                            onClick = { navController.navigateBack() }
+                        ){
+                            Text( text = "Cancel Session" )
                         }
-                    ){
-                        Text( text = "Save Session" )
+
+                        Spacer(Modifier.width(8.dp))
+
+                        Button(
+                            onClick = {
+                                onEvent(WorkoutEvent.SaveWorkout)
+                                navController.navigateBack()
+                            }
+                        ){
+                            Text( text = "Save Session" )
+                        }
                     }
                 }
             }
+
+            // Exercise Selector
+            ExerciseSelectorView(
+                modifier = Modifier.fillMaxSize(),
+                exerciseList = workoutState.exerciseLibrary,
+                searchString = workoutState.searchString,
+                searchFilterType = workoutState.searchFilter,
+                selectedExercises = workoutState.selectedExercises,
+                onEvent = onEvent,
+                focusManager = focusManager,
+                focusRequester = focusRequester,
+                interactionSource = interactionSource,
+                visible = workoutState.exerciseSelectorVisible
+            )
+
         }
 
-        // Exercise Selector
-        ExerciseSelectorView(
-            modifier = Modifier.fillMaxSize(),
-            exerciseList = workoutState.exerciseLibrary,
-            searchString = workoutState.searchString,
-            searchFilterType = workoutState.searchFilter,
-            selectedExercises = workoutState.selectedExercises,
-            onEvent = onEvent,
-            focusManager = focusManager,
-            focusRequester = focusRequester,
-            interactionSource = interactionSource,
-            visible = workoutState.exerciseSelectorVisible
-        )
-
     }
+
 }
