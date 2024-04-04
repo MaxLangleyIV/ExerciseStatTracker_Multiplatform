@@ -299,4 +299,9 @@ class WorkoutViewModel(
 
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        println("WORKOUT VIEWMODEL CLEARED")
+    }
+
 }
