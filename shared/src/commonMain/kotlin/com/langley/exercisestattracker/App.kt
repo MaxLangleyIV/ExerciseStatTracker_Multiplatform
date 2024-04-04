@@ -1,20 +1,33 @@
 package com.langley.exercisestattracker
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material.icons.outlined.FitnessCenter
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.home.HomeScreen
-import com.langley.exercisestattracker.features.home.HomeState
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
@@ -91,23 +104,29 @@ fun App(
             color = MaterialTheme.colorScheme.background
         ) {
 
-            when (currentScreen) {
+            Column(
+                modifier = Modifier.fillMaxSize() ,
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-                Screen.Home -> {
+                // Screens
+                Column(
+                    modifier = Modifier.weight(0.92F),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
                     HomeScreen(
-                        state = HomeState(), // This state is a placeholder
+                        visible = currentScreen == Screen.Home,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,
                         navController = navController
                     )
 
-                }
-
-                Screen.Library -> {
-
                     LibraryScreen(
+                        visible = currentScreen == Screen.Library,
                         dataSource = appModule.exerciseAppDataSource,
                         libraryState = libraryState,
                         onEvent = libraryViewModel::onEvent,
@@ -117,11 +136,8 @@ fun App(
                         navController = navController
                     )
 
-                }
-
-                Screen.Records -> {
-
                     RecordsScreen(
+                        visible = currentScreen == Screen.Records,
                         recordsState = recordsState,
                         onEvent = recordsViewModel::onEvent,
                         focusRequester = focusRequester,
@@ -130,11 +146,8 @@ fun App(
                         navController = navController
                     )
 
-                }
-
-                Screen.Workout -> {
-
                     WorkoutScreen(
+                        visible = currentScreen == Screen.Workout,
                         workoutState = workoutState,
                         onEvent = workoutViewModel::onEvent,
                         focusRequester = focusRequester,
@@ -144,7 +157,125 @@ fun App(
                     )
 
                 }
+
+
+                // Bottom Nav Bar
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.08F)
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+
+                    // Library Button
+                    IconButton(
+                        onClick = {
+                            navController.navigateTo(Screen.Library)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if (currentScreen == Screen.Library){
+                                Icons.Filled.Book
+                            }
+                            else{
+                                Icons.Outlined.Book
+                            },
+                            contentDescription = "Library"
+                        )
+                    }
+
+                    // Workout
+                    IconButton(
+                        onClick = {
+                            navController.navigateTo(Screen.Workout)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if (currentScreen == Screen.Workout){
+                                Icons.Filled.FitnessCenter
+                            }
+                            else{
+                                Icons.Outlined.FitnessCenter
+                            },
+                            contentDescription = "Workout"
+                        )
+                    }
+
+
+                    IconButton(
+                        onClick = {
+                            navController.navigateBack()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBackIos,
+                            contentDescription = "Close"
+                        )
+                    }
+
+                }
+
             }
+
+
+
+
+//            when (currentScreen) {
+//
+//                Screen.Home -> {
+//
+//                    HomeScreen(
+//                        state = HomeState(), // This state is a placeholder
+//                        focusRequester = focusRequester,
+//                        focusManager = focusManager,
+//                        interactionSource = interactionSource,
+//                        navController = navController
+//                    )
+//
+//                }
+//
+//                Screen.Library -> {
+//
+//                    LibraryScreen(
+//                        dataSource = appModule.exerciseAppDataSource,
+//                        libraryState = libraryState,
+//                        onEvent = libraryViewModel::onEvent,
+//                        focusRequester = focusRequester,
+//                        focusManager = focusManager,
+//                        interactionSource = interactionSource,
+//                        navController = navController
+//                    )
+//
+//                }
+//
+//                Screen.Records -> {
+//
+//                    RecordsScreen(
+//                        recordsState = recordsState,
+//                        onEvent = recordsViewModel::onEvent,
+//                        focusRequester = focusRequester,
+//                        focusManager = focusManager,
+//                        interactionSource = interactionSource,
+//                        navController = navController
+//                    )
+//
+//                }
+//
+//                Screen.Workout -> {
+//
+//                    WorkoutScreen(
+//                        workoutState = workoutState,
+//                        onEvent = workoutViewModel::onEvent,
+//                        focusRequester = focusRequester,
+//                        focusManager = focusManager,
+//                        interactionSource = interactionSource,
+//                        navController = navController
+//                    )
+//
+//                }
+//            }
         }
     }
 }
