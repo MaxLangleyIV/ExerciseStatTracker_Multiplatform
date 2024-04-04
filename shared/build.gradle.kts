@@ -36,6 +36,9 @@ kotlin {
             implementation(compose.materialIconsExtended)
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
+            implementation(libs.androidx.datastore.preferences.core)
+            implementation(libs.androidx.datastore.core.okio)
+//            implementation(libs.androidx.data.store.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
