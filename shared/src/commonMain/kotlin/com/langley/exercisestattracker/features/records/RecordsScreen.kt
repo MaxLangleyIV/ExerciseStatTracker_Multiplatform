@@ -33,87 +33,73 @@ fun RecordsScreen(
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
-    navController: ExerciseAppNavController
+    navController: ExerciseAppNavController,
+    visible: Boolean = false
 ){
 
+    if (visible){
 
-    Scaffold {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .focusable(true)
-                .clickable(
-                    indication = null,
-                    interactionSource = interactionSource
-                ) { focusManager.clearFocus() },
-        ){
-            RecordsTopBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp,16.dp),
-                state = recordsState,
-                onEvent = onEvent,
-                focusManager = focusManager,
-                navController = navController
-            )
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(1),
+        Scaffold {
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)
-                    .background(MaterialTheme.colorScheme.background),
-                contentPadding = PaddingValues(vertical = 8.dp),
+                    .focusable(true)
+                    .clickable(
+                        indication = null,
+                        interactionSource = interactionSource
+                    ) { focusManager.clearFocus() },
+            ){
+                RecordsTopBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp,16.dp),
+                    state = recordsState,
+                    onEvent = onEvent,
+                    focusManager = focusManager,
+                    navController = navController
+                )
 
-                content = {
-                    items(
-                        items = recordsState.exerciseRecords,
-                        key = {item: ExerciseRecord ->  item.exerciseRecordId!!}
-                    ){ exerciseRecord: ExerciseRecord ->
-                        RecordListItem(
-                            exerciseRecord,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                                .focusable(true)
-                                .clickable {
-                                    focusManager.clearFocus()
-                                    onEvent(
-                                        RecordsEvent.RecordSelected(exerciseRecord)
-                                    )
-                                },
-                        )
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(1),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .background(MaterialTheme.colorScheme.background),
+                    contentPadding = PaddingValues(vertical = 8.dp),
+
+                    content = {
+                        items(
+                            items = recordsState.exerciseRecords,
+                            key = {item: ExerciseRecord ->  item.exerciseRecordId!!}
+                        ){ exerciseRecord: ExerciseRecord ->
+                            RecordListItem(
+                                exerciseRecord,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                                    .focusable(true)
+                                    .clickable {
+                                        focusManager.clearFocus()
+                                        onEvent(
+                                            RecordsEvent.RecordSelected(exerciseRecord)
+                                        )
+                                    },
+                            )
+                        }
                     }
-                }
+                )
+            }
+
+            RecordDetailsView(
+                isVisible = recordsState.isRecordDetailsSheetOpen,
+                onEvent = onEvent,
+                selectedRecord = recordsState.selectedRecord ?: ExerciseRecord()
             )
+
         }
 
-    RecordDetailsView(
-        isVisible = recordsState.isRecordDetailsSheetOpen,
-        onEvent = onEvent,
-        selectedRecord = recordsState.selectedRecord ?: ExerciseRecord()
-    )
-//
-//    EditRecordDetailsView(
-//        isVisible = state.isEditRecordDetailsSheetOpen,
-//        state = state,
-//        onEvent = onEvent,
-//    )
     }
 
-
-
 }
-
-
-@Composable
-fun EditRecordDetailsView(
-    isVisible: Boolean,
-    state: RecordsState,
-    onEvent: (RecordsEvent) -> Unit,
-) {
-    TODO("Not yet implemented")
-}
-
 
 
