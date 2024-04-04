@@ -19,42 +19,45 @@ import com.langley.exercisestattracker.navigation.Screen
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    state: HomeState,
+    state: HomeState = HomeState(),
 //    onEvent: (LibraryEvent) -> Unit,
-    focusRequester: FocusRequester,
+    focusRequester: FocusRequester = FocusRequester(),
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
-    navController: ExerciseAppNavController
+    navController: ExerciseAppNavController,
+    visible: Boolean = false,
 ){
-    Box(
-        modifier = modifier
-    ){
-        Column(
-            modifier = modifier.align(Alignment.Center)
-        ) {
-            Button(
-                onClick = { navController.navigateTo(Screen.Library) }
-            ){
-                Text( text = "Open Library" )
-            }
+    if (visible){
 
-            Spacer(modifier = Modifier.height(4.dp))
+        Box(
+            modifier = modifier
+        ){
+            Column(
+                modifier = modifier.align(Alignment.Center)
+            ) {
+                Button(
+                    onClick = { navController.navigateTo(Screen.Library) }
+                ){
+                    Text( text = "Open Library" )
+                }
 
-            Button(
-                onClick = { navController.navigateTo(Screen.Records) }
-            ){
-                Text( text = "Open Records" )
-            }
+                Spacer(modifier = Modifier.height(4.dp))
 
-            Spacer(modifier = Modifier.height(4.dp))
+                Button(
+                    onClick = { navController.navigateTo(Screen.Records) }
+                ){
+                    Text( text = "Open Records" )
+                }
 
-            Button(
-                onClick = { navController.navigateTo(Screen.Workout) }
-            ){
-                Text( text = "Workout" )
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Button(
+                    onClick = { navController.navigateTo(Screen.Workout) }
+                ){
+                    Text( text = "Workout" )
+                }
             }
         }
+
     }
-
-
 }
