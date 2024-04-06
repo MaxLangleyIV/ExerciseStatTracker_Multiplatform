@@ -50,7 +50,6 @@ fun App(
         isDarkTheme,
         isDynamicColor = false
     ){
-
         val focusRequester = remember { FocusRequester() }
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
@@ -75,9 +74,11 @@ fun App(
 
         val workoutViewModel = getViewModel(
             key = "workoutViewModel",
-            factory = viewModelFactory { WorkoutViewModel(appModule.exerciseAppDataSource) }
+            factory = viewModelFactory { WorkoutViewModel(appModule.exerciseAppDataSource,) }
         )
         val workoutState by workoutViewModel.state.collectAsState(WorkoutState())
+
+
 
 
 //    // INIT DUMMY DATA
@@ -91,7 +92,7 @@ fun App(
 //    // Add definitions to SQLDelight db.
 //    for (exerciseDefinition in exerciseDefList){
 //        libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
-//    }
+//    }1
 
 
         Surface(
