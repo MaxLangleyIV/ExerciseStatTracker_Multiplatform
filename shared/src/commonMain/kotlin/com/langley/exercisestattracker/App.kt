@@ -50,7 +50,6 @@ fun App(
         isDarkTheme,
         isDynamicColor = false
     ){
-
         val focusRequester = remember { FocusRequester() }
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
@@ -75,7 +74,11 @@ fun App(
 
         val workoutViewModel = getViewModel(
             key = "workoutViewModel",
-            factory = viewModelFactory { WorkoutViewModel(appModule.exerciseAppDataSource) }
+            factory = viewModelFactory { WorkoutViewModel(
+                dataSource = appModule.exerciseAppDataSource,
+                prefDataStore = appModule.preferencesDataStore
+                )
+            }
         )
         val workoutState by workoutViewModel.state.collectAsState(WorkoutState())
 
