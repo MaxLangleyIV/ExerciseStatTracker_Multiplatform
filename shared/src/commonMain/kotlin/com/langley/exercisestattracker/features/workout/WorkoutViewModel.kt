@@ -1,5 +1,8 @@
 package com.langley.exercisestattracker.features.workout
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -15,10 +18,15 @@ import kotlinx.datetime.Clock
 
 class WorkoutViewModel(
     private val dataSource: ExerciseAppDataSource,
+    val preferencesDataStore: DataStore<Preferences>,
     initialState: WorkoutState = WorkoutState()
 ): ViewModel() {
 
+
+
     private val _state = MutableStateFlow(initialState)
+
+    private val workoutStringKey = stringPreferencesKey("workout_state")
 
     val state = _state
         .asStateFlow()
