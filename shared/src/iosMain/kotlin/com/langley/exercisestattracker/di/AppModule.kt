@@ -1,12 +1,9 @@
 package com.langley.exercisestattracker.di
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.langley.exercisestattracker.core.data.DatabaseDriverFactory
-import com.langley.exercisestattracker.core.data.SqlDelightExerciseAppDataSource
-import com.langley.exercisestattracker.core.data.getDataStore
-import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.database.ExerciseStatTrackerDatabase
+import com.langley.exercisestattracker.core.data.SqlDelightExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 
 actual class AppModule {
     actual val exerciseAppDataSource: ExerciseAppDataSource by lazy {
@@ -15,9 +12,5 @@ actual class AppModule {
                 driver = DatabaseDriverFactory().createDriver()
             )
         )
-    }
-
-    actual val preferencesDataStore: DataStore<Preferences> by lazy {
-        getDataStore()
     }
 }
