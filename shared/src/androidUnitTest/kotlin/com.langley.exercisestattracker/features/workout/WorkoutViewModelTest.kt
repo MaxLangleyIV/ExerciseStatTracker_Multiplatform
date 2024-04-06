@@ -45,7 +45,7 @@ class WorkoutViewModelTest {
             WorkoutViewModel(
 
                 testDataSource,
-                initialState
+                initialState,
 
                 )
         }.createViewModel()
