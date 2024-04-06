@@ -1,13 +1,19 @@
 package com.langley.exercisestattracker.features.workout
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -15,8 +21,12 @@ import kotlinx.datetime.Clock
 
 class WorkoutViewModel(
     private val dataSource: ExerciseAppDataSource,
+    val prefDataStore: DataStore<Preferences>,
     initialState: WorkoutState = WorkoutState()
+
 ): ViewModel() {
+
+    private var saveJob: Job? = null
 
     private val _state = MutableStateFlow(initialState)
 
@@ -27,6 +37,30 @@ class WorkoutViewModel(
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = WorkoutState()
         )
+
+    private fun saveWorkoutState() {
+
+        saveJob?.cancel()
+
+        saveJob = viewModelScope.launch {
+            delay(1000)
+            prefDataStore.edit {
+                it[stringPreferencesKey("WORKOUT_STATE")] =
+                    "TEST WORKOUT STATE"
+            }
+        }
+
+    }
+
+    private fun clearWorkoutState(){
+
+        saveJob?.cancel()
+
+        viewModelScope.launch {
+            prefDataStore.edit { it.remove(stringPreferencesKey("WORKOUT_STATE")) }
+        }
+
+    }
 
 
     fun onEvent(workoutEvent: WorkoutEvent){
@@ -297,11 +331,6 @@ class WorkoutViewModel(
             }
         }
 
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        println("WORKOUT VIEWMODEL CLEARED")
     }
 
 }
