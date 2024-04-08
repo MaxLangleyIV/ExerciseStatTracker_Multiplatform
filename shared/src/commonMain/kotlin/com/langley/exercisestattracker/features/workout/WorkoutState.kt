@@ -4,7 +4,9 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class WorkoutState(
 
     val routine: ExerciseRoutine = ExerciseRoutine(),
