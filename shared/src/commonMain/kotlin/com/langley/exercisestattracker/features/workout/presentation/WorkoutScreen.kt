@@ -94,7 +94,7 @@ fun WorkoutScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Button(
-                            onClick = { navController.navigateBack() }
+                            onClick = { onEvent(WorkoutEvent.CancelWorkout) }
                         ){
                             Text( text = "Cancel Session" )
                         }
