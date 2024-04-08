@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,7 +55,7 @@ fun App(
         val focusManager = LocalFocusManager.current
         val interactionSource = remember { MutableInteractionSource() }
 
-        val navController = remember { ExerciseAppNavController() }
+        val navController = remember { ExerciseAppNavController(Screen.Workout) }
         val currentScreen by navController.currentScreen.collectAsState()
 
         // View Models and States
@@ -110,7 +111,7 @@ fun App(
 
                 // Screens
                 Column(
-                    modifier = Modifier.weight(0.92F),
+                    modifier = Modifier.weight(0.94F),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -161,28 +162,28 @@ fun App(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(0.08F)
+                        .weight(0.06F)
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
 
-                    // Home
+                    // Records
                     IconButton(
                         onClick = {
-                            navController.navigateTo(Screen.Home)
+                            navController.navigateTo(Screen.Records)
                         }
                     ) {
                         Icon(
                             modifier = Modifier.alpha(
-                                if (currentScreen == Screen.Home){
+                                if (currentScreen == Screen.Records){
                                     1F
                                 }
                                 else{
                                     0.6F
                                 }
                             ),
-                            imageVector = Icons.Default.Home,
+                            imageVector = Icons.Default.List,
                             contentDescription = "Home",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -234,63 +235,6 @@ fun App(
 
             }
 
-
-
-
-//            when (currentScreen) {
-//
-//                Screen.Home -> {
-//
-//                    HomeScreen(
-//                        state = HomeState(), // This state is a placeholder
-//                        focusRequester = focusRequester,
-//                        focusManager = focusManager,
-//                        interactionSource = interactionSource,
-//                        navController = navController
-//                    )
-//
-//                }
-//
-//                Screen.Library -> {
-//
-//                    LibraryScreen(
-//                        dataSource = appModule.exerciseAppDataSource,
-//                        libraryState = libraryState,
-//                        onEvent = libraryViewModel::onEvent,
-//                        focusRequester = focusRequester,
-//                        focusManager = focusManager,
-//                        interactionSource = interactionSource,
-//                        navController = navController
-//                    )
-//
-//                }
-//
-//                Screen.Records -> {
-//
-//                    RecordsScreen(
-//                        recordsState = recordsState,
-//                        onEvent = recordsViewModel::onEvent,
-//                        focusRequester = focusRequester,
-//                        focusManager = focusManager,
-//                        interactionSource = interactionSource,
-//                        navController = navController
-//                    )
-//
-//                }
-//
-//                Screen.Workout -> {
-//
-//                    WorkoutScreen(
-//                        workoutState = workoutState,
-//                        onEvent = workoutViewModel::onEvent,
-//                        focusRequester = focusRequester,
-//                        focusManager = focusManager,
-//                        interactionSource = interactionSource,
-//                        navController = navController
-//                    )
-//
-//                }
-//            }
         }
     }
 }
