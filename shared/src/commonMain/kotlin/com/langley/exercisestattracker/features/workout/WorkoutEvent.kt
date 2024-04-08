@@ -20,6 +20,7 @@ sealed interface WorkoutEvent {
     data object ClearSelectedSet: WorkoutEvent
     data class UpdateRepsFromString(val index: Int, val value: String) : WorkoutEvent
     data class UpdateWeightFromString(val index: Int, val value: String) : WorkoutEvent
+    data object CancelWorkout : WorkoutEvent
 
     // Exercise Selector Events
     data class DefinitionSelected(val exerciseDefinition: ExerciseDefinition) : WorkoutEvent
