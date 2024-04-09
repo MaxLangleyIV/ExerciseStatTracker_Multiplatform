@@ -1,6 +1,11 @@
 package com.langley.exercisestattracker.features.workout
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
+import com.langley.exercisestattracker.core.data.SETTINGS_PREFERENCES
+import com.langley.exercisestattracker.core.data.createDataStorePreferences
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
@@ -8,11 +13,16 @@ import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.coroutines.coroutineContext
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -38,14 +48,18 @@ class WorkoutViewModelTest {
         dummyRecords = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
     )
 
+    private val dataPrefs = mockk<DataStore<Preferences>>(relaxed = true)
+    private val prefs = mockk<Preferences>(relaxed = true)
+
     private fun setupViewModel( initialState: WorkoutState){
 
         viewModel = viewModelFactory {
 
             WorkoutViewModel(
 
-                testDataSource,
-                initialState,
+                dataSource = testDataSource,
+                prefDataStore = dataPrefs,
+                initialState = initialState,
 
                 )
         }.createViewModel()
@@ -54,6 +68,9 @@ class WorkoutViewModelTest {
 
     @Before
     fun setup() = runTest{
+
+        every { dataPrefs.data } returns flowOf(prefs)
+        every { prefs[stringPreferencesKey("WORKOUT_STATE")] } returns ""
 
         testRecord0 = ExerciseRecord(
             exerciseRecordId = 0,
@@ -80,9 +97,7 @@ class WorkoutViewModelTest {
         testDef1 = ExerciseDefinition( exerciseName = "Test1" )
         testDef2 = ExerciseDefinition( exerciseName = "Test2" )
 
-        setupViewModel(WorkoutState(
-            completedExercises = listOf(testRecord0, testRecord1, testRecord2)
-        ))
+        setupViewModel(WorkoutState())
 
         state = viewModel.state.first()
 
