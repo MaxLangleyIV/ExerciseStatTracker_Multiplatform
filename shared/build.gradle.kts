@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.junit)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.mvvm.core)
+            implementation("io.mockk:mockk:1.13.10")
 
             implementation(libs.mvvm.flow)
             implementation(libs.mvvm.flow.compose)
