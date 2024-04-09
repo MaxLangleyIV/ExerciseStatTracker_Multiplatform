@@ -33,7 +33,7 @@ class WorkoutViewModel(
 
     private var saveJob: Job? = null
 
-    private val _state = MutableStateFlow(WorkoutState())
+    private val _state = MutableStateFlow(initialState)
 
     val state = _state
         .asStateFlow()
@@ -44,12 +44,16 @@ class WorkoutViewModel(
         )
 
     init {
-        viewModelScope.launch {
+        if (initialState == WorkoutState()){
 
-            _state.update {
-                getWorkoutStateFromString(
-                    getWorkoutStateFromPrefs()
-                )
+            viewModelScope.launch {
+
+                _state.update {
+                    getWorkoutStateFromString(
+                        getWorkoutStateFromPrefs()
+                    )
+                }
+
             }
 
         }
