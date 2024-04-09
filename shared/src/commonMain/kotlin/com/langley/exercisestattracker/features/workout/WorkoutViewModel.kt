@@ -1,22 +1,37 @@
 package com.langley.exercisestattracker.features.workout
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.langley.exercisestattracker.core.data.getWorkoutStateFromString
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
 
 class WorkoutViewModel(
     private val dataSource: ExerciseAppDataSource,
+    val prefDataStore: DataStore<Preferences>,
     initialState: WorkoutState = WorkoutState()
+
 ): ViewModel() {
+
+    private var saveJob: Job? = null
 
     private val _state = MutableStateFlow(initialState)
 
@@ -27,6 +42,64 @@ class WorkoutViewModel(
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = WorkoutState()
         )
+
+    init {
+        if (initialState == WorkoutState()){
+
+            viewModelScope.launch {
+
+                _state.update {
+                    getWorkoutStateFromString(
+                        getWorkoutStateFromPrefs()
+                    )
+                }
+
+            }
+
+        }
+    }
+
+    private suspend fun getWorkoutStateFromPrefs(): String {
+        var workoutString: String = ""
+
+        val workoutStringJob = viewModelScope.launch {
+            workoutString = prefDataStore.data.map {
+                it[stringPreferencesKey("WORKOUT_STATE")] ?: ""
+            }.first()
+        }
+
+        workoutStringJob.join()
+
+        return workoutString
+    }
+
+    private fun saveWorkoutState() {
+
+        saveJob?.cancel()
+
+        saveJob = viewModelScope.launch {
+            delay(1000)
+
+            val stateString = Json.encodeToString(_state.value)
+
+            prefDataStore.edit {
+                it[stringPreferencesKey("WORKOUT_STATE")] =
+                    stateString
+            }
+        }
+
+    }
+
+    private fun clearWorkoutState(){
+
+        saveJob?.cancel()
+
+        viewModelScope.launch {
+            prefDataStore.edit { it.remove(stringPreferencesKey("WORKOUT_STATE")) }
+        }
+        _state.update { WorkoutState() }
+
+    }
 
 
     fun onEvent(workoutEvent: WorkoutEvent){
@@ -78,6 +151,8 @@ class WorkoutViewModel(
                     recordsList = mutableList
                 ) }
 
+                saveWorkoutState()
+
             }
 
             is WorkoutEvent.MarkIncomplete -> {
@@ -92,6 +167,8 @@ class WorkoutViewModel(
                 _state.update { it.copy(
                     recordsList = mutableList
                 ) }
+
+                saveWorkoutState()
 
             }
 
@@ -111,6 +188,8 @@ class WorkoutViewModel(
                     }
 
                 }
+
+                clearWorkoutState()
 
             }
 
@@ -147,6 +226,8 @@ class WorkoutViewModel(
                     exerciseList = mutableList
                 ) }
 
+                saveWorkoutState()
+
             }
             is WorkoutEvent.AddToListOfRecords -> {
 
@@ -164,6 +245,8 @@ class WorkoutViewModel(
                     recordsList = mutableList
                 ) }
 
+                saveWorkoutState()
+
             }
             is WorkoutEvent.RemoveFromListOfExercises -> {
 
@@ -175,6 +258,8 @@ class WorkoutViewModel(
                     exerciseList = mutableList
                 ) }
 
+                saveWorkoutState()
+
             }
             is WorkoutEvent.RemoveFromListOfRecords -> {
 
@@ -185,6 +270,8 @@ class WorkoutViewModel(
                 _state.update { it.copy(
                     recordsList = mutableList
                 ) }
+
+                saveWorkoutState()
 
             }
 
@@ -242,6 +329,8 @@ class WorkoutViewModel(
                     recordsList = mutableList
                 ) }
 
+                saveWorkoutState()
+
             }
 
             is WorkoutEvent.SelectSet -> {
@@ -276,6 +365,8 @@ class WorkoutViewModel(
                     recordsList = mutableList
                 ) }
 
+                saveWorkoutState()
+
             }
 
             is WorkoutEvent.UpdateWeightFromString -> {
@@ -294,6 +385,12 @@ class WorkoutViewModel(
                     recordsList = mutableList
                 ) }
 
+                saveWorkoutState()
+
+            }
+
+            WorkoutEvent.CancelWorkout -> {
+                clearWorkoutState()
             }
         }
 

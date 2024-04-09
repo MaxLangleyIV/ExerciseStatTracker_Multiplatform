@@ -21,145 +21,128 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
-import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.presentation.components.DefinitionDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseLibraryTopBar
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun LibraryScreen(
     modifier: Modifier = Modifier,
+    libraryState: LibraryState = LibraryState(),
+    onEvent: (LibraryEvent) -> Unit = {},
     dataSource: ExerciseAppDataSource,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
-    navController: ExerciseAppNavController
+    navController: ExerciseAppNavController,
+    visible: Boolean = false
 ) {
-    val libraryViewModel = getViewModel(
-        key = "libraryViewModel",
-        factory = viewModelFactory {
-            LibraryViewModel(dataSource)
-        }
-    )
 
-    val libraryState by libraryViewModel.state.collectAsState(LibraryState())
+    if (visible){
 
-
-//    // Initialize dummy data for exercise library.
-//    val exerciseDefDummyData = ExerciseDefinitionDummyData()
-//    val exerciseDefList = exerciseDefDummyData.definitionList
-//    // Add definitions to SQLDelight db.
-//    for (exerciseDefinition in exerciseDefList){
-//        libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
-//    }
-
-
-    Scaffold(
-        modifier = modifier,
-        floatingActionButton = {
-            if (
-                !libraryState.isEditExerciseDefSheetOpen
-                and !libraryState.isAddExerciseDefSheetOpen
-                and !libraryState.isExerciseDetailsSheetOpen
+        Scaffold(
+            modifier = modifier,
+            floatingActionButton = {
+                if (
+                    !libraryState.isEditExerciseDefSheetOpen
+                    and !libraryState.isAddExerciseDefSheetOpen
+                    and !libraryState.isExerciseDetailsSheetOpen
                 ){
 
-                FloatingActionButton(
-                    onClick = {
-                        focusManager.clearFocus()
-                        (libraryViewModel::onEvent)(LibraryEvent.ClearSelectedDef)
-                        (libraryViewModel::onEvent)(LibraryEvent.AddNewDefClicked)
-                    },
-                    shape = RoundedCornerShape(20.dp)
-                ){
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = "Add exercise definition."
-                    )
-                }
-            }
-        }
-    ){
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .focusable(true)
-                .clickable(
-                    indication = null,
-                    interactionSource = interactionSource
-                ) { focusManager.clearFocus() },
-        ){
-            ExerciseLibraryTopBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp,16.dp),
-                state = libraryState,
-                onEvent = libraryViewModel::onEvent,
-                focusManager = focusManager,
-                navController = navController
-            )
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-                    .background(MaterialTheme.colorScheme.background),
-                contentPadding = PaddingValues(vertical = 8.dp),
-
-                content = {
-                    items(
-                        items = libraryState.exerciseDefinitions,
-                        key = {item: ExerciseDefinition ->  item.exerciseDefinitionId!!}
-                        )
-                    { exerciseDefinition: ExerciseDefinition ->
-                        ExerciseDefinitionListItem(
-                            exerciseDefinition,
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .padding(8.dp)
-                                .focusable(true)
-                                .clickable {
-                                    focusManager.clearFocus()
-                                    (libraryViewModel::onEvent)(
-                                        LibraryEvent.DefinitionSelected(exerciseDefinition)
-                                    )
-                                },
+                    FloatingActionButton(
+                        onClick = {
+                            focusManager.clearFocus()
+                            onEvent(LibraryEvent.ClearSelectedDef)
+                            onEvent(LibraryEvent.AddNewDefClicked)
+                        },
+                        shape = RoundedCornerShape(20.dp)
+                    ){
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = "Add exercise definition."
                         )
                     }
                 }
+            }
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .focusable(true)
+                    .clickable(
+                        indication = null,
+                        interactionSource = interactionSource
+                    ) { focusManager.clearFocus() },
+            ){
+                ExerciseLibraryTopBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp,16.dp),
+                    state = libraryState,
+                    onEvent = onEvent,
+                    focusManager = focusManager,
+                    navController = navController
+                )
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .background(MaterialTheme.colorScheme.background),
+                    contentPadding = PaddingValues(vertical = 8.dp),
+
+                    content = {
+                        items(
+                            items = libraryState.exerciseDefinitions,
+                            key = {item: ExerciseDefinition ->  item.exerciseDefinitionId!!}
+                        )
+                        { exerciseDefinition: ExerciseDefinition ->
+                            ExerciseDefinitionListItem(
+                                exerciseDefinition,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .padding(8.dp)
+                                    .focusable(true)
+                                    .clickable {
+                                        focusManager.clearFocus()
+                                        onEvent(
+                                            LibraryEvent.DefinitionSelected(exerciseDefinition)
+                                        )
+                                    },
+                            )
+                        }
+                    }
+                )
+            }
+
+            DefinitionDetailsView(
+                isVisible = libraryState.isExerciseDetailsSheetOpen,
+                libraryOnEvent = onEvent,
+                selectedDefinition =
+                libraryState.selectedExerciseDefinition?: ExerciseDefinition()
+            )
+
+
+            ExerciseBuilderScreen(
+                dataSource = dataSource,
+                isVisible = libraryState.isAddExerciseDefSheetOpen,
+                selectedExercise = libraryState.selectedExerciseDefinition,
+                libraryOnEvent = onEvent,
+                focusManager = focusManager,
+                interactionSource = interactionSource,
             )
         }
 
-        DefinitionDetailsView(
-            isVisible = libraryState.isExerciseDetailsSheetOpen,
-            libraryOnEvent = libraryViewModel::onEvent,
-            selectedDefinition =
-            libraryState.selectedExerciseDefinition?: ExerciseDefinition()
-        )
-
-
-        ExerciseBuilderScreen(
-            dataSource = dataSource,
-            isVisible = libraryState.isAddExerciseDefSheetOpen,
-            selectedExercise = libraryState.selectedExerciseDefinition,
-            libraryOnEvent = libraryViewModel::onEvent,
-            focusManager = focusManager,
-            interactionSource = interactionSource,
-        )
     }
 }

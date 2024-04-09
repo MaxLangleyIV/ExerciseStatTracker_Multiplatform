@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     id("org.jetbrains.compose") version "1.5.11"
     id("app.cash.sqldelight") version "2.0.1"
+    kotlin("plugin.serialization") version "1.9.20"
 }
 
 kotlin {
@@ -36,12 +37,17 @@ kotlin {
             implementation(compose.materialIconsExtended)
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
+            implementation(libs.androidx.datastore.preferences.core)
+            implementation(libs.androidx.datastore.core.okio)
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.junit)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.mvvm.core)
+            implementation("io.mockk:mockk:1.13.10")
 
             implementation(libs.mvvm.flow)
             implementation(libs.mvvm.flow.compose)

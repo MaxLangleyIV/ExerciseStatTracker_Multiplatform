@@ -1,5 +1,8 @@
 package com.langley.exercisestattracker.core.domain
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ExerciseDefinition(
     val exerciseDefinitionId: Long? = null,
     val exerciseName: String = "",
