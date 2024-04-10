@@ -185,6 +185,30 @@ class LibraryViewModel(
                     isExerciseDetailsSheetOpen = true
                 ) }
             }
+
+            LibraryEvent.SelectDefinitionsTab -> {
+                _state.update { it.copy(
+                    isShowingExercises = true,
+                    isShowingRoutines = false,
+                    isShowingSchedules = false
+                ) }
+            }
+
+            LibraryEvent.SelectRoutinesTab -> {
+                _state.update { it.copy(
+                    isShowingExercises = false,
+                    isShowingRoutines = true,
+                    isShowingSchedules = false
+                ) }
+            }
+
+            LibraryEvent.SelectSchedulesTab -> {
+                _state.update { it.copy(
+                    isShowingExercises = false,
+                    isShowingRoutines = false,
+                    isShowingSchedules = true
+                ) }
+            }
         }
     }
 }
