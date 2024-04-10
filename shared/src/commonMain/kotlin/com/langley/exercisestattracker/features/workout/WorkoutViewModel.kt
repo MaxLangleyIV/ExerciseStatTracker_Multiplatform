@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -60,7 +59,7 @@ class WorkoutViewModel(
     }
 
     private suspend fun getWorkoutStateFromPrefs(): String {
-        var workoutString: String = ""
+        var workoutString = ""
 
         val workoutStringJob = viewModelScope.launch {
             workoutString = prefDataStore.data.map {
