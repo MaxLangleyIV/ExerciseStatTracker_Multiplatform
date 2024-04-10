@@ -334,6 +334,90 @@ class LibraryViewModelTest {
         assertTrue(state.exerciseDefinitions.last().isFavorite)
     }
 
+    @Test
+    fun onEvent_SelectDefinitionsTab_isShowingDefinitionsTrueAndOtherTabsFalse() = runTest {
+        setupViewModel(
+            LibraryState(
+            isShowingExercises = false
+        )
+        )
+
+        var state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.isShowingExercises,
+            message = "isShowingExercises should start false for this test"
+        )
+
+        viewModel.onEvent(LibraryEvent.SelectDefinitionsTab)
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.isShowingExercises,
+            message = "isShowingExercises should be true after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingRoutines,
+            message = "isShowingRoutines should be false after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingSchedules,
+            message = "isShowingSchedules should be false after event"
+        )
+
+    }
+
+    @Test
+    fun onEvent_SelectRoutinesTab_isShowingRoutinesTrueAndOtherTabsFalse() = runTest {
+
+        viewModel.onEvent(LibraryEvent.SelectRoutinesTab)
+
+        val state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.isShowingRoutines,
+            message = "isShowingRoutines should be true after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingExercises,
+            message = "isShowingExercises should be false after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingSchedules,
+            message = "isShowingSchedules should be false after event"
+        )
+
+    }
+
+    @Test
+    fun onEvent_SelectSchedulesTab_isShowingSchedulesTrueAndOtherTabsFalse() = runTest {
+
+        viewModel.onEvent(LibraryEvent.SelectSchedulesTab)
+
+        val state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.isShowingSchedules,
+            message = "isShowingExercises should be true after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingRoutines,
+            message = "isShowingRoutines should be false after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingExercises,
+            message = "isShowingExercises should be false after event"
+        )
+
+    }
+
 }
 
 class MainDispatcherRule @OptIn(ExperimentalCoroutinesApi::class) constructor(
