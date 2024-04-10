@@ -3,6 +3,12 @@ package com.langley.exercisestattracker.features.library
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 
 data class LibraryState(
+
+    // UI State
+    val isShowingExercises: Boolean = true,
+    val isShowingRoutines: Boolean = false,
+    val isShowingSchedules: Boolean = false,
+
     //Data state.
     val exerciseDefinitions: List<ExerciseDefinition> = emptyList(),
     val selectedExerciseDefinition: ExerciseDefinition? = null,
