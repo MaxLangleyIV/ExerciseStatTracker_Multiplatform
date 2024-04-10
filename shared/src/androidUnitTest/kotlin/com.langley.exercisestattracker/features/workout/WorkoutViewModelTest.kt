@@ -4,8 +4,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
-import com.langley.exercisestattracker.core.data.SETTINGS_PREFERENCES
-import com.langley.exercisestattracker.core.data.createDataStorePreferences
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
@@ -15,14 +13,12 @@ import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.coroutines.coroutineContext
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -253,66 +249,6 @@ class WorkoutViewModelTest {
         )
 
     }
-
-//    @Test
-//    fun onEvent_RemoveFromCompletedInMiddle_completedExercisesListUpdatedCorrectly() = runTest {
-//
-//        state = viewModel.state.first()
-//
-//        assertTrue(
-//            actual = state.completedExercises.contains(testRecord1),
-//            message = "CompletedExercises should contain testRecord1"
-//        )
-//
-//        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(1, testRecord1))
-//
-//        state = viewModel.state.first()
-//
-//        assertFalse(
-//            actual = state.completedExercises.contains(testRecord1),
-//            message = "CompletedExercises should not contain testRecord1"
-//        )
-//    }
-//
-//    @Test
-//    fun onEvent_RemoveFromCompletedAtFront_completedExercisesListUpdatedCorrectly() = runTest {
-//
-//        state = viewModel.state.first()
-//
-//        assertTrue(
-//            actual = state.completedExercises.contains(testRecord0),
-//            message = "CompletedExercises should contain testRecord0"
-//        )
-//
-//        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(0, testRecord0))
-//
-//        state = viewModel.state.first()
-//
-//        assertFalse(
-//            actual = state.completedExercises.contains(testRecord0),
-//            message = "CompletedExercises should not contain testRecord0"
-//        )
-//    }
-//
-//    @Test
-//    fun onEvent_RemoveFromCompletedAtEnd_completedExercisesListUpdatedCorrectly() = runTest {
-//
-//        state = viewModel.state.first()
-//
-//        assertTrue(
-//            actual = state.completedExercises.contains(testRecord2),
-//            message = "CompletedExercises should contain testRecord2"
-//        )
-//
-//        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(2, testRecord2))
-//
-//        state = viewModel.state.first()
-//
-//        assertFalse(
-//            actual = state.completedExercises.contains(testRecord2),
-//            message = "CompletedExercises should not contain testRecord2"
-//        )
-//    }
 
     @Test
     fun onEvent_saveWorkout() = runTest {
