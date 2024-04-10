@@ -14,6 +14,9 @@ sealed interface LibraryEvent {
     data object AddNewDefClicked : LibraryEvent
     data object CloseAddDefClicked : LibraryEvent
     data object ClearSelectedDef : LibraryEvent
+    data object SelectDefinitionsTab : LibraryEvent
+    data object SelectRoutinesTab : LibraryEvent
+    data object SelectSchedulesTab : LibraryEvent
 
 
 
