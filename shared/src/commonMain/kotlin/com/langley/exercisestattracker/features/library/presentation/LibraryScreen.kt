@@ -5,10 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -87,7 +89,8 @@ fun LibraryScreen(
                 ExerciseLibraryTopBar(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(0.dp,16.dp),
+                        .height(IntrinsicSize.Min)
+                        .padding(0.dp,4.dp),
                     state = libraryState,
                     onEvent = onEvent,
                     focusManager = focusManager,
@@ -98,7 +101,7 @@ fun LibraryScreen(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(8.dp)
+                        .padding(horizontal = 4.dp, vertical = 4.dp)
                         .background(MaterialTheme.colorScheme.background),
                     contentPadding = PaddingValues(vertical = 8.dp),
 
