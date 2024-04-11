@@ -83,3 +83,54 @@ fun ExerciseDefinition.toBlankRecord(): ExerciseRecord {
         isCalisthenic = isCalisthenic,
     )
 }
+
+fun ExerciseRoutine.getExercisesFromCSV(
+    allExercisesAvailable: List<ExerciseDefinition>
+): List<ExerciseDefinition> {
+
+    val mutableList = mutableListOf<ExerciseDefinition>()
+
+    val csvAsList = this.exerciseCSV.split(",")
+
+    for (exerciseID in csvAsList){
+
+        val id: Int? =
+            try {
+                exerciseID.toInt()
+            } catch (nfe: NumberFormatException){
+                null
+            }
+
+
+        if (id != null){
+
+            for (def in allExercisesAvailable){
+                val defId = def.exerciseDefinitionId?.toInt() ?: -1
+
+                if (defId == id){
+                    mutableList.add(def)
+                }
+            }
+        }
+
+    }
+
+    return mutableList
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
