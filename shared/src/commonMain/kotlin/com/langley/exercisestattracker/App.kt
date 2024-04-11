@@ -24,12 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
+import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.home.HomeScreen
+import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
+import com.langley.exercisestattracker.features.records.RecordsEvent
 import com.langley.exercisestattracker.features.records.RecordsScreen
 import com.langley.exercisestattracker.features.records.RecordsState
 import com.langley.exercisestattracker.features.records.RecordsViewModel
@@ -82,20 +88,28 @@ fun App(
         )
         val workoutState by workoutViewModel.state.collectAsState(WorkoutState())
 
+//        // INIT DUMMY DATA
+//        // Exercises
+//        val exerciseDefList = ExerciseDefinitionDummyData().definitionList
+//        for (exerciseDefinition in exerciseDefList){
+//            libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
+//        }
+//        // Routines
+//        val routines = ExerciseRoutineDummyData(exerciseDefList).getRoutines()
+//        for (r in routines){
+//            libraryViewModel.onEvent(LibraryEvent.SaveRoutine(r))
+//        }
+//        // Schedules
+//        val schedules = ExerciseRoutineDummyData(exerciseDefList).getSchedules(10)
+//        for (s in schedules){
+//            libraryViewModel.onEvent(LibraryEvent.SaveSchedule(s))
+//        }
 
-//    // INIT DUMMY DATA
-//    val exerciseRecordList = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
-//    for (record in exerciseRecordList){
-//        (recordsViewModel::onEvent)(RecordsEvent.SaveRecord(record))
-//    }
-
-//    val exerciseDefDummyData = ExerciseDefinitionDummyData()
-//    val exerciseDefList = exerciseDefDummyData.definitionList
-//    // Add definitions to SQLDelight db.
-//    for (exerciseDefinition in exerciseDefList){
-//        libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
-//    }
-
+        // Records
+//        val exerciseRecordList = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
+//        for (record in exerciseRecordList){
+//            (recordsViewModel::onEvent)(RecordsEvent.SaveRecord(record))
+//        }
 
         Surface(
             modifier = Modifier.fillMaxSize(),
