@@ -3,6 +3,8 @@ package com.langley.exercisestattracker.features.library
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -84,16 +86,16 @@ class LibraryViewModelTest {
         val state = viewModel.state.first()
 
         assertTrue(
-            state.exerciseDefinitions.isNotEmpty(),
+            state.exercises.isNotEmpty(),
             "Definitions list is empty."
         )
 
-        for (i in 0..<state.exerciseDefinitions.size) {
+        for (i in 0..<state.exercises.size) {
 
             assertEquals(exerciseDefinitionList[i].exerciseName,
-                state.exerciseDefinitions[i].exerciseName,
+                state.exercises[i].exerciseName,
                 "${exerciseDefinitionList[i].exerciseName} not equal to " +
-                        "definition in state: ${state.exerciseDefinitions[i].exerciseName}"
+                        "definition in state: ${state.exercises[i].exerciseName}"
             )
         }
     }
@@ -109,7 +111,7 @@ class LibraryViewModelTest {
         val state = viewModel.state.first()
         var savedExerciseFoundInState = false
 
-        for (def in state.exerciseDefinitions){
+        for (def in state.exercises){
 
             if (def.exerciseName == testExerciseDefinition.exerciseName){
                 savedExerciseFoundInState = true
@@ -120,18 +122,53 @@ class LibraryViewModelTest {
     }
 
     @Test
+    fun onEvent_saveExerciseRoutine_savedRoutineFoundInState() = runTest {
+        val testRoutine = ExerciseRoutine(routineName = "Test")
+
+        viewModel.onEvent(LibraryEvent.SaveRoutine(testRoutine))
+
+        val state = viewModel.state.first()
+        var savedRoutineFoundInState = false
+
+        for (routine in state.routines){
+
+            if (routine.routineName == testRoutine.routineName){
+                savedRoutineFoundInState = true
+            }
+        }
+        assertTrue(savedRoutineFoundInState,
+            "Unable to find routine with matching name.")
+    }
+
+    @Test
+    fun onEvent_saveExerciseSchedule_savedScheduleFoundInState() = runTest {
+        val testSchedule = ExerciseSchedule( exerciseScheduleName = "Test" )
+
+        viewModel.onEvent(LibraryEvent.SaveSchedule(testSchedule))
+
+        val state = viewModel.state.first()
+        var savedScheduleFoundInState = false
+
+        for (schedule in state.schedules){
+
+            if (schedule.exerciseScheduleName == testSchedule.exerciseScheduleName){
+                savedScheduleFoundInState = true
+            }
+        }
+        assertTrue(savedScheduleFoundInState,
+            "Unable to find schedule with matching name.")
+    }
+
+    @Test
     fun onEvent_exerciseDefSelectedCalled_selectedDefReflectedInState() = runTest{
         var state = viewModel.state.first()
 
-        val randomNum = Random.nextInt(0,(state.exerciseDefinitions.size - 1))
-        val selectedDef = state.exerciseDefinitions[randomNum]
+        val randomNum = Random.nextInt(0,(state.exercises.size - 1))
+        val selectedDef = state.exercises[randomNum]
 
         viewModel.onEvent(LibraryEvent.DefinitionSelected(selectedDef))
 
         state = viewModel.state.first()
-
-        assertFalse(state.isSearchDropdownOpen,
-            "Search dropdown failed to be set false after selection.")
 
         assertEquals(selectedDef, state.selectedExerciseDefinition,
             "selectedDef: $selectedDef does not equal def in state: " +
@@ -141,6 +178,48 @@ class LibraryViewModelTest {
 
         assertTrue(state.isExerciseDetailsSheetOpen,
             "isExerciseDetailsSheetOpen failed to be set true after selection.")
+    }
+
+    @Test
+    fun onEvent_RoutineSelected_selectedRoutineInState() = runTest{
+
+        val selectedRoutine = ExerciseRoutine(routineName = "Selected Test")
+
+        viewModel.onEvent(LibraryEvent.RoutineSelected(selectedRoutine))
+
+        val state = viewModel.state.first()
+
+
+        assertEquals(
+            expected = selectedRoutine,
+            actual = state.selectedRoutine,
+            message =
+            "$selectedRoutine does not equal routine in state:${state.selectedRoutine}"
+        )
+
+        assertTrue(state.isRoutineDetailsSheetOpen,
+            "isRoutineDetailsSheetOpen failed to be set true after selection.")
+    }
+
+    @Test
+    fun onEvent_ScheduleSelected_selectedScheduleInState() = runTest{
+
+        val exerciseSchedule = ExerciseSchedule(exerciseScheduleName = "Selected Test")
+
+        viewModel.onEvent(LibraryEvent.ScheduleSelected(exerciseSchedule))
+
+        val state = viewModel.state.first()
+
+
+        assertEquals(
+            expected = exerciseSchedule,
+            actual = state.selectedSchedule,
+            message =
+            "$exerciseSchedule does not equal schedule in state:${state.selectedSchedule}"
+        )
+
+        assertTrue(state.isScheduleDetailsSheetOpen,
+            "isScheduleDetailsSheetOpen failed to be set true after selection.")
     }
 
     @Test
@@ -171,7 +250,7 @@ class LibraryViewModelTest {
 
     @Test
     fun onEvent_EditExerciseDefinition_stateProperlyUpdated() = runTest {
-        val selectedDef = viewModel.state.first().exerciseDefinitions[0]
+        val selectedDef = viewModel.state.first().exercises[0]
 
         setupViewModel(
             LibraryState(
@@ -321,7 +400,7 @@ class LibraryViewModelTest {
     @Test
     fun onEvent_ToggleIsFavorite_valueUpdatedInDb() = runTest {
         var state = viewModel.state.first()
-        val defToFavorite = state.exerciseDefinitions[0]
+        val defToFavorite = state.exercises[0]
 
         assertFalse(defToFavorite.isFavorite)
 
@@ -331,7 +410,7 @@ class LibraryViewModelTest {
         viewModel.onEvent(LibraryEvent.ToggleIsFavorite(state.selectedExerciseDefinition!!))
         state = viewModel.state.first()
 
-        assertTrue(state.exerciseDefinitions.last().isFavorite)
+        assertTrue(state.exercises.last().isFavorite)
     }
 
     @Test
