@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ExerciseSchedule(
-    val exerciseScheduleId: Long?,
-    val exerciseScheduleName: String,
-    val exerciseRoutineCSV: String,
-    val isFavorite: Long,
-    val dateCreated:Long?
+    val exerciseScheduleId: Long? = null,
+    val exerciseScheduleName: String = "",
+    val exerciseRoutineCSV: String = "",
+    val isFavorite: Long = 0,
+    val dateCreated:Long? = null
 )
