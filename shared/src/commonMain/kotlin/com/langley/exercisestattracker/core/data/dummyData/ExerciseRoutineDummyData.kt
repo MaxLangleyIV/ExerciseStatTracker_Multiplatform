@@ -2,6 +2,7 @@ package com.langley.exercisestattracker.core.data.dummyData
 
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import kotlinx.datetime.Clock
 import kotlin.random.Random
 
@@ -11,8 +12,21 @@ class ExerciseRoutineDummyData(
 ) {
 
     private val exerciseRoutines = mutableListOf<ExerciseRoutine>()
+    private val exerciseSchedules = mutableListOf<ExerciseSchedule>()
     fun getRoutines(): List<ExerciseRoutine>{
         return exerciseRoutines.toList()
+    }
+
+    fun getSchedules(amount: Int): List<ExerciseSchedule> {
+        for (i in 1..amount){
+            val schedule = ExerciseSchedule(
+                exerciseScheduleName = "Test Schedule $i",
+            )
+
+            exerciseSchedules.add(schedule)
+        }
+
+        return exerciseSchedules
     }
 
 
