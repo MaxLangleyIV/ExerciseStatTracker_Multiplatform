@@ -1,6 +1,8 @@
 package com.langley.exercisestattracker.features.library
 
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 
 data class LibraryState(
 
@@ -10,8 +12,14 @@ data class LibraryState(
     val isShowingSchedules: Boolean = false,
 
     //Data state.
-    val exerciseDefinitions: List<ExerciseDefinition> = emptyList(),
+    val exercises: List<ExerciseDefinition> = emptyList(),
     val selectedExerciseDefinition: ExerciseDefinition? = null,
+
+    val routines: List<ExerciseRoutine> = emptyList(),
+    val selectedRoutine: ExerciseRoutine? = null,
+
+    val schedules: List<ExerciseSchedule> = emptyList(),
+    val selectedSchedule: ExerciseSchedule? = null,
 
     //Search state
     val isSearchDropdownOpen: Boolean = false,
@@ -23,6 +31,14 @@ data class LibraryState(
     val isExerciseDetailsSheetOpen: Boolean = false,
     val isEditExerciseDefSheetOpen: Boolean = false,
     val isAddExerciseDefSheetOpen: Boolean = false,
+
+    val isRoutineDetailsSheetOpen: Boolean = false,
+    val isEditRoutineSheetOpen: Boolean = false,
+    val isAddRoutineSheetOpen: Boolean = false,
+
+    val isScheduleDetailsSheetOpen: Boolean = false,
+    val isEditScheduleSheetOpen: Boolean = false,
+    val isAddScheduleSheetOpen: Boolean = false,
 
     //Input validation errors state.
     val exerciseNameError: String? = null,
