@@ -29,12 +29,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.presentation.components.DefinitionDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseLibraryTopBar
+import com.langley.exercisestattracker.features.library.presentation.components.RoutineListItem
+import com.langley.exercisestattracker.features.library.presentation.components.ScheduleListItem
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
 @Composable
@@ -97,17 +101,18 @@ fun LibraryScreen(
                     navController = navController
                 )
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 4.dp, vertical = 4.dp)
-                        .background(MaterialTheme.colorScheme.background),
-                    contentPadding = PaddingValues(vertical = 8.dp),
-
-                    content = {
+                // Exercise List
+                if (libraryState.isShowingExercises){
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 4.dp, vertical = 4.dp)
+                            .background(MaterialTheme.colorScheme.background),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                    ){
                         items(
-                            items = libraryState.exerciseDefinitions,
+                            items = libraryState.exercises,
                             key = {item: ExerciseDefinition ->  item.exerciseDefinitionId!!}
                         )
                         { exerciseDefinition: ExerciseDefinition ->
@@ -126,7 +131,72 @@ fun LibraryScreen(
                             )
                         }
                     }
-                )
+                }
+
+                // Routine List
+                if (libraryState.isShowingRoutines){
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(1),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 4.dp, vertical = 4.dp)
+                            .background(MaterialTheme.colorScheme.background),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                    ){
+                        items(
+                            items = libraryState.routines,
+                            key = {item: ExerciseRoutine ->  item.exerciseRoutineId!!}
+                        )
+                        { routine: ExerciseRoutine ->
+                            RoutineListItem(
+                                routine,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .padding(8.dp)
+                                    .focusable(true)
+                                    .clickable {
+                                        focusManager.clearFocus()
+                                        onEvent(
+                                            LibraryEvent.RoutineSelected(routine)
+                                        )
+                                    },
+                            )
+                        }
+                    }
+                }
+
+                // Schedule List
+                if (libraryState.isShowingSchedules){
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(1),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 4.dp, vertical = 4.dp)
+                            .background(MaterialTheme.colorScheme.background),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                    ){
+                        items(
+                            items = libraryState.schedules,
+                            key = {item: ExerciseSchedule ->  item.exerciseScheduleId!!}
+                        )
+                        { schedule: ExerciseSchedule ->
+                            println("SCHEDULE: $schedule")
+                            ScheduleListItem(
+                                schedule,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .padding(8.dp)
+                                    .focusable(true)
+                                    .clickable {
+                                        focusManager.clearFocus()
+                                        onEvent(
+                                            LibraryEvent.ScheduleSelected(schedule)
+                                        )
+                                    },
+                            )
+                        }
+                    }
+                }
             }
 
             DefinitionDetailsView(
