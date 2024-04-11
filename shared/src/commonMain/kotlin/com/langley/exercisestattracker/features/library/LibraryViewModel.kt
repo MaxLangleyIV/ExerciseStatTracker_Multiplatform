@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
@@ -27,10 +29,12 @@ class LibraryViewModel(
     val state = combine(
         _state,
         exerciseAppDataSource.getDefinitions(),
+        exerciseAppDataSource.getRoutines(),
+        exerciseAppDataSource.getSchedules()
     ){
-        state, exerciseDefinitions ->
+        state, definitions, routines, schedules ->
 
-        updateLibraryState(state, exerciseDefinitions)
+        updateLibraryState(state, definitions, routines, schedules)
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), LibraryState())
 
@@ -40,17 +44,21 @@ class LibraryViewModel(
 
     private fun updateLibraryState(
         currentState: LibraryState,
-        definitionsList: List<ExerciseDefinition>
+        definitionsList: List<ExerciseDefinition>,
+        routinesList: List<ExerciseRoutine>,
+        schedulesList: List<ExerciseSchedule>,
     ): LibraryState {
 
         return currentState.copy(
 
-            exerciseDefinitions =
+            exercises =
             filterDefinitionLibrary(
                 definitionLibrary = definitionsList,
                 filterType = currentState.searchFilterType,
                 searchString = currentState.searchString
-            )
+            ),
+            routines = routinesList,
+            schedules = schedulesList
 
         )
 
@@ -64,14 +72,30 @@ class LibraryViewModel(
                 _state.update { it.copy(
                     isSearchDropdownOpen = false,
                     selectedExerciseDefinition = event.exerciseDefinition,
-                    isExerciseDetailsSheetOpen = true
+                    isExerciseDetailsSheetOpen = true,
+                    isRoutineDetailsSheetOpen = false,
+                    isScheduleDetailsSheetOpen = false
                 ) }
             }
 
-            is LibraryEvent.SaveDefinition -> {
-                viewModelScope.launch {
-                    exerciseAppDataSource.insertOrReplaceDefinition(event.exerciseDefinition)
-                }
+            is LibraryEvent.RoutineSelected -> {
+                _state.update { it.copy(
+                    isSearchDropdownOpen = false,
+                    selectedRoutine = event.routine,
+                    isExerciseDetailsSheetOpen = false,
+                    isRoutineDetailsSheetOpen = true,
+                    isScheduleDetailsSheetOpen = false
+                ) }
+            }
+
+            is LibraryEvent.ScheduleSelected -> {
+                _state.update { it.copy(
+                    isSearchDropdownOpen = false,
+                    selectedSchedule = event.schedule,
+                    isRoutineDetailsSheetOpen = false,
+                    isExerciseDetailsSheetOpen = false,
+                    isScheduleDetailsSheetOpen = true
+                ) }
             }
 
             LibraryEvent.CloseDetailsView -> {
@@ -209,6 +233,25 @@ class LibraryViewModel(
                     isShowingSchedules = true
                 ) }
             }
+
+            is LibraryEvent.SaveDefinition -> {
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceDefinition(event.definition)
+                }
+            }
+
+            is LibraryEvent.SaveRoutine -> {
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceRoutine(event.routine)
+                }
+            }
+
+            is LibraryEvent.SaveSchedule -> {
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceSchedule(event.schedule)
+                }
+            }
+
         }
     }
 }
