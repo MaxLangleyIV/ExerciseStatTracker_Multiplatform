@@ -38,7 +38,9 @@ import com.langley.exercisestattracker.features.library.presentation.components.
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseLibraryTopBar
 import com.langley.exercisestattracker.features.library.presentation.components.LibraryList
+import com.langley.exercisestattracker.features.library.presentation.components.RoutineDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.RoutineListItem
+import com.langley.exercisestattracker.features.library.presentation.components.ScheduleDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.ScheduleListItem
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
@@ -135,7 +137,7 @@ fun LibraryScreen(
                 isVisible = libraryState.isExerciseDetailsSheetOpen,
                 libraryOnEvent = onEvent,
                 definition =
-                libraryState.selectedExerciseDefinition?: ExerciseDefinition()
+                libraryState.selectedExerciseDefinition ?: ExerciseDefinition()
             )
 
 
@@ -147,6 +149,19 @@ fun LibraryScreen(
                 focusManager = focusManager,
                 interactionSource = interactionSource,
             )
+
+            RoutineDetailsView(
+                isVisible = libraryState.isRoutineDetailsSheetOpen,
+                libraryOnEvent = onEvent,
+                routine = libraryState.selectedRoutine ?: ExerciseRoutine()
+            )
+
+            ScheduleDetailsView(
+                isVisible = libraryState.isScheduleDetailsSheetOpen,
+                libraryOnEvent = onEvent,
+                schedule = libraryState.selectedSchedule ?: ExerciseSchedule()
+            )
+
         }
 
     }
