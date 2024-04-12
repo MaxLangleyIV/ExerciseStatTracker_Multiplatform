@@ -2,6 +2,7 @@ package com.langley.exercisestattracker.features.library
 
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
@@ -39,15 +40,21 @@ class LibraryViewModelTest {
         newExerciseDefinition: ExerciseDefinition = ExerciseDefinition()
     ): LibraryViewModel {
 
+        val dummyData = ExerciseDefinitionDummyData()
+        val dummyRoutineData = ExerciseRoutineDummyData(dummyData.definitionList)
+
         viewModel = viewModelFactory {
 
             LibraryViewModel(
 
                 TestExerciseAppDataSource(
-                    ExerciseDefinitionDummyData().definitionList
+                    dummyDefinitions = dummyData.definitionList,
+                    dummyRoutines = dummyRoutineData.getRoutines(),
+                    dummySchedules = dummyRoutineData.getSchedules(10)
                 ),
                 initialState,
-                newExerciseDefinition
+                newExerciseDefinition,
+                ExerciseRoutine()
             )
         }.createViewModel()
 
@@ -398,7 +405,7 @@ class LibraryViewModelTest {
     }
 
     @Test
-    fun onEvent_ToggleIsFavorite_valueUpdatedInDb() = runTest {
+    fun onEvent_ToggleFavoriteDef_valueUpdatedInDb() = runTest {
         var state = viewModel.state.first()
         val defToFavorite = state.exercises[0]
 
@@ -407,10 +414,42 @@ class LibraryViewModelTest {
         viewModel.onEvent(LibraryEvent.DefinitionSelected(defToFavorite))
         state = viewModel.state.first()
 
-        viewModel.onEvent(LibraryEvent.ToggleIsFavorite(state.selectedExerciseDefinition!!))
+        viewModel.onEvent(LibraryEvent.ToggleFavoriteDef(state.selectedExerciseDefinition!!))
         state = viewModel.state.first()
 
         assertTrue(state.exercises.last().isFavorite)
+    }
+
+    @Test
+    fun onEvent_ToggleFavoriteRoutine_valueUpdatedInDb() = runTest {
+        var state = viewModel.state.first()
+        val routine = state.routines[0]
+
+        assertFalse(routine.isFavorite)
+
+        viewModel.onEvent(LibraryEvent.RoutineSelected(routine))
+        state = viewModel.state.first()
+
+        viewModel.onEvent(LibraryEvent.ToggleFavoriteRoutine(state.selectedRoutine!!))
+        state = viewModel.state.first()
+
+        assertTrue(state.routines.last().isFavorite)
+    }
+
+    @Test
+    fun onEvent_ToggleFavoriteSchedule_valueUpdatedInDb() = runTest {
+        var state = viewModel.state.first()
+        val schedule = state.schedules[0]
+
+        assertFalse(schedule.isFavorite)
+
+        viewModel.onEvent(LibraryEvent.ScheduleSelected(schedule))
+        state = viewModel.state.first()
+
+        viewModel.onEvent(LibraryEvent.ToggleFavoriteSchedule(state.selectedSchedule!!))
+        state = viewModel.state.first()
+
+        assertTrue(state.schedules.last().isFavorite)
     }
 
     @Test
