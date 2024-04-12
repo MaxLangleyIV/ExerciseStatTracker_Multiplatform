@@ -105,7 +105,7 @@ class SqlDelightExerciseAppDataSource(
             exerciseScheduleId = schedule.exerciseScheduleId,
             exerciseScheduleName = schedule.exerciseScheduleName,
             exerciseRoutineCSV = schedule.exerciseRoutineCSV,
-            isFavorite = schedule.isFavorite,
+            isFavorite = if (schedule.isFavorite){ 1 } else{ 0 },
             dateCreated = Clock.System.now().toEpochMilliseconds()
         )
     }
