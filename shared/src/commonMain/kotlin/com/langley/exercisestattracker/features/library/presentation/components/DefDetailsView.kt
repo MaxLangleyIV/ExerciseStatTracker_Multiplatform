@@ -43,20 +43,18 @@ import com.langley.exercisestattracker.features.library.LibraryEvent
 @Composable
 fun DefinitionDetailsView(
     isVisible: Boolean,
-    selectedDefinition: ExerciseDefinition,
+    definition: ExerciseDefinition,
     libraryOnEvent: (LibraryEvent) -> Unit,
 )
 {
     var showMuscles by remember { mutableStateOf(true) }
 
-    val definition by remember(selectedDefinition) { mutableStateOf(selectedDefinition) }
-
-    val primaryTargetList by remember(selectedDefinition) {
-        mutableStateOf(selectedDefinition.bodyRegion.split(", "))
+    val primaryTargetList by remember(definition) {
+        mutableStateOf(definition.bodyRegion.split(", "))
     }
 
-    val musclesList by remember(selectedDefinition) {
-        mutableStateOf(selectedDefinition.targetMuscles.split(", "))
+    val musclesList by remember(definition) {
+        mutableStateOf(definition.targetMuscles.split(", "))
     }
 
 
@@ -86,7 +84,7 @@ fun DefinitionDetailsView(
 
             IconButton(
                 onClick = {
-                    libraryOnEvent(LibraryEvent.ToggleIsFavorite(definition))
+                    libraryOnEvent(LibraryEvent.ToggleFavoriteDef(definition))
                 }
             ) {
                 Icon(
