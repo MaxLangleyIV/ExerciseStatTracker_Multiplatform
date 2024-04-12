@@ -7,6 +7,6 @@ data class ExerciseSchedule(
     val exerciseScheduleId: Long? = null,
     val exerciseScheduleName: String = "",
     val exerciseRoutineCSV: String = "",
-    val isFavorite: Long = 0,
+    val isFavorite: Boolean = false,
     val dateCreated:Long? = null
 )
