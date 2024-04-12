@@ -107,11 +107,15 @@ class LibraryViewModel(
             LibraryEvent.CloseDetailsView -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
-                        isExerciseDetailsSheetOpen = false
+                        isExerciseDetailsSheetOpen = false,
+                        isRoutineDetailsSheetOpen = false,
+                        isScheduleDetailsSheetOpen = false
                     ) }
                     delay(300L) //BottomSheet animation delay
                     _state.update { it.copy(
-                        selectedExerciseDefinition = null
+                        selectedExerciseDefinition = null,
+                        selectedRoutine = null,
+                        selectedSchedule = null
                     ) }
                 }
             }
