@@ -47,6 +47,7 @@ fun database.ExerciseSchedule.toExerciseSchedule():
     return ExerciseSchedule(
         exerciseScheduleId = exerciseScheduleId,
         exerciseScheduleName = exerciseScheduleName,
+        description = description,
         exerciseRoutineCSV = exerciseRoutineCSV,
         isFavorite = isFavorite.toInt() == 1,
         dateCreated = dateCreated
