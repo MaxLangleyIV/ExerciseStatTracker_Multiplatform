@@ -9,9 +9,12 @@ import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -229,29 +232,56 @@ class LibraryViewModelTest {
             "isScheduleDetailsSheetOpen failed to be set true after selection.")
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun onEvent_closeExerciseDetailsViewCalled_ExerciseDetailsSheetOpenIsFalse() = runTest {
+    fun onEvent_closeDetailsViewCalled_AllDetailsSheetOpenFlagsAreFalse_allSelectedValNull() = runTest {
         //Select a definition to open details view.
         setupViewModel(
             LibraryState(
-                isExerciseDetailsSheetOpen = true
+                isExerciseDetailsSheetOpen = true,
+                isRoutineDetailsSheetOpen = true,
+                isScheduleDetailsSheetOpen = true,
+                selectedExerciseDefinition = ExerciseDefinition(),
+                selectedSchedule = ExerciseSchedule(),
+                selectedRoutine = ExerciseRoutine()
             )
-        )
-
-        var state = viewModel.state.first()
-
-        assertTrue(state.isExerciseDetailsSheetOpen,
-            "ViewModel failed to initialize correctly, " +
-                    "isExerciseDetailsSheetOpen should be true but was false."
         )
 
         viewModel.onEvent(LibraryEvent.CloseDetailsView)
 
-        state = viewModel.state.first()
+        delay(300L)
 
-        assertFalse(state.isExerciseDetailsSheetOpen,
-            "isExerciseDetailsSheetOpen failed to be set false " +
+        val state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.isExerciseDetailsSheetOpen,
+            message = "isExerciseDetailsSheetOpen failed to be set false " +
                     "after CloseDetailsView."
+        )
+        assertFalse(
+            state.isRoutineDetailsSheetOpen,
+            "isRoutineDetailsSheetOpen failed to be set false " +
+                    "after CloseDetailsView."
+        )
+        assertFalse(
+            actual = state.isScheduleDetailsSheetOpen,
+            message = "isScheduleDetailsSheetOpen failed to be set false " +
+                    "after CloseDetailsView."
+        )
+
+        advanceUntilIdle()
+
+        assertNull(
+            actual = state.selectedExerciseDefinition,
+            message = "selectedDefinition is not null after event"
+        )
+        assertNull(
+            actual = state.selectedRoutine,
+            message = "selectedRoutine is not null after event"
+        )
+        assertNull(
+            actual = state.selectedSchedule,
+            message = "selectedSchedule is not null after event"
         )
     }
 
