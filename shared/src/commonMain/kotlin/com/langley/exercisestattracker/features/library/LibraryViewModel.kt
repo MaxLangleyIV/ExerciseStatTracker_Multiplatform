@@ -21,7 +21,9 @@ class LibraryViewModel(
 
     private val exerciseAppDataSource: ExerciseAppDataSource,
     initialState: LibraryState = LibraryState(),
-    initialExerciseDef: ExerciseDefinition = ExerciseDefinition()
+    initialExerciseDef: ExerciseDefinition = ExerciseDefinition(),
+    initialRoutine: ExerciseRoutine = ExerciseRoutine(),
+    initialSchedule: ExerciseSchedule = ExerciseSchedule(),
 ): ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
@@ -39,6 +41,10 @@ class LibraryViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), LibraryState())
 
     var definitionForBuilder: ExerciseDefinition by mutableStateOf(initialExerciseDef)
+        private set
+    var routineForBuilder: ExerciseRoutine by mutableStateOf(initialRoutine)
+        private set
+    var scheduleForBuilder: ExerciseSchedule by mutableStateOf(initialSchedule)
         private set
 
 
@@ -182,7 +188,7 @@ class LibraryViewModel(
                 }
             }
 
-            is LibraryEvent.ToggleIsFavorite -> {
+            is LibraryEvent.ToggleFavoriteDef -> {
                 definitionForBuilder = _state.value.selectedExerciseDefinition!!.copy(
                     isFavorite = !_state.value.selectedExerciseDefinition!!.isFavorite
                 )
@@ -193,6 +199,30 @@ class LibraryViewModel(
                     exerciseAppDataSource.insertOrReplaceDefinition(definitionForBuilder)
                 }
 
+            }
+
+            is LibraryEvent.ToggleFavoriteRoutine -> {
+                routineForBuilder = _state.value.selectedRoutine!!.copy(
+                    isFavorite = !_state.value.selectedRoutine!!.isFavorite
+                )
+                _state.update { it.copy(
+                    selectedRoutine = routineForBuilder
+                ) }
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceRoutine(routineForBuilder)
+                }
+            }
+
+            is LibraryEvent.ToggleFavoriteSchedule -> {
+                scheduleForBuilder = _state.value.selectedSchedule!!.copy(
+                    isFavorite = !_state.value.selectedSchedule!!.isFavorite
+                )
+                _state.update { it.copy(
+                    selectedSchedule = scheduleForBuilder
+                ) }
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceSchedule(scheduleForBuilder)
+                }
             }
 
             LibraryEvent.ClearSelectedDef -> {
