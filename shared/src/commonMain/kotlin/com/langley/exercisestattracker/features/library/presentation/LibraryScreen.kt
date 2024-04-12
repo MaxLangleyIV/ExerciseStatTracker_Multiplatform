@@ -37,6 +37,7 @@ import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.presentation.components.DefinitionDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.library.presentation.components.ExerciseLibraryTopBar
+import com.langley.exercisestattracker.features.library.presentation.components.LibraryList
 import com.langley.exercisestattracker.features.library.presentation.components.RoutineListItem
 import com.langley.exercisestattracker.features.library.presentation.components.ScheduleListItem
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
@@ -103,106 +104,37 @@ fun LibraryScreen(
 
                 // Exercise List
                 if (libraryState.isShowingExercises){
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 4.dp, vertical = 4.dp)
-                            .background(MaterialTheme.colorScheme.background),
-                        contentPadding = PaddingValues(vertical = 8.dp),
-                    ){
-                        items(
-                            items = libraryState.exercises,
-                            key = {item: ExerciseDefinition ->  item.exerciseDefinitionId!!}
-                        )
-                        { exerciseDefinition: ExerciseDefinition ->
-                            ExerciseDefinitionListItem(
-                                exerciseDefinition,
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .padding(8.dp)
-                                    .focusable(true)
-                                    .clickable {
-                                        focusManager.clearFocus()
-                                        onEvent(
-                                            LibraryEvent.DefinitionSelected(exerciseDefinition)
-                                        )
-                                    },
-                            )
-                        }
-                    }
+                    LibraryList(
+                        exercises = libraryState.exercises,
+                        onEvent = onEvent,
+                        focusManager = focusManager,
+                        columns = GridCells.Fixed(2)
+                    )
                 }
 
                 // Routine List
                 if (libraryState.isShowingRoutines){
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(1),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 4.dp, vertical = 4.dp)
-                            .background(MaterialTheme.colorScheme.background),
-                        contentPadding = PaddingValues(vertical = 8.dp),
-                    ){
-                        items(
-                            items = libraryState.routines,
-                            key = {item: ExerciseRoutine ->  item.exerciseRoutineId!!}
-                        )
-                        { routine: ExerciseRoutine ->
-                            RoutineListItem(
-                                routine,
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .padding(8.dp)
-                                    .focusable(true)
-                                    .clickable {
-                                        focusManager.clearFocus()
-                                        onEvent(
-                                            LibraryEvent.RoutineSelected(routine)
-                                        )
-                                    },
-                            )
-                        }
-                    }
+                    LibraryList(
+                        routines = libraryState.routines,
+                        onEvent = onEvent,
+                        focusManager = focusManager
+                    )
                 }
 
                 // Schedule List
                 if (libraryState.isShowingSchedules){
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(1),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 4.dp, vertical = 4.dp)
-                            .background(MaterialTheme.colorScheme.background),
-                        contentPadding = PaddingValues(vertical = 8.dp),
-                    ){
-                        items(
-                            items = libraryState.schedules,
-                            key = {item: ExerciseSchedule ->  item.exerciseScheduleId!!}
-                        )
-                        { schedule: ExerciseSchedule ->
-                            println("SCHEDULE: $schedule")
-                            ScheduleListItem(
-                                schedule,
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .padding(8.dp)
-                                    .focusable(true)
-                                    .clickable {
-                                        focusManager.clearFocus()
-                                        onEvent(
-                                            LibraryEvent.ScheduleSelected(schedule)
-                                        )
-                                    },
-                            )
-                        }
-                    }
+                    LibraryList(
+                        schedules = libraryState.schedules,
+                        onEvent = onEvent,
+                        focusManager = focusManager
+                    )
                 }
             }
 
             DefinitionDetailsView(
                 isVisible = libraryState.isExerciseDetailsSheetOpen,
                 libraryOnEvent = onEvent,
-                selectedDefinition =
+                definition =
                 libraryState.selectedExerciseDefinition?: ExerciseDefinition()
             )
 
