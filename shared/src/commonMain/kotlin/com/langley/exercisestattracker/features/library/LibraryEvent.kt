@@ -26,7 +26,9 @@ sealed interface LibraryEvent {
 
     // Details View Events
     data class EditDefinition(val exerciseDefinition: ExerciseDefinition) : LibraryEvent
-    data class ToggleIsFavorite(val selectedExerciseDefinition: ExerciseDefinition): LibraryEvent
+    data class ToggleFavoriteDef(val definition: ExerciseDefinition): LibraryEvent
+    data class ToggleFavoriteRoutine(val routine: ExerciseRoutine): LibraryEvent
+    data class ToggleFavoriteSchedule(val schedule: ExerciseSchedule): LibraryEvent
     data object CloseDetailsView : LibraryEvent
 
 
