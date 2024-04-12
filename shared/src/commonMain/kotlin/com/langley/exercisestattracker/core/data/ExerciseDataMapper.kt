@@ -48,7 +48,7 @@ fun database.ExerciseSchedule.toExerciseSchedule():
         exerciseScheduleId = exerciseScheduleId,
         exerciseScheduleName = exerciseScheduleName,
         exerciseRoutineCSV = exerciseRoutineCSV,
-        isFavorite = isFavorite,
+        isFavorite = isFavorite.toInt() == 1,
         dateCreated = dateCreated
     )
 }
@@ -109,6 +109,41 @@ fun ExerciseRoutine.getExercisesFromCSV(
 
                 if (defId == id){
                     mutableList.add(def)
+                }
+            }
+        }
+
+    }
+
+    return mutableList
+
+}
+
+fun ExerciseSchedule.getRoutinesFromCSV(
+    allRoutinesAvailable: List<ExerciseRoutine>
+): List<ExerciseRoutine> {
+
+    val mutableList = mutableListOf<ExerciseRoutine>()
+
+    val csvAsList = this.exerciseRoutineCSV.split(",")
+
+    for (routineId in csvAsList){
+
+        val id: Int? =
+            try {
+                routineId.toInt()
+            } catch (nfe: NumberFormatException){
+                null
+            }
+
+
+        if (id != null){
+
+            for (routine in allRoutinesAvailable){
+                val defId = routine.exerciseRoutineId?.toInt() ?: -1
+
+                if (defId == id){
+                    mutableList.add(routine)
                 }
             }
         }
