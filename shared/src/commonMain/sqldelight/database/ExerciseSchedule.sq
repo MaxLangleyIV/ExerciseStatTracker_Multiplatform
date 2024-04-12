@@ -1,6 +1,7 @@
 CREATE TABLE ExerciseSchedule (
     exerciseScheduleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     exerciseScheduleName TEXT NOT NULL,
+    description TEXT NOT NULL,
     exerciseRoutineCSV TEXT NOT NULL,
     isFavorite INTEGER NOT NULL,
     dateCreated INTEGER NOT NULL
@@ -12,22 +13,19 @@ SELECT *
 FROM ExerciseSchedule
 ORDER BY exerciseScheduleName;
 
-getExerciseScheduleById:
-SELECT *
-FROM ExerciseSchedule
-WHERE exerciseScheduleId = :givenExerciseScheduleId;
-
 insertOrReplaceExerciseSchedule:
 INSERT OR REPLACE
 INTO ExerciseSchedule(
     exerciseScheduleId,
     exerciseScheduleName,
+    description,
     exerciseRoutineCSV,
     isFavorite,
     dateCreated
 
 )
 VALUES (
+    ?,
     ?,
     ?,
     ?,
