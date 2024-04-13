@@ -19,9 +19,9 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.library.LibraryEvent
-import com.langley.exercisestattracker.features.library.presentation.components.exercises.ExerciseDefinitionListItem
-import com.langley.exercisestattracker.features.library.presentation.components.routines.RoutineListItem
-import com.langley.exercisestattracker.features.library.presentation.components.schedules.ScheduleListItem
+import com.langley.exercisestattracker.features.library.exercises.ExerciseDefinitionListItem
+import com.langley.exercisestattracker.features.library.routines.views.RoutineListItem
+import com.langley.exercisestattracker.features.library.schedules.ScheduleListItem
 
 @Composable
 fun LibraryList(
