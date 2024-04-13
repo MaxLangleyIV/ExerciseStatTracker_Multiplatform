@@ -1,26 +1,20 @@
 package com.langley.exercisestattracker.features.library.presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,14 +28,11 @@ import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
-import com.langley.exercisestattracker.features.library.presentation.components.DefinitionDetailsView
-import com.langley.exercisestattracker.features.library.presentation.components.ExerciseDefinitionListItem
-import com.langley.exercisestattracker.features.library.presentation.components.ExerciseLibraryTopBar
+import com.langley.exercisestattracker.features.library.presentation.components.exercises.DefinitionDetailsView
+import com.langley.exercisestattracker.features.library.presentation.components.libraryTopBar
 import com.langley.exercisestattracker.features.library.presentation.components.LibraryList
-import com.langley.exercisestattracker.features.library.presentation.components.RoutineDetailsView
-import com.langley.exercisestattracker.features.library.presentation.components.RoutineListItem
-import com.langley.exercisestattracker.features.library.presentation.components.ScheduleDetailsView
-import com.langley.exercisestattracker.features.library.presentation.components.ScheduleListItem
+import com.langley.exercisestattracker.features.library.presentation.components.routines.RoutineDetailsView
+import com.langley.exercisestattracker.features.library.presentation.components.schedules.ScheduleDetailsView
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
 @Composable
@@ -93,7 +84,7 @@ fun LibraryScreen(
                         interactionSource = interactionSource
                     ) { focusManager.clearFocus() },
             ){
-                ExerciseLibraryTopBar(
+                libraryTopBar(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(IntrinsicSize.Min)
