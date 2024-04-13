@@ -28,11 +28,12 @@ import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.exerciseBuilder.presentation.ExerciseBuilderScreen
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
-import com.langley.exercisestattracker.features.library.presentation.components.exercises.DefinitionDetailsView
+import com.langley.exercisestattracker.features.library.exercises.DefinitionDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.libraryTopBar
 import com.langley.exercisestattracker.features.library.presentation.components.LibraryList
-import com.langley.exercisestattracker.features.library.presentation.components.routines.RoutineDetailsView
-import com.langley.exercisestattracker.features.library.presentation.components.schedules.ScheduleDetailsView
+import com.langley.exercisestattracker.features.library.routines.views.RoutineDetailsView
+import com.langley.exercisestattracker.features.library.routines.views.RoutineEditView
+import com.langley.exercisestattracker.features.library.schedules.ScheduleDetailsView
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
 @Composable
@@ -145,6 +146,14 @@ fun LibraryScreen(
                 isVisible = libraryState.isRoutineDetailsSheetOpen,
                 libraryOnEvent = onEvent,
                 routine = libraryState.selectedRoutine ?: ExerciseRoutine()
+            )
+
+            RoutineEditView(
+                visible = libraryState.isEditRoutineSheetOpen,
+                dataSource = dataSource,
+                onEvent = onEvent,
+                focusManager = focusManager,
+                interactionSource = interactionSource
             )
 
             ScheduleDetailsView(
