@@ -47,7 +47,7 @@ import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheetNoScroll
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
-import com.langley.exercisestattracker.features.library.presentation.components.exercises.ExerciseDefinitionListItem
+import com.langley.exercisestattracker.features.library.exercises.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 
 @Composable
