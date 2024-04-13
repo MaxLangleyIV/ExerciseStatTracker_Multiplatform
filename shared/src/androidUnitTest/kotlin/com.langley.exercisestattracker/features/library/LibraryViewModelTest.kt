@@ -13,7 +13,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -235,7 +234,7 @@ class LibraryViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun onEvent_closeDetailsViewCalled_AllDetailsSheetOpenFlagsAreFalse_allSelectedValNull() = runTest {
-        //Select a definition to open details view.
+
         setupViewModel(
             LibraryState(
                 isExerciseDetailsSheetOpen = true,
@@ -285,6 +284,56 @@ class LibraryViewModelTest {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun onEvent_closeEditViewCalled_AllEditSheetOpenFlagsAreFalse_allSelectedValNull() = runTest {
+
+        setupViewModel(
+            LibraryState(
+                isEditExerciseDefSheetOpen = true,
+                isEditRoutineSheetOpen = true,
+                isEditScheduleSheetOpen = true,
+                selectedExerciseDefinition = ExerciseDefinition(),
+                selectedSchedule = ExerciseSchedule(),
+                selectedRoutine = ExerciseRoutine()
+            )
+        )
+
+        viewModel.onEvent(LibraryEvent.CloseEditView)
+
+        delay(300L)
+
+        val state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.isEditExerciseDefSheetOpen,
+            message = "isEditExerciseDefSheetOpen failed to be set false "
+        )
+        assertFalse(
+            state.isEditRoutineSheetOpen,
+            "isEditRoutineSheetOpen failed to be set false "
+        )
+        assertFalse(
+            actual = state.isEditScheduleSheetOpen,
+            message = "isEditScheduleSheetOpen failed to be set false "
+        )
+
+        advanceUntilIdle()
+
+        assertNull(
+            actual = state.selectedExerciseDefinition,
+            message = "selectedDefinition is not null after event"
+        )
+        assertNull(
+            actual = state.selectedRoutine,
+            message = "selectedRoutine is not null after event"
+        )
+        assertNull(
+            actual = state.selectedSchedule,
+            message = "selectedSchedule is not null after event"
+        )
+    }
+
     @Test
     fun onEvent_EditExerciseDefinition_stateProperlyUpdated() = runTest {
         val selectedDef = viewModel.state.first().exercises[0]
@@ -308,6 +357,19 @@ class LibraryViewModelTest {
             "Selected Def in state: ${state.selectedExerciseDefinition} " +
                     "does not equal selected def: $selectedDef"
         )
+    }
+
+    @Test
+    fun onEvent_EditRoutine_stateProperlyUpdated() = runTest {
+
+        viewModel.onEvent(LibraryEvent.EditRoutine)
+
+        val state = viewModel.state.first()
+
+        assertTrue(state.isEditRoutineSheetOpen,
+            "isEditRoutineSheetOpen is false after EditDefinition event."
+        )
+
     }
 
 
