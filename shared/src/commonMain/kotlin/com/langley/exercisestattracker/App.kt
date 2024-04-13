@@ -64,10 +64,7 @@ fun App(
         // View Models and States
         val libraryViewModel = getViewModel(
             key = "libraryViewModel",
-            factory = viewModelFactory { LibraryViewModel(
-                appModule.exerciseAppDataSource,
-                initialRoutine = ExerciseRoutine()
-            ) }
+            factory = viewModelFactory { LibraryViewModel(appModule.exerciseAppDataSource) }
         )
         val libraryState by libraryViewModel.state.collectAsState(LibraryState())
 
