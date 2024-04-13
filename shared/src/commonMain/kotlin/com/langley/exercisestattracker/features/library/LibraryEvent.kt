@@ -26,10 +26,15 @@ sealed interface LibraryEvent {
 
     // Details View Events
     data class EditDefinition(val exerciseDefinition: ExerciseDefinition) : LibraryEvent
+    data object EditRoutine : LibraryEvent
+    data object EditSchedule : LibraryEvent
     data class ToggleFavoriteDef(val definition: ExerciseDefinition): LibraryEvent
     data class ToggleFavoriteRoutine(val routine: ExerciseRoutine): LibraryEvent
     data class ToggleFavoriteSchedule(val schedule: ExerciseSchedule): LibraryEvent
     data object CloseDetailsView : LibraryEvent
+
+    // Edit View Events
+    data object CloseEditView : LibraryEvent
 
 
     // For initializing dummy data.
