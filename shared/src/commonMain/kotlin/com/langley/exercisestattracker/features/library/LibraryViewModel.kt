@@ -120,12 +120,36 @@ class LibraryViewModel(
                 }
             }
 
+            LibraryEvent.CloseEditView -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        isEditExerciseDefSheetOpen = false,
+                        isEditRoutineSheetOpen = false,
+                        isEditScheduleSheetOpen = false
+                    ) }
+                    delay(300L) //BottomSheet animation delay
+                    _state.update { it.copy(
+                        selectedExerciseDefinition = null,
+                        selectedRoutine = null,
+                        selectedSchedule = null
+                    ) }
+                }
+            }
+
             is LibraryEvent.EditDefinition -> {
                 _state.update { it.copy(
                     isAddExerciseDefSheetOpen = true,
                 ) }
                 definitionForBuilder = _state.value.selectedExerciseDefinition!!.copy()
             }
+
+            LibraryEvent.EditRoutine -> {
+                _state.update { it.copy(
+                    isEditRoutineSheetOpen = true,
+                ) }
+            }
+
+            LibraryEvent.EditSchedule -> {}
 
             LibraryEvent.AddNewDefClicked -> {
                 _state.update { it.copy(
@@ -285,6 +309,7 @@ class LibraryViewModel(
                     exerciseAppDataSource.insertOrReplaceSchedule(event.schedule)
                 }
             }
+
 
         }
     }
