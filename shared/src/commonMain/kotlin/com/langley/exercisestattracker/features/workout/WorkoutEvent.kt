@@ -2,6 +2,7 @@ package com.langley.exercisestattracker.features.workout
 
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 
 sealed interface WorkoutEvent {
@@ -24,9 +25,13 @@ sealed interface WorkoutEvent {
 
     // Exercise Selector Events
     data class DefinitionSelected(val exerciseDefinition: ExerciseDefinition) : WorkoutEvent
-    data class AddToListOfExercises(val exercises: List<ExerciseDefinition>) : WorkoutEvent
+    data class RoutineSelected(val routine: ExerciseRoutine) : WorkoutEvent
+    data class AddToExercisesWithDefaultSet(val exercises: List<ExerciseDefinition>) : WorkoutEvent
     data class OnSearchStringChanged(val string: String) : WorkoutEvent
     data class SetCurrentFilterType(val filter: ExerciseLibraryFilterType) : WorkoutEvent
+    data class AddRoutine(val routine: ExerciseRoutine) : WorkoutEvent
+
+
     data object ClearFilterType : WorkoutEvent
 
 }
