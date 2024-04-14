@@ -158,6 +158,7 @@ fun App(
 
                     WorkoutScreen(
                         visible = currentScreen == Screen.Workout,
+                        dataSource = appModule.exerciseAppDataSource,
                         workoutState = workoutState,
                         onEvent = workoutViewModel::onEvent,
                         focusRequester = focusRequester,
