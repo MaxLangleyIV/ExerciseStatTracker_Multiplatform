@@ -28,7 +28,6 @@ import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import com.langley.exercisestattracker.features.workout.presentation.components.TopBar
 import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutContentHolder
-import com.langley.exercisestattracker.features.workout.subfeature.exerciseSelector.ExerciseSelectorView
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
 @Composable
@@ -120,7 +119,7 @@ fun WorkoutScreen(
                 searchString = workoutState.searchString,
                 searchFilterType = workoutState.searchFilter,
                 selectedExercises = workoutState.selectedExercises,
-                onEvent = onEvent,
+                workoutEvent = onEvent,
                 focusManager = focusManager,
                 focusRequester = focusRequester,
                 interactionSource = interactionSource,
