@@ -54,13 +54,13 @@ fun RecordsTopBar(
                 .align(Alignment.CenterStart)
                 .padding(12.dp)
         ) {
-            IconButton(onClick = { navController.navigateBack() }){
-                Icon(
-                    modifier = Modifier.size(200.dp),
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back Button"
-                )
-            }
+//            IconButton(onClick = { navController.navigateBack() }){
+//                Icon(
+//                    modifier = Modifier.size(200.dp),
+//                    imageVector = Icons.Default.ArrowBack,
+//                    contentDescription = "Back Button"
+//                )
+//            }
             Box {
                 IconButton(onClick = { dropdownExpanded = true }) {
                     Icon(
