@@ -56,7 +56,7 @@ fun EmptyWorkoutContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1F),
-                text = "Add an exercise.",
+                text = "Add Exercise",
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Center,
             )
@@ -80,7 +80,7 @@ fun EmptyWorkoutContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1F),
-                text = "Select a routine.",
+                text = "Select Routine",
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 textAlign = TextAlign.Center,
             )
