@@ -20,8 +20,11 @@ import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.exercises.ExerciseDefinitionListItem
+import com.langley.exercisestattracker.features.library.routines.RoutineBuilderEvent
 import com.langley.exercisestattracker.features.library.routines.views.RoutineListItem
+import com.langley.exercisestattracker.features.library.schedules.ScheduleBuilderEvent
 import com.langley.exercisestattracker.features.library.schedules.ScheduleListItem
+import com.langley.exercisestattracker.features.workout.WorkoutEvent
 
 @Composable
 fun LibraryList(
@@ -29,7 +32,9 @@ fun LibraryList(
     exercises: List<ExerciseDefinition>? = null,
     routines: List<ExerciseRoutine>? = null,
     schedules: List<ExerciseSchedule>? = null,
-    onEvent: (LibraryEvent) -> Unit,
+    exerciseOnClick: (ExerciseDefinition) -> Unit = {},
+    routineOnClick: (ExerciseRoutine) -> Unit = {},
+    scheduleOnClick: (ExerciseSchedule) -> Unit = {},
     focusManager: FocusManager,
     columns: GridCells = GridCells.Fixed(1)
 ){
@@ -58,9 +63,7 @@ fun LibraryList(
                         .focusable(true)
                         .clickable {
                             focusManager.clearFocus()
-                            onEvent(
-                                LibraryEvent.DefinitionSelected(exerciseDefinition)
-                            )
+                            exerciseOnClick(exerciseDefinition)
                         },
                 )
             }
@@ -82,9 +85,7 @@ fun LibraryList(
                         .focusable(true)
                         .clickable {
                             focusManager.clearFocus()
-                            onEvent(
-                                LibraryEvent.RoutineSelected(routine)
-                            )
+                            routineOnClick(routine)
                         },
                 )
             }
@@ -106,9 +107,7 @@ fun LibraryList(
                         .focusable(true)
                         .clickable {
                             focusManager.clearFocus()
-                            onEvent(
-                                LibraryEvent.ScheduleSelected(schedule)
-                            )
+                            scheduleOnClick(schedule)
                         },
                 )
             }
