@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.features.library.selector.SelectorView
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import com.langley.exercisestattracker.features.workout.presentation.components.TopBar
@@ -36,6 +37,7 @@ fun WorkoutScreen(
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.background)
         .padding(8.dp),
+    dataSource: ExerciseAppDataSource,
     workoutState: WorkoutState = WorkoutState(),
     onEvent: (WorkoutEvent) -> Unit,
     focusRequester: FocusRequester,
@@ -62,13 +64,13 @@ fun WorkoutScreen(
 
                 // Top Bar
                 TopBar(
-                    modifier = Modifier.weight(0.1F),
+                    modifier = Modifier.weight(0.05F),
                     navController = navController,
                     workoutState = workoutState,
                     onEvent = onEvent
                 )
 
-                Spacer(Modifier.height(8.dp))
+//                Spacer(Modifier.height(4.dp))
 
                 // Content
                 WorkoutContentHolder(
@@ -113,12 +115,9 @@ fun WorkoutScreen(
             }
 
             // Exercise Selector
-            ExerciseSelectorView(
+            SelectorView(
                 modifier = Modifier.fillMaxSize(),
-                exerciseList = workoutState.exerciseLibrary,
-                searchString = workoutState.searchString,
-                searchFilterType = workoutState.searchFilter,
-                selectedExercises = workoutState.selectedExercises,
+                dataSource = dataSource,
                 workoutEvent = onEvent,
                 focusManager = focusManager,
                 focusRequester = focusRequester,
