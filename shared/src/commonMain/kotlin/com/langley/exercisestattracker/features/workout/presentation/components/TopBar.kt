@@ -38,21 +38,21 @@ fun TopBar(
         modifier = modifier
     ) {
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ){
-            IconButton(
-                onClick = {
-                    navController.navigateBack()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBackIos,
-                    contentDescription = "Close"
-                )
-            }
-        }
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.Start
+//        ){
+//            IconButton(
+//                onClick = {
+//                    navController.navigateBack()
+//                }
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.ArrowBackIos,
+//                    contentDescription = "Close"
+//                )
+//            }
+//        }
         // Routine Name
         Row(
             modifier = Modifier
