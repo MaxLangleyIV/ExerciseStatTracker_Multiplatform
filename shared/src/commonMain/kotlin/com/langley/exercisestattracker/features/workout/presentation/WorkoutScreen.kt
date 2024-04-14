@@ -116,13 +116,19 @@ fun WorkoutScreen(
 
             // Exercise Selector
             SelectorView(
+                visible = workoutState.exerciseSelectorVisible,
                 modifier = Modifier.fillMaxSize(),
                 dataSource = dataSource,
-                workoutEvent = onEvent,
+                onAddExercises = { exercises ->
+                    onEvent(WorkoutEvent.AddToExercisesWithDefaultSet(exercises))
+                },
+                onAddRoutine = { routine ->
+                    if (routine != null){ onEvent(WorkoutEvent.AddRoutine(routine)) }
+                },
+                onClose = {onEvent(WorkoutEvent.CloseExerciseSelector)},
                 focusManager = focusManager,
                 focusRequester = focusRequester,
                 interactionSource = interactionSource,
-                visible = workoutState.exerciseSelectorVisible
             )
 
         }
