@@ -124,7 +124,7 @@ fun WorkoutContent(
                                     }
                                 }
                             ){
-                                Text( text = "Add another set." )
+                                Text( text = "Add Set" )
                             }
                         }
 
@@ -140,7 +140,7 @@ fun WorkoutContent(
                     )
                 }
             ){
-                Text( text = "Add a new exercise." )
+                Text( text = "Add New Exercise" )
             }
         }
 
