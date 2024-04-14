@@ -4,7 +4,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.langley.exercisestattracker.core.data.getExercisesFromCSV
 import com.langley.exercisestattracker.core.data.getWorkoutStateFromString
+import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -13,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -34,13 +37,20 @@ class WorkoutViewModel(
 
     private val _state = MutableStateFlow(initialState)
 
-    val state = _state
-        .asStateFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = WorkoutState()
+    val state = combine(
+        _state,
+        dataSource.getDefinitions()
+    ){
+        currentState, definitions ->
+        currentState.copy(
+            exerciseLibrary = definitions
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = WorkoutState()
+    )
+
 
     init {
         if (initialState == WorkoutState()){
@@ -209,20 +219,23 @@ class WorkoutViewModel(
 
             }
 
-            is WorkoutEvent.AddToListOfExercises -> {
+            is WorkoutEvent.AddToExercisesWithDefaultSet -> {
 
-                val mutableList = _state.value.exerciseList.toMutableList()
+                val definitions = _state.value.exerciseList.toMutableList()
+                val records = _state.value.recordsList.toMutableList()
 
                 for (def in workoutEvent.exercises){
 
-                    mutableList.add(def)
+                    if (!definitions.contains(def)){
+                        definitions.add(def)
+                        records.add(def.toBlankRecord().copy(completed = false))
+                    }
 
                 }
 
-                mutableList.toSet().toList()
-
                 _state.update { it.copy(
-                    exerciseList = mutableList
+                    exerciseList = definitions,
+                    recordsList = records
                 ) }
 
                 saveWorkoutState()
@@ -390,6 +403,18 @@ class WorkoutViewModel(
 
             WorkoutEvent.CancelWorkout -> {
                 clearWorkoutState()
+            }
+
+            is WorkoutEvent.RoutineSelected -> {}
+
+            is WorkoutEvent.AddRoutine -> {
+                val exercises = _state.value.exerciseList.toMutableList()
+                val records = _state.value.exerciseList.toMutableList()
+
+                val newExercises = workoutEvent.routine.getExercisesFromCSV(
+                    _state.value.exerciseLibrary
+                )
+
             }
         }
 
