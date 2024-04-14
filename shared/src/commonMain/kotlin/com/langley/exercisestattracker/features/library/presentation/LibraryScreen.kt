@@ -151,6 +151,7 @@ fun LibraryScreen(
             RoutineEditView(
                 visible = libraryState.isEditRoutineSheetOpen,
                 dataSource = dataSource,
+                routine = libraryState.selectedRoutine ?: ExerciseRoutine(),
                 onEvent = onEvent,
                 focusManager = focusManager,
                 interactionSource = interactionSource
