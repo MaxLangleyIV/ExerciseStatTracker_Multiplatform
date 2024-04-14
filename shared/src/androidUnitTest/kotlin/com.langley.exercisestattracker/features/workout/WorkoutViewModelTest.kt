@@ -8,6 +8,7 @@ import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDum
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -324,7 +325,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should not already contain testDef0"
         )
 
-        viewModel.onEvent(WorkoutEvent.AddToListOfExercises(listOf(testDef0)))
+        viewModel.onEvent(WorkoutEvent.AddToExercisesWithDefaultSet(listOf(testDef0)))
 
         state = viewModel.state.first()
 
@@ -348,7 +349,7 @@ class WorkoutViewModelTest {
         }
 
         viewModel.onEvent(
-            WorkoutEvent.AddToListOfExercises(listToAdd)
+            WorkoutEvent.AddToExercisesWithDefaultSet(listToAdd)
         )
 
         state = viewModel.state.first()
@@ -749,6 +750,31 @@ class WorkoutViewModelTest {
             actual = state.recordsList[0].weightUsed,
             message = "recordsList[0].weightUsed should equal 0 when input is an empty string"
         )
+
+    }
+
+    @Test
+    fun onEvent_addRoutine_routineSet_exercisesAndRecordsUpdated() = runTest {
+
+        val routine = ExerciseRoutine(
+            exerciseRoutineId = 0,
+            exerciseCSV = "0,0,0,1,1,1,2,2,2",
+            repsCSV = "5,5,5,5,5,5,5,5,5"
+            )
+
+        viewModel.onEvent(WorkoutEvent.AddRoutine(routine))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = routine,
+            actual = state.routine,
+            message = "${state.routine} in state doesn't equal test routine"
+        )
+
+//        assertTrue(
+//            actual = state.exerciseList.contains()
+//        )
 
     }
 
