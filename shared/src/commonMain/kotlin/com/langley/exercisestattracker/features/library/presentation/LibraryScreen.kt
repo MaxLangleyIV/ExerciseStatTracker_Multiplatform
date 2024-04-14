@@ -100,7 +100,7 @@ fun LibraryScreen(
                 if (libraryState.isShowingExercises){
                     LibraryList(
                         exercises = libraryState.exercises,
-                        onEvent = onEvent,
+                        exerciseOnClick = { onEvent( LibraryEvent.DefinitionSelected(it) ) },
                         focusManager = focusManager,
                         columns = GridCells.Fixed(2)
                     )
@@ -110,7 +110,7 @@ fun LibraryScreen(
                 if (libraryState.isShowingRoutines){
                     LibraryList(
                         routines = libraryState.routines,
-                        onEvent = onEvent,
+                        routineOnClick = { onEvent( LibraryEvent.RoutineSelected(it) ) },
                         focusManager = focusManager
                     )
                 }
@@ -119,7 +119,7 @@ fun LibraryScreen(
                 if (libraryState.isShowingSchedules){
                     LibraryList(
                         schedules = libraryState.schedules,
-                        onEvent = onEvent,
+                        scheduleOnClick = { onEvent( LibraryEvent.ScheduleSelected(it) ) },
                         focusManager = focusManager
                     )
                 }
