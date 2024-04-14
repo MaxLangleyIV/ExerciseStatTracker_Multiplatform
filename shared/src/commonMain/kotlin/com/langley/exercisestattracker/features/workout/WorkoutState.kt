@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WorkoutState(
 
-    val routine: ExerciseRoutine = ExerciseRoutine(),
+    val routine: ExerciseRoutine? = null,
 
     val exerciseList: List<ExerciseDefinition> = listOf(),
 
