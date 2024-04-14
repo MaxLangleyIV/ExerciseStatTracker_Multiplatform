@@ -127,12 +127,6 @@ class LibraryViewModel(
                         isEditRoutineSheetOpen = false,
                         isEditScheduleSheetOpen = false
                     ) }
-                    delay(300L) //BottomSheet animation delay
-                    _state.update { it.copy(
-                        selectedExerciseDefinition = null,
-                        selectedRoutine = null,
-                        selectedSchedule = null
-                    ) }
                 }
             }
 
