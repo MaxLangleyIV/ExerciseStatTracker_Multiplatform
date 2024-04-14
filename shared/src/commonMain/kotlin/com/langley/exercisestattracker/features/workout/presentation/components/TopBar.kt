@@ -66,9 +66,8 @@ fun TopBar(
         ){
 
             Text(
-                text = workoutState.routine.routineName.ifBlank {
-                    "New Workout"
-                } + " - " + Clock.System.todayIn(TimeZone.currentSystemDefault())
+                text = workoutState.routine?.routineName
+                    ?: ("New Workout - " + Clock.System.todayIn(TimeZone.currentSystemDefault()))
             )
 
         }
