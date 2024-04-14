@@ -32,9 +32,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -44,18 +41,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheetNoScroll
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.features.library.exercises.ExerciseDefinitionListItem
-import com.langley.exercisestattracker.features.library.routines.RoutineBuilderEvent
-import com.langley.exercisestattracker.features.library.schedules.ScheduleBuilderEvent
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
-import com.langley.exercisestattracker.features.workout.WorkoutEvent
-import database.ExerciseRoutine
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
@@ -63,9 +56,10 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 fun SelectorView(
     modifier: Modifier = Modifier,
     dataSource: ExerciseAppDataSource,
-    workoutEvent: ((WorkoutEvent) -> Unit)? = null,
-    routineBuilderEvent: ((RoutineBuilderEvent) -> Unit)? = null,
-    scheduleBuilderEvent: ((ScheduleBuilderEvent) -> Unit)? = null,
+    onAddExercises: (List<ExerciseDefinition>) -> Unit = {},
+    onAddRoutine: (ExerciseRoutine?) -> Unit = {},
+    onAddSchedule: (ExerciseSchedule?) -> Unit = {},
+    onClose: () -> Unit = {},
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
@@ -85,10 +79,6 @@ fun SelectorView(
         )
         val state by selectorViewModel.state.collectAsState(SelectorState())
 
-        var dropdownExpanded by remember { mutableStateOf(false) }
-        var filterType: ExerciseLibraryFilterType? by remember { mutableStateOf(null) }
-        var searchString by remember { mutableStateOf("") }
-        var selectedExercises: List<ExerciseDefinition> by remember { mutableStateOf(emptyList()) }
 
 
         // Top Bar
@@ -104,13 +94,7 @@ fun SelectorView(
             // Back Button
             IconButton(
                 onClick = {
-                    if (workoutEvent != null){ workoutEvent(WorkoutEvent.CloseExerciseSelector) }
-                    else if (routineBuilderEvent != null){
-                        routineBuilderEvent(RoutineBuilderEvent.CloseExerciseSelector)
-                    }
-                    else if (scheduleBuilderEvent != null){
-                        scheduleBuilderEvent(ScheduleBuilderEvent.CloseExerciseSelector)
-                    }
+                    onClose()
                 }
             ) {
                 Icon(
@@ -123,9 +107,9 @@ fun SelectorView(
             OutlinedTextField(
                 modifier = Modifier.focusRequester(FocusRequester())
                     .weight(0.5F),
-                value = searchString,
+                value = state.searchString,
                 onValueChange = {
-                    searchString = it
+                    selectorViewModel.updateSearchString(it)
                 },
                 shape = RoundedCornerShape(20.dp),
                 maxLines = 1
@@ -138,7 +122,7 @@ fun SelectorView(
             ) {
 
                 Box {
-                    IconButton(onClick = { dropdownExpanded = true }) {
+                    IconButton(onClick = { selectorViewModel.updateDropdownState(true) }) {
                         Icon(
                             modifier = Modifier.size(400.dp),
                             imageVector = Icons.Default.Menu,
@@ -147,15 +131,17 @@ fun SelectorView(
                     }
 
                     DropdownMenu(
-                        expanded = dropdownExpanded,
-                        onDismissRequest = {dropdownExpanded = false}
+                        expanded = state.dropdownExpanded,
+                        onDismissRequest = {selectorViewModel.updateDropdownState(false)}
                     ){
 
                         DropdownMenuItem(
                             text = { Text("Favorite") },
                             onClick = {
-                                dropdownExpanded = false
-                                filterType = ExerciseLibraryFilterType.Favorite()
+                                selectorViewModel.updateDropdownState(false)
+                                selectorViewModel.updateFilterType(
+                                    ExerciseLibraryFilterType.Favorite()
+                                )
                             }
                         )
 
@@ -164,8 +150,10 @@ fun SelectorView(
                         DropdownMenuItem(
                             text = { Text("Barbell") },
                             onClick = {
-                                dropdownExpanded = false
-                                filterType = ExerciseLibraryFilterType.Barbell()
+                                selectorViewModel.updateDropdownState(false)
+                                selectorViewModel.updateFilterType(
+                                    ExerciseLibraryFilterType.Barbell()
+                                )
                             }
                         )
 
@@ -174,8 +162,10 @@ fun SelectorView(
                         DropdownMenuItem(
                             text = { Text("Dumbbell") },
                             onClick = {
-                                dropdownExpanded = false
-                                filterType = ExerciseLibraryFilterType.Dumbbell()
+                                selectorViewModel.updateDropdownState(false)
+                                selectorViewModel.updateFilterType(
+                                    ExerciseLibraryFilterType.Dumbbell()
+                                )
                             }
                         )
 
@@ -184,8 +174,10 @@ fun SelectorView(
                         DropdownMenuItem(
                             text = { Text("Cardio") },
                             onClick = {
-                                dropdownExpanded = false
-                                filterType = ExerciseLibraryFilterType.Cardio()
+                                selectorViewModel.updateDropdownState(false)
+                                selectorViewModel.updateFilterType(
+                                    ExerciseLibraryFilterType.Cardio()
+                                )
                             }
                         )
 
@@ -194,8 +186,10 @@ fun SelectorView(
                         DropdownMenuItem(
                             text = { Text("Calisthenics") },
                             onClick = {
-                                dropdownExpanded = false
-                                filterType = ExerciseLibraryFilterType.Calisthenic()
+                                selectorViewModel.updateDropdownState(false)
+                                selectorViewModel.updateFilterType(
+                                    ExerciseLibraryFilterType.Calisthenic()
+                                )
                             }
                         )
 
@@ -204,8 +198,8 @@ fun SelectorView(
                         DropdownMenuItem(
                             text = { Text("None") },
                             onClick = {
-                                dropdownExpanded = false
-                                filterType = null
+                                selectorViewModel.updateDropdownState(false)
+                                selectorViewModel.updateFilterType(null)
                             }
                         )
                     }
@@ -213,7 +207,7 @@ fun SelectorView(
             }
 
             // Clear button
-            if (searchString != "" || filterType != null) {
+            if (state.searchString != "" || state.filterType != null) {
                 Column(
                     modifier = Modifier
                         .padding(16.dp)
@@ -222,8 +216,8 @@ fun SelectorView(
                         modifier = Modifier
                             .padding(4.dp)
                             .clickable {
-                                filterType = null
-                                searchString = ""
+                                selectorViewModel.updateFilterType(null)
+                                selectorViewModel.updateSearchString("")
                             },
                         text = "Clear",
                         textAlign = TextAlign.Center,
@@ -246,26 +240,23 @@ fun SelectorView(
             items(
                 items = filterDefinitionLibrary(
                     definitionLibrary = state.exercises,
-                    filterType = filterType,
-                    searchString = searchString
+                    filterType = state.filterType,
+                    searchString = state.searchString
                 ),
                 key = { item: ExerciseDefinition ->  item.exerciseDefinitionId!! }
-            ) { exerciseDefinition: ExerciseDefinition ->
+            ) { definition: ExerciseDefinition ->
                 ExerciseDefinitionListItem(
-                    exerciseDefinition,
+                    definition,
                     modifier = Modifier
                         .fillMaxHeight()
                         .padding(8.dp)
                         .focusable(true)
                         .clickable {
                             focusManager.clearFocus()
-                            selectedExercises = toggleDefInList(
-                                exerciseDefinition,
-                                selectedExercises
-                            )
+                            selectorViewModel.toggleSelectedDef(definition)
                         },
                     selectable = true,
-                    isClicked = selectedExercises.contains(exerciseDefinition)
+                    isClicked = state.selectedExercises.contains(definition)
                 )
             }
         }
@@ -282,33 +273,17 @@ fun SelectorView(
 
             Button(
                 onClick = {
-                    if (workoutEvent != null){
-                        workoutEvent(WorkoutEvent.AddToListOfExercises(selectedExercises))
-                        for (exercise in selectedExercises){
-                            workoutEvent(
-                                WorkoutEvent.AddToListOfRecords(
-                                    listOf( exercise.toBlankRecord().copy(completed = false) )
-                                )
-                            )
-                        }
-                        workoutEvent(WorkoutEvent.CloseExerciseSelector)
-                    }
-                    else if (routineBuilderEvent != null){
-                        routineBuilderEvent(
-                            RoutineBuilderEvent.AddToListOfExercises(selectedExercises)
-                        )
-                    }
+                    onAddExercises(state.selectedExercises)
+                    onAddRoutine(state.selectedRoutine)
+                    onClose()
                 }
             ){
-                Text( text = "Add Exercise${if(selectedExercises.size > 1){"s"}else{""}}" )
+                Text( text = "Add" )
             }
 
             Button(
                 onClick = {
-                    if (workoutEvent != null){
-                        workoutEvent(WorkoutEvent.CloseExerciseSelector)
-                    }
-
+                    onClose()
                 }
             ){
                 Text( text = "Cancel" )
@@ -318,18 +293,3 @@ fun SelectorView(
     } // End of screen containers
 
 } // End of container wrapper.
-
-private fun toggleDefInList(
-    def: ExerciseDefinition,
-    list: List<ExerciseDefinition>
-): List<ExerciseDefinition>{
-
-    val mutableList = list.toMutableList()
-
-    if (mutableList.contains(def)){
-        mutableList.remove(def)
-    }
-    else { mutableList.add(def) }
-
-    return mutableList
-}
