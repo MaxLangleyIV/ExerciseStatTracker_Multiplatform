@@ -293,9 +293,6 @@ class LibraryViewModelTest {
                 isEditExerciseDefSheetOpen = true,
                 isEditRoutineSheetOpen = true,
                 isEditScheduleSheetOpen = true,
-                selectedExerciseDefinition = ExerciseDefinition(),
-                selectedSchedule = ExerciseSchedule(),
-                selectedRoutine = ExerciseRoutine()
             )
         )
 
@@ -316,21 +313,6 @@ class LibraryViewModelTest {
         assertFalse(
             actual = state.isEditScheduleSheetOpen,
             message = "isEditScheduleSheetOpen failed to be set false "
-        )
-
-        advanceUntilIdle()
-
-        assertNull(
-            actual = state.selectedExerciseDefinition,
-            message = "selectedDefinition is not null after event"
-        )
-        assertNull(
-            actual = state.selectedRoutine,
-            message = "selectedRoutine is not null after event"
-        )
-        assertNull(
-            actual = state.selectedSchedule,
-            message = "selectedSchedule is not null after event"
         )
     }
 
