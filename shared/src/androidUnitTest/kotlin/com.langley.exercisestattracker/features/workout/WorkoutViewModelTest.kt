@@ -42,6 +42,7 @@ class WorkoutViewModelTest {
     private lateinit var testDef2: ExerciseDefinition
 
     private val testDataSource = TestExerciseAppDataSource(
+        dummyDefinitions = ExerciseDefinitionDummyData().definitionList,
         dummyRecords = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
     )
 
@@ -94,7 +95,7 @@ class WorkoutViewModelTest {
         testDef1 = ExerciseDefinition( exerciseName = "Test1" )
         testDef2 = ExerciseDefinition( exerciseName = "Test2" )
 
-        setupViewModel(WorkoutState())
+        setupViewModel(WorkoutState(exerciseLibrary = ExerciseDefinitionDummyData().definitionList))
 
         state = viewModel.state.first()
 
@@ -772,9 +773,43 @@ class WorkoutViewModelTest {
             message = "${state.routine} in state doesn't equal test routine"
         )
 
-//        assertTrue(
-//            actual = state.exerciseList.contains()
-//        )
+        println(state.exerciseList.size)
+
+        var exercise0Count = 0
+        var exercise1Count = 0
+        var exercise2Count = 0
+
+        for (record in state.recordsList){
+            println("RECORD: ${record.exerciseName}")
+
+            if (record.exerciseName == state.exerciseLibrary[0].exerciseName){
+                exercise0Count++
+            }
+            if (record.exerciseName == state.exerciseLibrary[1].exerciseName){
+                exercise1Count++
+            }
+            else if (record.exerciseName == state.exerciseLibrary[2].exerciseName){
+                exercise2Count++
+            }
+
+        }
+
+        assertEquals(
+            expected = 3,
+            actual = exercise0Count,
+            message = "exercise0Count should equal 3"
+        )
+        assertEquals(
+            expected = 3,
+            actual = exercise1Count,
+            message = "exercise1Count should equal 3"
+        )
+        assertEquals(
+            expected = 3,
+            actual = exercise2Count,
+            message = "exercise2Count should equal 3"
+        )
+
 
     }
 
