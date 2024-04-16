@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -20,6 +23,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,23 +33,40 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
 @Composable
-fun libraryTopBar(
+fun LibraryTopBar(
 
-    state: LibraryState,
-    onEvent: (LibraryEvent) -> Unit,
+    searchString: String = "",
+    onSearchStringChanged: (String) -> Unit = {},
+    filterType: ExerciseLibraryFilterType? = null,
+    onFilterTypeChanged: (ExerciseLibraryFilterType?) -> Unit = {},
+    isShowingExercises: Boolean = true,
+    isShowingRoutines: Boolean = false,
+    isShowingSchedules: Boolean = false,
+    onShowExercisesSelected: () -> Unit = {},
+    onShowRoutinesSelected: () -> Unit = {},
+    onShowSchedulesSelected: () -> Unit = {},
+    onDefSelected: (ExerciseDefinition) -> Unit = {},
+    onRoutineSelected: (ExerciseRoutine) -> Unit = {},
+    onScheduleSelected: (ExerciseSchedule) -> Unit = {},
     modifier: Modifier = Modifier,
     focusManager: FocusManager,
-    navController: ExerciseAppNavController
+    showCloseButton: Boolean = false,
+    onClose: () -> Unit = {},
 
 ){
     var dropdownExpanded by remember { mutableStateOf(false) }
@@ -59,9 +80,37 @@ fun libraryTopBar(
         // Search Row
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
+
+            // Close Button
+            if (showCloseButton){
+                IconButton(
+                    onClick = {
+                        onClose()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close"
+                    )
+                }
+            }
+            else {
+                Spacer(Modifier.weight(0.2F))
+            }
+
+            // Search Bar
+            OutlinedTextField(
+                modifier = Modifier.focusRequester(FocusRequester())
+                    .weight(0.5F),
+                value = searchString,
+                onValueChange = { onSearchStringChanged(it) },
+                shape = RoundedCornerShape(20.dp),
+                maxLines = 1
+            )
+
             // Filter
             Box(
                 modifier = Modifier
@@ -85,10 +134,7 @@ fun libraryTopBar(
                         text = { Text("Favorite") },
                         onClick = {
                             dropdownExpanded = false
-                            onEvent(
-                                LibraryEvent
-                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Favorite())
-                            )
+                            onFilterTypeChanged(ExerciseLibraryFilterType.Favorite())
                         }
                     )
 
@@ -98,10 +144,7 @@ fun libraryTopBar(
                         text = { Text("Barbell") },
                         onClick = {
                             dropdownExpanded = false
-                            onEvent(
-                                LibraryEvent
-                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Barbell())
-                            )
+                            onFilterTypeChanged(ExerciseLibraryFilterType.Barbell())
                         }
                     )
 
@@ -111,10 +154,7 @@ fun libraryTopBar(
                         text = { Text("Dumbbell") },
                         onClick = {
                             dropdownExpanded = false
-                            onEvent(
-                                LibraryEvent
-                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Dumbbell())
-                            )
+                            onFilterTypeChanged(ExerciseLibraryFilterType.Dumbbell())
                         }
                     )
 
@@ -124,10 +164,7 @@ fun libraryTopBar(
                         text = { Text("Cardio") },
                         onClick = {
                             dropdownExpanded = false
-                            onEvent(
-                                LibraryEvent
-                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Cardio())
-                            )
+                            onFilterTypeChanged(ExerciseLibraryFilterType.Cardio())
                         }
                     )
 
@@ -137,10 +174,7 @@ fun libraryTopBar(
                         text = { Text("Calisthenics") },
                         onClick = {
                             dropdownExpanded = false
-                            onEvent(
-                                LibraryEvent
-                                    .SetCurrentFilterType(ExerciseLibraryFilterType.Calisthenic())
-                            )
+                            onFilterTypeChanged(ExerciseLibraryFilterType.Calisthenic())
                         }
                     )
 
@@ -150,28 +184,15 @@ fun libraryTopBar(
                         text = { Text("None") },
                         onClick = {
                             dropdownExpanded = false
-                            onEvent(
-                                LibraryEvent.ClearFilterType
-                            )
+                            onFilterTypeChanged(null)
                         }
                     )
                 }
             }
 
-            // Search Bar
-            Column(
-                modifier = Modifier.weight(0.6F)
-            ) {
-                BasicSearchBar(
-                    state = state,
-                    modifier = Modifier.width(256.dp),
-                    onEvent = onEvent,
-                    isDropdownOpen = state.isSearchDropdownOpen
-                )
-            }
 
             // Clear button
-            if (state.searchString != "" || state.searchFilterType != null){
+            if (searchString != "" || filterType != null){
                 Column(
                     modifier = Modifier
                         .weight(0.2F)
@@ -181,10 +202,8 @@ fun libraryTopBar(
                         modifier = Modifier
                             .padding(4.dp)
                             .clickable {
-                                onEvent(
-                                    LibraryEvent.ClearFilterType
-                                )
-                                onEvent(LibraryEvent.OnSearchStringChanged(""))
+                                onFilterTypeChanged(null)
+                                onSearchStringChanged("")
                             },
                         text = "Clear",
                         textAlign = TextAlign.Center,
@@ -193,9 +212,7 @@ fun libraryTopBar(
                     )
                 }
             }
-            else {
-                Spacer(Modifier.weight(0.2F))
-            }
+
         }
 
         Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp)
@@ -212,7 +229,7 @@ fun libraryTopBar(
                 modifier = Modifier
                     .weight(0.33f)
                     .background(
-                        if (state.isShowingExercises) {
+                        if (isShowingExercises) {
                             MaterialTheme.colorScheme.secondary
                         }
                         else {
@@ -220,7 +237,7 @@ fun libraryTopBar(
                         }
                     )
                     .padding(4.dp)
-                    .clickable { onEvent(LibraryEvent.SelectDefinitionsTab) },
+                    .clickable { onShowExercisesSelected() },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -228,7 +245,7 @@ fun libraryTopBar(
                     text = "Exercises",
                     textAlign = TextAlign.Center,
                     color =
-                    if (state.isShowingExercises) {
+                    if (isShowingExercises) {
                         MaterialTheme.colorScheme.onSecondary
                     }
                     else {
@@ -244,7 +261,7 @@ fun libraryTopBar(
                 modifier = Modifier
                     .weight(0.33f)
                     .background(
-                        if (state.isShowingRoutines) {
+                        if (isShowingRoutines) {
                             MaterialTheme.colorScheme.secondary
                         }
                         else {
@@ -252,7 +269,7 @@ fun libraryTopBar(
                         }
                     )
                     .padding(4.dp)
-                    .clickable { onEvent(LibraryEvent.SelectRoutinesTab) },
+                    .clickable { onShowRoutinesSelected() },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -260,7 +277,7 @@ fun libraryTopBar(
                     text = "Routines",
                     textAlign = TextAlign.Center,
                     color =
-                    if (state.isShowingRoutines) {
+                    if (isShowingRoutines) {
                         MaterialTheme.colorScheme.onSecondary
                     }
                     else {
@@ -276,7 +293,7 @@ fun libraryTopBar(
                 modifier = Modifier
                     .weight(0.33f)
                     .background(
-                        if (state.isShowingSchedules) {
+                        if (isShowingSchedules) {
                             MaterialTheme.colorScheme.secondary
                         }
                         else {
@@ -284,7 +301,7 @@ fun libraryTopBar(
                         }
                     )
                     .padding(4.dp)
-                    .clickable { onEvent(LibraryEvent.SelectSchedulesTab) },
+                    .clickable { onShowSchedulesSelected() },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -292,7 +309,7 @@ fun libraryTopBar(
                     text = "Schedules",
                     textAlign = TextAlign.Center,
                     color =
-                    if (state.isShowingSchedules) {
+                    if (isShowingSchedules) {
                         MaterialTheme.colorScheme.onSecondary
                     }
                     else {
