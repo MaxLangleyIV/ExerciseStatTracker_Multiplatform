@@ -11,7 +11,7 @@ sealed interface LibraryEvent {
     data class RoutineSelected(val routine: ExerciseRoutine) : LibraryEvent
     data class ScheduleSelected(val schedule: ExerciseSchedule) : LibraryEvent
     data class OnSearchStringChanged(val value: String) : LibraryEvent
-    data class SetCurrentFilterType(val filterType: ExerciseLibraryFilterType): LibraryEvent
+    data class SetCurrentFilterType(val filterType: ExerciseLibraryFilterType?): LibraryEvent
     data class UpdateSelectedDefinition(val definition: ExerciseDefinition): LibraryEvent
     data object ClearFilterType : LibraryEvent
     data object ToggleIsSearchDropdownOpen: LibraryEvent
