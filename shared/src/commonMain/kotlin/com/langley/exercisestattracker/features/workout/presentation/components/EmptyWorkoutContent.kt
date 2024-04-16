@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.langley.exercisestattracker.features.library.selector.SelectorState
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 
@@ -70,7 +71,9 @@ fun EmptyWorkoutContent(
                 .fillMaxWidth()
                 .heightIn(min = 0.dp, max = 60.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .clickable {  }
+                .clickable {
+                    onEvent(WorkoutEvent.OpenRoutineSelector)
+                }
                 .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(4.dp),
             horizontalArrangement = Arrangement.Center,
