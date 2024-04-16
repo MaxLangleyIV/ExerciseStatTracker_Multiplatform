@@ -7,12 +7,15 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -47,7 +50,10 @@ import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheetNoScroll
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
+import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.exercises.ExerciseDefinitionListItem
+import com.langley.exercisestattracker.features.library.presentation.components.LibraryList
+import com.langley.exercisestattracker.features.library.presentation.components.LibraryTopBar
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -82,183 +88,106 @@ fun SelectorView(
 
 
         // Top Bar
-        Row(
+        LibraryTopBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.1F)
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+                .height(IntrinsicSize.Min)
+                .padding(0.dp,4.dp),
 
-            // Back Button
-            IconButton(
-                onClick = {
-                    onClose()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBackIos,
-                    contentDescription = "Close"
-                )
-            }
+            searchString = state.searchString,
+            onSearchStringChanged = {selectorViewModel.updateSearchString(it) },
 
-            // Search Bar
-            OutlinedTextField(
-                modifier = Modifier.focusRequester(FocusRequester())
-                    .weight(0.5F),
-                value = state.searchString,
-                onValueChange = {
-                    selectorViewModel.updateSearchString(it)
-                },
-                shape = RoundedCornerShape(20.dp),
-                maxLines = 1
-            )
+            filterType = state.filterType,
+            onFilterTypeChanged = {selectorViewModel.updateFilterType(it)},
 
-            // Filter
-            Column(
-                modifier = Modifier
-                    .padding(12.dp)
-            ) {
+            isShowingExercises = state.isShowingExercises,
+            isShowingRoutines = state.isShowingRoutines,
+            isShowingSchedules = state.isShowingSchedules,
 
-                Box {
-                    IconButton(onClick = { selectorViewModel.updateDropdownState(true) }) {
-                        Icon(
-                            modifier = Modifier.size(400.dp),
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "Filter",
-                        )
-                    }
+            onShowExercisesSelected = {selectorViewModel.selectDefinitionsTab()},
+            onShowRoutinesSelected = {selectorViewModel.selectRoutinesTab()},
+            onShowSchedulesSelected = {selectorViewModel.selectSchedulesTab()},
 
-                    DropdownMenu(
-                        expanded = state.dropdownExpanded,
-                        onDismissRequest = {selectorViewModel.updateDropdownState(false)}
-                    ){
+            onDefSelected = { selectorViewModel.toggleSelectedDef(it) },
+            onRoutineSelected = { selectorViewModel.toggleSelectedRoutine(it) },
+            onScheduleSelected = { selectorViewModel.toggleSelectedSchedule(it) },
 
-                        DropdownMenuItem(
-                            text = { Text("Favorite") },
-                            onClick = {
-                                selectorViewModel.updateDropdownState(false)
-                                selectorViewModel.updateFilterType(
-                                    ExerciseLibraryFilterType.Favorite()
-                                )
-                            }
-                        )
+            focusManager = focusManager,
+        )
 
-                        Divider()
-
-                        DropdownMenuItem(
-                            text = { Text("Barbell") },
-                            onClick = {
-                                selectorViewModel.updateDropdownState(false)
-                                selectorViewModel.updateFilterType(
-                                    ExerciseLibraryFilterType.Barbell()
-                                )
-                            }
-                        )
-
-                        Divider()
-
-                        DropdownMenuItem(
-                            text = { Text("Dumbbell") },
-                            onClick = {
-                                selectorViewModel.updateDropdownState(false)
-                                selectorViewModel.updateFilterType(
-                                    ExerciseLibraryFilterType.Dumbbell()
-                                )
-                            }
-                        )
-
-                        Divider()
-
-                        DropdownMenuItem(
-                            text = { Text("Cardio") },
-                            onClick = {
-                                selectorViewModel.updateDropdownState(false)
-                                selectorViewModel.updateFilterType(
-                                    ExerciseLibraryFilterType.Cardio()
-                                )
-                            }
-                        )
-
-                        Divider()
-
-                        DropdownMenuItem(
-                            text = { Text("Calisthenics") },
-                            onClick = {
-                                selectorViewModel.updateDropdownState(false)
-                                selectorViewModel.updateFilterType(
-                                    ExerciseLibraryFilterType.Calisthenic()
-                                )
-                            }
-                        )
-
-                        Divider()
-
-                        DropdownMenuItem(
-                            text = { Text("None") },
-                            onClick = {
-                                selectorViewModel.updateDropdownState(false)
-                                selectorViewModel.updateFilterType(null)
-                            }
-                        )
-                    }
-                }
-            }
-
-            // Clear button
-            if (state.searchString != "" || state.filterType != null) {
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .clickable {
-                                selectorViewModel.updateFilterType(null)
-                                selectorViewModel.updateSearchString("")
-                            },
-                        text = "Clear",
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                    )
-                }
-            }
-        }
+//        // Exercise List
+//        LazyVerticalGrid(
+//            columns = GridCells.Fixed(2),
+//            modifier = Modifier
+//                .weight(0.7F)
+//                .padding(8.dp)
+//                .background(MaterialTheme.colorScheme.background),
+//            contentPadding = PaddingValues(vertical = 8.dp),
+//        ){
+//            items(
+//                items = filterDefinitionLibrary(
+//                    definitionLibrary = state.exercises,
+//                    filterType = state.filterType,
+//                    searchString = state.searchString
+//                ),
+//                key = { item: ExerciseDefinition ->  item.exerciseDefinitionId!! }
+//            ) { definition: ExerciseDefinition ->
+//                ExerciseDefinitionListItem(
+//                    definition,
+//                    modifier = Modifier
+//                        .fillMaxHeight()
+//                        .padding(8.dp)
+//                        .focusable(true)
+//                        .clickable {
+//                            focusManager.clearFocus()
+//                            selectorViewModel.toggleSelectedDef(definition)
+//                        },
+//                    selectable = true,
+//                    isClicked = state.selectedExercises.contains(definition)
+//                )
+//            }
+//        }
 
         // Exercise List
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .weight(0.7F)
-                .padding(8.dp)
-                .background(MaterialTheme.colorScheme.background),
-            contentPadding = PaddingValues(vertical = 8.dp),
-        ){
-            items(
-                items = filterDefinitionLibrary(
-                    definitionLibrary = state.exercises,
-                    filterType = state.filterType,
-                    searchString = state.searchString
-                ),
-                key = { item: ExerciseDefinition ->  item.exerciseDefinitionId!! }
-            ) { definition: ExerciseDefinition ->
-                ExerciseDefinitionListItem(
-                    definition,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(8.dp)
-                        .focusable(true)
-                        .clickable {
-                            focusManager.clearFocus()
-                            selectorViewModel.toggleSelectedDef(definition)
-                        },
-                    selectable = true,
-                    isClicked = state.selectedExercises.contains(definition)
-                )
-            }
+        if (state.isShowingExercises){
+            LibraryList(
+                exercises = state.exercises,
+                exerciseOnClick = {
+                    focusManager.clearFocus()
+                    selectorViewModel.toggleSelectedDef(it)
+                },
+                focusManager = focusManager,
+                columns = GridCells.Fixed(2),
+                selectable = true,
+                selectedExercises = state.selectedExercises
+            )
+        }
+
+        // Routine List
+        if (state.isShowingRoutines){
+            LibraryList(
+                routines = state.routines,
+                routineOnClick = {
+                    focusManager.clearFocus()
+                    selectorViewModel.toggleSelectedRoutine(it)
+                },
+                focusManager = focusManager,
+                selectable = true,
+                selectedRoutines = listOf(state.selectedRoutine?: ExerciseRoutine())
+            )
+        }
+
+        // Schedule List
+        if (state.isShowingSchedules){
+            LibraryList(
+                schedules = state.schedules,
+                scheduleOnClick = {
+                    focusManager.clearFocus()
+                    selectorViewModel.toggleSelectedSchedule(it)
+                },
+                focusManager = focusManager,
+                selectable = false
+            )
         }
 
         // Bottom Bar
