@@ -1,57 +1,29 @@
 package com.langley.exercisestattracker.features.library.selector
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheetNoScroll
-import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
-import com.langley.exercisestattracker.features.library.LibraryEvent
-import com.langley.exercisestattracker.features.library.exercises.ExerciseDefinitionListItem
 import com.langley.exercisestattracker.features.library.presentation.components.LibraryList
 import com.langley.exercisestattracker.features.library.presentation.components.LibraryTopBar
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
@@ -69,7 +41,11 @@ fun SelectorView(
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource,
-    visible: Boolean = false
+    visible: Boolean = false,
+    showRoutinesTab: Boolean = true,
+    showSchedulesTab: Boolean = true,
+    startOnRoutinesTab: Boolean = false,
+    startOnSchedulesTab: Boolean = false
     ) {
 
     BasicBottomSheetNoScroll(
@@ -80,11 +56,19 @@ fun SelectorView(
         val selectorViewModel = getViewModel(
             key = "selectorViewModel",
             factory = viewModelFactory {
-                SelectorViewModel(dataSource = dataSource)
+                SelectorViewModel(
+                    dataSource = dataSource,
+                )
             }
         )
         val state by selectorViewModel.state.collectAsState(SelectorState())
 
+
+        LaunchedEffect(startOnRoutinesTab){
+            if (startOnRoutinesTab){
+                selectorViewModel.selectRoutinesTab()
+            }
+        }
 
 
         // Top Bar
@@ -112,46 +96,24 @@ fun SelectorView(
             onRoutineSelected = { selectorViewModel.toggleSelectedRoutine(it) },
             onScheduleSelected = { selectorViewModel.toggleSelectedSchedule(it) },
 
+            showCloseButton = true,
+            onClose = onClose,
+
+            showSchedulesTab = showSchedulesTab,
+
             focusManager = focusManager,
         )
-
-//        // Exercise List
-//        LazyVerticalGrid(
-//            columns = GridCells.Fixed(2),
-//            modifier = Modifier
-//                .weight(0.7F)
-//                .padding(8.dp)
-//                .background(MaterialTheme.colorScheme.background),
-//            contentPadding = PaddingValues(vertical = 8.dp),
-//        ){
-//            items(
-//                items = filterDefinitionLibrary(
-//                    definitionLibrary = state.exercises,
-//                    filterType = state.filterType,
-//                    searchString = state.searchString
-//                ),
-//                key = { item: ExerciseDefinition ->  item.exerciseDefinitionId!! }
-//            ) { definition: ExerciseDefinition ->
-//                ExerciseDefinitionListItem(
-//                    definition,
-//                    modifier = Modifier
-//                        .fillMaxHeight()
-//                        .padding(8.dp)
-//                        .focusable(true)
-//                        .clickable {
-//                            focusManager.clearFocus()
-//                            selectorViewModel.toggleSelectedDef(definition)
-//                        },
-//                    selectable = true,
-//                    isClicked = state.selectedExercises.contains(definition)
-//                )
-//            }
-//        }
 
         // Exercise List
         if (state.isShowingExercises){
             LibraryList(
-                exercises = state.exercises,
+                modifier = Modifier
+                    .weight(0.7F),
+                exercises = filterDefinitionLibrary(
+                    definitionLibrary = state.exercises,
+                    filterType = state.filterType,
+                    searchString = state.searchString
+                ),
                 exerciseOnClick = {
                     focusManager.clearFocus()
                     selectorViewModel.toggleSelectedDef(it)
@@ -166,6 +128,8 @@ fun SelectorView(
         // Routine List
         if (state.isShowingRoutines){
             LibraryList(
+                modifier = Modifier
+                    .weight(0.7F),
                 routines = state.routines,
                 routineOnClick = {
                     focusManager.clearFocus()
@@ -173,52 +137,53 @@ fun SelectorView(
                 },
                 focusManager = focusManager,
                 selectable = true,
-                selectedRoutines = listOf(state.selectedRoutine?: ExerciseRoutine())
+                selectedRoutine = state.selectedRoutine
             )
         }
 
         // Schedule List
         if (state.isShowingSchedules){
             LibraryList(
+                modifier = Modifier
+                    .weight(0.7F),
                 schedules = state.schedules,
                 scheduleOnClick = {
                     focusManager.clearFocus()
                     selectorViewModel.toggleSelectedSchedule(it)
                 },
                 focusManager = focusManager,
-                selectable = false
+                selectable = true,
+                selectedSchedule = state.selectedSchedule
             )
         }
 
         // Bottom Bar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.1F)
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        if (state.selectedExercises.isNotEmpty() || state.selectedRoutine != null){
 
-            Button(
-                onClick = {
-                    onAddExercises(state.selectedExercises)
-                    onAddRoutine(state.selectedRoutine)
-                    onClose()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.075F)
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Button(
+                    onClick = {
+                        onAddExercises(state.selectedExercises)
+                        onAddRoutine(state.selectedRoutine)
+                        onClose()
+                    }
+                ){
+                    Text( text = "Add To Workout" )
                 }
-            ){
-                Text( text = "Add" )
+
             }
 
-            Button(
-                onClick = {
-                    onClose()
-                }
-            ){
-                Text( text = "Cancel" )
-            }
         }
 
-    } // End of screen containers
 
-} // End of container wrapper.
+    } // End of BasicBottomSheet.
+
+} // End of top level composable.
