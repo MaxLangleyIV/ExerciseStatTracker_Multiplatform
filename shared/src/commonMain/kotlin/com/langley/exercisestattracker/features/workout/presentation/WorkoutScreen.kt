@@ -27,7 +27,7 @@ import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.features.library.selector.SelectorView
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
-import com.langley.exercisestattracker.features.workout.presentation.components.TopBar
+import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutTopBar
 import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutContentHolder
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
@@ -63,8 +63,8 @@ fun WorkoutScreen(
             ) {
 
                 // Top Bar
-                TopBar(
-                    modifier = Modifier.weight(0.05F),
+                WorkoutTopBar(
+                    modifier = Modifier.weight(0.1F),
                     navController = navController,
                     workoutState = workoutState,
                     onEvent = onEvent
@@ -81,34 +81,35 @@ fun WorkoutScreen(
                         .weight(0.8F),
 
                     workoutState = workoutState,
-                    onEvent = onEvent
+                    onEvent = onEvent,
                 )
 
-                // Save / Cancel Section
-                Column(
-                    modifier = Modifier.weight(0.1F),
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                if (workoutState.exerciseList.isNotEmpty()){
+                    // Save / Cancel Section
+                    Column(
+                        modifier = Modifier.weight(0.1F),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(
-                            onClick = { onEvent(WorkoutEvent.CancelWorkout) }
-                        ){
-                            Text( text = "Cancel Session" )
-                        }
-
-                        Spacer(Modifier.width(8.dp))
-
-                        Button(
-                            onClick = {
-                                onEvent(WorkoutEvent.SaveWorkout)
-                                navController.navigateBack()
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Button(
+                                onClick = { onEvent(WorkoutEvent.CancelWorkout) }
+                            ){
+                                Text( text = "Cancel Session" )
                             }
-                        ){
-                            Text( text = "Save Session" )
+
+                            Spacer(Modifier.width(8.dp))
+
+                            Button(
+                                onClick = {
+                                    onEvent(WorkoutEvent.SaveWorkout)
+                                }
+                            ){
+                                Text( text = "Save Session" )
+                            }
                         }
                     }
                 }
@@ -129,6 +130,8 @@ fun WorkoutScreen(
                 focusManager = focusManager,
                 focusRequester = focusRequester,
                 interactionSource = interactionSource,
+                showSchedulesTab = false,
+                startOnRoutinesTab = workoutState.startSelectorOnRoutinesTab
             )
 
         }
