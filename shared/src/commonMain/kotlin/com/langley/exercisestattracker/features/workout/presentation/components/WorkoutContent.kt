@@ -144,7 +144,5 @@ fun WorkoutContent(
             }
         }
 
-        // Set Details View
-
     }
 }
