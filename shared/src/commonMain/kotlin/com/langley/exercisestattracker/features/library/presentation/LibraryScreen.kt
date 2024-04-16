@@ -29,7 +29,7 @@ import com.langley.exercisestattracker.features.exerciseBuilder.presentation.Exe
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.exercises.DefinitionDetailsView
-import com.langley.exercisestattracker.features.library.presentation.components.libraryTopBar
+import com.langley.exercisestattracker.features.library.presentation.components.LibraryTopBar
 import com.langley.exercisestattracker.features.library.presentation.components.LibraryList
 import com.langley.exercisestattracker.features.library.routines.views.RoutineDetailsView
 import com.langley.exercisestattracker.features.library.routines.views.RoutineEditView
@@ -85,15 +85,32 @@ fun LibraryScreen(
                         interactionSource = interactionSource
                     ) { focusManager.clearFocus() },
             ){
-                libraryTopBar(
+                LibraryTopBar(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(IntrinsicSize.Min)
                         .padding(0.dp,4.dp),
-                    state = libraryState,
-                    onEvent = onEvent,
+                    searchString = libraryState.searchString,
+                    onSearchStringChanged = {value: String ->
+                        onEvent(LibraryEvent.OnSearchStringChanged(value))
+                    },
+                    filterType = libraryState.searchFilterType,
+                    onFilterTypeChanged = {exerciseLibraryFilterType ->
+                        onEvent(LibraryEvent.SetCurrentFilterType(exerciseLibraryFilterType))
+                    },
+                    isShowingExercises = libraryState.isShowingExercises,
+                    isShowingRoutines = libraryState.isShowingRoutines,
+                    isShowingSchedules = libraryState.isShowingSchedules,
+
+                    onShowExercisesSelected = {onEvent(LibraryEvent.SelectDefinitionsTab)},
+                    onShowRoutinesSelected = {onEvent(LibraryEvent.SelectRoutinesTab)},
+                    onShowSchedulesSelected = {onEvent(LibraryEvent.SelectSchedulesTab)},
+
+                    onDefSelected = { onEvent(LibraryEvent.DefinitionSelected(it)) },
+                    onRoutineSelected = { onEvent(LibraryEvent.RoutineSelected(it)) },
+                    onScheduleSelected = { onEvent(LibraryEvent.ScheduleSelected(it)) },
+
                     focusManager = focusManager,
-                    navController = navController
                 )
 
                 // Exercise List
