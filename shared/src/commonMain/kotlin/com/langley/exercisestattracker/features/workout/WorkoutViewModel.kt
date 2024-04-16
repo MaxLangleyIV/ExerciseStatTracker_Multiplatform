@@ -8,14 +8,12 @@ import com.langley.exercisestattracker.core.data.getExercisesFromCSV
 import com.langley.exercisestattracker.core.data.getWorkoutStateFromString
 import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
-import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -34,6 +32,7 @@ class WorkoutViewModel(
 
 ): ViewModel() {
 
+    // Job reference when saving to PreferencesDataStore.
     private var saveJob: Job? = null
 
     private val _state = MutableStateFlow(initialState)
@@ -51,7 +50,6 @@ class WorkoutViewModel(
         started = SharingStarted.WhileSubscribed(5000L),
         initialValue = WorkoutState()
     )
-
 
     init {
         if (initialState == WorkoutState()){
@@ -121,6 +119,19 @@ class WorkoutViewModel(
                 viewModelScope.launch {
                     _state.update { it.copy(
                         exerciseLibrary = dataSource.getDefinitions().first(),
+                        startSelectorOnRoutinesTab = false,
+                        exerciseSelectorVisible = true
+                    ) }
+                }
+
+            }
+
+            WorkoutEvent.OpenRoutineSelector -> {
+
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        exerciseLibrary = dataSource.getDefinitions().first(),
+                        startSelectorOnRoutinesTab = true,
                         exerciseSelectorVisible = true
                     ) }
                 }
@@ -426,7 +437,10 @@ class WorkoutViewModel(
                     }
 
                     records.add(
-                        exercise.toBlankRecord().copy(repsCompleted = reps[index].toInt())
+                        exercise.toBlankRecord().copy(
+                            repsCompleted = reps[index].toInt(),
+                            completed = false
+                        )
                     )
 
                 }
@@ -439,6 +453,7 @@ class WorkoutViewModel(
 
 
             }
+
         }
 
     }
