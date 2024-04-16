@@ -70,23 +70,53 @@ class SelectorViewModel(
     }
 
     fun selectDefinitionsTab() {
-        TODO("Not yet implemented")
+        _state.update { it.copy(
+            isShowingExercises = true,
+            isShowingRoutines = false,
+            isShowingSchedules = false
+        ) }
     }
 
     fun selectRoutinesTab() {
-        TODO("Not yet implemented")
+        _state.update { it.copy(
+            isShowingExercises = false,
+            isShowingRoutines = true,
+            isShowingSchedules = false
+        ) }
     }
 
     fun selectSchedulesTab() {
-        TODO("Not yet implemented")
+        _state.update { it.copy(
+            isShowingExercises = false,
+            isShowingRoutines = false,
+            isShowingSchedules = true
+        ) }
     }
 
     fun toggleSelectedRoutine(routine: ExerciseRoutine) {
-        TODO("Not yet implemented")
+        if (_state.value.selectedRoutine != routine){
+            _state.update { it.copy(
+                selectedRoutine = routine
+            ) }
+        }
+        else {
+            _state.update { it.copy(
+                selectedRoutine = null
+            ) }
+        }
     }
 
     fun toggleSelectedSchedule(schedule: ExerciseSchedule) {
-        TODO("Not yet implemented")
+        if (_state.value.selectedSchedule != schedule){
+            _state.update { it.copy(
+                selectedSchedule = schedule
+            ) }
+        }
+        else {
+            _state.update { it.copy(
+                selectedSchedule = null
+            ) }
+        }
     }
 
 }
