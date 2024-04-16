@@ -19,6 +19,7 @@ data class WorkoutState(
 
 
     // Exercise Selector
+    val startSelectorOnRoutinesTab: Boolean = false,
 
     val exerciseSelectorVisible: Boolean = false,
 
