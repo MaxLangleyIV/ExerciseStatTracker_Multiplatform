@@ -106,7 +106,9 @@ fun ExerciseRoutine.getExercisesFromCSV(
         if (id != null){
 
             for (def in allExercisesAvailable){
+
                 val defId = def.exerciseDefinitionId?.toInt() ?: -1
+
 
                 if (defId == id){
                     mutableList.add(def)
