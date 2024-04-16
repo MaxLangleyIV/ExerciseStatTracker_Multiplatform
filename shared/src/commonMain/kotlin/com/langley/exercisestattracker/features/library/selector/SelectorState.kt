@@ -8,7 +8,9 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SelectorState(
 
     // Data State
@@ -18,6 +20,7 @@ data class SelectorState(
 
     val selectedExercises: List<ExerciseDefinition> = emptyList(),
     val selectedRoutine: ExerciseRoutine? = null,
+    val selectedSchedule: ExerciseSchedule? = null,
 
     // UI State
     val isShowingExercises: Boolean = true,
