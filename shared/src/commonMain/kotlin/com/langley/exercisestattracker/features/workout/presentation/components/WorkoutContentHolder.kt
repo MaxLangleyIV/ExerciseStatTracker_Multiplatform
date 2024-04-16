@@ -45,6 +45,7 @@ fun WorkoutContentHolder(
                 workoutState = workoutState,
                 onEvent = onEvent
             )
+
         }
     }
 
