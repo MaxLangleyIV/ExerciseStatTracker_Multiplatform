@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -67,6 +69,7 @@ fun LibraryTopBar(
     focusManager: FocusManager,
     showCloseButton: Boolean = false,
     onClose: () -> Unit = {},
+    showSchedulesTab: Boolean = true
 
 ){
     var dropdownExpanded by remember { mutableStateOf(false) }
@@ -76,6 +79,13 @@ fun LibraryTopBar(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.Center,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text(text = "Library")
+//        }
 
         // Search Row
         Row(
@@ -83,33 +93,6 @@ fun LibraryTopBar(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            // Close Button
-            if (showCloseButton){
-                IconButton(
-                    onClick = {
-                        onClose()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close"
-                    )
-                }
-            }
-            else {
-                Spacer(Modifier.weight(0.2F))
-            }
-
-            // Search Bar
-            OutlinedTextField(
-                modifier = Modifier.focusRequester(FocusRequester())
-                    .weight(0.5F),
-                value = searchString,
-                onValueChange = { onSearchStringChanged(it) },
-                shape = RoundedCornerShape(20.dp),
-                maxLines = 1
-            )
 
             // Filter
             Box(
@@ -190,6 +173,15 @@ fun LibraryTopBar(
                 }
             }
 
+            // Search Bar
+            OutlinedTextField(
+                modifier = Modifier.focusRequester(FocusRequester())
+                    .weight(0.5F),
+                value = searchString,
+                onValueChange = { onSearchStringChanged(it) },
+                shape = RoundedCornerShape(20.dp),
+                maxLines = 1
+            )
 
             // Clear button
             if (searchString != "" || filterType != null){
@@ -211,6 +203,24 @@ fun LibraryTopBar(
                         fontSize = 18.sp,
                     )
                 }
+            }
+
+            // Close Button
+            if (showCloseButton){
+                IconButton(
+                    modifier = Modifier.weight(0.2F),
+                    onClick = {
+                        onClose()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Close"
+                    )
+                }
+            }
+            else {
+                Spacer(Modifier.weight(0.2F))
             }
 
         }
@@ -286,36 +296,38 @@ fun LibraryTopBar(
                 )
             }
 
-            Divider(modifier = Modifier.fillMaxHeight().width(1.dp), thickness = 1.dp)
+            if (showSchedulesTab){
+                Divider(modifier = Modifier.fillMaxHeight().width(1.dp), thickness = 1.dp)
 
-            // Schedules
-            Column(
-                modifier = Modifier
-                    .weight(0.33f)
-                    .background(
+                // Schedules
+                Column(
+                    modifier = Modifier
+                        .weight(0.33f)
+                        .background(
+                            if (isShowingSchedules) {
+                                MaterialTheme.colorScheme.secondary
+                            }
+                            else {
+                                MaterialTheme.colorScheme.background
+                            }
+                        )
+                        .padding(4.dp)
+                        .clickable { onShowSchedulesSelected() },
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Schedules",
+                        textAlign = TextAlign.Center,
+                        color =
                         if (isShowingSchedules) {
-                            MaterialTheme.colorScheme.secondary
+                            MaterialTheme.colorScheme.onSecondary
                         }
                         else {
-                            MaterialTheme.colorScheme.background
+                            MaterialTheme.colorScheme.onBackground
                         }
                     )
-                    .padding(4.dp)
-                    .clickable { onShowSchedulesSelected() },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Schedules",
-                    textAlign = TextAlign.Center,
-                    color =
-                    if (isShowingSchedules) {
-                        MaterialTheme.colorScheme.onSecondary
-                    }
-                    else {
-                        MaterialTheme.colorScheme.onBackground
-                    }
-                )
+                }
             }
 
         }
