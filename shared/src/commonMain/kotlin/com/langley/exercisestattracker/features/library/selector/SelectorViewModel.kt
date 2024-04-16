@@ -2,6 +2,8 @@ package com.langley.exercisestattracker.features.library.selector
 
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.features.library.LibraryState
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -65,6 +67,26 @@ class SelectorViewModel(
         _state.update { it.copy(
             selectedExercises = mutableList
         ) }
+    }
+
+    fun selectDefinitionsTab() {
+        TODO("Not yet implemented")
+    }
+
+    fun selectRoutinesTab() {
+        TODO("Not yet implemented")
+    }
+
+    fun selectSchedulesTab() {
+        TODO("Not yet implemented")
+    }
+
+    fun toggleSelectedRoutine(routine: ExerciseRoutine) {
+        TODO("Not yet implemented")
+    }
+
+    fun toggleSelectedSchedule(schedule: ExerciseSchedule) {
+        TODO("Not yet implemented")
     }
 
 }
