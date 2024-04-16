@@ -8,6 +8,7 @@ import com.langley.exercisestattracker.core.data.getExercisesFromCSV
 import com.langley.exercisestattracker.core.data.getWorkoutStateFromString
 import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.Job
@@ -409,11 +410,33 @@ class WorkoutViewModel(
 
             is WorkoutEvent.AddRoutine -> {
                 val exercises = _state.value.exerciseList.toMutableList()
-                val records = _state.value.exerciseList.toMutableList()
+                val records = _state.value.recordsList.toMutableList()
 
                 val newExercises = workoutEvent.routine.getExercisesFromCSV(
                     _state.value.exerciseLibrary
                 )
+
+                val reps = workoutEvent.routine.repsCSV.split(",")
+
+                for ((index, exercise) in newExercises.withIndex()){
+
+                    if (!exercises.contains(exercise)){
+
+                        exercises.add(exercise)
+                    }
+
+                    records.add(
+                        exercise.toBlankRecord().copy(repsCompleted = reps[index].toInt())
+                    )
+
+                }
+
+                _state.update { it.copy(
+                    exerciseList = exercises,
+                    recordsList = records,
+                    routine = workoutEvent.routine
+                ) }
+
 
             }
         }
