@@ -36,7 +36,11 @@ fun LibraryList(
     routineOnClick: (ExerciseRoutine) -> Unit = {},
     scheduleOnClick: (ExerciseSchedule) -> Unit = {},
     focusManager: FocusManager,
-    columns: GridCells = GridCells.Fixed(1)
+    columns: GridCells = GridCells.Fixed(1),
+    selectable: Boolean = false,
+    selectedExercises: List<ExerciseDefinition> = emptyList(),
+    selectedRoutines: List<ExerciseRoutine> = emptyList(),
+    selectedSchedules: List<ExerciseSchedule> = emptyList(),
 ){
 
     LazyVerticalGrid(
@@ -65,6 +69,8 @@ fun LibraryList(
                             focusManager.clearFocus()
                             exerciseOnClick(exerciseDefinition)
                         },
+                    selectable = selectable,
+                    isClicked = selectedExercises.contains(exerciseDefinition)
                 )
             }
 
@@ -87,6 +93,8 @@ fun LibraryList(
                             focusManager.clearFocus()
                             routineOnClick(routine)
                         },
+                    selectable = selectable,
+                    isClicked = selectedRoutines.contains(routine)
                 )
             }
 
@@ -109,6 +117,8 @@ fun LibraryList(
                             focusManager.clearFocus()
                             scheduleOnClick(schedule)
                         },
+                    selectable = selectable,
+                    isClicked = selectedSchedules.contains(schedule)
                 )
             }
 
