@@ -28,7 +28,10 @@ import com.langley.exercisestattracker.features.workout.WorkoutEvent
 
 @Composable
 fun LibraryList(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 4.dp, vertical = 4.dp)
+        .background(MaterialTheme.colorScheme.background),
     exercises: List<ExerciseDefinition>? = null,
     routines: List<ExerciseRoutine>? = null,
     schedules: List<ExerciseSchedule>? = null,
@@ -39,17 +42,14 @@ fun LibraryList(
     columns: GridCells = GridCells.Fixed(1),
     selectable: Boolean = false,
     selectedExercises: List<ExerciseDefinition> = emptyList(),
-    selectedRoutines: List<ExerciseRoutine> = emptyList(),
-    selectedSchedules: List<ExerciseSchedule> = emptyList(),
+    selectedRoutine: ExerciseRoutine? = null,
+    selectedSchedule: ExerciseSchedule? = null,
 ){
 
     LazyVerticalGrid(
         columns = columns,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 4.dp, vertical = 4.dp)
-            .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(vertical = 8.dp),
+        modifier = modifier,
+        contentPadding = PaddingValues(vertical = 4.dp),
     ){
 
         if (exercises != null){
@@ -94,7 +94,7 @@ fun LibraryList(
                             routineOnClick(routine)
                         },
                     selectable = selectable,
-                    isClicked = selectedRoutines.contains(routine)
+                    isClicked = selectedRoutine == routine
                 )
             }
 
@@ -118,7 +118,7 @@ fun LibraryList(
                             scheduleOnClick(schedule)
                         },
                     selectable = selectable,
-                    isClicked = selectedSchedules.contains(schedule)
+                    isClicked = selectedSchedule == schedule
                 )
             }
 
