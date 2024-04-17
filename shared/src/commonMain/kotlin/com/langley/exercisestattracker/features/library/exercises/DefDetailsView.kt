@@ -1,5 +1,9 @@
 package com.langley.exercisestattracker.features.library.exercises
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarOutline
@@ -57,265 +63,536 @@ fun DefinitionDetailsView(
         mutableStateOf(definition.targetMuscles.split(", "))
     }
 
-
-    BasicBottomSheet(
+    AnimatedVisibility(
         visible = isVisible,
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center
-    )
-    {
-
-        // Top Row
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+        enter = fadeIn(
+            animationSpec = tween(durationMillis = 100),
+        ),
+        exit = fadeOut(
+            animationSpec = tween(durationMillis = 100),
         )
-        {
-            IconButton(
-                onClick = {
-                    libraryOnEvent(LibraryEvent.CloseDetailsView)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = "Close"
-                )
-            }
-
-            IconButton(
-                onClick = {
-                    libraryOnEvent(LibraryEvent.ToggleFavoriteDef(definition))
-                }
-            ) {
-                Icon(
-
-                    imageVector =
-                    if (
-                        definition.isFavorite
-                        ) {
-                        Icons.Filled.Star
+    ){
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(8.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Top Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            )
+            {
+                IconButton(
+                    onClick = {
+                        libraryOnEvent(LibraryEvent.CloseDetailsView)
                     }
-                    else { Icons.Filled.StarOutline },
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = "Close"
+                    )
+                }
 
-                    contentDescription = "Favorite"
-                )
+                IconButton(
+                    onClick = {
+                        libraryOnEvent(LibraryEvent.ToggleFavoriteExercise(definition))
+                    }
+                ) {
+                    Icon(
 
-            }
+                        imageVector =
+                        if (
+                            definition.isFavorite
+                        ) {
+                            Icons.Filled.Star
+                        }
+                        else { Icons.Filled.StarOutline },
 
-            Text(
-                text = "Edit",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(16.dp)
-                    .clickable {
+                        contentDescription = "Favorite"
+                    )
+
+                }
+
+                Text(
+                    text = "Edit",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp)
+                        .clickable {
 //                        defBuilderOnEvent(
 //                            ExerciseBuilderEvent.InitializeDefinition
 //                        )
-                        libraryOnEvent(
-                            LibraryEvent.EditDefinition(definition)
-                        ) },
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-            )
-        }
-
-        // Title Section
-        Column (
-            modifier = Modifier.fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        )
-        {
-            Spacer(Modifier.height(16.dp))
-
-
-            Column()
-            {
-
-                Text(
-                    text = definition.exerciseName,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
+                            libraryOnEvent(
+                                LibraryEvent.EditExercise(definition)
+                            ) },
                     fontWeight = FontWeight.Bold,
-                    fontSize = 36.sp,
-                    lineHeight = 40.sp,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontSize = 20.sp,
                 )
-                Spacer(Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(
-                            RoundedCornerShape(16.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.tertiaryContainer)
-
-                ){}
             }
 
-            Spacer(Modifier.height(16.dp))
-
-            // Tags Section
-            Column(
-                modifier = Modifier.fillMaxWidth()
+            // Title Section
+            Column (
+                modifier = Modifier.fillMaxSize()
                     .background(MaterialTheme.colorScheme.surface),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
-            ) {
-                if (definition.isWeighted){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Weight Training",
-                        maxLines = 1
-                    )
-                    Spacer(Modifier.height(4.dp))
-                }
-                if (definition.isCalisthenic){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Calisthenics",
-                        maxLines = 1
-                    )
-                    Spacer(Modifier.height(4.dp))
-                }
-                if (definition.isCardio){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Cardio",
-                        maxLines = 1
-                    )
-                    Spacer(Modifier.height(4.dp))
-                }
-                if (definition.isTimed){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Timed Exercise",
-                        maxLines = 1
-                    )
-                    Spacer(Modifier.height(4.dp))
-                }
-                if (definition.hasDistance){
-                    RoundedTextContainer(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Distance Measured",
-                        maxLines = 1
-                    )
-                    Spacer(Modifier.height(4.dp))
-                }
-            }
+            )
+            {
+                Spacer(Modifier.height(16.dp))
 
-            Spacer(Modifier.height(16.dp))
 
-            // Primary Target Section
-            Column(
-                modifier = Modifier.fillMaxWidth()
-                    .clip(
-                        RoundedCornerShape(16.dp)
+                Column()
+                {
+
+                    Text(
+                        text = definition.exerciseName,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 36.sp,
+                        lineHeight = 40.sp,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .padding(4.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    text = "Primary Target:",
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Left
-                )
-                LazyVerticalGrid(
-                    modifier = Modifier.heightIn(36.dp, 200.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    columns =
-                    if (primaryTargetList.isEmpty()) { GridCells.Fixed(1)}
-                    else if (primaryTargetList.size >= 3) { GridCells.Fixed(3) }
-                    else { GridCells.Fixed(primaryTargetList.size) }
-                ){
-                    items(primaryTargetList){
+                    Spacer(Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .clip(
+                                RoundedCornerShape(16.dp)
+                            )
+                            .background(MaterialTheme.colorScheme.tertiaryContainer)
+
+                    ){}
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                // Tags Section
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    if (definition.isWeighted){
                         RoundedTextContainer(
-                            text = it,
-                            boxMinWidth = 64.dp,
-                            boxMinHeight = 64.dp
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Weight Training",
+                            maxLines = 1
                         )
+                        Spacer(Modifier.height(4.dp))
+                    }
+                    if (definition.isCalisthenic){
+                        RoundedTextContainer(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Calisthenics",
+                            maxLines = 1
+                        )
+                        Spacer(Modifier.height(4.dp))
+                    }
+                    if (definition.isCardio){
+                        RoundedTextContainer(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Cardio",
+                            maxLines = 1
+                        )
+                        Spacer(Modifier.height(4.dp))
+                    }
+                    if (definition.isTimed){
+                        RoundedTextContainer(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Timed Exercise",
+                            maxLines = 1
+                        )
+                        Spacer(Modifier.height(4.dp))
+                    }
+                    if (definition.hasDistance){
+                        RoundedTextContainer(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Distance Measured",
+                            maxLines = 1
+                        )
+                        Spacer(Modifier.height(4.dp))
                     }
                 }
-            }
 
-            Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
 
-            // Target Muscles
-            Column(
-                modifier = Modifier.fillMaxWidth()
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .clickable { showMuscles = !showMuscles }
-                    .padding(4.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-
-                // Section Title Row
-                Row(
+                // Primary Target Section
+                Column(
                     modifier = Modifier.fillMaxWidth()
+                        .clip(
+                            RoundedCornerShape(16.dp)
+                        )
                         .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(end = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+                        .padding(4.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
                     Text(
                         modifier = Modifier
-                            .padding(start = 8.dp)
-                            .weight(1F),
-                        text = "Target Muscles:",
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        text = "Primary Target:",
                         fontSize = 18.sp,
-                        textAlign = TextAlign.Left,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        textAlign = TextAlign.Left
                     )
-
-                }
-
-                Spacer(Modifier.height(8.dp))
-
-                // Target Muscles List
-                if (showMuscles){
-
                     LazyVerticalGrid(
-                        modifier = Modifier.heightIn(min = 0.dp, max = 300.dp),
+                        modifier = Modifier.heightIn(36.dp, 200.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
                         columns =
-                        if (musclesList.isEmpty()) { GridCells.Fixed(1)}
-                        else if (musclesList.size >= 3) { GridCells.Fixed(3) }
-                        else { GridCells.Fixed(musclesList.size) }
-                    ) {
-                        items(musclesList){
+                        if (primaryTargetList.isEmpty()) { GridCells.Fixed(1)}
+                        else if (primaryTargetList.size >= 3) { GridCells.Fixed(3) }
+                        else { GridCells.Fixed(primaryTargetList.size) }
+                    ){
+                        items(primaryTargetList){
                             RoundedTextContainer(
-                                modifier = Modifier.fillMaxWidth(),
                                 text = it,
                                 boxMinWidth = 64.dp,
                                 boxMinHeight = 64.dp
                             )
+                        }
+                    }
+                }
 
-                            Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(16.dp))
+
+                // Target Muscles
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .clip(
+                            RoundedCornerShape(16.dp)
+                        )
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .clickable { showMuscles = !showMuscles }
+                        .padding(4.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+
+                    // Section Title Row
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .padding(end = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .weight(1F),
+                            text = "Target Muscles:",
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Left,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+
+                    }
+
+                    Spacer(Modifier.height(8.dp))
+
+                    // Target Muscles List
+                    if (showMuscles){
+
+                        LazyVerticalGrid(
+                            modifier = Modifier.heightIn(min = 0.dp, max = 300.dp),
+                            columns =
+                            if (musclesList.isEmpty()) { GridCells.Fixed(1)}
+                            else if (musclesList.size >= 3) { GridCells.Fixed(3) }
+                            else { GridCells.Fixed(musclesList.size) }
+                        ) {
+                            items(musclesList){
+                                RoundedTextContainer(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = it,
+                                    boxMinWidth = 64.dp,
+                                    boxMinHeight = 64.dp
+                                )
+
+                                Spacer(Modifier.height(12.dp))
+                            }
                         }
                     }
                 }
             }
+
+            Spacer(Modifier.height(16.dp))
+
+            Text(
+                text = definition.description,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Normal,
+                fontSize = 20.sp
+            )
+
+            Spacer(Modifier.height(16.dp))
         }
-
-        Spacer(Modifier.height(16.dp))
-
-        Text(
-            text = definition.description,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
-            fontWeight = FontWeight.Normal,
-            fontSize = 20.sp
-        )
-
-        Spacer(Modifier.height(16.dp))
-
     }
+
+
+//    BasicBottomSheet(
+//        visible = isVisible,
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.Center
+//    )
+//    {
+//
+//        // Top Row
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceBetween
+//        )
+//        {
+//            IconButton(
+//                onClick = {
+//                    libraryOnEvent(LibraryEvent.CloseDetailsView)
+//                }
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Rounded.Close,
+//                    contentDescription = "Close"
+//                )
+//            }
+//
+//            IconButton(
+//                onClick = {
+//                    libraryOnEvent(LibraryEvent.ToggleFavoriteExercise(definition))
+//                }
+//            ) {
+//                Icon(
+//
+//                    imageVector =
+//                    if (
+//                        definition.isFavorite
+//                        ) {
+//                        Icons.Filled.Star
+//                    }
+//                    else { Icons.Filled.StarOutline },
+//
+//                    contentDescription = "Favorite"
+//                )
+//
+//            }
+//
+//            Text(
+//                text = "Edit",
+//                textAlign = TextAlign.Center,
+//                modifier = Modifier.padding(16.dp)
+//                    .clickable {
+////                        defBuilderOnEvent(
+////                            ExerciseBuilderEvent.InitializeDefinition
+////                        )
+//                        libraryOnEvent(
+//                            LibraryEvent.EditExercise(definition)
+//                        ) },
+//                fontWeight = FontWeight.Bold,
+//                fontSize = 20.sp,
+//            )
+//        }
+//
+//        // Title Section
+//        Column (
+//            modifier = Modifier.fillMaxSize()
+//                .background(MaterialTheme.colorScheme.surface),
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.Center
+//        )
+//        {
+//            Spacer(Modifier.height(16.dp))
+//
+//
+//            Column()
+//            {
+//
+//                Text(
+//                    text = definition.exerciseName,
+//                    textAlign = TextAlign.Center,
+//                    modifier = Modifier.fillMaxWidth(),
+//                    fontWeight = FontWeight.Bold,
+//                    fontSize = 36.sp,
+//                    lineHeight = 40.sp,
+//                    color = MaterialTheme.colorScheme.onSurface
+//                )
+//                Spacer(Modifier.height(8.dp))
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(8.dp)
+//                        .clip(
+//                            RoundedCornerShape(16.dp)
+//                        )
+//                        .background(MaterialTheme.colorScheme.tertiaryContainer)
+//
+//                ){}
+//            }
+//
+//            Spacer(Modifier.height(16.dp))
+//
+//            // Tags Section
+//            Column(
+//                modifier = Modifier.fillMaxWidth()
+//                    .background(MaterialTheme.colorScheme.surface),
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                verticalArrangement = Arrangement.Center
+//            ) {
+//                if (definition.isWeighted){
+//                    RoundedTextContainer(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        text = "Weight Training",
+//                        maxLines = 1
+//                    )
+//                    Spacer(Modifier.height(4.dp))
+//                }
+//                if (definition.isCalisthenic){
+//                    RoundedTextContainer(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        text = "Calisthenics",
+//                        maxLines = 1
+//                    )
+//                    Spacer(Modifier.height(4.dp))
+//                }
+//                if (definition.isCardio){
+//                    RoundedTextContainer(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        text = "Cardio",
+//                        maxLines = 1
+//                    )
+//                    Spacer(Modifier.height(4.dp))
+//                }
+//                if (definition.isTimed){
+//                    RoundedTextContainer(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        text = "Timed Exercise",
+//                        maxLines = 1
+//                    )
+//                    Spacer(Modifier.height(4.dp))
+//                }
+//                if (definition.hasDistance){
+//                    RoundedTextContainer(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        text = "Distance Measured",
+//                        maxLines = 1
+//                    )
+//                    Spacer(Modifier.height(4.dp))
+//                }
+//            }
+//
+//            Spacer(Modifier.height(16.dp))
+//
+//            // Primary Target Section
+//            Column(
+//                modifier = Modifier.fillMaxWidth()
+//                    .clip(
+//                        RoundedCornerShape(16.dp)
+//                    )
+//                    .background(MaterialTheme.colorScheme.secondaryContainer)
+//                    .padding(4.dp),
+//                verticalArrangement = Arrangement.Center,
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ){
+//                Text(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(4.dp),
+//                    text = "Primary Target:",
+//                    fontSize = 18.sp,
+//                    textAlign = TextAlign.Left
+//                )
+//                LazyVerticalGrid(
+//                    modifier = Modifier.heightIn(36.dp, 200.dp),
+//                    horizontalArrangement = Arrangement.SpaceEvenly,
+//                    columns =
+//                    if (primaryTargetList.isEmpty()) { GridCells.Fixed(1)}
+//                    else if (primaryTargetList.size >= 3) { GridCells.Fixed(3) }
+//                    else { GridCells.Fixed(primaryTargetList.size) }
+//                ){
+//                    items(primaryTargetList){
+//                        RoundedTextContainer(
+//                            text = it,
+//                            boxMinWidth = 64.dp,
+//                            boxMinHeight = 64.dp
+//                        )
+//                    }
+//                }
+//            }
+//
+//            Spacer(Modifier.height(16.dp))
+//
+//            // Target Muscles
+//            Column(
+//                modifier = Modifier.fillMaxWidth()
+//                    .clip(
+//                        RoundedCornerShape(16.dp)
+//                    )
+//                    .background(MaterialTheme.colorScheme.secondaryContainer)
+//                    .clickable { showMuscles = !showMuscles }
+//                    .padding(4.dp),
+//                verticalArrangement = Arrangement.Center,
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ){
+//
+//                // Section Title Row
+//                Row(
+//                    modifier = Modifier.fillMaxWidth()
+//                        .background(MaterialTheme.colorScheme.secondaryContainer)
+//                        .padding(end = 16.dp),
+//                    horizontalArrangement = Arrangement.SpaceBetween
+//                ) {
+//                    Text(
+//                        modifier = Modifier
+//                            .padding(start = 8.dp)
+//                            .weight(1F),
+//                        text = "Target Muscles:",
+//                        fontSize = 18.sp,
+//                        textAlign = TextAlign.Left,
+//                        color = MaterialTheme.colorScheme.onSecondaryContainer
+//                    )
+//
+//                }
+//
+//                Spacer(Modifier.height(8.dp))
+//
+//                // Target Muscles List
+//                if (showMuscles){
+//
+//                    LazyVerticalGrid(
+//                        modifier = Modifier.heightIn(min = 0.dp, max = 300.dp),
+//                        columns =
+//                        if (musclesList.isEmpty()) { GridCells.Fixed(1)}
+//                        else if (musclesList.size >= 3) { GridCells.Fixed(3) }
+//                        else { GridCells.Fixed(musclesList.size) }
+//                    ) {
+//                        items(musclesList){
+//                            RoundedTextContainer(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                text = it,
+//                                boxMinWidth = 64.dp,
+//                                boxMinHeight = 64.dp
+//                            )
+//
+//                            Spacer(Modifier.height(12.dp))
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        Spacer(Modifier.height(16.dp))
+//
+//        Text(
+//            text = definition.description,
+//            textAlign = TextAlign.Center,
+//            modifier = Modifier.fillMaxWidth(),
+//            fontWeight = FontWeight.Normal,
+//            fontSize = 20.sp
+//        )
+//
+//        Spacer(Modifier.height(16.dp))
+//
+//    }
 }
