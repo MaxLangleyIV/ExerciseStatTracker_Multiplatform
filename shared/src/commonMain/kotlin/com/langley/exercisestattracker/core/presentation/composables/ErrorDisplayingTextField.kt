@@ -14,10 +14,12 @@ fun ErrorDisplayingTextField(
     placeholder: String,
     error: String?,
     onValueChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    label: @Composable() (() -> Unit)? = null
 ){
     OutlinedTextField(
         value = value,
+        label = label,
         placeholder = {
             Text(text = placeholder)
         },
