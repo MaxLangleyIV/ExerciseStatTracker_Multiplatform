@@ -98,7 +98,7 @@ class ExerciseBuilderViewModel(
                             .insertOrReplaceDefinition(_state.value.newExerciseDefinition)
                         if (_state.value.initialized){
                             libraryOnEvent(
-                                LibraryEvent.UpdateSelectedDefinition(
+                                LibraryEvent.UpdateSelectedExercise(
                                     _state.value.newExerciseDefinition
                                 )
                             )
