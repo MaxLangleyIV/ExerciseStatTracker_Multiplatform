@@ -1,5 +1,9 @@
 package com.langley.exercisestattracker.features.library.routines.views
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -59,25 +63,29 @@ fun RoutineEditView(
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource
 ) {
-    BasicBottomSheet(
-        visible = visible
-    ){
 
-        val routineBuilderViewModel = getViewModel(
-            key = "routineBuilderViewModel",
-            factory = viewModelFactory {
-                RoutineBuilderViewModel(
-                    dataSource = dataSource,
-                    initialState = RoutineBuilderState(routine = routine),
-                    libraryOnEvent = onEvent
-                )
-            }
+    val routineBuilderViewModel = getViewModel(
+        key = "routineBuilderViewModel",
+        factory = viewModelFactory {
+            RoutineBuilderViewModel(
+                dataSource = dataSource,
+                initialState = RoutineBuilderState(routine = routine),
+                libraryOnEvent = onEvent
+            )
+        }
+    )
+
+    val state by routineBuilderViewModel.state.collectAsState(RoutineBuilderState())
+
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(
+            animationSpec = tween(durationMillis = 100),
+        ),
+        exit = fadeOut(
+            animationSpec = tween(durationMillis = 100),
         )
-
-        println("ROUTINE BUILDER VIEW MODEL: $routineBuilderViewModel")
-        println("ROUTINE: $routine")
-
-        val state by routineBuilderViewModel.state.collectAsState(RoutineBuilderState())
+    ){
 
         Column(
             modifier = Modifier
@@ -137,6 +145,7 @@ fun RoutineEditView(
                 {
                     ErrorDisplayingTextField(
                         value = routine.routineName,
+                        label = { Text(text = "Routine Name") },
                         placeholder = "Routine Name",
                         error = state.nameError,
                         onValueChanged = {},
@@ -159,7 +168,7 @@ fun RoutineEditView(
                     Modifier.height(16.dp)
                 )
 
-                // Body Region Row
+                // Tags Row
                 Row(
                     modifier = Modifier.fillMaxWidth()
                         .clip(
@@ -187,80 +196,9 @@ fun RoutineEditView(
 
                 Spacer(Modifier.height(16.dp))
 
-                // Target Muscles Row
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .clip(
-                            RoundedCornerShape(16.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Column()
-                    {
-                        Text(
-                            text = "Target Muscles:",
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                    }
-
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                // Metrics Column
-
-
-                Spacer(Modifier.height(16.dp))
-
-                // Tags Column
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(
-                            RoundedCornerShape(16.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(8.dp)
-                ){
-
-                    Text( text = "Extra Tags:" )
-                    Spacer(Modifier.height(8.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-//
-
-//                    SelectableTextBoxWithEvent(
-//                        text = "Body Weight",
-//                        isClicked = newExerciseDefinition.isCalisthenic,
-//                        onEvent = onEvent,
-//                        event = LibraryEvent.ToggleIsCalisthenics,
-//                    )
-//
-//                    Spacer(Modifier.width(8.dp))
-//
-//                    SelectableTextBoxWithEvent(
-//                        text = "Cardio",
-//                        isClicked = newExerciseDefinition.isCardio,
-//                        onEvent = onEvent,
-//                        event = LibraryEvent.ToggleIsCardio,
-//                    )
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-
                 OutlinedTextField(
                     value = routine.description,
+                    label = { Text(text = "Description") },
                     onValueChange = {},
                     placeholder = {
                         Text(text = "Exercise Description")
@@ -286,44 +224,5 @@ fun RoutineEditView(
 
             }
         }
-    }
-}
-
-@Composable
-fun SelectableTextBoxWithEvent(
-    modifier: Modifier = Modifier,
-    text: String,
-    isClicked: Boolean,
-    onEvent: (LibraryEvent) -> Unit,
-    event: LibraryEvent,
-){
-    Box(
-        modifier = modifier
-//            .size(76.dp)
-            .defaultMinSize(64.dp, 64.dp)
-            .clip(
-                RoundedCornerShape(16.dp)
-            )
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
-            .clickable { onEvent(event) }
-            .border(
-                width = 2.dp,
-
-                color = if (isClicked) {
-                    MaterialTheme.colorScheme.outline
-                } else Color.Transparent,
-
-                shape = RoundedCornerShape(16.dp)
-            )
-            .padding(4.dp)
-
-    ){
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onTertiaryContainer,
-            text = text,
-            fontSize = 16.sp,
-        )
     }
 }
