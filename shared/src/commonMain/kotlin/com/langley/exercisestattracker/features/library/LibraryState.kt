@@ -13,7 +13,7 @@ data class LibraryState(
 
     //Data state.
     val exercises: List<ExerciseDefinition> = emptyList(),
-    val selectedExerciseDefinition: ExerciseDefinition? = null,
+    val selectedExercise: ExerciseDefinition? = null,
 
     val routines: List<ExerciseRoutine> = emptyList(),
     val selectedRoutine: ExerciseRoutine? = null,
@@ -29,8 +29,8 @@ data class LibraryState(
 
     //UI visibility flags.
     val isExerciseDetailsSheetOpen: Boolean = false,
-    val isEditExerciseDefSheetOpen: Boolean = false,
-    val isAddExerciseDefSheetOpen: Boolean = false,
+    val isEditExerciseSheetOpen: Boolean = false,
+    val isAddExerciseSheetOpen: Boolean = false,
 
     val isRoutineDetailsSheetOpen: Boolean = false,
     val isEditRoutineSheetOpen: Boolean = false,
