@@ -90,7 +90,7 @@ fun App(
 //        // Exercises
 //        val exerciseDefList = ExerciseDefinitionDummyData().definitionList
 //        for (exerciseDefinition in exerciseDefList){
-//            libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
+//            libraryViewModel.onEvent(LibraryEvent.SaveExercise(exerciseDefinition))
 //        }
 //        // Routines
 //        val routines = ExerciseRoutineDummyData(exerciseDefList).getRoutines()
