@@ -42,7 +42,8 @@ fun WorkoutContentHolder(
 
             WorkoutContent(
                 modifier = Modifier.fillMaxSize(),
-                workoutState = workoutState,
+                exercises = workoutState.exerciseList,
+                records = workoutState.recordsList,
                 onEvent = onEvent
             )
 
