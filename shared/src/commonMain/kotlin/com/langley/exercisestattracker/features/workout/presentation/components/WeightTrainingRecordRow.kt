@@ -163,8 +163,11 @@ fun WeightTrainingRecordRow(
     exercise: ExerciseDefinition = ExerciseDefinition(),
     set: ExerciseRecord = ExerciseRecord(),
     setNumber: Int = 0,
-    onEvent: (WorkoutEvent) -> Unit,
-    recordIndex: Int
+    recordIndex: Int,
+    updateWeightFromString: (index: Int, string: String) -> Unit = { _, _ -> },
+    updateRepsFromString: (index: Int, string: String) -> Unit = { _, _ -> },
+    markComplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
+    markIncomplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> }
     ){
 
     var detailsVisible by remember { mutableStateOf(false) }
@@ -239,9 +242,10 @@ fun WeightTrainingRecordRow(
                 value = textFieldValue,
                 onValueChange = {
                     textFieldValue = it
-                    onEvent(
-                        WorkoutEvent.UpdateWeightFromString(index = recordIndex, value = it)
-                    )
+                    updateWeightFromString(recordIndex, it)
+//                    onEvent(
+//                        WorkoutEvent.UpdateWeightFromString(index = recordIndex, value = it)
+//                    )
                 },
                 singleLine = true,
                 textStyle =
@@ -298,9 +302,10 @@ fun WeightTrainingRecordRow(
                 value = textFieldValue,
                 onValueChange = {
                     textFieldValue = it
-                    onEvent(
-                        WorkoutEvent.UpdateRepsFromString(index = recordIndex, value = it)
-                    )
+                    updateRepsFromString(recordIndex,it)
+//                    onEvent(
+//                        WorkoutEvent.UpdateRepsFromString(index = recordIndex, value = it)
+//                    )
                 },
                 singleLine = true,
                 textStyle =
@@ -334,14 +339,16 @@ fun WeightTrainingRecordRow(
             Checkbox(
                 onCheckedChange = {isChecked ->
                     if (isChecked){
-                        onEvent(
-                            WorkoutEvent.MarkCompleted(recordIndex, set)
-                        )
+                        markComplete(recordIndex, set)
+//                        onEvent(
+//                            WorkoutEvent.MarkCompleted(recordIndex, set)
+//                        )
                     }
                     else {
-                        onEvent(
-                            WorkoutEvent.MarkIncomplete(recordIndex, set)
-                        )
+                        markIncomplete(recordIndex, set)
+//                        onEvent(
+//                            WorkoutEvent.MarkIncomplete(recordIndex, set)
+//                        )
                     }
                 },
                 checked = set.completed
