@@ -220,7 +220,10 @@ fun LibraryTopBar(
                 }
             }
             else {
-                Spacer(Modifier.weight(0.2F))
+                if (searchString == "" && filterType == null){
+                    Spacer(Modifier.weight(0.2F))
+                }
+
             }
 
         }
