@@ -96,7 +96,7 @@ fun ScheduleDetailsView(
 //                            ExerciseBuilderEvent.InitializeDefinition
 //                        )
 //                        libraryOnEvent(
-//                            LibraryEvent.EditDefinition(schedule)
+//                            LibraryEvent.EditExercise(schedule)
 //                        )
                     },
                 fontWeight = FontWeight.Bold,
