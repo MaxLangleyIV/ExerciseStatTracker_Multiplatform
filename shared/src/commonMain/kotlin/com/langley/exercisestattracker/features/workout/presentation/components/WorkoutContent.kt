@@ -24,7 +24,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import kotlinx.datetime.Clock
@@ -32,7 +34,8 @@ import kotlinx.datetime.Clock
 @Composable
 fun WorkoutContent(
     modifier: Modifier = Modifier,
-    workoutState: WorkoutState,
+    exercises: List<ExerciseDefinition> = emptyList(),
+    records: List<ExerciseRecord> = emptyList(),
     onEvent: (WorkoutEvent) -> Unit = {}
 ){
 
@@ -45,7 +48,7 @@ fun WorkoutContent(
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            for ((exerciseIndex, exercise) in workoutState.exerciseList.withIndex()){
+            for ((exerciseIndex, exercise) in exercises.withIndex()){
 
                 var numberOfSets by remember { mutableStateOf( 0 ) }
 
@@ -81,7 +84,7 @@ fun WorkoutContent(
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        for ((recordIndex, set) in workoutState.recordsList.withIndex()){
+                        for ((recordIndex, set) in records.withIndex()){
 
                             if (set.exerciseName == exercise.exerciseName){
 
@@ -92,7 +95,15 @@ fun WorkoutContent(
                                     set = set,
                                     setNumber = numberOfSets,
                                     recordIndex = recordIndex,
-                                    onEvent = onEvent
+                                    updateRepsFromString = {index, string ->
+                                        onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
+                                    },
+                                    updateWeightFromString = {index, string ->
+                                        onEvent(WorkoutEvent.UpdateWeightFromString(index, string))
+                                    },
+                                    markComplete = {index, newSet ->
+                                        onEvent(WorkoutEvent.MarkCompleted(index, newSet))
+                                    }
                                 )
 
                                 lastSetEntered = set
