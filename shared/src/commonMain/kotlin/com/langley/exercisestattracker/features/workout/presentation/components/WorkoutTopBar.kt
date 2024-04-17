@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,8 +21,10 @@ import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
+import kotlinx.datetime.number
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun WorkoutTopBar(
@@ -31,6 +34,9 @@ fun WorkoutTopBar(
     onEvent: (WorkoutEvent) -> Unit = {}
 
 ){
+    val date = remember { Instant.fromEpochMilliseconds(
+        Clock.System.now().toEpochMilliseconds()
+    ).toLocalDateTime(TimeZone.currentSystemDefault()) }
 
     Column(
         modifier = modifier
@@ -49,8 +55,9 @@ fun WorkoutTopBar(
         ){
 
             Text(
-                text = workoutState.routine?.routineName
-                    ?: ("New Workout - " + Clock.System.todayIn(TimeZone.currentSystemDefault())),
+                text =
+                (workoutState.routine?.routineName ?: "New Workout") +
+                " - ${date.month.number}/${date.dayOfMonth}/${date.year}",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold
             )
