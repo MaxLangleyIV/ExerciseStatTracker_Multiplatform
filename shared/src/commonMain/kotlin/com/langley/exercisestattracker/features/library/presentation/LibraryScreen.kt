@@ -55,16 +55,27 @@ fun LibraryScreen(
             modifier = modifier,
             floatingActionButton = {
                 if (
-                    !libraryState.isEditExerciseDefSheetOpen
-                    and !libraryState.isAddExerciseDefSheetOpen
+                    !libraryState.isEditExerciseSheetOpen
+                    and !libraryState.isAddExerciseSheetOpen
                     and !libraryState.isExerciseDetailsSheetOpen
+                    and !libraryState.isRoutineDetailsSheetOpen
+                    and !libraryState.isEditRoutineSheetOpen
                 ){
 
                     FloatingActionButton(
                         onClick = {
                             focusManager.clearFocus()
-                            onEvent(LibraryEvent.ClearSelectedDef)
-                            onEvent(LibraryEvent.AddNewDefClicked)
+
+                            if (libraryState.isShowingExercises){
+                                onEvent(LibraryEvent.ClearSelectedExercise)
+                                onEvent(LibraryEvent.AddNewExercise)
+                            }
+                            else if (libraryState.isShowingRoutines){
+                                onEvent(LibraryEvent.ClearSelectedRoutine)
+                                onEvent(LibraryEvent.AddNewRoutine)
+                            }
+
+
                         },
                         shape = RoundedCornerShape(20.dp)
                     ){
@@ -102,13 +113,14 @@ fun LibraryScreen(
                     isShowingRoutines = libraryState.isShowingRoutines,
                     isShowingSchedules = libraryState.isShowingSchedules,
 
-                    onShowExercisesSelected = {onEvent(LibraryEvent.SelectDefinitionsTab)},
+                    onShowExercisesSelected = {onEvent(LibraryEvent.SelectExercisesTab)},
                     onShowRoutinesSelected = {onEvent(LibraryEvent.SelectRoutinesTab)},
-                    onShowSchedulesSelected = {onEvent(LibraryEvent.SelectSchedulesTab)},
+//                    onShowSchedulesSelected = {onEvent(LibraryEvent.SelectSchedulesTab)},
 
-                    onDefSelected = { onEvent(LibraryEvent.DefinitionSelected(it)) },
+                    onDefSelected = { onEvent(LibraryEvent.ExerciseSelected(it)) },
                     onRoutineSelected = { onEvent(LibraryEvent.RoutineSelected(it)) },
-                    onScheduleSelected = { onEvent(LibraryEvent.ScheduleSelected(it)) },
+//                    onScheduleSelected = { onEvent(LibraryEvent.ScheduleSelected(it)) },
+                    showSchedulesTab = false,
 
                     focusManager = focusManager,
                 )
@@ -117,7 +129,7 @@ fun LibraryScreen(
                 if (libraryState.isShowingExercises){
                     LibraryList(
                         exercises = libraryState.exercises,
-                        exerciseOnClick = { onEvent( LibraryEvent.DefinitionSelected(it) ) },
+                        exerciseOnClick = { onEvent( LibraryEvent.ExerciseSelected(it) ) },
                         focusManager = focusManager,
                         columns = GridCells.Fixed(2)
                     )
@@ -146,21 +158,21 @@ fun LibraryScreen(
                 isVisible = libraryState.isExerciseDetailsSheetOpen,
                 libraryOnEvent = onEvent,
                 definition =
-                libraryState.selectedExerciseDefinition ?: ExerciseDefinition()
+                libraryState.selectedExercise ?: ExerciseDefinition()
             )
 
 
             ExerciseBuilderScreen(
                 dataSource = dataSource,
-                isVisible = libraryState.isAddExerciseDefSheetOpen,
-                selectedExercise = libraryState.selectedExerciseDefinition,
+                isVisible = libraryState.isAddExerciseSheetOpen,
+                selectedExercise = libraryState.selectedExercise,
                 libraryOnEvent = onEvent,
                 focusManager = focusManager,
                 interactionSource = interactionSource,
             )
 
             RoutineDetailsView(
-                isVisible = libraryState.isRoutineDetailsSheetOpen,
+                visible = libraryState.isRoutineDetailsSheetOpen,
                 libraryOnEvent = onEvent,
                 routine = libraryState.selectedRoutine ?: ExerciseRoutine()
             )
