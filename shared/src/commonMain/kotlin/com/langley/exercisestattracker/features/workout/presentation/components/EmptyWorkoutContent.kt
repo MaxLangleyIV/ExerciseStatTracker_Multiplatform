@@ -29,6 +29,7 @@ fun EmptyWorkoutContent(
 //    onEvent: (WorkoutEvent) -> Unit = {}
     openExerciseSelector: () -> Unit = {},
     openRoutineSelector: () -> Unit = {},
+    workoutMode: Boolean = true
 ){
     Text(
         text = "This workout is currently empty.",
@@ -67,31 +68,33 @@ fun EmptyWorkoutContent(
 
         Spacer(Modifier.height(8.dp))
 
-        // Select Routine Button
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 0.dp, max = 60.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .clickable {
-                    openRoutineSelector()
-//                    onEvent(WorkoutEvent.OpenRoutineSelector)
-                }
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-                .padding(4.dp),
-            horizontalArrangement = Arrangement.Center,
-        ){
-
-            Text(
+        if (workoutMode){
+            // Select Routine Button
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1F),
-                text = "Select Routine",
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                textAlign = TextAlign.Center,
-            )
-        }
+                    .heightIn(min = 0.dp, max = 60.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable {
+                        openRoutineSelector()
+//                    onEvent(WorkoutEvent.OpenRoutineSelector)
+                    }
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.Center,
+            ){
 
-        Spacer(Modifier.height(8.dp))
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1F),
+                    text = "Select Routine",
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+        }
     }
 }
