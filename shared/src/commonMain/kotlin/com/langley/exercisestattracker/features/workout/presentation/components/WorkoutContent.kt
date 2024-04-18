@@ -38,12 +38,13 @@ fun WorkoutContent(
     records: List<ExerciseRecord> = emptyList(),
 //    onEvent: (WorkoutEvent) -> Unit = {},
     openExerciseSelector: () -> Unit = {},
-    routineBuilderMode: Boolean = false,
+    workoutMode: Boolean = false,
     updateRepsFromString: (index: Int, string: String) -> Unit = { _, _ -> },
     updateWeightFromString: (index: Int, string: String) -> Unit = { _, _ -> },
     markSetComplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
     markSetIncomplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
     addToListOfRecords: (list: List<ExerciseRecord>) -> Unit = {},
+    removeRecord: (index: Int) -> Unit = {}
 ){
 
     Box(
@@ -85,7 +86,7 @@ fun WorkoutContent(
                     ) {
                         var lastSetEntered: ExerciseRecord? = null
 
-                        WeightTrainingLabelsRow()
+                        WeightTrainingLabelsRow(workoutMode = workoutMode)
 
                         Divider(
                             modifier = Modifier.fillMaxWidth()
@@ -98,6 +99,7 @@ fun WorkoutContent(
                                 numberOfSets += 1
 
                                 WeightTrainingRecordRow(
+                                    workoutMode = workoutMode,
                                     exercise = exercise,
                                     set = set,
                                     setNumber = numberOfSets,
@@ -116,7 +118,8 @@ fun WorkoutContent(
                                     },
                                     markIncomplete = {index, newSet ->
                                         markSetIncomplete(index, newSet)
-                                    }
+                                    },
+                                    removeRecord = removeRecord
                                 )
 
                                 lastSetEntered = set
