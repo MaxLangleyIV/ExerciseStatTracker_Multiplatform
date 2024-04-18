@@ -28,6 +28,7 @@ fun WorkoutContentHolder(
     markSetIncomplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
     addToListOfRecords: (list: List<ExerciseRecord>) -> Unit = {},
     removeRecord: (index: Int) -> Unit = {},
+    removeExercise: (index: Int) -> Unit = {},
     workoutMode: Boolean = true
 ){
 
@@ -63,6 +64,7 @@ fun WorkoutContentHolder(
                 markSetIncomplete = markSetIncomplete,
                 addToListOfRecords = addToListOfRecords,
                 removeRecord = removeRecord,
+                removeExercise = removeExercise,
                 workoutMode = workoutMode
             )
 
