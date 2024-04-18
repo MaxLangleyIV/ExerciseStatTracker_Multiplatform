@@ -5,22 +5,17 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
@@ -36,19 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
-import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
-import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.library.LibraryEvent
-import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.routines.RoutineBuilderState
 import com.langley.exercisestattracker.features.library.routines.RoutineBuilderViewModel
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -96,13 +86,13 @@ fun RoutineEditView(
                     indication = null,
                     interactionSource = interactionSource
                 ) { focusManager.clearFocus() },
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.SpaceBetween
         )
         {
 
             // Top Row
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().weight(0.1F),
                 horizontalArrangement = Arrangement.SpaceBetween
             )
             {
@@ -120,7 +110,8 @@ fun RoutineEditView(
                 Text(
                     text = "Delete",
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .padding(16.dp)
                         .clickable {},
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -130,7 +121,8 @@ fun RoutineEditView(
 
             // Body
             Column (
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .weight(0.85F)
                     .background(MaterialTheme.colorScheme.surface),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -183,7 +175,7 @@ fun RoutineEditView(
                     Column()
                     {
                         Text(
-                            text = "Body Region:",
+                            text = "Tags:",
                             textAlign = TextAlign.Left,
                             modifier = Modifier,
                             fontWeight = FontWeight.Normal,
@@ -206,20 +198,23 @@ fun RoutineEditView(
                     shape = RoundedCornerShape(20.dp)
                 )
 
-                Spacer(Modifier.height(16.dp))
+            }
 
+            // Bottom Bar
+            Row(
+                modifier = Modifier.fillMaxWidth().weight(0.05F),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Button(
-                    onClick = {}
-                ){
-                    Text(text = "Update")
-                }
-
-                Spacer(Modifier.height(8.dp))
-
-                Button(
-                    onClick = {}
+                    onClick = { onEvent(LibraryEvent.CloseEditView) }
                 ){
                     Text(text = "Cancel")
+                }
+                Button(
+                    onClick = { routineBuilderViewModel.insertOrReplaceRoutine(state.routine) }
+                ){
+                    Text(text = "Update")
                 }
 
             }
