@@ -177,7 +177,6 @@ fun WeightTrainingRecordRow(
     ){
 
     var detailsVisible by remember { mutableStateOf(false) }
-    val index = remember(recordIndex) { recordIndex }
 
     Row(
         modifier = Modifier
@@ -236,7 +235,7 @@ fun WeightTrainingRecordRow(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                var textFieldValue by remember { mutableStateOf(set.weightUsed.toString()) }
+                var textFieldValue = set.weightUsed.toString()
 
 
                 BasicTextField(
@@ -299,7 +298,10 @@ fun WeightTrainingRecordRow(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            var textFieldValue by remember { mutableStateOf(set.repsCompleted.toString()) }
+//            var textFieldValue by remember { mutableStateOf(set.repsCompleted.toString()) }
+
+            var textFieldValue = set.repsCompleted.toString()
+
             BasicTextField(
                 modifier = Modifier
                     .onFocusChanged {
@@ -371,10 +373,11 @@ fun WeightTrainingRecordRow(
 
     RecordDetailsDropdown(
         visible = detailsVisible,
+        onClose = { detailsVisible = false },
         exercise = exercise,
         set = set,
         setNumber = setNumber,
-        recordIndex = index,
+        recordIndex = recordIndex,
         removeRecord = removeRecord
     )
 
