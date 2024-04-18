@@ -99,7 +99,8 @@ fun WorkoutScreen(
                     addToListOfRecords = { list ->
                         onEvent(WorkoutEvent.AddToListOfRecords(list))
                     },
-                    removeRecord = { index -> onEvent(WorkoutEvent.RemoveRecord(index)) }
+                    removeRecord = { index -> onEvent(WorkoutEvent.RemoveRecord(index)) },
+                    removeExercise = { index -> onEvent(WorkoutEvent.RemoveExercises(index)) }
 
                 )
 
