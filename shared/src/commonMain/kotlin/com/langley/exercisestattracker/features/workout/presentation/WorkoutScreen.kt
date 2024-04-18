@@ -74,6 +74,7 @@ fun WorkoutScreen(
 
                 // Content
                 WorkoutContentHolder(
+                    workoutMode = true,
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(16.dp))
@@ -87,7 +88,7 @@ fun WorkoutScreen(
                         onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
                     },
                     updateWeightFromString = {index, string ->
-                        onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
+                        onEvent(WorkoutEvent.UpdateWeightFromString(index, string))
                     },
                     markSetComplete = { index, set ->
                         onEvent(WorkoutEvent.MarkCompleted(index, set))
@@ -98,7 +99,7 @@ fun WorkoutScreen(
                     addToListOfRecords = { list ->
                         onEvent(WorkoutEvent.AddToListOfRecords(list))
                     },
-                    routineBuilderMode = false
+                    removeRecord = { index -> onEvent(WorkoutEvent.RemoveRecord(index)) }
 
                 )
 
@@ -146,8 +147,6 @@ fun WorkoutScreen(
                 },
                 onClose = {onEvent(WorkoutEvent.CloseExerciseSelector)},
                 focusManager = focusManager,
-                focusRequester = focusRequester,
-                interactionSource = interactionSource,
                 showSchedulesTab = false,
                 startOnRoutinesTab = workoutState.startSelectorOnRoutinesTab
             )
