@@ -509,7 +509,7 @@ class WorkoutViewModelTest {
             message = "recordsList should contain testRecord0"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(0))
+        viewModel.onEvent(WorkoutEvent.RemoveRecord(0))
 
         state = viewModel.state.first()
 
@@ -536,7 +536,7 @@ class WorkoutViewModelTest {
             message = "recordsList should contain testRecord1"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(1))
+        viewModel.onEvent(WorkoutEvent.RemoveRecord(1))
 
         state = viewModel.state.first()
 
@@ -562,7 +562,7 @@ class WorkoutViewModelTest {
             message = "recordsList should contain testRecord2"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(2))
+        viewModel.onEvent(WorkoutEvent.RemoveRecord(2))
 
         state = viewModel.state.first()
 
