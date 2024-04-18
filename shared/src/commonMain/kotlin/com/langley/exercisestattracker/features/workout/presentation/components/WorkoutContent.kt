@@ -36,7 +36,14 @@ fun WorkoutContent(
     modifier: Modifier = Modifier,
     exercises: List<ExerciseDefinition> = emptyList(),
     records: List<ExerciseRecord> = emptyList(),
-    onEvent: (WorkoutEvent) -> Unit = {}
+//    onEvent: (WorkoutEvent) -> Unit = {},
+    openExerciseSelector: () -> Unit = {},
+    routineBuilderMode: Boolean = false,
+    updateRepsFromString: (index: Int, string: String) -> Unit = { _, _ -> },
+    updateWeightFromString: (index: Int, string: String) -> Unit = { _, _ -> },
+    markSetComplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
+    markSetIncomplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
+    addToListOfRecords: (list: List<ExerciseRecord>) -> Unit = {},
 ){
 
     Box(
@@ -96,13 +103,19 @@ fun WorkoutContent(
                                     setNumber = numberOfSets,
                                     recordIndex = recordIndex,
                                     updateRepsFromString = {index, string ->
-                                        onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
+                                        updateRepsFromString(index, string)
+//                                        onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
                                     },
                                     updateWeightFromString = {index, string ->
-                                        onEvent(WorkoutEvent.UpdateWeightFromString(index, string))
+                                        updateWeightFromString(index, string)
+//                                        onEvent(WorkoutEvent.UpdateWeightFromString(index, string))
                                     },
                                     markComplete = {index, newSet ->
-                                        onEvent(WorkoutEvent.MarkCompleted(index, newSet))
+                                        markSetComplete(index, newSet)
+//                                        onEvent(WorkoutEvent.MarkCompleted(index, newSet))
+                                    },
+                                    markIncomplete = {index, newSet ->
+                                        markSetIncomplete(index, newSet)
                                     }
                                 )
 
@@ -121,17 +134,26 @@ fun WorkoutContent(
                             Button(
                                 onClick = {
                                     if (lastSetEntered != null){
-                                        onEvent(
-                                            WorkoutEvent.AddToListOfRecords(
-                                                listOf(
-                                                    lastSetEntered.copy(
-                                                        dateCompleted =
-                                                        Clock.System.now().toEpochMilliseconds(),
-                                                        completed = false
-                                                    )
+                                        addToListOfRecords(
+                                            listOf(
+                                                lastSetEntered.copy(
+                                                    dateCompleted =
+                                                    Clock.System.now().toEpochMilliseconds(),
+                                                    completed = false
                                                 )
                                             )
                                         )
+//                                        onEvent(
+//                                            WorkoutEvent.AddToListOfRecords(
+//                                                listOf(
+//                                                    lastSetEntered.copy(
+//                                                        dateCompleted =
+//                                                        Clock.System.now().toEpochMilliseconds(),
+//                                                        completed = false
+//                                                    )
+//                                                )
+//                                            )
+//                                        )
                                     }
                                 }
                             ){
@@ -141,14 +163,16 @@ fun WorkoutContent(
 
                     }
                 }
+
                 Spacer(Modifier.height(8.dp))
             }
 
             Button(
                 onClick = {
-                    onEvent(
-                        WorkoutEvent.OpenExerciseSelector
-                    )
+                    openExerciseSelector()
+//                    onEvent(
+//                        WorkoutEvent.OpenExerciseSelector
+//                    )
                 }
             ){
                 Text( text = "Add New Exercise" )
