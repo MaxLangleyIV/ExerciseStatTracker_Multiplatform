@@ -285,7 +285,7 @@ class WorkoutViewModel(
                 saveWorkoutState()
 
             }
-            is WorkoutEvent.RemoveFromListOfRecords -> {
+            is WorkoutEvent.RemoveRecord -> {
 
                 val mutableList = _state.value.recordsList.toMutableList()
 
@@ -397,7 +397,9 @@ class WorkoutViewModel(
 
                 val weight = try {
                     workoutEvent.value.toFloat()
-                } catch (formatException: NumberFormatException) { 0F }
+                } catch (formatException: NumberFormatException) {
+                    0F
+                }
 
                 val mutableList = _state.value.recordsList.toMutableList()
 
