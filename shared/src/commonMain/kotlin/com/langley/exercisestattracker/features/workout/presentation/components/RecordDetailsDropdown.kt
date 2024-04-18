@@ -33,6 +33,8 @@ fun RecordDetailsDropdown(
     exercise: ExerciseDefinition = ExerciseDefinition(),
     set: ExerciseRecord = ExerciseRecord(),
     setNumber: Int = 0,
+    recordIndex: Int,
+    removeRecord: (index: Int) -> Unit = {}
 
     ){
     AnimatedVisibility(
@@ -56,7 +58,7 @@ fun RecordDetailsDropdown(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = {}
+                onClick = { removeRecord(recordIndex) }
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
