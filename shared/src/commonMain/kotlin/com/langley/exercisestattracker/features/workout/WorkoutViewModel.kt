@@ -272,11 +272,11 @@ class WorkoutViewModel(
                 saveWorkoutState()
 
             }
-            is WorkoutEvent.RemoveFromListOfExercises -> {
+            is WorkoutEvent.RemoveExercises -> {
 
                 val mutableList = _state.value.exerciseList.toMutableList()
 
-                mutableList.remove(workoutEvent.exercise)
+                mutableList.removeAt(workoutEvent.index)
 
                 _state.update { it.copy(
                     exerciseList = mutableList
