@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,6 +42,7 @@ import com.langley.exercisestattracker.core.presentation.composables.ErrorDispla
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.routines.RoutineBuilderState
 import com.langley.exercisestattracker.features.library.routines.RoutineBuilderViewModel
+import com.langley.exercisestattracker.features.library.selector.SelectorView
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
@@ -77,147 +79,162 @@ fun RoutineEditView(
         )
     ){
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(8.dp)
-                .clickable(
-                    indication = null,
-                    interactionSource = interactionSource
-                ) { focusManager.clearFocus() },
-            verticalArrangement = Arrangement.SpaceBetween
-        )
-        {
-
-            // Top Row
-            Row(
-                modifier = Modifier.fillMaxWidth().weight(0.1F),
-                horizontalArrangement = Arrangement.SpaceBetween
-            )
-            {
-                IconButton(
-                    onClick = {
-                        onEvent(LibraryEvent.CloseEditView)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = "Close"
-                    )
-                }
-
-                Text(
-                    text = "Delete",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .clickable {},
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                )
-
-            }
-
-            // Body
-            Column (
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Column(
                 modifier = Modifier
-                    .weight(0.85F)
-                    .background(MaterialTheme.colorScheme.surface),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(8.dp)
+                    .clickable(
+                        indication = null,
+                        interactionSource = interactionSource
+                    ) { focusManager.clearFocus() },
+                verticalArrangement = Arrangement.SpaceBetween
             )
             {
-                Spacer(Modifier.height(8.dp))
 
-                // Name Input
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                // Top Row
+                Row(
+                    modifier = Modifier.fillMaxWidth().weight(0.1F),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 )
                 {
-                    ErrorDisplayingTextField(
-                        value = routine.routineName,
-                        label = { Text(text = "Routine Name") },
-                        placeholder = "Routine Name",
-                        error = state.nameError,
-                        onValueChanged = {},
+                    IconButton(
+                        onClick = {
+                            onEvent(LibraryEvent.CloseEditView)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = "Close"
+                        )
+                    }
+
+                    Text(
+                        text = "Delete",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clickable {},
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
                     )
 
+                }
+
+                // Body
+                Column (
+                    modifier = Modifier
+                        .weight(0.85F)
+                        .background(MaterialTheme.colorScheme.surface),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                )
+                {
                     Spacer(Modifier.height(8.dp))
+
+                    // Name Input
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    )
+                    {
+                        ErrorDisplayingTextField(
+                            value = routine.routineName,
+                            label = { Text(text = "Routine Name") },
+                            placeholder = "Routine Name",
+                            error = state.nameError,
+                            onValueChanged = {},
+                        )
+
+                        Spacer(Modifier.height(8.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(8.dp)
+                                .clip(
+                                    RoundedCornerShape(16.dp)
+                                )
+                                .background(MaterialTheme.colorScheme.tertiaryContainer)
+
+                        ){}
+                    }
+
+                    Spacer(
+                        Modifier.height(16.dp)
+                    )
+
+                    // Tags Row
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
+                        modifier = Modifier.fillMaxWidth()
                             .clip(
                                 RoundedCornerShape(16.dp)
                             )
-                            .background(MaterialTheme.colorScheme.tertiaryContainer)
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .padding(4.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
 
-                    ){}
+                        Column()
+                        {
+                            Text(
+                                text = "Tags:",
+                                textAlign = TextAlign.Left,
+                                modifier = Modifier,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 20.sp,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+
+                    OutlinedTextField(
+                        value = routine.description,
+                        label = { Text(text = "Description") },
+                        onValueChange = {},
+                        placeholder = {
+                            Text(text = "Exercise Description")
+                        },
+                        shape = RoundedCornerShape(20.dp)
+                    )
+
                 }
 
-                Spacer(
-                    Modifier.height(16.dp)
-                )
-
-                // Tags Row
+                // Bottom Bar
                 Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .clip(
-                            RoundedCornerShape(16.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-
-                    Column()
-                    {
-                        Text(
-                            text = "Tags:",
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
+                    modifier = Modifier.fillMaxWidth().weight(0.05F),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
+                        onClick = { onEvent(LibraryEvent.CloseEditView) }
+                    ){
+                        Text(text = "Cancel")
+                    }
+                    Button(
+                        onClick = { routineBuilderViewModel.insertOrReplaceRoutine(state.routine) }
+                    ){
+                        Text(text = "Update")
                     }
 
                 }
-
-                Spacer(Modifier.height(16.dp))
-
-                OutlinedTextField(
-                    value = routine.description,
-                    label = { Text(text = "Description") },
-                    onValueChange = {},
-                    placeholder = {
-                        Text(text = "Exercise Description")
-                    },
-                    shape = RoundedCornerShape(20.dp)
-                )
-
             }
 
-            // Bottom Bar
-            Row(
-                modifier = Modifier.fillMaxWidth().weight(0.05F),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = { onEvent(LibraryEvent.CloseEditView) }
-                ){
-                    Text(text = "Cancel")
-                }
-                Button(
-                    onClick = { routineBuilderViewModel.insertOrReplaceRoutine(state.routine) }
-                ){
-                    Text(text = "Update")
-                }
+            SelectorView(
+                visible = state.isSelectorOpen,
+                modifier = Modifier.fillMaxSize(),
+                dataSource = dataSource,
+                onAddExercises = {list ->
 
-            }
+                },
+                onClose = {},
+                showRoutinesTab = false,
+                showSchedulesTab = false,
+                focusManager = focusManager,
+            )
         }
     }
 }
