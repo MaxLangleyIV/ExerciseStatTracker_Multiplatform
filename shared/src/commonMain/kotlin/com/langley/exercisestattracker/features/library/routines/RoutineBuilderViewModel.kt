@@ -1,6 +1,7 @@
 package com.langley.exercisestattracker.features.library.routines
 
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -32,5 +33,26 @@ class RoutineBuilderViewModel(
         TODO()
 
     }
+
+    fun updateRoutine(newRoutine: ExerciseRoutine){
+        TODO()
+    }
+
+    fun openSelector(){
+        TODO()
+    }
+
+    fun closeSelector(){
+        TODO()
+    }
+
+    fun addToExercises(list: List<ExerciseDefinition>){
+        TODO()
+    }
+
+    fun removeFromExercises(list: List<ExerciseDefinition>){
+        TODO()
+    }
+
 
 }
