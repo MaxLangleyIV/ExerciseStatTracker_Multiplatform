@@ -26,8 +26,9 @@ import com.langley.exercisestattracker.features.workout.WorkoutState
 @Composable
 fun EmptyWorkoutContent(
     modifier: Modifier = Modifier,
-    workoutState: WorkoutState,
-    onEvent: (WorkoutEvent) -> Unit = {}
+//    onEvent: (WorkoutEvent) -> Unit = {}
+    openExerciseSelector: () -> Unit = {},
+    openRoutineSelector: () -> Unit = {},
 ){
     Text(
         text = "This workout is currently empty.",
@@ -46,7 +47,8 @@ fun EmptyWorkoutContent(
                 .heightIn(min = 0.dp, max = 60.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable {
-                    onEvent(WorkoutEvent.OpenExerciseSelector)
+                    openExerciseSelector()
+//                    onEvent(WorkoutEvent.OpenExerciseSelector)
                 }
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(4.dp),
@@ -72,7 +74,8 @@ fun EmptyWorkoutContent(
                 .heightIn(min = 0.dp, max = 60.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable {
-                    onEvent(WorkoutEvent.OpenRoutineSelector)
+                    openRoutineSelector()
+//                    onEvent(WorkoutEvent.OpenRoutineSelector)
                 }
                 .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(4.dp),
