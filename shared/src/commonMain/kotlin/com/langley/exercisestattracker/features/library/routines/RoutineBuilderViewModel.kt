@@ -1,8 +1,7 @@
 package com.langley.exercisestattracker.features.library.routines
 
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
-import com.langley.exercisestattracker.di.AppModule
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderState
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.LibraryEvent
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,5 +26,11 @@ class RoutineBuilderViewModel(
         )
 
     val definitions = dataSource.getDefinitions()
+
+    fun insertOrReplaceRoutine(newRoutine: ExerciseRoutine){
+
+        TODO()
+
+    }
 
 }
