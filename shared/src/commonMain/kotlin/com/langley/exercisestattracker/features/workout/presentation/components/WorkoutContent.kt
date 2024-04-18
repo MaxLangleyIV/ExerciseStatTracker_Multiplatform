@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
@@ -44,7 +46,8 @@ fun WorkoutContent(
     markSetComplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
     markSetIncomplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
     addToListOfRecords: (list: List<ExerciseRecord>) -> Unit = {},
-    removeRecord: (index: Int) -> Unit = {}
+    removeRecord: (index: Int) -> Unit = {},
+    removeExercise: (index: Int) -> Unit = {},
 ){
 
     Box(
@@ -119,7 +122,7 @@ fun WorkoutContent(
                                     markIncomplete = {index, newSet ->
                                         markSetIncomplete(index, newSet)
                                     },
-                                    removeRecord = removeRecord
+                                    removeRecord = {index -> removeRecord(index) }
                                 )
 
                                 lastSetEntered = set
@@ -129,10 +132,10 @@ fun WorkoutContent(
 
                         numberOfSets = 0
 
-                        Column(
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Button(
                                 onClick = {
@@ -146,21 +149,23 @@ fun WorkoutContent(
                                                 )
                                             )
                                         )
-//                                        onEvent(
-//                                            WorkoutEvent.AddToListOfRecords(
-//                                                listOf(
-//                                                    lastSetEntered.copy(
-//                                                        dateCompleted =
-//                                                        Clock.System.now().toEpochMilliseconds(),
-//                                                        completed = false
-//                                                    )
-//                                                )
-//                                            )
-//                                        )
+                                    }
+                                    else {
+                                        addToListOfRecords(listOf(exercise.toBlankRecord()))
                                     }
                                 }
                             ){
                                 Text( text = "Add Set" )
+                            }
+
+                            if (lastSetEntered == null){
+                                Button(
+                                    onClick = {
+                                        removeExercise(exerciseIndex)
+                                    }
+                                ){
+                                    Text( text = "Remove Exercise" )
+                                }
                             }
                         }
 
