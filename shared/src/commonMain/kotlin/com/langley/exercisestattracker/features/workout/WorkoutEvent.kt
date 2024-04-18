@@ -4,7 +4,6 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
-import com.langley.exercisestattracker.features.library.selector.SelectorState
 
 sealed interface WorkoutEvent {
 
@@ -16,7 +15,7 @@ sealed interface WorkoutEvent {
     data class MarkIncomplete(val index: Int, val record: ExerciseRecord): WorkoutEvent
     data class RemoveFromListOfExercises(val exercise: ExerciseDefinition) : WorkoutEvent
     data class AddToListOfRecords(val records: List<ExerciseRecord>) : WorkoutEvent
-    data class RemoveFromListOfRecords(val index: Int) : WorkoutEvent
+    data class RemoveRecord(val index: Int) : WorkoutEvent
     data class UpdateRecordInList(val index: Int, val newRecord: ExerciseRecord) : WorkoutEvent
     data class SelectSet(val record: ExerciseRecord): WorkoutEvent
     data object ClearSelectedSet: WorkoutEvent
