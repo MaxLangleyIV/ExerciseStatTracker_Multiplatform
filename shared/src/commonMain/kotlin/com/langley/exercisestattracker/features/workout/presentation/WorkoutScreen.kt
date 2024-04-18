@@ -79,9 +79,27 @@ fun WorkoutScreen(
                         .clip(RoundedCornerShape(16.dp))
                         .background(MaterialTheme.colorScheme.background)
                         .weight(0.8F),
+                    exercises = workoutState.exerciseList,
+                    records = workoutState.recordsList,
+                    openExerciseSelector = { onEvent(WorkoutEvent.OpenExerciseSelector) },
+                    openRoutineSelector = { onEvent(WorkoutEvent.OpenRoutineSelector) },
+                    updateRepsFromString = {index, string ->
+                        onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
+                    },
+                    updateWeightFromString = {index, string ->
+                        onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
+                    },
+                    markSetComplete = { index, set ->
+                        onEvent(WorkoutEvent.MarkCompleted(index, set))
+                    },
+                    markSetIncomplete = { index, set ->
+                        onEvent(WorkoutEvent.MarkIncomplete(index, set))
+                    },
+                    addToListOfRecords = { list ->
+                        onEvent(WorkoutEvent.AddToListOfRecords(list))
+                    },
+                    routineBuilderMode = false
 
-                    workoutState = workoutState,
-                    onEvent = onEvent,
                 )
 
                 if (workoutState.exerciseList.isNotEmpty()){
