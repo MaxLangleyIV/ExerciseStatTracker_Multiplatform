@@ -9,6 +9,8 @@ import kotlinx.serialization.Serializable
 data class RoutineBuilderState(
     val initialized: Boolean = false,
 
+    val exerciseLibrary: List<ExerciseDefinition> = emptyList(),
+
     val routine: ExerciseRoutine = ExerciseRoutine(),
 
     val exerciseList: List<ExerciseDefinition> = emptyList(),
@@ -19,6 +21,7 @@ data class RoutineBuilderState(
 
     // UI
     val isSelectorOpen: Boolean = false,
+    val searchString: String = "",
 
     //Input validation errors state.
     val nameError: String? = null,
