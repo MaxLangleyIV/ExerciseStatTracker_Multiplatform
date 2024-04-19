@@ -380,7 +380,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef0"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveExercises(0))
+        viewModel.onEvent(WorkoutEvent.RemoveExercise(0))
 
         state = viewModel.state.first()
 
@@ -407,7 +407,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef1"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveExercises(1))
+        viewModel.onEvent(WorkoutEvent.RemoveExercise(1))
 
         state = viewModel.state.first()
 
@@ -434,7 +434,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef2"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveExercises(2))
+        viewModel.onEvent(WorkoutEvent.RemoveExercise(2))
 
         state = viewModel.state.first()
 
@@ -626,7 +626,7 @@ class WorkoutViewModelTest {
         assertEquals(
             state.searchString,
             "Test",
-            "SearchString does not equal 'Test'"
+            "searchString does not equal 'Test'"
         )
 
     }
