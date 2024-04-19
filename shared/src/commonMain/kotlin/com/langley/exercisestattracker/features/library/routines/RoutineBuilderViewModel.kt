@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class RoutineBuilderViewModel(
     private val dataSource: ExerciseAppDataSource,
@@ -33,18 +34,19 @@ class RoutineBuilderViewModel(
         started = SharingStarted.WhileSubscribed(5000L),
         initialValue = initialState
     )
-//        .asStateFlow()
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.WhileSubscribed(5000L),
-//            initialState
-//        )
-
-//    val definitions = dataSource.getDefinitions()
 
     fun onEvent(event: RoutineBuilderEvent){
         when(event){
             is RoutineBuilderEvent.AddToListOfExercises -> {
+                val mutableList = _state.value.exerciseList.toMutableList()
+
+                for (exercise in event.exercises){
+                    mutableList.add(exercise)
+                }
+
+                _state.update { it.copy(
+                    exerciseList = mutableList
+                ) }
 
             }
             RoutineBuilderEvent.OpenSelector -> {
@@ -74,6 +76,26 @@ class RoutineBuilderViewModel(
 
             }
             is RoutineBuilderEvent.InsertOrReplaceRoutine -> {
+
+                if (
+                    event.routine.routineName.isNotBlank() &&
+                    event.routine.repsCSV.isNotBlank() &&
+                    event.routine.exerciseCSV.isNotBlank()
+                ){
+                    viewModelScope.launch {
+                        dataSource.insertOrReplaceRoutine(event.routine)
+                    }
+                }
+
+            }
+
+            is RoutineBuilderEvent.DeleteRoutine -> {
+
+                val routineId = event.routine.exerciseRoutineId
+
+                if (routineId != null){
+                    viewModelScope.launch { dataSource.deleteRoutine(routineId) }
+                }
 
             }
         }
