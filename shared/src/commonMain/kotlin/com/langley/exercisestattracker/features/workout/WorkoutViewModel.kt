@@ -27,7 +27,7 @@ import kotlinx.serialization.json.Json
 
 class WorkoutViewModel(
     private val dataSource: ExerciseAppDataSource,
-    val prefDataStore: DataStore<Preferences>,
+    private val prefDataStore: DataStore<Preferences>,
     initialState: WorkoutState = WorkoutState()
 
 ): ViewModel() {
