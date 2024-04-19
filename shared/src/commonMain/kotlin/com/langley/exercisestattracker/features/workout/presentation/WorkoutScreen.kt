@@ -100,7 +100,7 @@ fun WorkoutScreen(
                         onEvent(WorkoutEvent.AddToListOfRecords(list))
                     },
                     removeRecord = { index -> onEvent(WorkoutEvent.RemoveRecord(index)) },
-                    removeExercise = { index -> onEvent(WorkoutEvent.RemoveExercises(index)) }
+                    removeExercise = { index -> onEvent(WorkoutEvent.RemoveExercise(index)) }
 
                 )
 
