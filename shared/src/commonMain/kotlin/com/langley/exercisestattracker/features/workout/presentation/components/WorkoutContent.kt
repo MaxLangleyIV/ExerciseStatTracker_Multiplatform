@@ -151,7 +151,9 @@ fun WorkoutContent(
                                         )
                                     }
                                     else {
-                                        addToListOfRecords(listOf(exercise.toBlankRecord()))
+                                        addToListOfRecords(
+                                            listOf(exercise.toBlankRecord().copy(completed = false))
+                                        )
                                     }
                                 }
                             ){
@@ -179,7 +181,7 @@ fun WorkoutContent(
                 onClick = {
                     openExerciseSelector()
 //                    onEvent(
-//                        WorkoutEvent.OpenExerciseSelector
+//                        WorkoutEvent.OpenSelector
 //                    )
                 }
             ){
