@@ -44,6 +44,7 @@ import com.langley.exercisestattracker.features.library.routines.RoutineBuilderE
 import com.langley.exercisestattracker.features.library.routines.RoutineBuilderState
 import com.langley.exercisestattracker.features.library.routines.RoutineBuilderViewModel
 import com.langley.exercisestattracker.features.library.selector.SelectorView
+import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutContentHolder
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
@@ -115,7 +116,11 @@ fun RoutineEditView(
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .padding(16.dp)
-                            .clickable {},
+                            .clickable {
+                                routineBuilderViewModel.onEvent(
+                                    RoutineBuilderEvent.DeleteRoutine(routine)
+                                )
+                            },
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                     )
@@ -199,6 +204,17 @@ fun RoutineEditView(
                             Text(text = "Exercise Description")
                         },
                         shape = RoundedCornerShape(20.dp)
+                    )
+
+                    WorkoutContentHolder(
+                        workoutMode = false,
+                        exercises = state.exerciseList,
+                        records = state.recordList,
+                        openExerciseSelector = {
+                            routineBuilderViewModel.onEvent(RoutineBuilderEvent.OpenSelector)
+                        }
+
+
                     )
 
                 }
