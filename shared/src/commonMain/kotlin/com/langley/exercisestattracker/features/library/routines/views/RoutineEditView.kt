@@ -40,6 +40,7 @@ import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
 import com.langley.exercisestattracker.features.library.LibraryEvent
+import com.langley.exercisestattracker.features.library.routines.RoutineBuilderEvent
 import com.langley.exercisestattracker.features.library.routines.RoutineBuilderState
 import com.langley.exercisestattracker.features.library.routines.RoutineBuilderViewModel
 import com.langley.exercisestattracker.features.library.selector.SelectorView
@@ -62,7 +63,6 @@ fun RoutineEditView(
             RoutineBuilderViewModel(
                 dataSource = dataSource,
                 initialState = RoutineBuilderState(routine = routine),
-                libraryOnEvent = onEvent
             )
         }
     )
@@ -215,7 +215,11 @@ fun RoutineEditView(
                         Text(text = "Cancel")
                     }
                     Button(
-                        onClick = { routineBuilderViewModel.insertOrReplaceRoutine(state.routine) }
+                        onClick = {
+                            routineBuilderViewModel.onEvent(
+                                RoutineBuilderEvent.InsertOrReplaceRoutine(state.routine)
+                            )
+                        }
                     ){
                         Text(text = "Update")
                     }
@@ -228,9 +232,9 @@ fun RoutineEditView(
                 modifier = Modifier.fillMaxSize(),
                 dataSource = dataSource,
                 onAddExercises = {list ->
-
+                    routineBuilderViewModel.onEvent(RoutineBuilderEvent.AddToListOfExercises(list))
                 },
-                onClose = {},
+                onClose = { routineBuilderViewModel.onEvent(RoutineBuilderEvent.CloseSelector) },
                 showRoutinesTab = false,
                 showSchedulesTab = false,
                 focusManager = focusManager,
