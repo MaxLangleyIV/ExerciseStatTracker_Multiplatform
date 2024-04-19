@@ -49,7 +49,7 @@ fun EmptyWorkoutContent(
                 .clip(RoundedCornerShape(16.dp))
                 .clickable {
                     openExerciseSelector()
-//                    onEvent(WorkoutEvent.OpenExerciseSelector)
+//                    onEvent(WorkoutEvent.OpenSelector)
                 }
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(4.dp),
