@@ -10,6 +10,7 @@ import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExercis
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
@@ -200,7 +201,36 @@ class RoutineBuilderViewModelTest {
     @Test
     fun onEvent_InsertOrReplaceRoutine_routineFoundInDB() = runTest {
 
-        
+        viewModel.onEvent(RoutineBuilderEvent.InsertOrReplaceRoutine(testRoutine0))
+
+        state = viewModel.state.first()
+
+        var routineFound = false
+
+        for (routine in testDataSource.getRoutines().first()){
+            if (routine.routineName == testRoutine0.routineName){ routineFound = true }
+        }
+
+        assertTrue(routineFound)
 
     }
+
+    @Test
+    fun onEvent_DeleteExerciseDefinition_stateProperlyUpdated() = runTest {
+
+        val routineToDelete = testDataSource.getRoutines().first()[0]
+
+
+        viewModel.onEvent(RoutineBuilderEvent.DeleteRoutine(routineToDelete))
+
+
+        assertFalse(
+            testDataSource.getRoutines().first().contains(routineToDelete),
+            "${routineToDelete.routineName} " +
+                    "found in definitions after deletion event."
+        )
+
+    }
+
+
 }
