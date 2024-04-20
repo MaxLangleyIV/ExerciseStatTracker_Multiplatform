@@ -98,6 +98,20 @@ class RoutineBuilderViewModel(
                 }
 
             }
+
+            is RoutineBuilderEvent.AddRecords -> {
+
+                val mutableList = _state.value.recordList.toMutableList()
+
+                for (record in event.records){
+                    mutableList.add(record)
+                }
+
+                _state.update { it.copy(
+                    recordList = mutableList
+                ) }
+
+            }
         }
     }
 
