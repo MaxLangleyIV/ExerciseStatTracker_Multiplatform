@@ -1,8 +1,5 @@
 package com.langley.exercisestattracker.features.library.routines
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
@@ -10,17 +7,9 @@ import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExercis
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
-import com.langley.exercisestattracker.features.exerciseBuilder.ExerciseBuilderEvent
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
-import com.langley.exercisestattracker.features.workout.WorkoutEvent
-import com.langley.exercisestattracker.features.workout.WorkoutState
-import com.langley.exercisestattracker.features.workout.WorkoutViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import io.mockk.every
-import io.mockk.mockk
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -229,6 +218,17 @@ class RoutineBuilderViewModelTest {
             "${routineToDelete.routineName} " +
                     "found in definitions after deletion event."
         )
+
+    }
+
+    @Test
+    fun onEvent_AddRecord_recordFoundInState() = runTest {
+
+        viewModel.onEvent(RoutineBuilderEvent.AddRecords(listOf(testRecord0)))
+
+        state = viewModel.state.first()
+
+        assertTrue(state.recordList.contains(testRecord0))
 
     }
 
