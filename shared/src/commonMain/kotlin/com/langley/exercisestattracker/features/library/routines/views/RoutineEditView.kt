@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.presentation.composables.ErrorDisplayingTextField
@@ -194,7 +195,7 @@ fun RoutineEditView(
 
                     }
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(8.dp))
 
                     OutlinedTextField(
                         value = routine.description,
@@ -212,6 +213,9 @@ fun RoutineEditView(
                         records = state.recordList,
                         openExerciseSelector = {
                             routineBuilderViewModel.onEvent(RoutineBuilderEvent.OpenSelector)
+                        },
+                        addToListOfRecords = {
+                            routineBuilderViewModel.onEvent(RoutineBuilderEvent.AddRecords(it))
                         }
 
 
@@ -248,7 +252,19 @@ fun RoutineEditView(
                 modifier = Modifier.fillMaxSize(),
                 dataSource = dataSource,
                 onAddExercises = {list ->
-                    routineBuilderViewModel.onEvent(RoutineBuilderEvent.AddToListOfExercises(list))
+                    for (exercise in list){
+                        if (!state.exerciseList.contains(exercise)){
+                            routineBuilderViewModel.onEvent(
+                                RoutineBuilderEvent.AddToListOfExercises(listOf(exercise))
+                            )
+
+                            routineBuilderViewModel.onEvent(
+                                RoutineBuilderEvent.AddRecords(
+                                    listOf(exercise.toBlankRecord().copy(completed = false))
+                                )
+                            )
+                        }
+                    }
                 },
                 onClose = { routineBuilderViewModel.onEvent(RoutineBuilderEvent.CloseSelector) },
                 showRoutinesTab = false,
