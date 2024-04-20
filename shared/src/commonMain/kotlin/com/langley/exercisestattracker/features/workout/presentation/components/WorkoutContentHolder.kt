@@ -45,7 +45,8 @@ fun WorkoutContentHolder(
             EmptyWorkoutContent(
                 modifier = Modifier,
                 openExerciseSelector = openExerciseSelector,
-                openRoutineSelector = openRoutineSelector
+                openRoutineSelector = openRoutineSelector,
+                workoutMode = workoutMode
             )
 
         }
