@@ -32,7 +32,7 @@ fun EmptyWorkoutContent(
     workoutMode: Boolean = true
 ){
     Text(
-        text = "This workout is currently empty.",
+        text = "This ${if(workoutMode){"workout"}else{"routine"}} is currently empty.",
         color = MaterialTheme.colorScheme.onBackground
     )
 
