@@ -8,6 +8,8 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
+import com.langley.exercisestattracker.features.workout.WorkoutEvent
+import com.langley.exercisestattracker.features.workout.WorkoutState
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -230,6 +232,38 @@ class RoutineBuilderViewModelTest {
 
         assertTrue(state.recordList.contains(testRecord0))
 
+    }
+
+    @Test
+    fun onEvent_UpdateRepsFromString_recordsListProperlyUpdated() = runTest {
+
+        setupViewModel(
+            RoutineBuilderState(
+                recordList = listOf(testRecord0, testRecord1, testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        viewModel.onEvent(RoutineBuilderEvent.UpdateRepsFromString(index = 0, string = "5"))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = 5,
+            actual = state.recordList[0].repsCompleted,
+            message = "recordsList[0].repsCompleted should equal 5"
+        )
+
+        viewModel.onEvent(RoutineBuilderEvent.UpdateRepsFromString(index = 0, string = ""))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = 0,
+            actual = state.recordList[0].repsCompleted,
+            message = "recordsList[0].repsCompleted should equal 0 when input is an empty string"
+        )
     }
 
 
