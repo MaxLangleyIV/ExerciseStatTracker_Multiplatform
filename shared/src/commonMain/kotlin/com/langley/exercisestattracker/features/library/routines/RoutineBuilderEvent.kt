@@ -13,4 +13,7 @@ sealed interface RoutineBuilderEvent {
     data object CloseSelector : RoutineBuilderEvent
     data class InsertOrReplaceRoutine(val routine: ExerciseRoutine) : RoutineBuilderEvent
     data class DeleteRoutine(val routine: ExerciseRoutine) : RoutineBuilderEvent
+    data class UpdateRepsFromString(val index: Int, val string: String) : RoutineBuilderEvent
+
+
 }
