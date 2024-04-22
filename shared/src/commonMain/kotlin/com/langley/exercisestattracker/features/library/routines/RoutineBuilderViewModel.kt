@@ -112,6 +112,22 @@ class RoutineBuilderViewModel(
                 ) }
 
             }
+
+            is RoutineBuilderEvent.UpdateRepsFromString -> {
+                val reps = try {
+                    event.string.toInt()
+                } catch (formatException: NumberFormatException) { 0 }
+
+                val mutableList = _state.value.recordList.toMutableList()
+
+                mutableList[event.index] = mutableList[event.index].copy(
+                    repsCompleted = reps
+                )
+
+                _state.update { it.copy(
+                    recordList = mutableList
+                ) }
+            }
         }
     }
 
