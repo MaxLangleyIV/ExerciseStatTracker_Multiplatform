@@ -216,6 +216,11 @@ fun RoutineEditView(
                         },
                         addToListOfRecords = {
                             routineBuilderViewModel.onEvent(RoutineBuilderEvent.AddRecords(it))
+                        },
+                        updateRepsFromString = {index, string ->
+                            routineBuilderViewModel.onEvent(
+                                RoutineBuilderEvent.UpdateRepsFromString(index, string)
+                            )
                         }
 
 
