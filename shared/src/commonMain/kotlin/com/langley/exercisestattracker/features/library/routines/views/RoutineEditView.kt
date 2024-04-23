@@ -221,6 +221,16 @@ fun RoutineEditView(
                             routineBuilderViewModel.onEvent(
                                 RoutineBuilderEvent.UpdateRepsFromString(index, string)
                             )
+                        },
+                        removeRecord = {index ->
+                            routineBuilderViewModel.onEvent(
+                                RoutineBuilderEvent.RemoveRecord(index)
+                            )
+                        },
+                        removeExercise = {index ->
+                            routineBuilderViewModel.onEvent(
+                                RoutineBuilderEvent.RemoveExercise(index)
+                            )
                         }
 
 
