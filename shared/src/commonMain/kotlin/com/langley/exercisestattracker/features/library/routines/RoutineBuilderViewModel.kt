@@ -128,6 +128,16 @@ class RoutineBuilderViewModel(
                     recordList = mutableList
                 ) }
             }
+
+            is RoutineBuilderEvent.RemoveRecord -> {
+                val mutableList = _state.value.recordList.toMutableList()
+
+                mutableList.removeAt(event.index)
+
+                _state.update { it.copy(
+                    recordList = mutableList
+                ) }
+            }
         }
     }
 
