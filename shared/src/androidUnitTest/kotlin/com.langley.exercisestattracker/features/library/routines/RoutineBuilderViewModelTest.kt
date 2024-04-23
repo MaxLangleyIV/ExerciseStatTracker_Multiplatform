@@ -266,5 +266,84 @@ class RoutineBuilderViewModelTest {
         )
     }
 
+    @Test
+    fun onEvent_RemoveFromListOfRecordsAtFront_recordsListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            RoutineBuilderState(
+                recordList = listOf(testRecord0,testRecord1,testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.recordList.contains(testRecord0),
+            message = "recordsList should contain testRecord0"
+        )
+
+        viewModel.onEvent(RoutineBuilderEvent.RemoveRecord(0))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.recordList.contains(testRecord0),
+            message = "recordsList should not contain testRecord0"
+        )
+
+    }
+
+    @Test
+    fun onEvent_RemoveFromListOfRecordsInMiddle_recordsListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            RoutineBuilderState(
+                recordList = listOf(testRecord0,testRecord1,testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.recordList.contains(testRecord1),
+            message = "recordsList should contain testRecord1"
+        )
+
+        viewModel.onEvent(RoutineBuilderEvent.RemoveRecord(1))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.recordList.contains(testRecord1),
+            message = "recordsList should not contain testRecord1"
+        )
+    }
+
+    @Test
+    fun onEvent_RemoveFromListOfRecordsAtEnd_recordsListUpdatedCorrectly() = runTest {
+
+        setupViewModel(
+            RoutineBuilderState(
+                recordList = listOf(testRecord0,testRecord1,testRecord2)
+            )
+        )
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.recordList.contains(testRecord2),
+            message = "recordsList should contain testRecord2"
+        )
+
+        viewModel.onEvent(RoutineBuilderEvent.RemoveRecord(2))
+
+        state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.recordList.contains(testRecord2),
+            message = "recordsList should not contain testRecord2"
+        )
+    }
+
 
 }
