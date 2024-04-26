@@ -298,9 +298,9 @@ fun WeightTrainingRecordRow(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-//            var textFieldValue by remember { mutableStateOf(set.repsCompleted.toString()) }
+            var textFieldValue by remember(set) { mutableStateOf(set.repsCompleted.toString()) }
 
-            var textFieldValue = set.repsCompleted.toString()
+//            var textFieldValue = remember(set) { set.repsCompleted.toString() }
 
             BasicTextField(
                 modifier = Modifier
@@ -313,7 +313,7 @@ fun WeightTrainingRecordRow(
                 value = textFieldValue,
                 onValueChange = {
                     textFieldValue = it
-                    updateRepsFromString(recordIndex,it)
+                    if (it.isNotBlank()){ updateRepsFromString(recordIndex,it) }
 //                    onEvent(
 //                        WorkoutEvent.UpdateRepsFromString(index = recordIndex, value = it)
 //                    )
