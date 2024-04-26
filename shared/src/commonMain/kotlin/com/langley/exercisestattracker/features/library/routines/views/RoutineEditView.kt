@@ -170,32 +170,32 @@ fun RoutineEditView(
                     )
 
                     // Tags Row
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .clip(
-                                RoundedCornerShape(16.dp)
-                            )
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
-                            .padding(4.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-
-                        Column()
-                        {
-                            Text(
-                                text = "Tags:",
-                                textAlign = TextAlign.Left,
-                                modifier = Modifier,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 20.sp,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer
-                            )
-                        }
-
-                    }
-
-                    Spacer(Modifier.height(8.dp))
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth()
+//                            .clip(
+//                                RoundedCornerShape(16.dp)
+//                            )
+//                            .background(MaterialTheme.colorScheme.secondaryContainer)
+//                            .padding(4.dp),
+//                        horizontalArrangement = Arrangement.SpaceEvenly,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ){
+//
+//                        Column()
+//                        {
+//                            Text(
+//                                text = "Tags:",
+//                                textAlign = TextAlign.Left,
+//                                modifier = Modifier,
+//                                fontWeight = FontWeight.Normal,
+//                                fontSize = 20.sp,
+//                                color = MaterialTheme.colorScheme.onSecondaryContainer
+//                            )
+//                        }
+//
+//                    }
+//
+//                    Spacer(Modifier.height(8.dp))
 
                     OutlinedTextField(
                         value = routine.description,
@@ -205,6 +205,10 @@ fun RoutineEditView(
                             Text(text = "Exercise Description")
                         },
                         shape = RoundedCornerShape(20.dp)
+                    )
+
+                    Spacer(
+                        Modifier.height(16.dp)
                     )
 
                     WorkoutContentHolder(
