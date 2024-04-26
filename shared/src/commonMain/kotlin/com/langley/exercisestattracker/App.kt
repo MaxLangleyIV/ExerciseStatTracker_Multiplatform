@@ -87,16 +87,7 @@ fun App(
         val workoutState by workoutViewModel.state.collectAsState(WorkoutState())
 
 //        // INIT DUMMY DATA
-//        // Exercises
-//        val exerciseDefList = ExerciseDefinitionDummyData().definitionList
-//        for (exerciseDefinition in exerciseDefList){
-//            libraryViewModel.onEvent(LibraryEvent.SaveExercise(exerciseDefinition))
-//        }
-//        // Routines
-//        val routines = ExerciseRoutineDummyData(exerciseDefList).getRoutines()
-//        for (r in routines){
-//            libraryViewModel.onEvent(LibraryEvent.SaveRoutine(r))
-//        }
+        // Exercises?
 //        // Schedules
 //        val schedules = ExerciseRoutineDummyData(exerciseDefList).getSchedules(10)
 //        for (s in schedules){
