@@ -36,6 +36,10 @@ fun EmptyWorkoutContent(
         color = MaterialTheme.colorScheme.onBackground
     )
 
+    Spacer(
+        Modifier.height(16.dp)
+    )
+
     // Buttons Column
     Column(
         verticalArrangement = Arrangement.SpaceEvenly,
