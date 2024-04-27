@@ -180,7 +180,7 @@ fun LibraryScreen(
                 visible = libraryState.isEditRoutineSheetOpen,
                 dataSource = dataSource,
                 routine = libraryState.selectedRoutine ?: ExerciseRoutine(),
-                onEvent = onEvent,
+                libraryEvent = onEvent,
                 focusManager = focusManager,
                 interactionSource = interactionSource
             )
