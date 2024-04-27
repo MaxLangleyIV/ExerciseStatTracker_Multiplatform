@@ -1,14 +1,9 @@
 package com.langley.exercisestattracker.features.library.routines
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
-import com.langley.exercisestattracker.features.library.LibraryEvent
-import com.langley.exercisestattracker.features.workout.WorkoutState
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -138,6 +133,19 @@ class RoutineBuilderViewModel(
                     recordList = mutableList
                 ) }
             }
+
+            is RoutineBuilderEvent.UpdateName -> {
+                _state.update { it.copy(
+                    routine = _state.value.routine.copy(routineName = event.string)
+                ) }
+            }
+            is RoutineBuilderEvent.UpdateDescription -> {
+                _state.update { it.copy(
+                    routine = _state.value.routine.copy(description = event.string)
+                ) }
+            }
+
+            is RoutineBuilderEvent.UpdateSelectedRoutine -> TODO()
         }
     }
 
