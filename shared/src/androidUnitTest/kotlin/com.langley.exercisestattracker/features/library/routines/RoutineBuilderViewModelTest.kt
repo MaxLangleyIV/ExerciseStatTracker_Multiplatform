@@ -345,5 +345,29 @@ class RoutineBuilderViewModelTest {
         )
     }
 
+    @Test
+    fun onEvent_UpdateName_routineNameUpdatedInState() = runTest {
+        viewModel.onEvent(RoutineBuilderEvent.UpdateName("TEST"))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = "TEST",
+            actual = state.routine.routineName
+        )
+    }
+
+    @Test
+    fun onEvent_UpdateDescription_routineDescriptionUpdatedInState() = runTest {
+        viewModel.onEvent(RoutineBuilderEvent.UpdateDescription("TEST"))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = "TEST",
+            actual = state.routine.description
+        )
+    }
+
 
 }
