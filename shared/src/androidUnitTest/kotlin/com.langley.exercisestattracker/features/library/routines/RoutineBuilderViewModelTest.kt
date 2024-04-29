@@ -4,6 +4,8 @@ import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
+import com.langley.exercisestattracker.core.data.getExercisesFromCSV
+import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
@@ -11,6 +13,8 @@ import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -367,6 +371,41 @@ class RoutineBuilderViewModelTest {
             expected = "TEST",
             actual = state.routine.description
         )
+    }
+
+    @Test
+    fun onEvent_UpdateSelectedRoutine_stateUpdatedProperly() = runTest {
+
+        viewModel.onEvent(RoutineBuilderEvent.UpdateSelectedRoutine(testRoutine0))
+
+        delay(300L)
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = testRoutine0,
+            actual = state.routine,
+            message = "routine in state should equal testRoutine0"
+        )
+
+        for (exercise in testRoutine0.getExercisesFromCSV(testDataSource.getDefinitions().first())){
+
+            println("EXERCISE: ${exercise.exerciseName}")
+
+            assertTrue(
+                actual = state.exerciseList.contains(exercise),
+                message = "state.exerciseList doesn't contain ${exercise.exerciseName}"
+            )
+
+            assertTrue(
+                actual = state.recordList.contains(
+                    exercise.toBlankRecord().copy(repsCompleted = 5,completed = false)
+                ),
+                message = "state.recordList doesn't contain ${exercise.exerciseName}.toBlankRecord"
+            )
+
+        }
+
     }
 
 
