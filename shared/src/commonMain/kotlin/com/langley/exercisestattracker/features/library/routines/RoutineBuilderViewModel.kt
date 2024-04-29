@@ -1,10 +1,14 @@
 package com.langley.exercisestattracker.features.library.routines
 
+import com.langley.exercisestattracker.core.data.getExercisesFromCSV
+import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -145,7 +149,55 @@ class RoutineBuilderViewModel(
                 ) }
             }
 
-            is RoutineBuilderEvent.UpdateSelectedRoutine -> TODO()
+            is RoutineBuilderEvent.UpdateSelectedRoutine -> {
+
+                viewModelScope.launch {
+                    println("STARTING UPDATE")
+                    if (_state.value.exerciseLibrary.isEmpty()){
+                        _state.update { it.copy(
+                            exerciseLibrary = dataSource.getDefinitions().first()
+                        ) }
+                    }
+
+                    val exercises = _state.value.exerciseList.toMutableList()
+                    val records = _state.value.recordList.toMutableList()
+
+                    println(_state.value.exerciseLibrary.size)
+
+                    val newExercises = event.routine.getExercisesFromCSV(
+                        _state.value.exerciseLibrary
+                    )
+                    println(newExercises)
+
+                    val reps = event.routine.repsCSV.split(",")
+
+                    for ((index, exercise) in newExercises.withIndex()){
+
+                        if (!exercises.contains(exercise)){
+
+                            exercises.add(exercise)
+                        }
+
+                        records.add(
+                            exercise.toBlankRecord().copy(
+                                repsCompleted = reps[index].toInt(),
+                                completed = false
+                            )
+                        )
+
+                    }
+
+                    println("EXERCISES: $exercises")
+                    println("RECORDS: $records")
+
+                    _state.update { it.copy(
+                        exerciseList = exercises,
+                        recordList = records,
+                        routine = event.routine
+                    ) }
+                }
+
+            }
         }
     }
 
