@@ -235,7 +235,7 @@ fun WeightTrainingRecordRow(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                var textFieldValue = set.weightUsed.toString()
+                var textFieldValue by remember(set) { mutableStateOf(set.weightUsed.toString()) }
 
 
                 BasicTextField(
@@ -249,7 +249,7 @@ fun WeightTrainingRecordRow(
                     value = textFieldValue,
                     onValueChange = {
                         textFieldValue = it
-                        updateWeightFromString(recordIndex, it)
+                        if (it.isNotBlank()){ updateWeightFromString(recordIndex, it) }
 //                    onEvent(
 //                        WorkoutEvent.UpdateWeightFromString(index = recordIndex, value = it)
 //                    )
