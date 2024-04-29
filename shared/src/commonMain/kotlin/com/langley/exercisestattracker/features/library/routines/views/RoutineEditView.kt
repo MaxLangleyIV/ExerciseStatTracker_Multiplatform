@@ -58,22 +58,6 @@ fun RoutineEditView(
     focusManager: FocusManager,
     interactionSource: MutableInteractionSource
 ) {
-    val routineBuilderViewModel = getViewModel(
-        key = "routineBuilderViewModel",
-        factory = viewModelFactory {
-            RoutineBuilderViewModel(
-                dataSource = dataSource,
-                initialState = RoutineBuilderState(routine = routine),
-            )
-        }
-    )
-
-    val state by routineBuilderViewModel.state.collectAsState(RoutineBuilderState())
-
-    LaunchedEffect(routine){
-        routineBuilderViewModel.onEvent(RoutineBuilderEvent.UpdateSelectedRoutine(routine))
-    }
-
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(
@@ -83,6 +67,22 @@ fun RoutineEditView(
             animationSpec = tween(durationMillis = 100),
         )
     ){
+
+        val routineBuilderViewModel = getViewModel(
+            key = "routineBuilderViewModel",
+            factory = viewModelFactory {
+                RoutineBuilderViewModel(
+                    dataSource = dataSource,
+                    initialState = RoutineBuilderState(routine = routine),
+                )
+            }
+        )
+
+        val state by routineBuilderViewModel.state.collectAsState(RoutineBuilderState())
+
+        LaunchedEffect(routine.exerciseRoutineId){
+            routineBuilderViewModel.onEvent(RoutineBuilderEvent.UpdateSelectedRoutine(routine))
+        }
 
         Surface(modifier = Modifier.fillMaxSize()) {
             Column(
