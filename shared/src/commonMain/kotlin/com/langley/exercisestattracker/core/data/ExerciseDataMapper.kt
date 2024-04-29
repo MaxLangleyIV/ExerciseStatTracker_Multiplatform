@@ -99,6 +99,7 @@ fun ExerciseRoutine.getExercisesFromCSV(
             try {
                 exerciseID.toInt()
             } catch (nfe: NumberFormatException){
+                println(nfe)
                 null
             }
 
