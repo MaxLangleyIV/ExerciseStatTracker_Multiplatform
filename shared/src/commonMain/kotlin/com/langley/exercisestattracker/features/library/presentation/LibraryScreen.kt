@@ -31,6 +31,7 @@ import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.exercises.DefinitionDetailsView
 import com.langley.exercisestattracker.features.library.presentation.components.LibraryTopBar
 import com.langley.exercisestattracker.features.library.presentation.components.LibraryList
+import com.langley.exercisestattracker.features.library.routines.views.RoutineAddView
 import com.langley.exercisestattracker.features.library.routines.views.RoutineDetailsView
 import com.langley.exercisestattracker.features.library.routines.views.RoutineEditView
 import com.langley.exercisestattracker.features.library.schedules.ScheduleDetailsView
@@ -60,6 +61,7 @@ fun LibraryScreen(
                     and !libraryState.isExerciseDetailsSheetOpen
                     and !libraryState.isRoutineDetailsSheetOpen
                     and !libraryState.isEditRoutineSheetOpen
+                    and !libraryState.isAddRoutineSheetOpen
                 ){
 
                     FloatingActionButton(
@@ -180,6 +182,14 @@ fun LibraryScreen(
                 visible = libraryState.isEditRoutineSheetOpen,
                 dataSource = dataSource,
                 routine = libraryState.selectedRoutine ?: ExerciseRoutine(),
+                libraryEvent = onEvent,
+                focusManager = focusManager,
+                interactionSource = interactionSource
+            )
+
+            RoutineAddView(
+                visible = libraryState.isAddRoutineSheetOpen,
+                dataSource = dataSource,
                 libraryEvent = onEvent,
                 focusManager = focusManager,
                 interactionSource = interactionSource
