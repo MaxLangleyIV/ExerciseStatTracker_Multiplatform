@@ -64,7 +64,7 @@ fun RoutineDetailsView(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
