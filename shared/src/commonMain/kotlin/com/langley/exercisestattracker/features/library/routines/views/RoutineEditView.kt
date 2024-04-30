@@ -151,7 +151,7 @@ fun RoutineEditView(
                 )
                 {
 
-                    // Name Input
+                    // Name and Description Input
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
