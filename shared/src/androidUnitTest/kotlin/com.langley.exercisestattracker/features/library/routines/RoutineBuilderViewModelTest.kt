@@ -10,10 +10,7 @@ import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
-import com.langley.exercisestattracker.features.workout.WorkoutEvent
-import com.langley.exercisestattracker.features.workout.WorkoutState
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -67,22 +64,22 @@ class RoutineBuilderViewModelTest {
     @Before
     fun setup() = runTest {
         testRecord0 = ExerciseRecord(
-            exerciseRecordId = 0,
+            recordId = 0,
             exerciseName = "Test0",
             completed = false
         )
         testRecord1 = ExerciseRecord(
-            exerciseRecordId = 1,
+            recordId = 1,
             exerciseName = "Test1",
             completed = false
         )
         testRecord2 = ExerciseRecord(
-            exerciseRecordId = 2,
+            recordId = 2,
             exerciseName = "Test2",
             completed = false
         )
         testRecord3 = ExerciseRecord(
-            exerciseRecordId = 3,
+            recordId = 3,
             exerciseName = "Test3",
             completed = false
         )
