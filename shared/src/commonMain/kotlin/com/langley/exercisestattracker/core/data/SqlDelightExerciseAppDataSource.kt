@@ -129,7 +129,8 @@ class SqlDelightExerciseAppDataSource(
  
     override suspend fun insertOrReplaceRecord(record: ExerciseRecord) {
         exerciseRecordQueries.insertOrReplaceExerciseRecord(
-            exerciseRecordId = record.exerciseRecordId,
+            recordId = record.recordId,
+            exerciseDefId = record.exerciseDefId,
             dateCompleted = record.dateCompleted,
             exerciseName = record.exerciseName,
             weightUsed = record.weightUsed.toDouble(),
