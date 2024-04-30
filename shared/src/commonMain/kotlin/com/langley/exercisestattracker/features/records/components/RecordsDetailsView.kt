@@ -37,7 +37,7 @@ import com.langley.exercisestattracker.features.records.RecordsEvent
 fun RecordDetailsView(
     isVisible: Boolean,
     onEvent: (RecordsEvent) -> Unit,
-    selectedRecord: ExerciseRecord = ExerciseRecord()
+    selectedRecord: ExerciseRecord = ExerciseRecord(exerciseDefId = -1)
 ) {
     var showMuscles by remember { mutableStateOf(true) }
 
