@@ -71,22 +71,22 @@ class WorkoutViewModelTest {
         every { prefs[stringPreferencesKey("WORKOUT_STATE")] } returns ""
 
         testRecord0 = ExerciseRecord(
-            exerciseRecordId = 0,
+            recordId = 0,
             exerciseName = "Test0",
             completed = false
         )
         testRecord1 = ExerciseRecord(
-            exerciseRecordId = 1,
+            recordId = 1,
             exerciseName = "Test1",
             completed = false
         )
         testRecord2 = ExerciseRecord(
-            exerciseRecordId = 2,
+            recordId = 2,
             exerciseName = "Test2",
             completed = false
         )
         testRecord3 = ExerciseRecord(
-            exerciseRecordId = 3,
+            recordId = 3,
             exerciseName = "Test3",
             completed = false
         )
@@ -275,7 +275,7 @@ class WorkoutViewModelTest {
                 assertTrue(
                     actual = testDataSource.getRecords().first().contains(record),
                     message =
-                    record.exerciseName + " ${record.exerciseRecordId} not found in data source."
+                    record.exerciseName + " ${record.recordId} not found in data source."
                 )
             }
             else {
@@ -283,7 +283,7 @@ class WorkoutViewModelTest {
                     actual = testDataSource.getRecords().first().contains(record),
                     message =
                     record.exerciseName +
-                            " ${record.exerciseRecordId} should not be found in data source."
+                            " ${record.recordId} should not be found in data source."
                 )
             }
 
