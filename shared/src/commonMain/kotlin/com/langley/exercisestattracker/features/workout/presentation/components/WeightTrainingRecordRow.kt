@@ -165,7 +165,7 @@ fun WeightTrainingLabelsRow(
 fun WeightTrainingRecordRow(
     modifier: Modifier = Modifier,
     exercise: ExerciseDefinition = ExerciseDefinition(),
-    set: ExerciseRecord = ExerciseRecord(),
+    set: ExerciseRecord = ExerciseRecord(exerciseDefId = -1),
     setNumber: Int = 0,
     recordIndex: Int,
     updateWeightFromString: (index: Int, string: String) -> Unit = { _, _ -> },
