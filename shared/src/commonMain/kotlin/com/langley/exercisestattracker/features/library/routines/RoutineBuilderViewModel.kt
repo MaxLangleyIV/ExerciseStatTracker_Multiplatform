@@ -75,6 +75,15 @@ class RoutineBuilderViewModel(
 
             }
             is RoutineBuilderEvent.InsertOrReplaceRoutine -> {
+                var newExerciseCSV = ""
+                var newRepsCSV = ""
+
+                for (record in _state.value.recordList){
+
+                    newExerciseCSV = newExerciseCSV + "record.ex"
+                }
+
+                val newRoutine = event.routine.copy()
 
                 if (
                     event.routine.routineName.isNotBlank() &&
