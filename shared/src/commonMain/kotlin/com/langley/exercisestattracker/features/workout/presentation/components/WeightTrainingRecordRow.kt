@@ -130,14 +130,14 @@ fun WeightTrainingLabelsRow(
 
         }
 
-        Divider(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp),
-//            color = MaterialTheme.colorScheme.outline
-        )
-
         if (workoutMode){
+            Divider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp),
+//            color = MaterialTheme.colorScheme.outline
+            )
+
             // Completion Status
             Column(
                 modifier = Modifier
@@ -332,13 +332,13 @@ fun WeightTrainingRecordRow(
 
         }
 
-        Divider(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp),
-        )
-
         if (workoutMode){
+            Divider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp),
+            )
+
             // Completion Status
             Column(
                 modifier = Modifier
