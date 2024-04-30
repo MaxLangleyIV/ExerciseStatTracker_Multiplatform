@@ -32,7 +32,7 @@ fun RecordDetailsDropdown(
     visible: Boolean = false,
     onClose: () -> Unit = {},
     exercise: ExerciseDefinition = ExerciseDefinition(),
-    set: ExerciseRecord = ExerciseRecord(),
+    set: ExerciseRecord = ExerciseRecord(exerciseDefId = -1),
     setNumber: Int = 0,
     recordIndex: Int,
     removeRecord: (index: Int) -> Unit = {}
