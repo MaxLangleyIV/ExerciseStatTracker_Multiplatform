@@ -80,18 +80,22 @@ class RoutineBuilderViewModel(
 
                 for (record in _state.value.recordList){
 
-                    newExerciseCSV = newExerciseCSV + "record.ex"
+                    newExerciseCSV = newExerciseCSV + record.exerciseDefId + ","
+                    newRepsCSV = newRepsCSV + record.repsCompleted + ","
                 }
 
-                val newRoutine = event.routine.copy()
+                val newRoutine = event.routine.copy(
+                    exerciseCSV = newExerciseCSV,
+                    repsCSV = newRepsCSV
+                )
 
                 if (
-                    event.routine.routineName.isNotBlank() &&
-                    event.routine.repsCSV.isNotBlank() &&
-                    event.routine.exerciseCSV.isNotBlank()
+                    newRoutine.routineName.isNotBlank() &&
+                    newRoutine.repsCSV.isNotBlank() &&
+                    newRoutine.exerciseCSV.isNotBlank()
                 ){
                     viewModelScope.launch {
-                        dataSource.insertOrReplaceRoutine(event.routine)
+                        dataSource.insertOrReplaceRoutine(newRoutine)
                     }
                 }
 
