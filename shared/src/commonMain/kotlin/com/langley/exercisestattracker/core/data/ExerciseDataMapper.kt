@@ -58,7 +58,8 @@ fun database.ExerciseRecord.toExerciseRecord():
         ExerciseRecord {
 
     return ExerciseRecord(
-        exerciseRecordId =exerciseRecordId,
+        recordId = recordId,
+        exerciseDefId = exerciseDefId,
         dateCompleted = dateCompleted,
         exerciseName = exerciseName,
         weightUsed = weightUsed.toFloat(),
@@ -79,6 +80,7 @@ fun database.ExerciseRecord.toExerciseRecord():
 
 fun ExerciseDefinition.toBlankRecord(): ExerciseRecord {
     return ExerciseRecord(
+        exerciseDefId = exerciseDefinitionId ?: -1,
         exerciseName = exerciseName,
         isCardio = isCardio,
         isCalisthenic = isCalisthenic,
