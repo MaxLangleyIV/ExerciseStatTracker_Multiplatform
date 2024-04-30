@@ -186,7 +186,7 @@ class RecordsViewModelTest{
     @Test
     fun onEvent_SaveRecord_recordSavedToDatasource() = runTest {
         val newRecord = state.exerciseRecords[0].copy(
-            exerciseRecordId = null,
+            recordId = null,
             dateCompleted = Clock.System.now().toEpochMilliseconds(),
             exerciseName = "Test"
         )
