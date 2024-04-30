@@ -134,6 +134,8 @@ fun RoutineEditView(
                                 routineBuilderViewModel.onEvent(
                                     RoutineBuilderEvent.DeleteRoutine(routine)
                                 )
+                                libraryEvent(LibraryEvent.CloseEditView)
+                                libraryEvent(LibraryEvent.CloseDetailsView)
                             },
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
@@ -236,6 +238,7 @@ fun RoutineEditView(
                             routineBuilderViewModel.onEvent(
                                 RoutineBuilderEvent.InsertOrReplaceRoutine(state.routine)
                             )
+                            libraryEvent(LibraryEvent.CloseEditView)
                         }
                     ){
                         Text(text = "Update")
