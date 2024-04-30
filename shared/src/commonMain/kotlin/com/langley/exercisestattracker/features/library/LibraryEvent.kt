@@ -38,6 +38,7 @@ sealed interface LibraryEvent {
 
     // Edit View Events
     data object CloseEditView : LibraryEvent
+    data object CloseAddView : LibraryEvent
 
 
     // For initializing dummy data.
