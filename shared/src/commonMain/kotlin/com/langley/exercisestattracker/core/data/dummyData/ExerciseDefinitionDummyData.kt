@@ -771,7 +771,8 @@ fun ExerciseDefinitionDummyData.getListOfDummyExerciseRecords(): List<ExerciseRe
 
         dummyExerciseRecords.add(
             ExerciseRecord(
-                exerciseRecordId = randomDef.exerciseDefinitionId,
+                recordId = randomDef.exerciseDefinitionId,
+                exerciseDefId = randomDef.exerciseDefinitionId ?: -1,
                 dateCompleted = Clock.System.now().toEpochMilliseconds(),
                 exerciseName = randomDef.exerciseName,
                 weightUsed = if (randomDef.isWeighted){ Random.nextInt(300).toFloat() } else { 0.toFloat() },
