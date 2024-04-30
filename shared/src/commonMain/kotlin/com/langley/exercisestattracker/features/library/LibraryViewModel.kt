@@ -130,6 +130,21 @@ class LibraryViewModel(
                 }
             }
 
+            LibraryEvent.CloseAddView -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        isAddExerciseSheetOpen = false,
+                        isAddRoutineSheetOpen = false,
+                        isAddScheduleSheetOpen = false,
+                        exerciseNameError = null,
+                        exerciseBodyRegionError = null,
+                        exerciseTargetMusclesError = null
+                    ) }
+                    delay(300L) //Animation delay for slide out.
+                    definitionForBuilder = ExerciseDefinition()
+                }
+            }
+
             is LibraryEvent.EditExercise -> {
                 _state.update { it.copy(
                     isAddExerciseSheetOpen = true,
@@ -304,8 +319,16 @@ class LibraryViewModel(
                 }
             }
 
-            LibraryEvent.AddNewRoutine -> TODO()
-            LibraryEvent.ClearSelectedRoutine -> TODO()
+            LibraryEvent.AddNewRoutine -> {
+                _state.update { it.copy(
+                    isAddRoutineSheetOpen = true
+                ) }
+            }
+            LibraryEvent.ClearSelectedRoutine -> {
+                _state.update { it.copy(
+                    selectedRoutine = null
+                ) }
+            }
         }
     }
 }
