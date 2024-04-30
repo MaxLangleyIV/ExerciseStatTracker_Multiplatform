@@ -26,6 +26,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
+import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
@@ -34,6 +35,7 @@ import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
+import com.langley.exercisestattracker.features.records.RecordsEvent
 import com.langley.exercisestattracker.features.records.RecordsScreen
 import com.langley.exercisestattracker.features.records.RecordsState
 import com.langley.exercisestattracker.features.records.RecordsViewModel
@@ -87,14 +89,17 @@ fun App(
         val workoutState by workoutViewModel.state.collectAsState(WorkoutState())
 
 //        // INIT DUMMY DATA
-        // Exercises?
-//        // Schedules
-//        val schedules = ExerciseRoutineDummyData(exerciseDefList).getSchedules(10)
-//        for (s in schedules){
-//            libraryViewModel.onEvent(LibraryEvent.SaveSchedule(s))
+//        // Exercises
+//        val exercises = ExerciseDefinitionDummyData().definitionList
+//        for (e in exercises){
+//            libraryViewModel.onEvent(LibraryEvent.SaveExercise(e))
 //        }
-
-        // Records
+//        // Routines
+//        val routines = ExerciseRoutineDummyData(exercises).getRoutines()
+//        for (r in routines){
+//            libraryViewModel.onEvent(LibraryEvent.SaveRoutine(r))
+//        }
+//        // Records
 //        val exerciseRecordList = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
 //        for (record in exerciseRecordList){
 //            (recordsViewModel::onEvent)(RecordsEvent.SaveRecord(record))
