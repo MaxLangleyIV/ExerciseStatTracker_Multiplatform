@@ -13,6 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,15 +39,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.data.getExercisesFromCSV
+import com.langley.exercisestattracker.core.data.getRecordsFromCSV
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.presentation.composables.BasicBottomSheet
 import com.langley.exercisestattracker.features.library.LibraryEvent
+import com.langley.exercisestattracker.features.library.routines.RoutineBuilderEvent
+import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutContentHolder
 
 @Composable
 fun RoutineDetailsView(
     modifier: Modifier = Modifier,
     visible: Boolean = false,
     routine: ExerciseRoutine = ExerciseRoutine(),
+    exerciseLibrary: List<ExerciseDefinition> = emptyList(),
     libraryOnEvent: (LibraryEvent) -> Unit
 ){
     AnimatedVisibility(
@@ -61,9 +68,10 @@ fun RoutineDetailsView(
         Column(
             modifier = modifier
                 .fillMaxSize()
+                .height(IntrinsicSize.Min)
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(8.dp),
+//                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -119,7 +127,7 @@ fun RoutineDetailsView(
 
             // Title Section
             Column (
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -166,22 +174,29 @@ fun RoutineDetailsView(
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = routine.exerciseCSV,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Normal,
-                fontSize = 20.sp
-            )
+//            Text(
+//                text = routine.exerciseCSV,
+//                textAlign = TextAlign.Center,
+//                modifier = Modifier.fillMaxWidth(),
+//                fontWeight = FontWeight.Normal,
+//                fontSize = 20.sp
+//            )
+//
+//            Spacer(Modifier.height(16.dp))
+//
+//            Text(
+//                text = routine.repsCSV,
+//                textAlign = TextAlign.Center,
+//                modifier = Modifier.fillMaxWidth(),
+//                fontWeight = FontWeight.Normal,
+//                fontSize = 20.sp
+//            )
 
-            Spacer(Modifier.height(16.dp))
-
-            Text(
-                text = routine.repsCSV,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Normal,
-                fontSize = 20.sp
+            WorkoutContentHolder(
+                workoutMode = false,
+                displayOnlyMode = true,
+                exercises = routine.getExercisesFromCSV(exerciseLibrary).toSet().toList(),
+                records = routine.getRecordsFromCSV(exerciseLibrary),
             )
 
         }
