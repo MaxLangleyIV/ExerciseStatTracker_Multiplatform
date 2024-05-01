@@ -175,7 +175,8 @@ fun LibraryScreen(
             RoutineDetailsView(
                 visible = libraryState.isRoutineDetailsSheetOpen,
                 libraryOnEvent = onEvent,
-                routine = libraryState.selectedRoutine ?: ExerciseRoutine()
+                routine = libraryState.selectedRoutine ?: ExerciseRoutine(),
+                exerciseLibrary = libraryState.exercises
             )
 
             RoutineEditView(
