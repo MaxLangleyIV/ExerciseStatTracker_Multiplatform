@@ -38,9 +38,9 @@ fun WorkoutContent(
     modifier: Modifier = Modifier,
     exercises: List<ExerciseDefinition> = emptyList(),
     records: List<ExerciseRecord> = emptyList(),
-//    onEvent: (WorkoutEvent) -> Unit = {},
     openExerciseSelector: () -> Unit = {},
     workoutMode: Boolean = false,
+    displayOnlyMode: Boolean = false,
     updateRepsFromString: (index: Int, string: String) -> Unit = { _, _ -> },
     updateWeightFromString: (index: Int, string: String) -> Unit = { _, _ -> },
     markSetComplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
@@ -132,43 +132,48 @@ fun WorkoutContent(
 
                         numberOfSets = 0
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Button(
-                                onClick = {
-                                    if (lastSetEntered != null){
-                                        addToListOfRecords(
-                                            listOf(
-                                                lastSetEntered.copy(
-                                                    dateCompleted =
-                                                    Clock.System.now().toEpochMilliseconds(),
-                                                    completed = false
-                                                )
-                                            )
-                                        )
-                                    }
-                                    else {
-                                        addToListOfRecords(
-                                            listOf(exercise.toBlankRecord().copy(completed = false))
-                                        )
-                                    }
-                                }
-                            ){
-                                Text( text = "Add Set" )
-                            }
+                        // Add New Set and Remove Exercise Buttons
+                        if (!displayOnlyMode){
 
-                            if (lastSetEntered == null){
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 Button(
                                     onClick = {
-                                        removeExercise(exerciseIndex)
+                                        if (lastSetEntered != null){
+                                            addToListOfRecords(
+                                                listOf(
+                                                    lastSetEntered.copy(
+                                                        dateCompleted =
+                                                        Clock.System.now().toEpochMilliseconds(),
+                                                        completed = false
+                                                    )
+                                                )
+                                            )
+                                        }
+                                        else {
+                                            addToListOfRecords(
+                                                listOf(exercise.toBlankRecord().copy(completed = false))
+                                            )
+                                        }
                                     }
                                 ){
-                                    Text( text = "Remove Exercise" )
+                                    Text( text = "Add Set" )
+                                }
+
+                                if (lastSetEntered == null){
+                                    Button(
+                                        onClick = {
+                                            removeExercise(exerciseIndex)
+                                        }
+                                    ){
+                                        Text( text = "Remove Exercise" )
+                                    }
                                 }
                             }
+
                         }
 
                     }
