@@ -29,7 +29,8 @@ fun WorkoutContentHolder(
     addToListOfRecords: (list: List<ExerciseRecord>) -> Unit = {},
     removeRecord: (index: Int) -> Unit = {},
     removeExercise: (index: Int) -> Unit = {},
-    workoutMode: Boolean = true
+    workoutMode: Boolean = true,
+    displayOnlyMode: Boolean = false
 ){
 
     // Workout Content
@@ -66,7 +67,8 @@ fun WorkoutContentHolder(
                 addToListOfRecords = addToListOfRecords,
                 removeRecord = removeRecord,
                 removeExercise = removeExercise,
-                workoutMode = workoutMode
+                workoutMode = workoutMode,
+                displayOnlyMode = displayOnlyMode
             )
 
         }
