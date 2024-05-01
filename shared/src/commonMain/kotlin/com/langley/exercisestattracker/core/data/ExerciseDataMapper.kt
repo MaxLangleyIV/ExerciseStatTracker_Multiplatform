@@ -125,6 +125,49 @@ fun ExerciseRoutine.getExercisesFromCSV(
 
 }
 
+fun ExerciseRoutine.getRecordsFromCSV(
+    exerciseLibrary: List<ExerciseDefinition>
+): List<ExerciseRecord> {
+
+    val mutableList = mutableListOf<ExerciseRecord>()
+
+    val exerciseCSVAsList = this.exerciseCSV.split(",")
+    val repsCSVAsList = this.repsCSV.split(",")
+
+    for ((index,exerciseID) in exerciseCSVAsList.withIndex()){
+
+        val id: Int? =
+            try {
+                exerciseID.toInt()
+            } catch (nfe: NumberFormatException){
+                println(nfe)
+                null
+            }
+
+
+        if (id != null){
+
+            for (def in exerciseLibrary){
+
+                val defId = def.exerciseDefinitionId?.toInt() ?: -1
+
+                if (defId == id){
+                    mutableList.add(
+                        def.toBlankRecord().copy(
+                            repsCompleted = repsCSVAsList[index].toInt(),
+                            completed = false
+                        )
+                    )
+                }
+            }
+        }
+
+    }
+
+    return mutableList
+
+}
+
 fun ExerciseSchedule.getRoutinesFromCSV(
     allRoutinesAvailable: List<ExerciseRoutine>
 ): List<ExerciseRoutine> {
