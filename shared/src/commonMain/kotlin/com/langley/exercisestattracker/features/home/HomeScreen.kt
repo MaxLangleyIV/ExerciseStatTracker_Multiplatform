@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 import com.langley.exercisestattracker.navigation.Screen
 
@@ -20,6 +23,8 @@ import com.langley.exercisestattracker.navigation.Screen
 fun HomeScreen(
     modifier: Modifier = Modifier,
     state: HomeState = HomeState(),
+    dataSource: ExerciseAppDataSource,
+    dataStore: DataStore<Preferences>,
 //    onEvent: (LibraryEvent) -> Unit,
     focusRequester: FocusRequester = FocusRequester(),
     focusManager: FocusManager,
@@ -35,27 +40,7 @@ fun HomeScreen(
             Column(
                 modifier = modifier.align(Alignment.Center)
             ) {
-                Button(
-                    onClick = { navController.navigateTo(Screen.Library) }
-                ){
-                    Text( text = "Open Library" )
-                }
 
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Button(
-                    onClick = { navController.navigateTo(Screen.Records) }
-                ){
-                    Text( text = "Open Records" )
-                }
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Button(
-                    onClick = { navController.navigateTo(Screen.Workout) }
-                ){
-                    Text( text = "Workout" )
-                }
             }
         }
 
