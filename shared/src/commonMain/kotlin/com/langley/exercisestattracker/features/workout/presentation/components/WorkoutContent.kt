@@ -122,7 +122,8 @@ fun WorkoutContent(
                                     markIncomplete = {index, newSet ->
                                         markSetIncomplete(index, newSet)
                                     },
-                                    removeRecord = {index -> removeRecord(index) }
+                                    removeRecord = {index -> removeRecord(index) },
+                                    displayOnlyMode = displayOnlyMode
                                 )
 
                                 lastSetEntered = set
@@ -182,15 +183,17 @@ fun WorkoutContent(
                 Spacer(Modifier.height(8.dp))
             }
 
-            Button(
-                onClick = {
-                    openExerciseSelector()
+            if (!displayOnlyMode){
+                Button(
+                    onClick = {
+                        openExerciseSelector()
 //                    onEvent(
 //                        WorkoutEvent.OpenSelector
 //                    )
+                    }
+                ){
+                    Text( text = "Add New Exercise" )
                 }
-            ){
-                Text( text = "Add New Exercise" )
             }
         }
 
