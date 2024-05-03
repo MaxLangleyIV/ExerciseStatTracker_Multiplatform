@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material3.Icon
@@ -125,6 +126,8 @@ fun App(
 
                     HomeScreen(
                         visible = currentScreen == Screen.Home,
+                        dataSource = appModule.exerciseAppDataSource,
+                        dataStore = appModule.preferencesDataStore,
                         focusRequester = focusRequester,
                         focusManager = focusManager,
                         interactionSource = interactionSource,
@@ -175,6 +178,26 @@ fun App(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
+                    // Home
+                    IconButton(
+                        onClick = {
+                            navController.navigateTo(Screen.Home)
+                        }
+                    ) {
+                        Icon(
+                            modifier = Modifier.alpha(
+                                if (currentScreen == Screen.Home){
+                                    1F
+                                }
+                                else{
+                                    0.6F
+                                }
+                            ),
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Home",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
 
                     // Records
                     IconButton(
@@ -192,7 +215,7 @@ fun App(
                                 }
                             ),
                             imageVector = Icons.Default.List,
-                            contentDescription = "Home",
+                            contentDescription = "Records",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
