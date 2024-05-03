@@ -66,22 +66,26 @@ class RoutineBuilderViewModelTest {
         testRecord0 = ExerciseRecord(
             recordId = 0,
             exerciseName = "Test0",
-            completed = false
+            completed = false,
+            exerciseDefId = -1
         )
         testRecord1 = ExerciseRecord(
             recordId = 1,
             exerciseName = "Test1",
-            completed = false
+            completed = false,
+            exerciseDefId = -1
         )
         testRecord2 = ExerciseRecord(
             recordId = 2,
             exerciseName = "Test2",
-            completed = false
+            completed = false,
+            exerciseDefId = -1
         )
         testRecord3 = ExerciseRecord(
             recordId = 3,
             exerciseName = "Test3",
-            completed = false
+            completed = false,
+            exerciseDefId = -1
         )
 
         testDef0 = ExerciseDefinition( exerciseName = "Test0" )
