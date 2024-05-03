@@ -3,6 +3,7 @@ package com.langley.exercisestattracker.features.library.routines
 import com.langley.exercisestattracker.core.data.getExercisesFromCSV
 import com.langley.exercisestattracker.core.data.toBlankRecord
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -79,15 +80,20 @@ class RoutineBuilderViewModel(
                 var newRepsCSV = ""
 
                 for (record in _state.value.recordList){
-
                     newExerciseCSV = newExerciseCSV + record.exerciseDefId + ","
                     newRepsCSV = newRepsCSV + record.repsCompleted + ","
                 }
 
-                val newRoutine = event.routine.copy(
-                    exerciseCSV = newExerciseCSV,
-                    repsCSV = newRepsCSV
-                )
+                val newRoutine = if (newExerciseCSV.isNotEmpty() && newRepsCSV.isNotBlank()){
+
+                    event.routine.copy(
+                        exerciseCSV = newExerciseCSV,
+                        repsCSV = newRepsCSV
+                    )
+
+                } else{
+                    event.routine.copy()
+                }
 
                 if (
                     newRoutine.routineName.isNotBlank() &&
