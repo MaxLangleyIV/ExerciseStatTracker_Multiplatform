@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,11 +23,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
+import com.langley.exercisestattracker.features.library.selector.SelectorView
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
-import com.langley.exercisestattracker.features.workout.presentation.components.TopBar
+import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutTopBar
 import com.langley.exercisestattracker.features.workout.presentation.components.WorkoutContentHolder
-import com.langley.exercisestattracker.features.workout.subfeature.exerciseSelector.ExerciseSelectorView
 import com.langley.exercisestattracker.navigation.ExerciseAppNavController
 
 @Composable
@@ -37,6 +37,7 @@ fun WorkoutScreen(
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.background)
         .padding(8.dp),
+    dataSource: ExerciseAppDataSource,
     workoutState: WorkoutState = WorkoutState(),
     onEvent: (WorkoutEvent) -> Unit,
     focusRequester: FocusRequester,
@@ -62,69 +63,93 @@ fun WorkoutScreen(
             ) {
 
                 // Top Bar
-                TopBar(
+                WorkoutTopBar(
                     modifier = Modifier.weight(0.1F),
                     navController = navController,
                     workoutState = workoutState,
                     onEvent = onEvent
                 )
 
-                Spacer(Modifier.height(8.dp))
+//                Spacer(Modifier.height(4.dp))
 
                 // Content
                 WorkoutContentHolder(
+                    workoutMode = true,
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(16.dp))
                         .background(MaterialTheme.colorScheme.background)
                         .weight(0.8F),
+                    exercises = workoutState.exerciseList,
+                    records = workoutState.recordsList,
+                    openExerciseSelector = { onEvent(WorkoutEvent.OpenExerciseSelector) },
+                    openRoutineSelector = { onEvent(WorkoutEvent.OpenRoutineSelector) },
+                    updateRepsFromString = {index, string ->
+                        onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
+                    },
+                    updateWeightFromString = {index, string ->
+                        onEvent(WorkoutEvent.UpdateWeightFromString(index, string))
+                    },
+                    markSetComplete = { index, set ->
+                        onEvent(WorkoutEvent.MarkCompleted(index, set))
+                    },
+                    markSetIncomplete = { index, set ->
+                        onEvent(WorkoutEvent.MarkIncomplete(index, set))
+                    },
+                    addToListOfRecords = { list ->
+                        onEvent(WorkoutEvent.AddToListOfRecords(list))
+                    },
+                    removeRecord = { index -> onEvent(WorkoutEvent.RemoveRecord(index)) },
+                    removeExercise = { index -> onEvent(WorkoutEvent.RemoveExercise(index)) }
 
-                    workoutState = workoutState,
-                    onEvent = onEvent
                 )
 
-                // Save / Cancel Section
-                Column(
-                    modifier = Modifier.weight(0.1F),
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                if (workoutState.exerciseList.isNotEmpty()){
+                    // Save / Cancel Section
+                    Column(
+                        modifier = Modifier.weight(0.1F),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(
-                            onClick = { onEvent(WorkoutEvent.CancelWorkout) }
-                        ){
-                            Text( text = "Cancel Session" )
-                        }
-
-                        Spacer(Modifier.width(8.dp))
-
-                        Button(
-                            onClick = {
-                                onEvent(WorkoutEvent.SaveWorkout)
-                                navController.navigateBack()
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Button(
+                                onClick = { onEvent(WorkoutEvent.CancelWorkout) }
+                            ){
+                                Text( text = "Cancel Session" )
                             }
-                        ){
-                            Text( text = "Save Session" )
+
+                            Spacer(Modifier.width(8.dp))
+
+                            Button(
+                                onClick = {
+                                    onEvent(WorkoutEvent.SaveWorkout)
+                                }
+                            ){
+                                Text( text = "Save Session" )
+                            }
                         }
                     }
                 }
             }
 
             // Exercise Selector
-            ExerciseSelectorView(
+            SelectorView(
+                visible = workoutState.exerciseSelectorVisible,
                 modifier = Modifier.fillMaxSize(),
-                exerciseList = workoutState.exerciseLibrary,
-                searchString = workoutState.searchString,
-                searchFilterType = workoutState.searchFilter,
-                selectedExercises = workoutState.selectedExercises,
-                onEvent = onEvent,
+                dataSource = dataSource,
+                onAddExercises = { exercises ->
+                    onEvent(WorkoutEvent.AddToExercisesWithDefaultSet(exercises))
+                },
+                onAddRoutine = { routine ->
+                    if (routine != null){ onEvent(WorkoutEvent.AddRoutine(routine)) }
+                },
+                onClose = {onEvent(WorkoutEvent.CloseExerciseSelector)},
                 focusManager = focusManager,
-                focusRequester = focusRequester,
-                interactionSource = interactionSource,
-                visible = workoutState.exerciseSelectorVisible
+                showSchedulesTab = false,
+                startOnRoutinesTab = workoutState.startSelectorOnRoutinesTab
             )
 
         }

@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.langley.exercisestattracker.core.domain.ExerciseAppDataSource
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import com.langley.exercisestattracker.features.library.utils.filterDefinitionLibrary
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
@@ -19,7 +21,9 @@ class LibraryViewModel(
 
     private val exerciseAppDataSource: ExerciseAppDataSource,
     initialState: LibraryState = LibraryState(),
-    initialExerciseDef: ExerciseDefinition = ExerciseDefinition()
+    initialExerciseDef: ExerciseDefinition = ExerciseDefinition(),
+    initialRoutine: ExerciseRoutine = ExerciseRoutine(),
+    initialSchedule: ExerciseSchedule = ExerciseSchedule(),
 ): ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
@@ -27,30 +31,40 @@ class LibraryViewModel(
     val state = combine(
         _state,
         exerciseAppDataSource.getDefinitions(),
+        exerciseAppDataSource.getRoutines(),
+        exerciseAppDataSource.getSchedules()
     ){
-        state, exerciseDefinitions ->
+        state, definitions, routines, schedules ->
 
-        updateLibraryState(state, exerciseDefinitions)
+        updateLibraryState(state, definitions, routines, schedules)
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), LibraryState())
 
     var definitionForBuilder: ExerciseDefinition by mutableStateOf(initialExerciseDef)
         private set
+    var routineForBuilder: ExerciseRoutine by mutableStateOf(initialRoutine)
+        private set
+    var scheduleForBuilder: ExerciseSchedule by mutableStateOf(initialSchedule)
+        private set
 
 
     private fun updateLibraryState(
         currentState: LibraryState,
-        definitionsList: List<ExerciseDefinition>
+        definitionsList: List<ExerciseDefinition>,
+        routinesList: List<ExerciseRoutine>,
+        schedulesList: List<ExerciseSchedule>,
     ): LibraryState {
 
         return currentState.copy(
 
-            exerciseDefinitions =
+            exercises =
             filterDefinitionLibrary(
                 definitionLibrary = definitionsList,
                 filterType = currentState.searchFilterType,
                 searchString = currentState.searchString
-            )
+            ),
+            routines = routinesList,
+            schedules = schedulesList
 
         )
 
@@ -60,43 +74,96 @@ class LibraryViewModel(
     fun onEvent(event: LibraryEvent) {
         when (event) {
 
-            is LibraryEvent.DefinitionSelected -> {
+            is LibraryEvent.ExerciseSelected -> {
                 _state.update { it.copy(
                     isSearchDropdownOpen = false,
-                    selectedExerciseDefinition = event.exerciseDefinition,
-                    isExerciseDetailsSheetOpen = true
+                    selectedExercise = event.exercise,
+                    isExerciseDetailsSheetOpen = true,
+                    isRoutineDetailsSheetOpen = false,
+                    isScheduleDetailsSheetOpen = false
                 ) }
             }
 
-            is LibraryEvent.SaveDefinition -> {
-                viewModelScope.launch {
-                    exerciseAppDataSource.insertOrReplaceDefinition(event.exerciseDefinition)
-                }
+            is LibraryEvent.RoutineSelected -> {
+                _state.update { it.copy(
+                    isSearchDropdownOpen = false,
+                    selectedRoutine = event.routine,
+                    isExerciseDetailsSheetOpen = false,
+                    isRoutineDetailsSheetOpen = true,
+                    isScheduleDetailsSheetOpen = false
+                ) }
+            }
+
+            is LibraryEvent.ScheduleSelected -> {
+                _state.update { it.copy(
+                    isSearchDropdownOpen = false,
+                    selectedSchedule = event.schedule,
+                    isRoutineDetailsSheetOpen = false,
+                    isExerciseDetailsSheetOpen = false,
+                    isScheduleDetailsSheetOpen = true
+                ) }
             }
 
             LibraryEvent.CloseDetailsView -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
-                        isExerciseDetailsSheetOpen = false
+                        isExerciseDetailsSheetOpen = false,
+                        isRoutineDetailsSheetOpen = false,
+                        isScheduleDetailsSheetOpen = false
                     ) }
                     delay(300L) //BottomSheet animation delay
                     _state.update { it.copy(
-                        selectedExerciseDefinition = null
+                        selectedExercise = null,
+                        selectedRoutine = null,
+                        selectedSchedule = null
                     ) }
                 }
             }
 
-            is LibraryEvent.EditDefinition -> {
-                _state.update { it.copy(
-                    isAddExerciseDefSheetOpen = true,
-                ) }
-                definitionForBuilder = _state.value.selectedExerciseDefinition!!.copy()
+            LibraryEvent.CloseEditView -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        isEditExerciseSheetOpen = false,
+                        isEditRoutineSheetOpen = false,
+                        isEditScheduleSheetOpen = false
+                    ) }
+                }
             }
 
-            LibraryEvent.AddNewDefClicked -> {
+            LibraryEvent.CloseAddView -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        isAddExerciseSheetOpen = false,
+                        isAddRoutineSheetOpen = false,
+                        isAddScheduleSheetOpen = false,
+                        exerciseNameError = null,
+                        exerciseBodyRegionError = null,
+                        exerciseTargetMusclesError = null
+                    ) }
+                    delay(300L) //Animation delay for slide out.
+                    definitionForBuilder = ExerciseDefinition()
+                }
+            }
+
+            is LibraryEvent.EditExercise -> {
                 _state.update { it.copy(
-                    isAddExerciseDefSheetOpen = true,
-                    isEditExerciseDefSheetOpen = false
+                    isAddExerciseSheetOpen = true,
+                ) }
+                definitionForBuilder = _state.value.selectedExercise!!.copy()
+            }
+
+            LibraryEvent.EditRoutine -> {
+                _state.update { it.copy(
+                    isEditRoutineSheetOpen = true,
+                ) }
+            }
+
+            LibraryEvent.EditSchedule -> TODO()
+
+            LibraryEvent.AddNewExercise -> {
+                _state.update { it.copy(
+                    isAddExerciseSheetOpen = true,
+                    isEditExerciseSheetOpen = false
                 ) }
                 definitionForBuilder = ExerciseDefinition(
                     exerciseDefinitionId = null,
@@ -120,7 +187,7 @@ class LibraryViewModel(
             LibraryEvent.CloseAddDefClicked -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
-                        isAddExerciseDefSheetOpen = false,
+                        isAddExerciseSheetOpen = false,
                         exerciseNameError = null,
                         exerciseBodyRegionError = null,
                         exerciseTargetMusclesError = null
@@ -158,12 +225,12 @@ class LibraryViewModel(
                 }
             }
 
-            is LibraryEvent.ToggleIsFavorite -> {
-                definitionForBuilder = _state.value.selectedExerciseDefinition!!.copy(
-                    isFavorite = !_state.value.selectedExerciseDefinition!!.isFavorite
+            is LibraryEvent.ToggleFavoriteExercise -> {
+                definitionForBuilder = _state.value.selectedExercise!!.copy(
+                    isFavorite = !_state.value.selectedExercise!!.isFavorite
                 )
                 _state.update { it.copy(
-                    selectedExerciseDefinition = definitionForBuilder
+                    selectedExercise = definitionForBuilder
                 ) }
                 viewModelScope.launch {
                     exerciseAppDataSource.insertOrReplaceDefinition(definitionForBuilder)
@@ -171,18 +238,95 @@ class LibraryViewModel(
 
             }
 
-            LibraryEvent.ClearSelectedDef -> {
+            is LibraryEvent.ToggleFavoriteRoutine -> {
+                routineForBuilder = _state.value.selectedRoutine!!.copy(
+                    isFavorite = !_state.value.selectedRoutine!!.isFavorite
+                )
                 _state.update { it.copy(
-                    selectedExerciseDefinition = null
+                    selectedRoutine = routineForBuilder
+                ) }
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceRoutine(routineForBuilder)
+                }
+            }
+
+            is LibraryEvent.ToggleFavoriteSchedule -> {
+                scheduleForBuilder = _state.value.selectedSchedule!!.copy(
+                    isFavorite = !_state.value.selectedSchedule!!.isFavorite
+                )
+                _state.update { it.copy(
+                    selectedSchedule = scheduleForBuilder
+                ) }
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceSchedule(scheduleForBuilder)
+                }
+            }
+
+            LibraryEvent.ClearSelectedExercise -> {
+                _state.update { it.copy(
+                    selectedExercise = null
                 ) }
             }
 
-            is LibraryEvent.UpdateSelectedDefinition -> {
+            is LibraryEvent.UpdateSelectedExercise -> {
 
-                definitionForBuilder = event.definition
+                definitionForBuilder = event.exercise
                 _state.update { it.copy(
-                    selectedExerciseDefinition = event.definition,
+                    selectedExercise = event.exercise,
                     isExerciseDetailsSheetOpen = true
+                ) }
+            }
+
+            LibraryEvent.SelectExercisesTab -> {
+                _state.update { it.copy(
+                    isShowingExercises = true,
+                    isShowingRoutines = false,
+                    isShowingSchedules = false
+                ) }
+            }
+
+            LibraryEvent.SelectRoutinesTab -> {
+                _state.update { it.copy(
+                    isShowingExercises = false,
+                    isShowingRoutines = true,
+                    isShowingSchedules = false
+                ) }
+            }
+
+            LibraryEvent.SelectSchedulesTab -> {
+                _state.update { it.copy(
+                    isShowingExercises = false,
+                    isShowingRoutines = false,
+                    isShowingSchedules = true
+                ) }
+            }
+
+            is LibraryEvent.SaveExercise -> {
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceDefinition(event.exercise)
+                }
+            }
+
+            is LibraryEvent.SaveRoutine -> {
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceRoutine(event.routine)
+                }
+            }
+
+            is LibraryEvent.SaveSchedule -> {
+                viewModelScope.launch {
+                    exerciseAppDataSource.insertOrReplaceSchedule(event.schedule)
+                }
+            }
+
+            LibraryEvent.AddNewRoutine -> {
+                _state.update { it.copy(
+                    isAddRoutineSheetOpen = true
+                ) }
+            }
+            LibraryEvent.ClearSelectedRoutine -> {
+                _state.update { it.copy(
+                    selectedRoutine = null
                 ) }
             }
         }

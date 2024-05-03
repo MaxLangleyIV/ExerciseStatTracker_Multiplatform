@@ -33,15 +33,12 @@ class ExerciseBuilderViewModel(
     val definitions = exerciseAppDataSource.getDefinitions()
 
     private fun initialize(definition: ExerciseDefinition){
-        println("SELECTED DEF: ${definition.exerciseName}")
 
         _state.update { it.copy(
             musclesList = definition.targetMuscles.split(", "),
             primaryTargetList = definition.bodyRegion.split(", "),
             newExerciseDefinition = definition
         ) }
-
-        println("NEW DEF: ${_state.value.newExerciseDefinition.exerciseName}")
 
     }
 
@@ -101,7 +98,7 @@ class ExerciseBuilderViewModel(
                             .insertOrReplaceDefinition(_state.value.newExerciseDefinition)
                         if (_state.value.initialized){
                             libraryOnEvent(
-                                LibraryEvent.UpdateSelectedDefinition(
+                                LibraryEvent.UpdateSelectedExercise(
                                     _state.value.newExerciseDefinition
                                 )
                             )

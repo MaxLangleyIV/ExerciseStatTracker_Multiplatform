@@ -4,25 +4,22 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
-import com.langley.exercisestattracker.core.data.SETTINGS_PREFERENCES
-import com.langley.exercisestattracker.core.data.createDataStorePreferences
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
 import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.library.ExerciseLibraryFilterType
 import com.langley.exercisestattracker.features.library.MainDispatcherRule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.coroutines.coroutineContext
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -45,6 +42,7 @@ class WorkoutViewModelTest {
     private lateinit var testDef2: ExerciseDefinition
 
     private val testDataSource = TestExerciseAppDataSource(
+        dummyDefinitions = ExerciseDefinitionDummyData().definitionList,
         dummyRecords = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
     )
 
@@ -73,31 +71,35 @@ class WorkoutViewModelTest {
         every { prefs[stringPreferencesKey("WORKOUT_STATE")] } returns ""
 
         testRecord0 = ExerciseRecord(
-            exerciseRecordId = 0,
+            recordId = 0,
             exerciseName = "Test0",
-            completed = false
+            completed = false,
+            exerciseDefId = -1
         )
         testRecord1 = ExerciseRecord(
-            exerciseRecordId = 1,
+            recordId = 1,
             exerciseName = "Test1",
-            completed = false
+            completed = false,
+            exerciseDefId = -1
         )
         testRecord2 = ExerciseRecord(
-            exerciseRecordId = 2,
+            recordId = 2,
             exerciseName = "Test2",
-            completed = false
+            completed = false,
+            exerciseDefId = -1
         )
         testRecord3 = ExerciseRecord(
-            exerciseRecordId = 3,
+            recordId = 3,
             exerciseName = "Test3",
-            completed = false
+            completed = false,
+            exerciseDefId = -1
         )
 
         testDef0 = ExerciseDefinition( exerciseName = "Test0" )
         testDef1 = ExerciseDefinition( exerciseName = "Test1" )
         testDef2 = ExerciseDefinition( exerciseName = "Test2" )
 
-        setupViewModel(WorkoutState())
+        setupViewModel(WorkoutState(exerciseLibrary = ExerciseDefinitionDummyData().definitionList))
 
         state = viewModel.state.first()
 
@@ -254,66 +256,6 @@ class WorkoutViewModelTest {
 
     }
 
-//    @Test
-//    fun onEvent_RemoveFromCompletedInMiddle_completedExercisesListUpdatedCorrectly() = runTest {
-//
-//        state = viewModel.state.first()
-//
-//        assertTrue(
-//            actual = state.completedExercises.contains(testRecord1),
-//            message = "CompletedExercises should contain testRecord1"
-//        )
-//
-//        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(1, testRecord1))
-//
-//        state = viewModel.state.first()
-//
-//        assertFalse(
-//            actual = state.completedExercises.contains(testRecord1),
-//            message = "CompletedExercises should not contain testRecord1"
-//        )
-//    }
-//
-//    @Test
-//    fun onEvent_RemoveFromCompletedAtFront_completedExercisesListUpdatedCorrectly() = runTest {
-//
-//        state = viewModel.state.first()
-//
-//        assertTrue(
-//            actual = state.completedExercises.contains(testRecord0),
-//            message = "CompletedExercises should contain testRecord0"
-//        )
-//
-//        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(0, testRecord0))
-//
-//        state = viewModel.state.first()
-//
-//        assertFalse(
-//            actual = state.completedExercises.contains(testRecord0),
-//            message = "CompletedExercises should not contain testRecord0"
-//        )
-//    }
-//
-//    @Test
-//    fun onEvent_RemoveFromCompletedAtEnd_completedExercisesListUpdatedCorrectly() = runTest {
-//
-//        state = viewModel.state.first()
-//
-//        assertTrue(
-//            actual = state.completedExercises.contains(testRecord2),
-//            message = "CompletedExercises should contain testRecord2"
-//        )
-//
-//        viewModel.onEvent(WorkoutEvent.RemoveFromCompleted(2, testRecord2))
-//
-//        state = viewModel.state.first()
-//
-//        assertFalse(
-//            actual = state.completedExercises.contains(testRecord2),
-//            message = "CompletedExercises should not contain testRecord2"
-//        )
-//    }
-
     @Test
     fun onEvent_saveWorkout() = runTest {
 
@@ -337,7 +279,7 @@ class WorkoutViewModelTest {
                 assertTrue(
                     actual = testDataSource.getRecords().first().contains(record),
                     message =
-                    record.exerciseName + " ${record.exerciseRecordId} not found in data source."
+                    record.exerciseName + " ${record.recordId} not found in data source."
                 )
             }
             else {
@@ -345,7 +287,7 @@ class WorkoutViewModelTest {
                     actual = testDataSource.getRecords().first().contains(record),
                     message =
                     record.exerciseName +
-                            " ${record.exerciseRecordId} should not be found in data source."
+                            " ${record.recordId} should not be found in data source."
                 )
             }
 
@@ -388,7 +330,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should not already contain testDef0"
         )
 
-        viewModel.onEvent(WorkoutEvent.AddToListOfExercises(listOf(testDef0)))
+        viewModel.onEvent(WorkoutEvent.AddToExercisesWithDefaultSet(listOf(testDef0)))
 
         state = viewModel.state.first()
 
@@ -412,7 +354,7 @@ class WorkoutViewModelTest {
         }
 
         viewModel.onEvent(
-            WorkoutEvent.AddToListOfExercises(listToAdd)
+            WorkoutEvent.AddToExercisesWithDefaultSet(listToAdd)
         )
 
         state = viewModel.state.first()
@@ -442,7 +384,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef0"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(testDef0))
+        viewModel.onEvent(WorkoutEvent.RemoveExercise(0))
 
         state = viewModel.state.first()
 
@@ -469,7 +411,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef1"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(testDef1))
+        viewModel.onEvent(WorkoutEvent.RemoveExercise(1))
 
         state = viewModel.state.first()
 
@@ -496,7 +438,7 @@ class WorkoutViewModelTest {
             message = "exerciseList should contain testDef2"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfExercises(testDef2))
+        viewModel.onEvent(WorkoutEvent.RemoveExercise(2))
 
         state = viewModel.state.first()
 
@@ -571,7 +513,7 @@ class WorkoutViewModelTest {
             message = "recordsList should contain testRecord0"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(0))
+        viewModel.onEvent(WorkoutEvent.RemoveRecord(0))
 
         state = viewModel.state.first()
 
@@ -598,7 +540,7 @@ class WorkoutViewModelTest {
             message = "recordsList should contain testRecord1"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(1))
+        viewModel.onEvent(WorkoutEvent.RemoveRecord(1))
 
         state = viewModel.state.first()
 
@@ -624,7 +566,7 @@ class WorkoutViewModelTest {
             message = "recordsList should contain testRecord2"
         )
 
-        viewModel.onEvent(WorkoutEvent.RemoveFromListOfRecords(2))
+        viewModel.onEvent(WorkoutEvent.RemoveRecord(2))
 
         state = viewModel.state.first()
 
@@ -688,7 +630,7 @@ class WorkoutViewModelTest {
         assertEquals(
             state.searchString,
             "Test",
-            "SearchString does not equal 'Test'"
+            "searchString does not equal 'Test'"
         )
 
     }
@@ -813,6 +755,65 @@ class WorkoutViewModelTest {
             actual = state.recordsList[0].weightUsed,
             message = "recordsList[0].weightUsed should equal 0 when input is an empty string"
         )
+
+    }
+
+    @Test
+    fun onEvent_addRoutine_routineSet_exercisesAndRecordsUpdated() = runTest {
+
+        val routine = ExerciseRoutine(
+            exerciseRoutineId = 0,
+            exerciseCSV = "0,0,0,1,1,1,2,2,2",
+            repsCSV = "5,5,5,5,5,5,5,5,5"
+            )
+
+        viewModel.onEvent(WorkoutEvent.AddRoutine(routine))
+
+        state = viewModel.state.first()
+
+        assertEquals(
+            expected = routine,
+            actual = state.routine,
+            message = "${state.routine} in state doesn't equal test routine"
+        )
+
+        println(state.exerciseList.size)
+
+        var exercise0Count = 0
+        var exercise1Count = 0
+        var exercise2Count = 0
+
+        for (record in state.recordsList){
+            println("RECORD: ${record.exerciseName}")
+
+            if (record.exerciseName == state.exerciseLibrary[0].exerciseName){
+                exercise0Count++
+            }
+            if (record.exerciseName == state.exerciseLibrary[1].exerciseName){
+                exercise1Count++
+            }
+            else if (record.exerciseName == state.exerciseLibrary[2].exerciseName){
+                exercise2Count++
+            }
+
+        }
+
+        assertEquals(
+            expected = 3,
+            actual = exercise0Count,
+            message = "exercise0Count should equal 3"
+        )
+        assertEquals(
+            expected = 3,
+            actual = exercise1Count,
+            message = "exercise1Count should equal 3"
+        )
+        assertEquals(
+            expected = 3,
+            actual = exercise2Count,
+            message = "exercise2Count should equal 3"
+        )
+
 
     }
 

@@ -2,13 +2,18 @@ package com.langley.exercisestattracker.features.library
 
 import com.langley.exercisestattracker.core.TestExerciseAppDataSource
 import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -37,15 +42,21 @@ class LibraryViewModelTest {
         newExerciseDefinition: ExerciseDefinition = ExerciseDefinition()
     ): LibraryViewModel {
 
+        val dummyData = ExerciseDefinitionDummyData()
+        val dummyRoutineData = ExerciseRoutineDummyData(dummyData.definitionList)
+
         viewModel = viewModelFactory {
 
             LibraryViewModel(
 
                 TestExerciseAppDataSource(
-                    ExerciseDefinitionDummyData().definitionList
+                    dummyDefinitions = dummyData.definitionList,
+                    dummyRoutines = dummyRoutineData.getRoutines(),
+                    dummySchedules = dummyRoutineData.getSchedules(10)
                 ),
                 initialState,
-                newExerciseDefinition
+                newExerciseDefinition,
+                ExerciseRoutine()
             )
         }.createViewModel()
 
@@ -84,16 +95,16 @@ class LibraryViewModelTest {
         val state = viewModel.state.first()
 
         assertTrue(
-            state.exerciseDefinitions.isNotEmpty(),
+            state.exercises.isNotEmpty(),
             "Definitions list is empty."
         )
 
-        for (i in 0..<state.exerciseDefinitions.size) {
+        for (i in 0..<state.exercises.size) {
 
             assertEquals(exerciseDefinitionList[i].exerciseName,
-                state.exerciseDefinitions[i].exerciseName,
+                state.exercises[i].exerciseName,
                 "${exerciseDefinitionList[i].exerciseName} not equal to " +
-                        "definition in state: ${state.exerciseDefinitions[i].exerciseName}"
+                        "definition in state: ${state.exercises[i].exerciseName}"
             )
         }
     }
@@ -101,15 +112,15 @@ class LibraryViewModelTest {
     @Test
     fun onEvent_saveExerciseDefinition_savedExerciseFoundInState() = runTest {
         testExerciseDefinition = testExerciseDefinition.copy(
-            exerciseName = "Testing SaveDefinition event."
+            exerciseName = "Testing SaveExercise event."
         )
 
-        viewModel.onEvent(LibraryEvent.SaveDefinition(testExerciseDefinition))
+        viewModel.onEvent(LibraryEvent.SaveExercise(testExerciseDefinition))
 
         val state = viewModel.state.first()
         var savedExerciseFoundInState = false
 
-        for (def in state.exerciseDefinitions){
+        for (def in state.exercises){
 
             if (def.exerciseName == testExerciseDefinition.exerciseName){
                 savedExerciseFoundInState = true
@@ -120,22 +131,57 @@ class LibraryViewModelTest {
     }
 
     @Test
+    fun onEvent_saveExerciseRoutine_savedRoutineFoundInState() = runTest {
+        val testRoutine = ExerciseRoutine(routineName = "Test")
+
+        viewModel.onEvent(LibraryEvent.SaveRoutine(testRoutine))
+
+        val state = viewModel.state.first()
+        var savedRoutineFoundInState = false
+
+        for (routine in state.routines){
+
+            if (routine.routineName == testRoutine.routineName){
+                savedRoutineFoundInState = true
+            }
+        }
+        assertTrue(savedRoutineFoundInState,
+            "Unable to find routine with matching name.")
+    }
+
+    @Test
+    fun onEvent_saveExerciseSchedule_savedScheduleFoundInState() = runTest {
+        val testSchedule = ExerciseSchedule( exerciseScheduleName = "Test" )
+
+        viewModel.onEvent(LibraryEvent.SaveSchedule(testSchedule))
+
+        val state = viewModel.state.first()
+        var savedScheduleFoundInState = false
+
+        for (schedule in state.schedules){
+
+            if (schedule.exerciseScheduleName == testSchedule.exerciseScheduleName){
+                savedScheduleFoundInState = true
+            }
+        }
+        assertTrue(savedScheduleFoundInState,
+            "Unable to find schedule with matching name.")
+    }
+
+    @Test
     fun onEvent_exerciseDefSelectedCalled_selectedDefReflectedInState() = runTest{
         var state = viewModel.state.first()
 
-        val randomNum = Random.nextInt(0,(state.exerciseDefinitions.size - 1))
-        val selectedDef = state.exerciseDefinitions[randomNum]
+        val randomNum = Random.nextInt(0,(state.exercises.size - 1))
+        val selectedDef = state.exercises[randomNum]
 
-        viewModel.onEvent(LibraryEvent.DefinitionSelected(selectedDef))
+        viewModel.onEvent(LibraryEvent.ExerciseSelected(selectedDef))
 
         state = viewModel.state.first()
 
-        assertFalse(state.isSearchDropdownOpen,
-            "Search dropdown failed to be set false after selection.")
-
-        assertEquals(selectedDef, state.selectedExerciseDefinition,
+        assertEquals(selectedDef, state.selectedExercise,
             "selectedDef: $selectedDef does not equal def in state: " +
-                    "${state.selectedExerciseDefinition}" +
+                    "${state.selectedExercise}" +
                     "Definition selected with index: $randomNum"
         )
 
@@ -144,66 +190,180 @@ class LibraryViewModelTest {
     }
 
     @Test
-    fun onEvent_closeExerciseDetailsViewCalled_ExerciseDetailsSheetOpenIsFalse() = runTest {
-        //Select a definition to open details view.
-        setupViewModel(
-            LibraryState(
-                isExerciseDetailsSheetOpen = true
-            )
+    fun onEvent_RoutineSelected_selectedRoutineInState() = runTest{
+
+        val selectedRoutine = ExerciseRoutine(routineName = "Selected Test")
+
+        viewModel.onEvent(LibraryEvent.RoutineSelected(selectedRoutine))
+
+        val state = viewModel.state.first()
+
+
+        assertEquals(
+            expected = selectedRoutine,
+            actual = state.selectedRoutine,
+            message =
+            "$selectedRoutine does not equal routine in state:${state.selectedRoutine}"
         )
 
-        var state = viewModel.state.first()
+        assertTrue(state.isRoutineDetailsSheetOpen,
+            "isRoutineDetailsSheetOpen failed to be set true after selection.")
+    }
 
-        assertTrue(state.isExerciseDetailsSheetOpen,
-            "ViewModel failed to initialize correctly, " +
-                    "isExerciseDetailsSheetOpen should be true but was false."
+    @Test
+    fun onEvent_ScheduleSelected_selectedScheduleInState() = runTest{
+
+        val exerciseSchedule = ExerciseSchedule(exerciseScheduleName = "Selected Test")
+
+        viewModel.onEvent(LibraryEvent.ScheduleSelected(exerciseSchedule))
+
+        val state = viewModel.state.first()
+
+
+        assertEquals(
+            expected = exerciseSchedule,
+            actual = state.selectedSchedule,
+            message =
+            "$exerciseSchedule does not equal schedule in state:${state.selectedSchedule}"
+        )
+
+        assertTrue(state.isScheduleDetailsSheetOpen,
+            "isScheduleDetailsSheetOpen failed to be set true after selection.")
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun onEvent_closeDetailsViewCalled_AllDetailsSheetOpenFlagsAreFalse_allSelectedValNull() = runTest {
+
+        setupViewModel(
+            LibraryState(
+                isExerciseDetailsSheetOpen = true,
+                isRoutineDetailsSheetOpen = true,
+                isScheduleDetailsSheetOpen = true,
+                selectedExercise = ExerciseDefinition(),
+                selectedSchedule = ExerciseSchedule(),
+                selectedRoutine = ExerciseRoutine()
+            )
         )
 
         viewModel.onEvent(LibraryEvent.CloseDetailsView)
 
-        state = viewModel.state.first()
+        delay(300L)
 
-        assertFalse(state.isExerciseDetailsSheetOpen,
-            "isExerciseDetailsSheetOpen failed to be set false " +
+        val state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.isExerciseDetailsSheetOpen,
+            message = "isExerciseDetailsSheetOpen failed to be set false " +
                     "after CloseDetailsView."
+        )
+        assertFalse(
+            state.isRoutineDetailsSheetOpen,
+            "isRoutineDetailsSheetOpen failed to be set false " +
+                    "after CloseDetailsView."
+        )
+        assertFalse(
+            actual = state.isScheduleDetailsSheetOpen,
+            message = "isScheduleDetailsSheetOpen failed to be set false " +
+                    "after CloseDetailsView."
+        )
+
+        advanceUntilIdle()
+
+        assertNull(
+            actual = state.selectedExercise,
+            message = "selectedDefinition is not null after event"
+        )
+        assertNull(
+            actual = state.selectedRoutine,
+            message = "selectedRoutine is not null after event"
+        )
+        assertNull(
+            actual = state.selectedSchedule,
+            message = "selectedSchedule is not null after event"
+        )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun onEvent_closeEditViewCalled_AllEditSheetOpenFlagsAreFalse_allSelectedValNull() = runTest {
+
+        setupViewModel(
+            LibraryState(
+                isEditExerciseSheetOpen = true,
+                isEditRoutineSheetOpen = true,
+                isEditScheduleSheetOpen = true,
+            )
+        )
+
+        viewModel.onEvent(LibraryEvent.CloseEditView)
+
+        delay(300L)
+
+        val state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.isEditExerciseSheetOpen,
+            message = "isEditExerciseDefSheetOpen failed to be set false "
+        )
+        assertFalse(
+            state.isEditRoutineSheetOpen,
+            "isEditRoutineSheetOpen failed to be set false "
+        )
+        assertFalse(
+            actual = state.isEditScheduleSheetOpen,
+            message = "isEditScheduleSheetOpen failed to be set false "
         )
     }
 
     @Test
     fun onEvent_EditExerciseDefinition_stateProperlyUpdated() = runTest {
-        val selectedDef = viewModel.state.first().exerciseDefinitions[0]
+        val selectedDef = viewModel.state.first().exercises[0]
 
         setupViewModel(
             LibraryState(
-                isAddExerciseDefSheetOpen = true,
-                selectedExerciseDefinition = selectedDef
+                isAddExerciseSheetOpen = true,
+                selectedExercise = selectedDef
             )
         )
 
-        viewModel.onEvent(LibraryEvent.EditDefinition(selectedDef))
+        viewModel.onEvent(LibraryEvent.EditExercise(selectedDef))
 
         val state = viewModel.state.first()
 
-        assertTrue(state.isAddExerciseDefSheetOpen,
-            "EditExerciseDefSheetOpen is false after EditDefinition event."
+        assertTrue(state.isAddExerciseSheetOpen,
+            "EditExerciseDefSheetOpen is false after EditExercise event."
         )
 
-        assertEquals(state.selectedExerciseDefinition, selectedDef,
-            "Selected Def in state: ${state.selectedExerciseDefinition} " +
+        assertEquals(state.selectedExercise, selectedDef,
+            "Selected Def in state: ${state.selectedExercise} " +
                     "does not equal selected def: $selectedDef"
         )
+    }
+
+    @Test
+    fun onEvent_EditRoutine_stateProperlyUpdated() = runTest {
+
+        viewModel.onEvent(LibraryEvent.EditRoutine)
+
+        val state = viewModel.state.first()
+
+        assertTrue(state.isEditRoutineSheetOpen,
+            "isEditRoutineSheetOpen is false after EditExercise event."
+        )
+
     }
 
 
 
     @Test
     fun onEvent_AddNewExerciseDefClicked_stateProperlyUpdated() = runTest {
-        viewModel.onEvent(LibraryEvent.AddNewDefClicked)
+        viewModel.onEvent(LibraryEvent.AddNewExercise)
 
         val state = viewModel.state.first()
 
         assertTrue(
-            state.isAddExerciseDefSheetOpen,
+            state.isAddExerciseSheetOpen,
             "isAddExerciseDefSheetOpen is false, should be true."
         )
 
@@ -217,7 +377,7 @@ class LibraryViewModelTest {
 
         setupViewModel(
             initialState = LibraryState(
-                isAddExerciseDefSheetOpen = true,
+                isAddExerciseSheetOpen = true,
                 exerciseNameError = "Test",
                 exerciseBodyRegionError = "Test",
                 exerciseTargetMusclesError = "Test"
@@ -230,7 +390,7 @@ class LibraryViewModelTest {
         val state = viewModel.state.first()
 
         assertFalse(
-            state.isAddExerciseDefSheetOpen,
+            state.isAddExerciseSheetOpen,
             "isAddExerciseDefSheetOpen is true, should be false."
         )
         assertNull(
@@ -319,19 +479,135 @@ class LibraryViewModelTest {
     }
 
     @Test
-    fun onEvent_ToggleIsFavorite_valueUpdatedInDb() = runTest {
+    fun onEvent_ToggleFavoriteDef_valueUpdatedInDb() = runTest {
         var state = viewModel.state.first()
-        val defToFavorite = state.exerciseDefinitions[0]
+        val defToFavorite = state.exercises[0]
 
         assertFalse(defToFavorite.isFavorite)
 
-        viewModel.onEvent(LibraryEvent.DefinitionSelected(defToFavorite))
+        viewModel.onEvent(LibraryEvent.ExerciseSelected(defToFavorite))
         state = viewModel.state.first()
 
-        viewModel.onEvent(LibraryEvent.ToggleIsFavorite(state.selectedExerciseDefinition!!))
+        viewModel.onEvent(LibraryEvent.ToggleFavoriteExercise(state.selectedExercise!!))
         state = viewModel.state.first()
 
-        assertTrue(state.exerciseDefinitions.last().isFavorite)
+        assertTrue(state.exercises.last().isFavorite)
+    }
+
+    @Test
+    fun onEvent_ToggleFavoriteRoutine_valueUpdatedInDb() = runTest {
+        var state = viewModel.state.first()
+        val routine = state.routines[0]
+
+        assertFalse(routine.isFavorite)
+
+        viewModel.onEvent(LibraryEvent.RoutineSelected(routine))
+        state = viewModel.state.first()
+
+        viewModel.onEvent(LibraryEvent.ToggleFavoriteRoutine(state.selectedRoutine!!))
+        state = viewModel.state.first()
+
+        assertTrue(state.routines.last().isFavorite)
+    }
+
+    @Test
+    fun onEvent_ToggleFavoriteSchedule_valueUpdatedInDb() = runTest {
+        var state = viewModel.state.first()
+        val schedule = state.schedules[0]
+
+        assertFalse(schedule.isFavorite)
+
+        viewModel.onEvent(LibraryEvent.ScheduleSelected(schedule))
+        state = viewModel.state.first()
+
+        viewModel.onEvent(LibraryEvent.ToggleFavoriteSchedule(state.selectedSchedule!!))
+        state = viewModel.state.first()
+
+        assertTrue(state.schedules.last().isFavorite)
+    }
+
+    @Test
+    fun onEvent_SelectDefinitionsTab_isShowingDefinitionsTrueAndOtherTabsFalse() = runTest {
+        setupViewModel(
+            LibraryState(
+            isShowingExercises = false
+        )
+        )
+
+        var state = viewModel.state.first()
+
+        assertFalse(
+            actual = state.isShowingExercises,
+            message = "isShowingExercises should start false for this test"
+        )
+
+        viewModel.onEvent(LibraryEvent.SelectExercisesTab)
+
+        state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.isShowingExercises,
+            message = "isShowingExercises should be true after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingRoutines,
+            message = "isShowingRoutines should be false after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingSchedules,
+            message = "isShowingSchedules should be false after event"
+        )
+
+    }
+
+    @Test
+    fun onEvent_SelectRoutinesTab_isShowingRoutinesTrueAndOtherTabsFalse() = runTest {
+
+        viewModel.onEvent(LibraryEvent.SelectRoutinesTab)
+
+        val state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.isShowingRoutines,
+            message = "isShowingRoutines should be true after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingExercises,
+            message = "isShowingExercises should be false after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingSchedules,
+            message = "isShowingSchedules should be false after event"
+        )
+
+    }
+
+    @Test
+    fun onEvent_SelectSchedulesTab_isShowingSchedulesTrueAndOtherTabsFalse() = runTest {
+
+        viewModel.onEvent(LibraryEvent.SelectSchedulesTab)
+
+        val state = viewModel.state.first()
+
+        assertTrue(
+            actual = state.isShowingSchedules,
+            message = "isShowingExercises should be true after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingRoutines,
+            message = "isShowingRoutines should be false after event"
+        )
+
+        assertFalse(
+            actual = state.isShowingExercises,
+            message = "isShowingExercises should be false after event"
+        )
+
     }
 
 }

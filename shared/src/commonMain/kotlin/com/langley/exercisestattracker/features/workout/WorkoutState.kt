@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WorkoutState(
 
-    val routine: ExerciseRoutine = ExerciseRoutine(),
+    val routine: ExerciseRoutine? = null,
 
     val exerciseList: List<ExerciseDefinition> = listOf(),
 
@@ -19,6 +19,7 @@ data class WorkoutState(
 
 
     // Exercise Selector
+    val startSelectorOnRoutinesTab: Boolean = false,
 
     val exerciseSelectorVisible: Boolean = false,
 

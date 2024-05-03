@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ExerciseRecord(
-    val exerciseRecordId: Long? = null,
+    val recordId: Long? = null,
+    val exerciseDefId: Long,
     val dateCompleted: Long = 0,
     val exerciseName: String = "",
     val weightUsed: Float = 0F,

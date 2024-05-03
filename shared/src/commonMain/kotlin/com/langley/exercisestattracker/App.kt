@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material3.Icon
@@ -25,12 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseDefinitionDummyData
+import com.langley.exercisestattracker.core.data.dummyData.ExerciseRoutineDummyData
+import com.langley.exercisestattracker.core.data.dummyData.getListOfDummyExerciseRecords
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.core.presentation.ExerciseStatTrackerTheme
 import com.langley.exercisestattracker.di.AppModule
 import com.langley.exercisestattracker.features.home.HomeScreen
+import com.langley.exercisestattracker.features.library.LibraryEvent
 import com.langley.exercisestattracker.features.library.LibraryState
 import com.langley.exercisestattracker.features.library.LibraryViewModel
 import com.langley.exercisestattracker.features.library.presentation.LibraryScreen
+import com.langley.exercisestattracker.features.records.RecordsEvent
 import com.langley.exercisestattracker.features.records.RecordsScreen
 import com.langley.exercisestattracker.features.records.RecordsState
 import com.langley.exercisestattracker.features.records.RecordsViewModel
@@ -83,20 +88,22 @@ fun App(
         )
         val workoutState by workoutViewModel.state.collectAsState(WorkoutState())
 
-
-//    // INIT DUMMY DATA
-//    val exerciseRecordList = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
-//    for (record in exerciseRecordList){
-//        (recordsViewModel::onEvent)(RecordsEvent.SaveRecord(record))
-//    }
-
-//    val exerciseDefDummyData = ExerciseDefinitionDummyData()
-//    val exerciseDefList = exerciseDefDummyData.definitionList
-//    // Add definitions to SQLDelight db.
-//    for (exerciseDefinition in exerciseDefList){
-//        libraryViewModel.onEvent(LibraryEvent.SaveDefinition(exerciseDefinition))
-//    }
-
+//        // INIT DUMMY DATA
+//        // Exercises
+//        val exercises = ExerciseDefinitionDummyData().definitionList
+//        for (e in exercises){
+//            libraryViewModel.onEvent(LibraryEvent.SaveExercise(e))
+//        }
+//        // Routines
+//        val routines = ExerciseRoutineDummyData(exercises).getRoutines()
+//        for (r in routines){
+//            libraryViewModel.onEvent(LibraryEvent.SaveRoutine(r))
+//        }
+//        // Records
+//        val exerciseRecordList = ExerciseDefinitionDummyData().getListOfDummyExerciseRecords()
+//        for (record in exerciseRecordList){
+//            (recordsViewModel::onEvent)(RecordsEvent.SaveRecord(record))
+//        }
 
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -147,6 +154,7 @@ fun App(
 
                     WorkoutScreen(
                         visible = currentScreen == Screen.Workout,
+                        dataSource = appModule.exerciseAppDataSource,
                         workoutState = workoutState,
                         onEvent = workoutViewModel::onEvent,
                         focusRequester = focusRequester,

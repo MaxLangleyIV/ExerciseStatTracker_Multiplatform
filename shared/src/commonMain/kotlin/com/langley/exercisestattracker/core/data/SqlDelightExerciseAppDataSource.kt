@@ -104,8 +104,9 @@ class SqlDelightExerciseAppDataSource(
         exerciseScheduleQueries.insertOrReplaceExerciseSchedule(
             exerciseScheduleId = schedule.exerciseScheduleId,
             exerciseScheduleName = schedule.exerciseScheduleName,
+            description = schedule.description,
             exerciseRoutineCSV = schedule.exerciseRoutineCSV,
-            isFavorite = schedule.isFavorite,
+            isFavorite = if (schedule.isFavorite){ 1 } else{ 0 },
             dateCreated = Clock.System.now().toEpochMilliseconds()
         )
     }
@@ -128,7 +129,8 @@ class SqlDelightExerciseAppDataSource(
  
     override suspend fun insertOrReplaceRecord(record: ExerciseRecord) {
         exerciseRecordQueries.insertOrReplaceExerciseRecord(
-            exerciseRecordId = record.exerciseRecordId,
+            recordId = record.recordId,
+            exerciseDefId = record.exerciseDefId,
             dateCompleted = record.dateCompleted,
             exerciseName = record.exerciseName,
             weightUsed = record.weightUsed.toDouble(),

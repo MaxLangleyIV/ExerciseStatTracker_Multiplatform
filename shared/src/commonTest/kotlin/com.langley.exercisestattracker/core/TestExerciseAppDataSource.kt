@@ -133,7 +133,7 @@ class TestExerciseAppDataSource(
 
     override suspend fun insertOrReplaceRecord(record: ExerciseRecord) {
         val newRecord: ExerciseRecord?
-        val recordId = record.exerciseRecordId
+        val recordId = record.recordId
 
         if (recordId != null){
 
@@ -145,7 +145,7 @@ class TestExerciseAppDataSource(
         else{
 
             newRecord = record.copy(
-                exerciseRecordId = dummyRecordsList.size.toLong()
+                recordId = dummyRecordsList.size.toLong()
             )
 
             dummyRecordsList.add(newRecord)

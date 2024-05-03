@@ -70,7 +70,7 @@ fun RecordsScreen(
                     content = {
                         items(
                             items = recordsState.exerciseRecords,
-                            key = {item: ExerciseRecord ->  item.exerciseRecordId!!}
+                            key = {item: ExerciseRecord ->  item.recordId!!}
                         ){ exerciseRecord: ExerciseRecord ->
                             RecordListItem(
                                 exerciseRecord,
@@ -93,7 +93,7 @@ fun RecordsScreen(
             RecordDetailsView(
                 isVisible = recordsState.isRecordDetailsSheetOpen,
                 onEvent = onEvent,
-                selectedRecord = recordsState.selectedRecord ?: ExerciseRecord()
+                selectedRecord = recordsState.selectedRecord ?: ExerciseRecord(exerciseDefId = -1)
             )
 
         }

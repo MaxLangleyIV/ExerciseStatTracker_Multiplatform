@@ -10,21 +10,21 @@ class ExerciseDefinitionValidatorTest {
     @Test
     fun validateExerciseDefinition_NameIsBlank_nameErrorStringNotNull(){
         val exerciseDefinition = ExerciseDefinition (
-            null,
-            "",
-            "a",
-            "b",
-            "c",
-            false,
-            false,
-            false,
-            false,
-            false,
-            0,
-            false,
-            0,
-            false,
-            null
+            exerciseDefinitionId = null,
+            exerciseName = "",
+            bodyRegion = "a",
+            targetMuscles = "b",
+            description = "c",
+            isWeighted = false,
+            hasReps = false,
+            isCardio = false,
+            isCalisthenic = false,
+            isTimed = false,
+            defaultDuration = 0,
+            hasDistance = false,
+            defaultDistance = 0,
+            isFavorite = false,
+            dateCreated = null
         )
         assertNotNull(
             ExerciseDefinitionValidator
@@ -35,21 +35,21 @@ class ExerciseDefinitionValidatorTest {
     @Test
     fun validateExerciseDefinition_bodyRegionIsBlank_bodyRegionErrorStringNotNull(){
         val exerciseDefinition = ExerciseDefinition (
-            null,
-            "a",
-            "",
-            "b",
-            "c",
-            false,
-            false,
-            false,
-            false,
-            false,
-            0,
-            false,
-            0,
-            false,
-            null
+            exerciseDefinitionId = null,
+            exerciseName = "a",
+            bodyRegion = "",
+            targetMuscles = "b",
+            description = "c",
+            isWeighted = false,
+            hasReps = false,
+            isCardio = false,
+            isCalisthenic = false,
+            isTimed = false,
+            defaultDuration = 0,
+            hasDistance = false,
+            defaultDistance = 0,
+            isFavorite = false,
+            dateCreated = null
         )
         assertNotNull(
             ExerciseDefinitionValidator
@@ -60,21 +60,21 @@ class ExerciseDefinitionValidatorTest {
     @Test
     fun validateExerciseDefinition_targetMusclesIsBlank_targetMusclesErrorStringNotNull(){
         val exerciseDefinition = ExerciseDefinition (
-            null,
-            "a",
-            "b",
-            "",
-            "c",
-            false,
-            false,
-            false,
-            false,
-            false,
-            0,
-            false,
-            0,
-            false,
-            null
+            exerciseDefinitionId = null,
+            exerciseName = "a",
+            bodyRegion = "b",
+            targetMuscles = "",
+            description = "c",
+            isWeighted = false,
+            hasReps = false,
+            isCardio = false,
+            isCalisthenic = false,
+            isTimed = false,
+            defaultDuration = 0,
+            hasDistance = false,
+            defaultDistance = 0,
+            isFavorite = false,
+            dateCreated = null
         )
         assertNotNull(
             ExerciseDefinitionValidator

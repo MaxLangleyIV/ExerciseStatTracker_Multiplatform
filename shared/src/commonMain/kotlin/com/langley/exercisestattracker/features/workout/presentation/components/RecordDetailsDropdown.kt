@@ -30,9 +30,12 @@ import com.langley.exercisestattracker.core.domain.ExerciseRecord
 fun RecordDetailsDropdown(
     modifier: Modifier = Modifier.fillMaxWidth(),
     visible: Boolean = false,
+    onClose: () -> Unit = {},
     exercise: ExerciseDefinition = ExerciseDefinition(),
-    set: ExerciseRecord = ExerciseRecord(),
+    set: ExerciseRecord = ExerciseRecord(exerciseDefId = -1),
     setNumber: Int = 0,
+    recordIndex: Int,
+    removeRecord: (index: Int) -> Unit = {}
 
     ){
     AnimatedVisibility(
@@ -56,7 +59,11 @@ fun RecordDetailsDropdown(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = {}
+                onClick = {
+                    println("ON DELETE: recordIndex = $recordIndex")
+                    onClose()
+                    removeRecord(recordIndex)
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,

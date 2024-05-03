@@ -1,15 +1,10 @@
 package com.langley.exercisestattracker.navigation
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.*
-
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 

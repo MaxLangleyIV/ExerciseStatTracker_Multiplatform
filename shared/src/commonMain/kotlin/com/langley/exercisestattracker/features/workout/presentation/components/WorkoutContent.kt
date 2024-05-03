@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,7 +25,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.langley.exercisestattracker.core.data.toBlankRecord
+import com.langley.exercisestattracker.core.domain.ExerciseDefinition
 import com.langley.exercisestattracker.core.domain.ExerciseRecord
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 import kotlinx.datetime.Clock
@@ -32,8 +36,18 @@ import kotlinx.datetime.Clock
 @Composable
 fun WorkoutContent(
     modifier: Modifier = Modifier,
-    workoutState: WorkoutState,
-    onEvent: (WorkoutEvent) -> Unit = {}
+    exercises: List<ExerciseDefinition> = emptyList(),
+    records: List<ExerciseRecord> = emptyList(),
+    openExerciseSelector: () -> Unit = {},
+    workoutMode: Boolean = false,
+    displayOnlyMode: Boolean = false,
+    updateRepsFromString: (index: Int, string: String) -> Unit = { _, _ -> },
+    updateWeightFromString: (index: Int, string: String) -> Unit = { _, _ -> },
+    markSetComplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
+    markSetIncomplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
+    addToListOfRecords: (list: List<ExerciseRecord>) -> Unit = {},
+    removeRecord: (index: Int) -> Unit = {},
+    removeExercise: (index: Int) -> Unit = {},
 ){
 
     Box(
@@ -45,7 +59,7 @@ fun WorkoutContent(
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            for ((exerciseIndex, exercise) in workoutState.exerciseList.withIndex()){
+            for ((exerciseIndex, exercise) in exercises.withIndex()){
 
                 var numberOfSets by remember { mutableStateOf( 0 ) }
 
@@ -75,24 +89,41 @@ fun WorkoutContent(
                     ) {
                         var lastSetEntered: ExerciseRecord? = null
 
-                        WeightTrainingLabelsRow()
+                        WeightTrainingLabelsRow(workoutMode = workoutMode)
 
                         Divider(
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        for ((recordIndex, set) in workoutState.recordsList.withIndex()){
+                        for ((recordIndex, set) in records.withIndex()){
 
                             if (set.exerciseName == exercise.exerciseName){
 
                                 numberOfSets += 1
 
                                 WeightTrainingRecordRow(
+                                    workoutMode = workoutMode,
                                     exercise = exercise,
                                     set = set,
                                     setNumber = numberOfSets,
                                     recordIndex = recordIndex,
-                                    onEvent = onEvent
+                                    updateRepsFromString = {index, string ->
+                                        updateRepsFromString(index, string)
+//                                        onEvent(WorkoutEvent.UpdateRepsFromString(index, string))
+                                    },
+                                    updateWeightFromString = {index, string ->
+                                        updateWeightFromString(index, string)
+//                                        onEvent(WorkoutEvent.UpdateWeightFromString(index, string))
+                                    },
+                                    markComplete = {index, newSet ->
+                                        markSetComplete(index, newSet)
+//                                        onEvent(WorkoutEvent.MarkCompleted(index, newSet))
+                                    },
+                                    markIncomplete = {index, newSet ->
+                                        markSetIncomplete(index, newSet)
+                                    },
+                                    removeRecord = {index -> removeRecord(index) },
+                                    displayOnlyMode = displayOnlyMode
                                 )
 
                                 lastSetEntered = set
@@ -102,16 +133,18 @@ fun WorkoutContent(
 
                         numberOfSets = 0
 
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Button(
-                                onClick = {
-                                    if (lastSetEntered != null){
-                                        onEvent(
-                                            WorkoutEvent.AddToListOfRecords(
+                        // Add New Set and Remove Exercise Buttons
+                        if (!displayOnlyMode){
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Button(
+                                    onClick = {
+                                        if (lastSetEntered != null){
+                                            addToListOfRecords(
                                                 listOf(
                                                     lastSetEntered.copy(
                                                         dateCompleted =
@@ -120,31 +153,49 @@ fun WorkoutContent(
                                                     )
                                                 )
                                             )
-                                        )
+                                        }
+                                        else {
+                                            addToListOfRecords(
+                                                listOf(exercise.toBlankRecord().copy(completed = false))
+                                            )
+                                        }
+                                    }
+                                ){
+                                    Text( text = "Add Set" )
+                                }
+
+                                if (lastSetEntered == null){
+                                    Button(
+                                        onClick = {
+                                            removeExercise(exerciseIndex)
+                                        }
+                                    ){
+                                        Text( text = "Remove Exercise" )
                                     }
                                 }
-                            ){
-                                Text( text = "Add another set." )
                             }
+
                         }
 
                     }
                 }
+
                 Spacer(Modifier.height(8.dp))
             }
 
-            Button(
-                onClick = {
-                    onEvent(
-                        WorkoutEvent.OpenExerciseSelector
-                    )
+            if (!displayOnlyMode){
+                Button(
+                    onClick = {
+                        openExerciseSelector()
+//                    onEvent(
+//                        WorkoutEvent.OpenSelector
+//                    )
+                    }
+                ){
+                    Text( text = "Add New Exercise" )
                 }
-            ){
-                Text( text = "Add a new exercise." )
             }
         }
-
-        // Set Details View
 
     }
 }

@@ -1,10 +1,10 @@
 CREATE TABLE ExerciseRecord (
-    exerciseRecordId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    recordId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    exerciseDefId INTEGER NOT NULL,
     dateCompleted INTEGER NOT NULL,
     exerciseName TEXT NOT NULL,
     weightUsed REAL NOT NULL,
     weightUnit TEXT NOT NULL,
---     weightIsKilos INTEGER NOT NULL,
     isCardio INTEGER NOT NULL,
     isCalisthenic INTEGER NOT NULL,
     duration TEXT NOT NULL,
@@ -25,7 +25,8 @@ ORDER BY dateCompleted DESC;
 insertOrReplaceExerciseRecord:
 INSERT OR REPLACE
 INTO ExerciseRecord(
-    exerciseRecordId,
+    recordId,
+    exerciseDefId,
     dateCompleted,
     exerciseName,
     weightUsed,
@@ -57,9 +58,10 @@ VALUES (
     ?,
     ?,
     ?,
+    ?,
     ?
 );
 
 deleteExerciseRecord:
 DELETE FROM ExerciseRecord
-WHERE exerciseRecordId = :givenExerciseDefinitionId;
+WHERE recordId = :givenExerciseDefinitionId;

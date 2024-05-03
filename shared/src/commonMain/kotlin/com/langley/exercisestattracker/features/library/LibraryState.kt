@@ -1,11 +1,25 @@
 package com.langley.exercisestattracker.features.library
 
 import com.langley.exercisestattracker.core.domain.ExerciseDefinition
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
+import com.langley.exercisestattracker.core.domain.ExerciseSchedule
 
 data class LibraryState(
+
+    // UI State
+    val isShowingExercises: Boolean = true,
+    val isShowingRoutines: Boolean = false,
+    val isShowingSchedules: Boolean = false,
+
     //Data state.
-    val exerciseDefinitions: List<ExerciseDefinition> = emptyList(),
-    val selectedExerciseDefinition: ExerciseDefinition? = null,
+    val exercises: List<ExerciseDefinition> = emptyList(),
+    val selectedExercise: ExerciseDefinition? = null,
+
+    val routines: List<ExerciseRoutine> = emptyList(),
+    val selectedRoutine: ExerciseRoutine? = null,
+
+    val schedules: List<ExerciseSchedule> = emptyList(),
+    val selectedSchedule: ExerciseSchedule? = null,
 
     //Search state
     val isSearchDropdownOpen: Boolean = false,
@@ -15,8 +29,16 @@ data class LibraryState(
 
     //UI visibility flags.
     val isExerciseDetailsSheetOpen: Boolean = false,
-    val isEditExerciseDefSheetOpen: Boolean = false,
-    val isAddExerciseDefSheetOpen: Boolean = false,
+    val isEditExerciseSheetOpen: Boolean = false,
+    val isAddExerciseSheetOpen: Boolean = false,
+
+    val isRoutineDetailsSheetOpen: Boolean = false,
+    val isEditRoutineSheetOpen: Boolean = false,
+    val isAddRoutineSheetOpen: Boolean = false,
+
+    val isScheduleDetailsSheetOpen: Boolean = false,
+    val isEditScheduleSheetOpen: Boolean = false,
+    val isAddScheduleSheetOpen: Boolean = false,
 
     //Input validation errors state.
     val exerciseNameError: String? = null,

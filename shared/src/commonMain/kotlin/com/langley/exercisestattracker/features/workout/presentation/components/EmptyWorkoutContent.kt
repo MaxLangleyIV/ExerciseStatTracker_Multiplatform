@@ -19,18 +19,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.langley.exercisestattracker.features.library.selector.SelectorState
 import com.langley.exercisestattracker.features.workout.WorkoutEvent
 import com.langley.exercisestattracker.features.workout.WorkoutState
 
 @Composable
 fun EmptyWorkoutContent(
     modifier: Modifier = Modifier,
-    workoutState: WorkoutState,
-    onEvent: (WorkoutEvent) -> Unit = {}
+//    onEvent: (WorkoutEvent) -> Unit = {}
+    openExerciseSelector: () -> Unit = {},
+    openRoutineSelector: () -> Unit = {},
+    workoutMode: Boolean = true
 ){
     Text(
-        text = "This workout is currently empty.",
+        text = "This ${if(workoutMode){"workout"}else{"routine"}} is currently empty.",
         color = MaterialTheme.colorScheme.onBackground
+    )
+
+    Spacer(
+        Modifier.height(16.dp)
     )
 
     // Buttons Column
@@ -45,7 +52,8 @@ fun EmptyWorkoutContent(
                 .heightIn(min = 0.dp, max = 60.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable {
-                    onEvent(WorkoutEvent.OpenExerciseSelector)
+                    openExerciseSelector()
+//                    onEvent(WorkoutEvent.OpenSelector)
                 }
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(4.dp),
@@ -56,7 +64,7 @@ fun EmptyWorkoutContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1F),
-                text = "Add an exercise.",
+                text = "Add Exercise",
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Center,
             )
@@ -64,28 +72,33 @@ fun EmptyWorkoutContent(
 
         Spacer(Modifier.height(8.dp))
 
-        // Select Routine Button
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 0.dp, max = 60.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .clickable {  }
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-                .padding(4.dp),
-            horizontalArrangement = Arrangement.Center,
-        ){
-
-            Text(
+        if (workoutMode){
+            // Select Routine Button
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1F),
-                text = "Select a routine.",
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                textAlign = TextAlign.Center,
-            )
-        }
+                    .heightIn(min = 0.dp, max = 60.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable {
+                        openRoutineSelector()
+//                    onEvent(WorkoutEvent.OpenRoutineSelector)
+                    }
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.Center,
+            ){
 
-        Spacer(Modifier.height(8.dp))
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1F),
+                    text = "Select Routine",
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+        }
     }
 }

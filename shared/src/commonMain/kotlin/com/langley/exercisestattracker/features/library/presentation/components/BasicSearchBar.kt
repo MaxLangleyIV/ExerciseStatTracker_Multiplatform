@@ -24,9 +24,9 @@ import com.langley.exercisestattracker.features.library.LibraryState
 
 @Composable
 fun BasicSearchBar(
-    state: LibraryState,
+    searchString: String = "",
+    onSearchStringChanged: (String) -> Unit = {},
     modifier: Modifier = Modifier,
-    onEvent: (LibraryEvent) -> Unit,
     isDropdownOpen: Boolean = false,
 ){
     Column(
@@ -41,41 +41,40 @@ fun BasicSearchBar(
             horizontalArrangement = Arrangement.Center,
         ){
             OutlinedTextField(
-                modifier = Modifier.focusRequester(FocusRequester())
-                    .clickable { onEvent(LibraryEvent.ToggleIsSearchDropdownOpen) },
-                value = state.searchString,
+                modifier = Modifier.focusRequester(FocusRequester()),
+                value = searchString,
                 onValueChange = {
-                    onEvent(LibraryEvent.OnSearchStringChanged(it))
+                    onSearchStringChanged(it)
                 },
                 shape = RoundedCornerShape(20.dp),
                 maxLines = 1
             )
         }
 
-        Row {
-            DropdownMenu(
-            expanded = isDropdownOpen,
-            onDismissRequest = { onEvent(LibraryEvent.ToggleIsSearchDropdownOpen) }
-            ){
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(1),
-                    modifier = Modifier
-                ){
-                    if (state.previousSearches == null){
-                        item {
-                            Text(text = "No previous searches found.")
-                        }
-                    }
-                    else {
-                        items(state.previousSearches){
-                            Text(
-                                modifier = Modifier.padding(8.dp),
-                                text = it
-                            )
-                        }
-                    }
-                }
-            }
-        }
+//        Row {
+//            DropdownMenu(
+//            expanded = isDropdownOpen,
+//            onDismissRequest = { onEvent(LibraryEvent.ToggleIsSearchDropdownOpen) }
+//            ){
+//                LazyVerticalGrid(
+//                    columns = GridCells.Fixed(1),
+//                    modifier = Modifier
+//                ){
+//                    if (state.previousSearches == null){
+//                        item {
+//                            Text(text = "No previous searches found.")
+//                        }
+//                    }
+//                    else {
+//                        items(state.previousSearches){
+//                            Text(
+//                                modifier = Modifier.padding(8.dp),
+//                                text = it
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }

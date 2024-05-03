@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
@@ -50,6 +49,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun WeightTrainingLabelsRow(
+    workoutMode: Boolean = true
 ){
     Row(
         modifier = Modifier
@@ -57,10 +57,10 @@ fun WeightTrainingLabelsRow(
             .height(IntrinsicSize.Min)
             .background(MaterialTheme.colorScheme.background),
         horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
 
-        //Title
+        // Sets
         Column(
             modifier = Modifier
                 .weight(0.2F)
@@ -85,30 +85,32 @@ fun WeightTrainingLabelsRow(
 //            color = MaterialTheme.colorScheme.outline
         )
 
-        // Weight Used
-        Column(
-            modifier = Modifier
-                .weight(0.2F)
-                .padding(4.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        if (workoutMode){
+            // Weight Used
+            Column(
+                modifier = Modifier
+                    .weight(0.2F)
+                    .padding(4.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            Text(
-                modifier = Modifier.weight(0.25F),
-                text = "Weight",
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
-            )
+                Text(
+                    modifier = Modifier.weight(0.25F),
+                    text = "Weight",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center
+                )
 
-        }
+            }
 
-        Divider(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp),
+            Divider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp),
 //            color = MaterialTheme.colorScheme.outline
-        )
+            )
+        }
 
         // Reps Performed
         Column(
@@ -128,30 +130,31 @@ fun WeightTrainingLabelsRow(
 
         }
 
-
-        Divider(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp),
+        if (workoutMode){
+            Divider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp),
 //            color = MaterialTheme.colorScheme.outline
-        )
-
-        // Completion Status
-        Column(
-            modifier = Modifier
-                .weight(0.2F)
-                .padding(4.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Text(
-                modifier = Modifier.weight(0.25F),
-                text = "Complete",
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
             )
 
+            // Completion Status
+            Column(
+                modifier = Modifier
+                    .weight(0.2F)
+                    .padding(4.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Text(
+                    modifier = Modifier.weight(0.25F),
+                    text = "Complete",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center
+                )
+
+            }
         }
 
     }
@@ -162,10 +165,16 @@ fun WeightTrainingLabelsRow(
 fun WeightTrainingRecordRow(
     modifier: Modifier = Modifier,
     exercise: ExerciseDefinition = ExerciseDefinition(),
-    set: ExerciseRecord = ExerciseRecord(),
+    set: ExerciseRecord = ExerciseRecord(exerciseDefId = -1),
     setNumber: Int = 0,
-    onEvent: (WorkoutEvent) -> Unit,
-    recordIndex: Int
+    recordIndex: Int,
+    updateWeightFromString: (index: Int, string: String) -> Unit = { _, _ -> },
+    updateRepsFromString: (index: Int, string: String) -> Unit = { _, _ -> },
+    markComplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
+    markIncomplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
+    removeRecord: (index: Int) -> Unit = {},
+    workoutMode: Boolean = true,
+    displayOnlyMode: Boolean = false
     ){
 
     var detailsVisible by remember { mutableStateOf(false) }
@@ -175,13 +184,13 @@ fun WeightTrainingRecordRow(
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
             .background(MaterialTheme.colorScheme.background)
-            .clickable {
+            .clickable(enabled = !displayOnlyMode) {
                        detailsVisible = !detailsVisible
             },
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        //Title
+        // Set Number
         Column(
             modifier = Modifier
                 .weight(0.2F)
@@ -203,65 +212,68 @@ fun WeightTrainingRecordRow(
                 .width(1.dp),
         )
 
-        // Weight Used
-        var isWeightInputFocused by remember { mutableStateOf( false ) }
+        if (workoutMode){
+            // Weight Used
+            var isWeightInputFocused by remember { mutableStateOf( false ) }
 
-        Column(
-            modifier = Modifier
-                .weight(0.2F)
-                .padding(4.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-                .border(
-                    width = 2.dp,
-                    color =
-                    if (isWeightInputFocused) {
-                        MaterialTheme.colorScheme.outline
-                    }
-                    else {
-                        Color.Transparent} ,
-                    shape = RoundedCornerShape(8.dp)
-                ),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            var textFieldValue by remember { mutableStateOf(set.weightUsed.toString()) }
-
-
-            BasicTextField(
+            Column(
                 modifier = Modifier
-                    .onFocusChanged {
-                        isWeightInputFocused = it.isFocused
-                    }
-                    .widthIn(min = 32.dp, max = 64.dp)
-                    .heightIn(min = 24.dp, max = 64.dp)
-                    .padding(4.dp),
-                value = textFieldValue,
-                onValueChange = {
-                    textFieldValue = it
-                    onEvent(
-                        WorkoutEvent.UpdateWeightFromString(index = recordIndex, value = it)
+                    .weight(0.2F)
+                    .padding(4.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .border(
+                        width = 2.dp,
+                        color =
+                        if (isWeightInputFocused) {
+                            MaterialTheme.colorScheme.outline
+                        }
+                        else {
+                            Color.Transparent} ,
+                        shape = RoundedCornerShape(8.dp)
+                    ),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                var textFieldValue by remember(set) { mutableStateOf(set.weightUsed.toString()) }
+
+
+                BasicTextField(
+                    modifier = Modifier
+                        .onFocusChanged {
+                            isWeightInputFocused = it.isFocused
+                        }
+                        .widthIn(min = 32.dp, max = 64.dp)
+                        .heightIn(min = 24.dp, max = 64.dp)
+                        .padding(4.dp),
+                    value = textFieldValue,
+                    onValueChange = {
+                        textFieldValue = it
+                        if (it.isNotBlank()){ updateWeightFromString(recordIndex, it) }
+//                    onEvent(
+//                        WorkoutEvent.UpdateWeightFromString(index = recordIndex, value = it)
+//                    )
+                    },
+                    singleLine = true,
+                    textStyle =
+                    TextStyle(
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        textAlign = TextAlign.Center,
+                        fontSize = 16.sp
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Decimal
                     )
-                },
-                singleLine = true,
-                textStyle =
-                TextStyle(
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    textAlign = TextAlign.Center,
-                    fontSize = 16.sp
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Decimal
                 )
+            }
+
+            Divider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp),
             )
         }
-
-        Divider(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp),
-        )
 
         // Reps Performed
         var isRepsInputFocused by remember { mutableStateOf( false ) }
@@ -287,11 +299,14 @@ fun WeightTrainingRecordRow(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            var textFieldValue by remember { mutableStateOf(set.repsCompleted.toString()) }
+            var textFieldValue by remember(set) { mutableStateOf(set.repsCompleted.toString()) }
+
+//            var textFieldValue = remember(set) { set.repsCompleted.toString() }
+
             BasicTextField(
                 modifier = Modifier
                     .onFocusChanged {
-                        isRepsInputFocused = it.isFocused
+                        isRepsInputFocused = (it.isFocused && !displayOnlyMode)
                     }
                     .widthIn(min = 32.dp, max = 64.dp)
                     .heightIn(min = 24.dp, max = 64.dp)
@@ -299,9 +314,10 @@ fun WeightTrainingRecordRow(
                 value = textFieldValue,
                 onValueChange = {
                     textFieldValue = it
-                    onEvent(
-                        WorkoutEvent.UpdateRepsFromString(index = recordIndex, value = it)
-                    )
+                    if (it.isNotBlank()){ updateRepsFromString(recordIndex,it) }
+//                    onEvent(
+//                        WorkoutEvent.UpdateRepsFromString(index = recordIndex, value = it)
+//                    )
                 },
                 singleLine = true,
                 textStyle =
@@ -312,48 +328,59 @@ fun WeightTrainingRecordRow(
                 ),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Decimal
-                )
+                ),
+                readOnly = displayOnlyMode
             )
 
         }
 
-        Divider(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp),
-        )
-
-        // Completion Status
-        Column(
-            modifier = Modifier
-                .weight(0.2F)
-                .padding(4.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Checkbox(
-                onCheckedChange = {isChecked ->
-                    if (isChecked){
-                        onEvent(
-                            WorkoutEvent.MarkCompleted(recordIndex, set)
-                        )
-                    }
-                    else {
-                        onEvent(
-                            WorkoutEvent.MarkIncomplete(recordIndex, set)
-                        )
-                    }
-                },
-                checked = set.completed
+        if (workoutMode){
+            Divider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp),
             )
 
+            // Completion Status
+            Column(
+                modifier = Modifier
+                    .weight(0.2F)
+                    .padding(4.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Checkbox(
+                    onCheckedChange = {isChecked ->
+                        if (isChecked){
+                            markComplete(recordIndex, set)
+//                        onEvent(
+//                            WorkoutEvent.MarkCompleted(recordIndex, set)
+//                        )
+                        }
+                        else {
+                            markIncomplete(recordIndex, set)
+//                        onEvent(
+//                            WorkoutEvent.MarkIncomplete(recordIndex, set)
+//                        )
+                        }
+                    },
+                    checked = set.completed
+                )
+
+            }
         }
 
     }
 
     RecordDetailsDropdown(
-        visible = detailsVisible
+        visible = detailsVisible,
+        onClose = { detailsVisible = false },
+        exercise = exercise,
+        set = set,
+        setNumber = setNumber,
+        recordIndex = recordIndex,
+        removeRecord = removeRecord
     )
 
     Divider(

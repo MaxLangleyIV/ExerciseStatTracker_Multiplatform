@@ -1,4 +1,4 @@
-package com.langley.exercisestattracker.features.library.presentation.components
+package com.langley.exercisestattracker.features.library.routines.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,12 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.langley.exercisestattracker.core.domain.ExerciseDefinition
-
+import com.langley.exercisestattracker.core.domain.ExerciseRoutine
 
 @Composable
-fun ExerciseDefinitionListItem(
-    exerciseDefinition: ExerciseDefinition,
+fun RoutineListItem(
+    routine: ExerciseRoutine,
     modifier: Modifier = Modifier,
     selectable: Boolean = false,
     isClicked: Boolean = false
@@ -85,7 +84,7 @@ fun ExerciseDefinitionListItem(
                 Text(
                     modifier = Modifier.weight(1f)
                         .wrapContentWidth(Alignment.CenterHorizontally),
-                    text = exerciseDefinition.exerciseName,
+                    text = routine.routineName,
                     color =
                     if (isClicked){
                         MaterialTheme.colorScheme.onPrimary
@@ -107,7 +106,7 @@ fun ExerciseDefinitionListItem(
                 horizontalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = exerciseDefinition.description,
+                    text = routine.description,
                     color =
                     if (isClicked){
                         MaterialTheme.colorScheme.onPrimary
