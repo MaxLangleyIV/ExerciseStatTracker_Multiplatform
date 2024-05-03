@@ -145,14 +145,14 @@ fun LibraryScreen(
                     )
                 }
 
-                // Schedule List
-                if (libraryState.isShowingSchedules){
-                    LibraryList(
-                        schedules = libraryState.schedules,
-                        scheduleOnClick = { onEvent( LibraryEvent.ScheduleSelected(it) ) },
-                        focusManager = focusManager
-                    )
-                }
+//                // Schedule List
+//                if (libraryState.isShowingSchedules){
+//                    LibraryList(
+//                        schedules = libraryState.schedules,
+//                        scheduleOnClick = { onEvent( LibraryEvent.ScheduleSelected(it) ) },
+//                        focusManager = focusManager
+//                    )
+//                }
             }
 
             DefinitionDetailsView(
@@ -196,11 +196,11 @@ fun LibraryScreen(
                 interactionSource = interactionSource
             )
 
-            ScheduleDetailsView(
-                isVisible = libraryState.isScheduleDetailsSheetOpen,
-                libraryOnEvent = onEvent,
-                schedule = libraryState.selectedSchedule ?: ExerciseSchedule()
-            )
+//            ScheduleDetailsView(
+//                isVisible = libraryState.isScheduleDetailsSheetOpen,
+//                libraryOnEvent = onEvent,
+//                schedule = libraryState.selectedSchedule ?: ExerciseSchedule()
+//            )
 
         }
 
