@@ -173,7 +173,8 @@ fun WeightTrainingRecordRow(
     markComplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
     markIncomplete: (index: Int, set: ExerciseRecord) -> Unit = { _, _ -> },
     removeRecord: (index: Int) -> Unit = {},
-    workoutMode: Boolean = true
+    workoutMode: Boolean = true,
+    displayOnlyMode: Boolean = false
     ){
 
     var detailsVisible by remember { mutableStateOf(false) }
@@ -183,7 +184,7 @@ fun WeightTrainingRecordRow(
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
             .background(MaterialTheme.colorScheme.background)
-            .clickable {
+            .clickable(enabled = !displayOnlyMode) {
                        detailsVisible = !detailsVisible
             },
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -305,7 +306,7 @@ fun WeightTrainingRecordRow(
             BasicTextField(
                 modifier = Modifier
                     .onFocusChanged {
-                        isRepsInputFocused = it.isFocused
+                        isRepsInputFocused = (it.isFocused && !displayOnlyMode)
                     }
                     .widthIn(min = 32.dp, max = 64.dp)
                     .heightIn(min = 24.dp, max = 64.dp)
@@ -327,7 +328,8 @@ fun WeightTrainingRecordRow(
                 ),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Decimal
-                )
+                ),
+                readOnly = displayOnlyMode
             )
 
         }
