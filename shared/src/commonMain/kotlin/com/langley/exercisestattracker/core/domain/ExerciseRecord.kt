@@ -10,7 +10,6 @@ data class ExerciseRecord(
     val exerciseName: String = "",
     val weightUsed: Float = 0F,
     val weightUnit: String = "lbs",
-//    val weightIsKilos: Boolean = false,
     val isCardio: Boolean = false,
     val isCalisthenic: Boolean = false,
     val duration: String = "0",
