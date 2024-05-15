@@ -1,5 +1,7 @@
 package com.langley.exercisestattracker.core.presentation.composables
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -13,7 +15,7 @@ fun AlertDialogPopUp(
     onConfirmation: () -> Unit,
     dialogTitle: String,
     dialogText: String,
-    icon: ImageVector,
+    icon: ImageVector = Icons.Default.Warning,
     contentDescription: String = "Alert Dialog Pop Up"
 ) {
     AlertDialog(
@@ -44,7 +46,7 @@ fun AlertDialogPopUp(
                     onDismissRequest()
                 }
             ) {
-                Text("Dismiss")
+                Text("Cancel")
             }
         }
     )
