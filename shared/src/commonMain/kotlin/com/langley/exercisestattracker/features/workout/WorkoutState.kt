@@ -29,6 +29,11 @@ data class WorkoutState(
 
     val exerciseLibrary: List<ExerciseDefinition> = listOf(),
 
-    val selectedExercises: List<ExerciseDefinition> = listOf()
+    val selectedExercises: List<ExerciseDefinition> = listOf(),
+
+    // Confirmation Dialog
+    val confirmationVisible: Boolean = false,
+
+    val confirmationAccepted: Boolean = false
 
 )
